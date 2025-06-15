@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="task_title">عنوان المهمة</string>
+    <string name="description">الوصف</string>
+    <string name="category_title">عنوان الصنف</string>
+
+</resources>
