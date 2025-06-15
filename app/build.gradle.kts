@@ -57,3 +57,32 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+
+tasks.register("installGitHooks") {
+    doLast {
+        // Install commit-msg hook (renamed from commit-message)
+        val commitMsgSource = file("../scripts/hooks/commit-message")
+        val commitMsgTarget = file("../.git/hooks/commit-msg")
+        if (!commitMsgTarget.exists() || commitMsgTarget.readText() != commitMsgSource.readText()) {
+            commitMsgTarget.writeText(commitMsgSource.readText())
+            commitMsgTarget.setExecutable(true)
+            println("✅ commit-msg hook installed and made executable.")
+        } else {
+            println("✅ commit-msg hook is already up to date.")
+        }
+        
+        // Install pre-push hook (renamed from branch-naming)
+        val prePushSource = file("../scripts/hooks/branch-naming")
+        val prePushTarget = file("../.git/hooks/pre-push")
+        if (!prePushTarget.exists() || prePushTarget.readText() != prePushSource.readText()) {
+            prePushTarget.writeText(prePushSource.readText())
+            prePushTarget.setExecutable(true)
+            println("✅ pre-push hook installed and made executable.")
+        } else {
+            println("✅ pre-push hook is already up to date.")
+        }
+    }
+}
+gradle.projectsEvaluated {
+    tasks["build"].dependsOn("installGitHooks")
+}
