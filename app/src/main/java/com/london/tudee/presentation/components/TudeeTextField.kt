@@ -1,5 +1,6 @@
 package com.london.tudee.presentation.components
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -29,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
@@ -40,7 +42,7 @@ import com.london.tudee.presentation.design_system.theme.LocalTudeeTypography
 fun TudeeTextField(
     modifier: Modifier = Modifier,
     icon: Int? = null,
-    hint: String,
+    @StringRes hint: Int,
     multiLined: Boolean = false
 ){
     var text by rememberSaveable { mutableStateOf("") }
@@ -60,7 +62,7 @@ fun TudeeTextField(
         modifier = modifier
             .background(LocalTudeeColors.current.surface)
             .fillMaxWidth()
-            .height(if (multiLined) 168.dp else 50.dp)
+            .height(if (multiLined) 168.dp else 56.dp)
             .border(
                 width = 1.dp,
                 color = borderColor,
@@ -104,7 +106,7 @@ fun TudeeTextField(
                 decorationBox = { innerTextField ->
                     if (text.isEmpty()) {
                         Text(
-                            text = hint,
+                            text = stringResource(hint),
                             color = LocalTudeeColors.current.hint,
                             style = LocalTudeeTypography.current.labelMedium
                         )
@@ -121,7 +123,6 @@ fun TudeeTextField(
             )
         }
     }
-
 }
 
 @Preview(showBackground = true)
@@ -130,6 +131,6 @@ fun TudeeTextFieldPreview(){
     TudeeTextField(
         multiLined = true,
         icon = R.drawable.add_date_icon,
-        hint = "Task Title",
+        hint = R.string.task_title
     )
 }
