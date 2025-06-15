@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
@@ -37,7 +38,7 @@ fun TudeeTextButton(
                     modifier = Modifier
                         .size(24.dp)
                         .padding(start = 8.dp),
-                    color = TudeeTheme.colors.primary,
+                    tintColor = TudeeTheme.colors.primary,
                 )
             }
         }
@@ -53,5 +54,16 @@ fun TudeeTextButton(
                 color = TudeeTheme.colors.disabled,
             )
         }
+    }
+}
+
+
+@Composable
+@ThemePreviews
+fun PreviewTudeeTextButton() {
+    TudeeTheme {
+        TudeeTextButton(
+            onClick = {}, text = "Cancel", isLoading = true
+        )
     }
 }
