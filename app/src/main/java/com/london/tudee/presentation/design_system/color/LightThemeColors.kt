@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.design_system.color
+package com.london.tudee.presentation.design_system.color
 
 import androidx.compose.ui.graphics.Color
 

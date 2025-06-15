@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.design_system.text_style
+package com.london.tudee.presentation.design_system.text_style
 
 import androidx.compose.ui.text.TextStyle
 

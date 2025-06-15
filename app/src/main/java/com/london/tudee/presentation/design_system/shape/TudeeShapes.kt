@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.design_system.shape
+package com.london.tudee.presentation.design_system.shape
 
 import androidx.compose.foundation.shape.CornerBasedShape
 

@@ -1,4 +1,4 @@
-package com.example.tudeeapp.presentation.design_system.theme
+package com.london.tudee.presentation.design_system.theme
 
 import android.content.res.Configuration
 import androidx.compose.ui.tooling.preview.Preview
