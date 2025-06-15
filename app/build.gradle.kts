@@ -83,6 +83,6 @@ tasks.register("installGitHooks") {
         }
     }
 }
-gradle.projectsEvaluated {
-    tasks["build"].dependsOn("installGitHooks")
-}
+//gradle.projectsEvaluated {
+//    tasks["build"].dependsOn("installGitHooks")
+//}
