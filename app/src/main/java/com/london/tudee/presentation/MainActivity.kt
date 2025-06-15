@@ -68,7 +68,7 @@ fun TestScreen() {
                     )
                     Text(
                         text = "Tudee",
-                        color = TudeeTheme.colors.onPrimary,
+                        color = TudeeTheme.colors.primaryVariant,
                         style = TudeeTheme.typography.cherryBomb
                     )
                 }
