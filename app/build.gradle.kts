@@ -61,8 +61,8 @@ dependencies {
 tasks.register("installGitHooks") {
     doLast {
         fun installHook(name: String) {
-            val source = file("scripts/hooks/$name")
-            val target = file(".git/hooks/$name")
+            val source = file("../scripts/hooks/$name")
+            val target = file("../.git/hooks/$name")
             if (!target.exists() || target.readText() != source.readText()) {
                 target.writeText(source.readText())
                 target.setExecutable(true)
@@ -73,8 +73,8 @@ tasks.register("installGitHooks") {
                 println("✅ $name hook is already up to date.")
             }
         }
-        installHook("branch-naming.bash")
-        installHook("commit-message.bash")
+        installHook("branch-naming")
+        installHook("commit-message")
     }
 }
 gradle.projectsEvaluated {
