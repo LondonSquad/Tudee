@@ -16,8 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
@@ -33,6 +36,11 @@ fun TopAppBar(
         IconButton(
             onClick = it,
             modifier = Modifier
+                .then(
+                    if (LocalLayoutDirection.current == LayoutDirection.Rtl)
+                        Modifier.rotate(180f)
+                    else Modifier
+                )
                 .border(
                     1.dp,
                     TudeeTheme.colors.stroke,
@@ -50,6 +58,11 @@ fun TopAppBar(
         IconButton(
             onClick = it,
             modifier = Modifier
+                .then(
+                    if (LocalLayoutDirection.current == LayoutDirection.Rtl)
+                        Modifier.rotate(180f)
+                    else Modifier
+                )
                 .border(
                     1.dp,
                     TudeeTheme.colors.stroke,
