@@ -12,13 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
-fun TudeePrimaryButton(
+fun TudeeNegativeButton(
     onClick: () -> Unit,
     text: String,
     modifier: Modifier = Modifier,
@@ -31,9 +30,7 @@ fun TudeePrimaryButton(
                 .height(56.dp)
                 .clip(TudeeTheme.shapes.circle)
                 .background(
-                    brush = Brush.verticalGradient(
-                        TudeeTheme.colors.primaryGradient
-                    )
+                    TudeeTheme.colors.errorVariant
                 )
                 .clickable(onClick = onClick)
                 .padding(horizontal = 24.dp, vertical = 8.dp),
@@ -43,14 +40,14 @@ fun TudeePrimaryButton(
             Text(
                 text = text,
                 style = TudeeTheme.typography.labelLarge,
-                color = TudeeTheme.colors.onPrimary,
+                color = TudeeTheme.colors.error,
             )
             if (isLoading) {
                 LoadingLottieAnimation(
                     modifier = Modifier
                         .size(24.dp)
                         .padding(start = 8.dp),
-                    tintColor = TudeeTheme.colors.onPrimary
+                    tintColor = TudeeTheme.colors.error
                 )
             }
         }
@@ -75,12 +72,11 @@ fun TudeePrimaryButton(
     }
 }
 
-
 @Composable
 @ThemePreviews
-fun PreviewTudeePrimaryButton() {
+fun PreviewTudeeNegativeButton() {
     TudeeTheme {
-        TudeePrimaryButton(
+        TudeeNegativeButton(
             onClick = {}, text = "Submit", isLoading = true
         )
     }
