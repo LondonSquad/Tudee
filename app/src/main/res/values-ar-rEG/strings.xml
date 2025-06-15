@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="In_Progress">قيد العمل</string>
+    <string name="Done"> تم الانجاز</string>
+    <string name="To_Do">جاهز للعمل</string>
+</resources>
