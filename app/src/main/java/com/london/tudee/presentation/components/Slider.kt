@@ -106,6 +106,7 @@ fun TaskStatusSlider(
                         .fillMaxHeight()
                         .width(61.dp)
                         .align(Alignment.Center)
+                        .padding(bottom = 8.dp)
                 ) {
                     Image(
                         painter = painterResource(id = tudeePicture),

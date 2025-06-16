@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.london.tudee.R
+import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
@@ -82,7 +83,7 @@ fun SnackBar(
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 fun SnackBarPreview() {
     Box(modifier = Modifier.fillMaxSize()) {
