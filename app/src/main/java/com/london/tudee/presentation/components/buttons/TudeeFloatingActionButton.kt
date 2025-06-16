@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
@@ -30,13 +29,11 @@ fun TudeeFloatingActionButton(
     Box(
         modifier = modifier
             .background(
-                brush = Brush.linearGradient(
-                    colors = if(isEnabled) TudeeTheme.colors.primaryGradient else listOf(
+                brush = Brush.verticalGradient(
+                    colors = if (isEnabled) TudeeTheme.colors.primaryGradient else listOf(
                         TudeeTheme.colors.disabled,
                         TudeeTheme.colors.disabled
-                    ),
-                    start = Offset(0f, 0f),
-                    end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+                    )
                 ),
                 shape = TudeeTheme.shapes.circle
             )
