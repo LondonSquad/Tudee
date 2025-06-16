@@ -39,13 +39,10 @@ fun DateItem(
                         colors = listOf(TudeeTheme.colors.surfaceLow, TudeeTheme.colors.surfaceLow)
                     )
                 },
-                shape = RoundedCornerShape(16.dp)
+                shape = TudeeTheme.shapes.small
             )
             .padding(
-                top = 12.dp,
-                bottom = 12.dp,
-                start = 14.dp,
-                end = 14.dp
+                horizontal = 14.dp, vertical = 12.dp
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(2.dp)
