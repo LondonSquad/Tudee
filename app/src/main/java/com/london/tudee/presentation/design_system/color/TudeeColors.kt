@@ -29,7 +29,8 @@ data class TudeeColors(
     val purpleVariant: Color,
     val pinkAccent: Color,
     val overlay: Color,
-    val emojiTint: Color
+    val emojiTint: Color,
+    val primaryGradient: List<Color>
 )
 
 

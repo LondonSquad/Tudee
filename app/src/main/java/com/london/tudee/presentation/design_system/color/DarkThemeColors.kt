@@ -12,10 +12,10 @@ val OnPrimaryDark = Color(0xFFFFFFFF)
 val TitleDark = Color(0xFFF5F5F5)
 val BodyDark = Color(0xFFCFCFCF)
 val HintDark = Color(0xFF888888)
-val StrokeDark = Color(0xFF3F3F3F)
+val StrokeDark = Color(0x1FFFFFFF)
 val SurfaceLowDark = Color(0xFF191919)
 val SurfaceHighDark = Color(0xFF2A2A2A)
-val CaptionDark = Color(0xFF3C3C3C)
+val CaptionDark = Color(0xB3FFFFFF)
 val CardDark = Color(0xFF2F2F2F)
 val CardStrokeDark = Color(0xFF404040)
 val DisabledDark = Color(0xFF404040)
@@ -30,6 +30,8 @@ val ErrorDark = Color(0xFFF95555)
 val ErrorVariantDark = Color(0xFF1F1111)
 val OverlayDark = Color(0x5202151E)
 val EmojiTintDark = Color(0xDE1F1F1F)
+val PrimaryGradientDark = listOf(Color(0xFF3090BF), Color(0xFF3A9CCD))
+
 
 val DarkTudeeColors = TudeeColors(
     primary = PrimaryDark,
@@ -58,5 +60,6 @@ val DarkTudeeColors = TudeeColors(
     purpleVariant = PurpleVariantDark,
     pinkAccent = PinkAccentDark,
     overlay = OverlayDark,
-    emojiTint = EmojiTintDark
+    emojiTint = EmojiTintDark,
+    primaryGradient = PrimaryGradientDark
 )
