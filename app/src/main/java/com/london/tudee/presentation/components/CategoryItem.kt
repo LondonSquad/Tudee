@@ -95,7 +95,7 @@ fun CategoryItem(
 
         Text(
             text = title,
-            style = TudeeTheme.typography.labelMedium,
+            style = TudeeTheme.typography.labelSmall,
             color = TudeeTheme.colors.body
         )
     }
