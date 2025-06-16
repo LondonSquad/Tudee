@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -27,7 +28,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 fun TudeeBottomNavigationBar(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    items: List<TudeeBottomNavItem> = getDefaultBottomNavItems(),
+    items: List<TudeeBottomNavItem> = TudeeBottomNavItems.items,
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -61,7 +62,7 @@ fun TudeeBottomNavigationBar(
                             ) {
                                 Icon(
                                     modifier = Modifier.size(21.5.dp),
-                                    painter = item.selectedIcon,
+                                    painter = painterResource(item.selectedIcon),
                                     contentDescription = item.contentDescription,
                                     tint = Color.Unspecified
                                 )
@@ -69,7 +70,7 @@ fun TudeeBottomNavigationBar(
                         } else {
                             Icon(
                                 modifier = Modifier.size(21.5.dp),
-                                painter = item.unselectedIcon,
+                                painter = painterResource(item.unselectedIcon),
                                 contentDescription = item.contentDescription,
                                 tint = TudeeTheme.colors.hint
                             )
@@ -91,7 +92,8 @@ fun PreviewTestScreen() {
     Scaffold(
         bottomBar = {
             TudeeBottomNavigationBar(navController = navController)
-        }) { innerPadding ->
+        }
+    ) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = Routes.HOME,

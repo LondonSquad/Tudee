@@ -1,10 +1,10 @@
 package com.london.tudee.presentation.components.bottom_navigation_bar
 
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.annotation.DrawableRes
 
 data class TudeeBottomNavItem(
     val route: String,
     val contentDescription: String,
-    val selectedIcon: Painter,
-    val unselectedIcon: Painter
+    @DrawableRes val selectedIcon: Int,
+    @DrawableRes val unselectedIcon: Int
 )

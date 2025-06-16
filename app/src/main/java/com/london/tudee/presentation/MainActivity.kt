@@ -37,22 +37,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-           // TestScreen()
-            val navController = rememberNavController()
-            Scaffold(
-                bottomBar = {
-                    TudeeBottomNavigationBar(navController = navController)
-                }) { innerPadding ->
-                NavHost(
-                    navController = navController,
-                    startDestination = Routes.HOME,
-                    modifier = Modifier.padding(innerPadding)
-                ) {
-                    composable(Routes.HOME) { NavigationTestScreen(TudeeTheme.colors.primary) }
-                    composable(Routes.TASKS) { NavigationTestScreen(TudeeTheme.colors.purpleAccent) }
-                    composable(Routes.CATEGORIES) { NavigationTestScreen(TudeeTheme.colors.emojiTint) }
-                }
-            }
+            TestScreen()
         }
     }
 }
