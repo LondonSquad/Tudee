@@ -1,5 +1,6 @@
 package com.london.tudee.presentation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,17 +20,39 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.london.tudee.presentation.components.BottomNavigationBar.NavigationTestScreen
+import com.london.tudee.presentation.components.BottomNavigationBar.Routes
+import com.london.tudee.presentation.components.BottomNavigationBar.TudeeBottomNavigationBar
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            setContent {
-                TestScreen()
+           // TestScreen()
+            val navController = rememberNavController()
+            Scaffold(
+                bottomBar = {
+                    TudeeBottomNavigationBar(navController = navController)
+                }) { innerPadding ->
+                NavHost(
+                    navController = navController,
+                    startDestination = Routes.HOME,
+                    modifier = Modifier.padding(innerPadding)
+                ) {
+                    composable(Routes.HOME) { NavigationTestScreen(TudeeTheme.colors.primary) }
+                    composable(Routes.TASKS) { NavigationTestScreen(TudeeTheme.colors.purpleAccent) }
+                    composable(Routes.CATEGORIES) { NavigationTestScreen(TudeeTheme.colors.emojiTint) }
+                }
             }
         }
     }
@@ -43,8 +66,8 @@ fun PreviewTestScreen() {
 
 @Composable
 fun TestScreen() {
-   //val isDark by remember { mutableStateOf(false) }
-  //  TudeeTheme (isDarkMode = isDark){}
+    //val isDark by remember { mutableStateOf(false) }
+    //  TudeeTheme (isDarkMode = isDark){}
     TudeeTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
