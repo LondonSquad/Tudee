@@ -65,7 +65,7 @@ fun CategoryItem(
                         painter = painterResource(id = R.drawable.ic_check),
                         contentDescription = null,
                         modifier = Modifier.size(12.dp),
-                        tint = Color.White
+                        tint = TudeeTheme.colors.onPrimary.copy(alpha = 0.87f)
                     )
                 }
             } else {
