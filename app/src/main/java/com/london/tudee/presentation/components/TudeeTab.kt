@@ -60,7 +60,7 @@ fun TudeeTab(
             modifier = modifier
                 .fillMaxWidth()
                 .background(TudeeTheme.colors.surfaceHigh)
-                .padding(top = 6.dp)
+                .padding(top = 2.dp)
                 .clickable(onClick = onClick),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = CenterHorizontally
@@ -80,7 +80,7 @@ fun TudeeTab(
                         Box(
                             modifier = Modifier
                                 .size(28.dp)
-                                .clip(shape = RoundedCornerShape(100.dp))
+                                .clip(shape = TudeeTheme.shapes.circle)
                                 .background(color = TudeeTheme.colors.surface),
                             contentAlignment = Center
                         ) {
@@ -91,7 +91,7 @@ fun TudeeTab(
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.height(2.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
                     Box(
                         modifier = Modifier
                             .height(4.dp)
@@ -137,7 +137,7 @@ private fun TudeeTabPreview() {
         TudeeTab(
             text = R.string.In_Progress,
             number = 14,
-            isSelected = false,
+            isSelected = true,
             onClick = {},
             modifier = Modifier.fillMaxWidth()
         )
