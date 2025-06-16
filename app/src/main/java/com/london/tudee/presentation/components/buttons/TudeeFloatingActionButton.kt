@@ -31,7 +31,7 @@ fun TudeeFloatingActionButton(
         modifier = modifier
             .background(
                 brush = Brush.linearGradient(
-                    colors = if(isEnabled) TudeeTheme.colors.primaryGradient else listOf(
+                    colors = if (isEnabled) TudeeTheme.colors.primaryGradient else listOf(
                         TudeeTheme.colors.disabled,
                         TudeeTheme.colors.disabled
                     ),
@@ -62,7 +62,7 @@ fun TudeeFloatingActionButton(
 
 @ThemePreviews
 @Composable
-fun TudeeFloatingActionButtonPreview() {
+private fun TudeeFloatingActionButtonPreview() {
     TudeeTheme {
         TudeeFloatingActionButton(
             painter = painterResource(R.drawable.note_add),
