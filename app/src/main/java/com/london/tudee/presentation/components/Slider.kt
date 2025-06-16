@@ -30,21 +30,14 @@ import com.london.tudee.presentation.design_system.text_style.nunitoFont
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 
-enum class TaskEmoji(val emoji: Int) {
-    POOR(R.drawable.poor_emoji),
-    BAD(R.drawable.bad_emoji),
-    OKAY(R.drawable.okay_status),
-    GOOD(R.drawable.good_emoji)
-}
-
 @Composable
 fun TaskStatusSlider(
     modifier: Modifier = Modifier,
-    title: String = "Nothing on your list…",
-    subtitle: String = "You just scrolling, not working.",
-    note: String = "Tudee is watching. back to work!!!",
-    @DrawableRes emoji: Int = R.drawable.poor_emoji,
-    @DrawableRes tudeePicture: Int = R.drawable.poor,
+    title: String,
+    subtitle: String,
+    note: String,
+    @DrawableRes emoji: Int,
+    @DrawableRes tudeePicture: Int,
 ) {
     Box(
         modifier = modifier
@@ -145,19 +138,13 @@ fun TaskStatusSliderPreview() {
 //            .offset(y = 56.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        TaskStatusSlider()
+        TaskStatusSlider(
+            title = "Nothing on your list…",
+            subtitle = "You just scrolling, not working.",
+            note = "Tudee is watching. back to work!!!",
+            emoji = R.drawable.poor_emoji,
+            tudeePicture = R.drawable.poor,
+        )
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun TaskStatusSliderArabicPreview() {
-//    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-//        Column(
-//            modifier = Modifier.padding(16.dp),
-//            verticalArrangement = Arrangement.spacedBy(16.dp)
-//        ) {
-//            TaskStatusSlider()
-//        }
-//    }
-//}
