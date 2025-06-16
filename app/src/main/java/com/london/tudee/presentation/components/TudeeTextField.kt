@@ -97,7 +97,7 @@ fun TudeeTextField(
 
             BasicTextField(
                 value = value,
-                onValueChange = { onValueChange },
+                onValueChange = onValueChange,
                 singleLine = !multiLined,
                 interactionSource = interactionSource,
                 decorationBox = { innerTextField ->
