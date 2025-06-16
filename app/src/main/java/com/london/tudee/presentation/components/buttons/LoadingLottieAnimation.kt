@@ -35,7 +35,7 @@ fun LoadingLottieAnimation(modifier: Modifier = Modifier, tintColor: Color) {
 
 @Composable
 @ThemePreviews
-fun PreviewLoadingLottieAnimation() {
+private fun PreviewLoadingLottieAnimation() {
     TudeeTheme {
         LoadingLottieAnimation(
             tintColor = TudeeTheme.colors.primary,

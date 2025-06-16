@@ -74,7 +74,7 @@ fun TudeeNegativeButton(
 
 @Composable
 @ThemePreviews
-fun PreviewTudeeNegativeButton() {
+private fun PreviewTudeeNegativeButton() {
     TudeeTheme {
         TudeeNegativeButton(
             onClick = {}, text = "Submit", isLoading = true

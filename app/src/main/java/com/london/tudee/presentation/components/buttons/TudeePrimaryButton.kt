@@ -78,7 +78,7 @@ fun TudeePrimaryButton(
 
 @Composable
 @ThemePreviews
-fun PreviewTudeePrimaryButton() {
+private fun PreviewTudeePrimaryButton() {
     TudeeTheme {
         TudeePrimaryButton(
             onClick = {}, text = "Submit", isLoading = true

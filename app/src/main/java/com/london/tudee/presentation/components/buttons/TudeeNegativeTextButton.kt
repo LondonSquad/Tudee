@@ -59,7 +59,7 @@ fun TudeeNegativeTextButton(
 
 @Composable
 @ThemePreviews
-fun PreviewTudeeNegativeTextButton() {
+private fun PreviewTudeeNegativeTextButton() {
     TudeeTheme {
         TudeeNegativeTextButton(
             onClick = {}, text = "Cancel", isLoading = true

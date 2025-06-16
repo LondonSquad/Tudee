@@ -60,7 +60,7 @@ fun TudeeTextButton(
 
 @Composable
 @ThemePreviews
-fun PreviewTudeeTextButton() {
+private fun PreviewTudeeTextButton() {
     TudeeTheme {
         TudeeTextButton(
             onClick = {}, text = "Cancel", isLoading = true
