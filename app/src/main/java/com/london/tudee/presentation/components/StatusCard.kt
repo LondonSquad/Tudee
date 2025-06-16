@@ -28,7 +28,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun StatusCard(
-    boxColor: Color,
+    backgroundColor: Color,
     @DrawableRes statusIcon: Int,
     tasksNumber: Int,
     @StringRes taskStatusName: Int,
@@ -37,12 +37,12 @@ fun StatusCard(
     Box(
         modifier = modifier
             .background(
-                color = boxColor,
+                color = backgroundColor,
                 shape = TudeeTheme.shapes.medium
             )
             .height(112.dp)
             .fillMaxWidth()
-    ){
+    ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             modifier = Modifier
@@ -52,7 +52,7 @@ fun StatusCard(
                     top = 12.dp,
                     bottom = 12.dp
                 )
-        ){
+        ) {
             Image(
                 imageVector = ImageVector.vectorResource(statusIcon),
                 contentDescription = "$statusIcon",
@@ -60,11 +60,13 @@ fun StatusCard(
                     .background(
                         color = Color.White.copy(0.24f),
                         shape = TudeeTheme.shapes.extraSmall
-                    ).border(
+                    )
+                    .border(
                         width = 1.dp,
                         color = Color.White.copy(0.12f),
                         shape = TudeeTheme.shapes.extraSmall
-                    ).padding(8.dp)
+                    )
+                    .padding(8.dp)
             )
 
             Column {
@@ -96,10 +98,10 @@ fun StatusCard(
 
 @ThemePreviews
 @Composable
-fun PreviewGreenStatusCard(){
+fun PreviewGreenStatusCard() {
     TudeeTheme {
         StatusCard(
-            boxColor = TudeeTheme.colors.greenAccent,
+            backgroundColor = TudeeTheme.colors.greenAccent,
             statusIcon = R.drawable.file_verified,
             tasksNumber = 3,
             taskStatusName = R.string.Done,
@@ -109,10 +111,10 @@ fun PreviewGreenStatusCard(){
 
 @ThemePreviews
 @Composable
-fun PreviewYellowStatusCard(){
-    TudeeTheme{
+fun PreviewYellowStatusCard() {
+    TudeeTheme {
         StatusCard(
-            boxColor = TudeeTheme.colors.yellowAccent,
+            backgroundColor = TudeeTheme.colors.yellowAccent,
             statusIcon = R.drawable.file_pin,
             tasksNumber = 16,
             taskStatusName = R.string.In_Progress,
@@ -122,10 +124,10 @@ fun PreviewYellowStatusCard(){
 
 @ThemePreviews
 @Composable
-fun PreviewStatusCard(){
-    TudeeTheme{
+fun PreviewStatusCard() {
+    TudeeTheme {
         StatusCard(
-            boxColor = TudeeTheme.colors.purpleAccent,
+            backgroundColor = TudeeTheme.colors.purpleAccent,
             statusIcon = R.drawable.file_unknown,
             tasksNumber = 1,
             taskStatusName = R.string.To_Do,
