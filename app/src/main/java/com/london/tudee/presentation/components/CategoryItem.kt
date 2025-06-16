@@ -37,7 +37,7 @@ fun CategoryItem(
             modifier = Modifier
                 .size(78.dp)
                 .background(
-                    color = TudeeTheme.colors.surface,
+                    color = TudeeTheme.colors.surfaceHigh,
                     shape = TudeeTheme.shapes.circle
                 )
                 .padding(23.dp)
