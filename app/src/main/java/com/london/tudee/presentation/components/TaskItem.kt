@@ -97,7 +97,6 @@ private fun TaskItemContent(
             text = title.take(25),
             style = TudeeTheme.typography.labelLarge,
             lineHeight = 19.sp,
-            letterSpacing = 0.sp,
             maxLines = 1,
             textAlign = TextAlign.Start,
             color = TudeeTheme.colors.body
@@ -107,7 +106,6 @@ private fun TaskItemContent(
             text = description,
             style = TudeeTheme.typography.labelSmall,
             lineHeight = 16.sp,
-            letterSpacing = 0.sp,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Start,

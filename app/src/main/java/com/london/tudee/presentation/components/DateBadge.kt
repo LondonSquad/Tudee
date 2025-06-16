@@ -29,8 +29,7 @@ fun DateBadge(
 ) {
     Card(
         modifier = modifier
-            .height(28.dp)
-            .wrapContentWidth(),
+            .height(28.dp),
         shape = TudeeTheme.shapes.circle,
         colors = CardDefaults.cardColors(containerColor = TudeeTheme.colors.surface)
     ) {
@@ -44,8 +43,8 @@ fun DateBadge(
         ) {
             Icon(
                 modifier = Modifier
-                    .size(12.dp)
-                    .padding(top = 2.dp, bottom = 2.dp, end = 4.dp),
+                    .padding(top = 2.dp, bottom = 2.dp, end = 2.dp)
+                    .size(12.dp),
                 painter = painterResource(id = R.drawable.ic_calendar_favorite),
                 contentDescription = "Calendar Icon",
                 tint = TudeeTheme.colors.body
@@ -54,7 +53,6 @@ fun DateBadge(
                 text = dateText,
                 style = TudeeTheme.typography.labelSmall,
                 lineHeight = 16.sp,
-                letterSpacing = 0.sp,
                 textAlign = TextAlign.Start,
                 color = TudeeTheme.colors.body
             )

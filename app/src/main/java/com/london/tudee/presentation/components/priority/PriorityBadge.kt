@@ -1,5 +1,6 @@
 package com.london.tudee.presentation.components.priority
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -27,14 +28,21 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 fun PriorityBadge(
     modifier: Modifier = Modifier,
     priority: Priority,
+    selected: Boolean = false,
+    clickable: Boolean = false,
+    onClick: (() -> Unit)? = null
 ) {
     val resources = getPriorityResources(priority)
 
     Card(
-        modifier = modifier.height(28.dp)
-            .wrapContentWidth(),
+        modifier = Modifier
+            .height(28.dp)
+            .wrapContentWidth()
+            .then(
+                if (clickable) Modifier.clickable { onClick?.invoke() } else Modifier
+            ),
         shape = TudeeTheme.shapes.circle,
-        colors = CardDefaults.cardColors(containerColor = resources.backgroundColor)
+        colors = CardDefaults.cardColors(containerColor = if (selected) resources.backgroundColor else TudeeTheme.colors.surfaceLow)
     ) {
         Row(
             modifier = Modifier
@@ -42,7 +50,7 @@ fun PriorityBadge(
                 .fillMaxHeight()
                 .padding(vertical = 6.dp)
                 .padding(horizontal = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
             Icon(
@@ -51,16 +59,15 @@ fun PriorityBadge(
                     .padding(end = 2.dp),
                 painter = painterResource(id = resources.iconResId),
                 contentDescription = "Priority Icon",
-                tint = TudeeTheme.colors.onPrimary
+                tint = if (selected) TudeeTheme.colors.onPrimary else TudeeTheme.colors.hint
             )
             Text(
-                modifier = modifier,
+                modifier = Modifier,
                 text = stringResource(id = resources.textResId),
                 style = TudeeTheme.typography.labelSmall,
                 lineHeight = 16.sp,
-                letterSpacing = 0.sp,
                 textAlign = TextAlign.Start,
-                color = TudeeTheme.colors.onPrimary
+                color = if (selected) TudeeTheme.colors.onPrimary else TudeeTheme.colors.hint
             )
         }
     }
@@ -93,7 +100,7 @@ fun getPriorityResources(priority: Priority): PriorityResources {
 @Composable
 fun PreviewPriorityBadgeHigh() {
     TudeeTheme {
-        PriorityBadge(priority = Priority.HIGH)
+        PriorityBadge(priority = Priority.HIGH, selected = true)
     }
 }
 
@@ -101,7 +108,15 @@ fun PreviewPriorityBadgeHigh() {
 @Composable
 fun PreviewPriorityBadgeMedium() {
     TudeeTheme {
-        PriorityBadge(priority = Priority.MEDIUM)
+        PriorityBadge(priority = Priority.MEDIUM, selected = true)
+    }
+}
+
+@ThemePreviews
+@Composable
+fun PreviewPriorityBadgeLowSelected() {
+    TudeeTheme {
+        PriorityBadge(priority = Priority.LOW, selected = true)
     }
 }
 
