@@ -3,17 +3,17 @@ package com.london.tudee.presentation.design_system.color
 import androidx.compose.ui.graphics.Color
 
 // Light Theme Colors
-val PrimaryLight = Color(0xFF4ABDF1)
+val PrimaryLight = Color(0xFF49BAF2)
 val SecondaryLight = Color(0xFFF49061)
 val PrimaryVariantLight = Color(0xFF3498D4)
 val BackgroundLight = Color(0xFFFFFFFF)
-val SurfaceLight = Color(0xFFFFFFFF)
+val SurfaceLight = Color(0xFFF9F9F9)
 val OnPrimaryLight = Color(0xFFFFFFFF)
 val TitleLight = Color(0xFF202020)
-val BodyLight = Color(0xFF4A4A4A)
-val HintLight = Color(0xFF9E9E9E)
+val BodyLight = Color(0x1F1F1F99)
+val HintLight = Color(0x1F1F1F61)
 val StrokeLight = Color(0xFFE6E6E6)
-val SurfaceLowLight = Color(0xFFF7F7F7)
+val SurfaceLowLight = Color(0xFFF0F0F0)
 val SurfaceHighLight = Color(0xFFFAFAFA)
 val CaptionLight = Color(0xFFEAEAEA)
 val CardLight = Color(0xFFF4F4F4)

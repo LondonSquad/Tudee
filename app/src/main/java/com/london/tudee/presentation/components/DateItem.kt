@@ -35,7 +35,7 @@ fun DateItem(
                     )
                 } else {
                     Brush.verticalGradient(
-                        colors = listOf(TudeeTheme.colors.surfaceLow, TudeeTheme.colors.surfaceLow)
+                        colors = listOf(TudeeTheme.colors.surface, TudeeTheme.colors.surface)
                     )
                 },
                 shape = TudeeTheme.shapes.small
