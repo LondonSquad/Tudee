@@ -1,7 +1,7 @@
 #!/bin/bash
 commit_msg_file=$1
 commit_msg=$(cat "$commit_msg_file")
-pattern="^((feat|comp|fix|refactor|test|chore|ci): [a-z0-9].*|Merge .+|Merge .+)"
+pattern="^((feat|comp|fix|refactor|test|chore|ci): [a-z0-9].*|Merge .+|merge .+)"
 if [[ ! "$commit_msg" =~ $pattern ]]; then
 echo ""
 echo "❌ Invalid commit message!"
