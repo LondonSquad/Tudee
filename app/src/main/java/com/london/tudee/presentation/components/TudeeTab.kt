@@ -135,7 +135,7 @@ fun TudeeTab(
 private fun TudeeTabPreview() {
     TudeeTheme {
         TudeeTab(
-            text = R.string.in_progresss,
+            text = R.string.In_Progress,
             number = 14,
             isSelected = false,
             onClick = {},

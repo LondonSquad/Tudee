@@ -51,9 +51,9 @@ fun TudeeTabLayout(
 fun TudeeTabLayoutWithPager(
     modifier: Modifier = Modifier,
     tabs: List<TabItem> = listOf(
-        TabItem(text = R.string.in_progresss, number = 14),
-        TabItem(text = R.string.to_do, number = 8),
-        TabItem(text = R.string.done, number = 5)
+        TabItem(text = R.string.In_Progress, number = 14),
+        TabItem(text = R.string.To_Do, number = 8),
+        TabItem(text = R.string.Done, number = 5)
     ),
     content: @Composable (page: Int) -> Unit
 ) {
