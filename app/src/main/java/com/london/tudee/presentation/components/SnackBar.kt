@@ -34,8 +34,8 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun SnackBar(
     modifier: Modifier = Modifier,
-    message: String = "Successfully.",
-    iconPainter: Painter = painterResource(R.drawable.snack_bar_container),
+    message: String ,
+    iconPainter: Painter,
 ) {
     Box(
         modifier = modifier
@@ -96,7 +96,9 @@ fun SnackBarPreview() {
     Box(modifier = Modifier.fillMaxSize()) {
         SnackBar(
             modifier = Modifier
-                .offset(y = 56.dp)
+                .offset(y = 56.dp),
+            message = "Successfully.",
+        iconPainter = painterResource(R.drawable.snack_bar_container),
         )
     }
 }
