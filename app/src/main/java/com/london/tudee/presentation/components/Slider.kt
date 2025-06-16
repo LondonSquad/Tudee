@@ -20,10 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.london.tudee.R
+import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 
@@ -31,8 +31,8 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 fun TaskStatusSlider(
     modifier: Modifier = Modifier,
     title: String,
-    subtitle: String,
-    note: String,
+    subtitle: String?,
+    note: String?,
     @DrawableRes emoji: Int,
     @DrawableRes tudeePicture: Int,
 ) {
@@ -44,8 +44,9 @@ fun TaskStatusSlider(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(end = 12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+                .padding(end = 6.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
                 modifier = modifier
@@ -55,8 +56,8 @@ fun TaskStatusSlider(
                     Text(
                         text = title,
                         style = TudeeTheme.typography.titleSmall,
-                        color = TudeeTheme.colors.emojiTint,
-                        lineHeight = 17.sp
+                        color = TudeeTheme.colors.title,
+                        lineHeight = 20.sp
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -70,21 +71,21 @@ fun TaskStatusSlider(
                 }
 
                 Text(
-                    text = subtitle,
+                    text = subtitle ?: "",
                     style = TudeeTheme.typography.bodySmall,
-                    color = TudeeTheme.colors.emojiTint,
+                    color = TudeeTheme.colors.title,
                     lineHeight = 17.sp
                 )
                 Text(
-                    text = note,
+                    text = note ?: "",
                     style = TudeeTheme.typography.bodySmall,
-                    color = TudeeTheme.colors.emojiTint,
+                    color = TudeeTheme.colors.title,
                     lineHeight = 17.sp
                 )
             }
 
             Spacer(modifier = Modifier.width(8.dp))
-//
+
             Box(
                 modifier = Modifier
                     .width(76.dp)
@@ -100,11 +101,11 @@ fun TaskStatusSlider(
                         )
                 )
 
-                Box(
+                Column(
                     modifier = Modifier
-                        .size(74.dp)
-                        .padding(6.dp),
-                    contentAlignment = Alignment.Center
+                        .fillMaxHeight()
+                        .width(61.dp)
+                        .align(Alignment.Center)
                 ) {
                     Image(
                         painter = painterResource(id = tudeePicture),
@@ -115,25 +116,19 @@ fun TaskStatusSlider(
                 }
             }
         }
-
     }
 }
 
-@Preview
+@ThemePreviews
 @Composable
 fun TaskStatusSliderPreview() {
-    Column(
-        modifier = Modifier
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        TaskStatusSlider(
-            title = "Nothing on your list…",
-            subtitle = "You just scrolling, not working.",
-            note = "Tudee is watching. back to work!!!",
-            emoji = R.drawable.poor_emoji,
-            tudeePicture = R.drawable.poor,
-        )
-    }
+
+    TaskStatusSlider(
+        title = "Nothing on your list…",
+        subtitle = "You just scrolling, not working.",
+        note = "Tudee is watching. back to work!!!",
+        emoji = R.drawable.poor_emoji,
+        tudeePicture = R.drawable.poor,
+    )
 }
 
