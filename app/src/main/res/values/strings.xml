@@ -3,4 +3,5 @@
     <string name="In_Progress">In Progress</string>
     <string name="Done">Done</string>
     <string name="To_Do">To-Do</string>
+    <string name="Circle">Circle</string>
 </resources>

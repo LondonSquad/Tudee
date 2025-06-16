@@ -3,4 +3,5 @@
     <string name="In_Progress">قيد العمل</string>
     <string name="Done"> تم الانجاز</string>
     <string name="To_Do">جاهز للعمل</string>
+    <string name="Circle">دائره</string>
 </resources>
