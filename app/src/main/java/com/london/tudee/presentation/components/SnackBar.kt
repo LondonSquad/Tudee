@@ -34,7 +34,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun SnackBar(
     modifier: Modifier = Modifier,
-    message: String ,
+    message: String,
     iconPainter: Painter,
 ) {
     Box(
@@ -44,7 +44,7 @@ fun SnackBar(
             .padding(horizontal = 16.dp)
             .shadow(
                 elevation = 4.dp,
-                shape = RoundedCornerShape(16.dp),
+                shape = TudeeTheme.shapes.small,
                 ambientColor = Color(0x1F000000)
             )
             .clip(TudeeTheme.shapes.small)
@@ -78,13 +78,9 @@ fun SnackBar(
 
             Text(
                 text = message,
-                style = TextStyle(
-                    color = TudeeTheme.colors.emojiTint,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
-                    lineHeight = 20.sp,
-                    fontFamily = nunitoFont
-                )
+                style = TudeeTheme.typography.bodyMedium,
+                color = TudeeTheme.colors.body,
+                lineHeight = 20.sp
             )
         }
     }
@@ -98,7 +94,7 @@ fun SnackBarPreview() {
             modifier = Modifier
                 .offset(y = 56.dp),
             message = "Successfully.",
-        iconPainter = painterResource(R.drawable.snack_bar_container),
+            iconPainter = painterResource(R.drawable.snack_bar_container),
         )
     }
 }
