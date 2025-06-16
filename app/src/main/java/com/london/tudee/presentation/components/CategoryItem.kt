@@ -45,7 +45,7 @@ fun CategoryItem(
             Icon(
                 painter = painterResource(id = iconRes),
                 contentDescription = title,
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(32.dp),
                 tint = tint
             )
 
@@ -53,8 +53,8 @@ fun CategoryItem(
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .offset(x = 16.dp, y = (-16).dp)
-                        .size(20.dp)
+                        .offset(x = 20.dp, y = (-20).dp)
+                        .size(  20.dp)
                         .background(
                             color = TudeeTheme.colors.greenAccent,
                             shape = TudeeTheme.shapes.circle
@@ -72,8 +72,9 @@ fun CategoryItem(
                 count?.let {
                     Box(
                         modifier = Modifier
+                            .width(36.dp)
                             .align(Alignment.TopEnd)
-                            .offset(x = 16.dp, y = (-16).dp)
+                            .offset(x = 20.dp, y = (-20).dp)
                             .background(
                                 color = TudeeTheme.colors.surfaceLow,
                                 shape = TudeeTheme.shapes.circle
