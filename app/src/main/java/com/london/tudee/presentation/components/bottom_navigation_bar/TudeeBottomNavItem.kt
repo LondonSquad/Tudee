@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.components.BottomNavigationBar
+package com.london.tudee.presentation.components.bottom_navigation_bar
 
 import androidx.compose.ui.graphics.painter.Painter
 

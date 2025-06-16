@@ -23,13 +23,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.london.tudee.presentation.components.BottomNavigationBar.NavigationTestScreen
-import com.london.tudee.presentation.components.BottomNavigationBar.Routes
-import com.london.tudee.presentation.components.BottomNavigationBar.TudeeBottomNavigationBar
+import com.london.tudee.presentation.components.bottom_navigation_bar.NavigationTestScreen
+import com.london.tudee.presentation.components.bottom_navigation_bar.Routes
+import com.london.tudee.presentation.components.bottom_navigation_bar.TudeeBottomNavigationBar
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 class MainActivity : ComponentActivity() {
