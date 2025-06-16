@@ -3,4 +3,7 @@
     <string name="task_title">عنوان المهمة</string>
     <string name="description">الوصف</string>
     <string name="category_title">عنوان الصنف</string>
+    <string name="high">عالي</string>
+    <string name="medium">متوسط</string>
+    <string name="low">منخفض</string>
 </resources>
