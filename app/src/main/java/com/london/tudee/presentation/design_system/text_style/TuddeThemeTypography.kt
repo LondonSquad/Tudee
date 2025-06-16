@@ -33,17 +33,17 @@ val ibmPlexSansArabicFont = FontFamily(
 )
 
 val TudeeTextStyle = TudeeTypography(
-    headlineLarge = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Bold, fontSize = 28.sp),
-    headlineMedium = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Bold, fontSize = 24.sp),
+    headlineLarge = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.SemiBold, fontSize = 28.sp),
+    headlineMedium = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.SemiBold, fontSize = 24.sp),
     headlineSmall = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.SemiBold, fontSize = 20.sp),
-    titleLarge = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Bold, fontSize = 20.sp),
-    titleMedium = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Bold, fontSize = 18.sp),
-    titleSmall = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.SemiBold, fontSize = 16.sp),
-    bodyLarge = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Medium, fontSize = 18.sp),
+    titleLarge = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Medium, fontSize = 20.sp),
+    titleMedium = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Medium, fontSize = 18.sp),
+    titleSmall = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Medium, fontSize = 16.sp),
+    bodyLarge = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Normal, fontSize = 18.sp),
     bodyMedium = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Normal, fontSize = 16.sp),
     bodySmall = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Normal, fontSize = 14.sp),
     labelLarge = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Medium, fontSize = 16.sp),
     labelMedium = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Medium, fontSize = 14.sp),
-    labelSmall = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Normal, fontSize = 12.sp),
+    labelSmall = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Medium, fontSize = 12.sp),
     cherryBomb = TextStyle(fontFamily = cherryBombFont, fontWeight = FontWeight.Normal, fontSize = 18.sp),
 )
