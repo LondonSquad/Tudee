@@ -170,7 +170,7 @@ fun SwitchButton(
 }
 
 @Composable
-fun BoxScope.UpperWhiteCloud(isDarkMood: Boolean) {
+private fun BoxScope.UpperWhiteCloud(isDarkMood: Boolean) {
     val offsetX by animateDpAsState(
         targetValue = if (isDarkMood) (-17).dp else 13.5.dp,
         animationSpec = tween(durationMillis = 1000, easing = EaseOut)
@@ -206,7 +206,7 @@ fun BoxScope.UpperWhiteCloud(isDarkMood: Boolean) {
     )
 }
 
-fun Modifier.innerShadow() = this.drawWithContent {
+private fun Modifier.innerShadow() = this.drawWithContent {
     drawContent()
     drawCircle(
         brush = Brush.radialGradient(
@@ -218,7 +218,7 @@ fun Modifier.innerShadow() = this.drawWithContent {
 }
 
 @Composable
-fun BoxScope.MiddleWhiteCloud(isDarkMood: Boolean) {
+private fun BoxScope.MiddleWhiteCloud(isDarkMood: Boolean) {
 
     val offsetX by animateDpAsState(
         targetValue = if (isDarkMood) (29).dp else (-1).dp,
@@ -247,7 +247,7 @@ fun BoxScope.MiddleWhiteCloud(isDarkMood: Boolean) {
 }
 
 @Composable
-fun BoxScope.UpperGrayCloud(isDarkMood: Boolean) {
+private fun BoxScope.UpperGrayCloud(isDarkMood: Boolean) {
     val offsetX by animateDpAsState(
         targetValue = if (isDarkMood) 33.dp else 12.3.dp,
         animationSpec = tween(durationMillis = 1000, easing = EaseOut)
@@ -276,7 +276,7 @@ fun BoxScope.UpperGrayCloud(isDarkMood: Boolean) {
 }
 
 @Composable
-fun BoxScope.DownGrayCloud(isDarkMood: Boolean) {
+private fun BoxScope.DownGrayCloud(isDarkMood: Boolean) {
     val offsetX by animateDpAsState(
         targetValue = if (isDarkMood) (-8).dp else (-8).dp,
         animationSpec = tween(durationMillis = 1000, easing = EaseOut)
@@ -305,7 +305,7 @@ fun BoxScope.DownGrayCloud(isDarkMood: Boolean) {
 }
 
 @Composable
-fun BoxScope.DownWhiteCloud(isDarkMood: Boolean) {
+private fun BoxScope.DownWhiteCloud(isDarkMood: Boolean) {
     AnimatedVisibility(
         visible = isDarkMood,
         enter = slideIn(
@@ -361,7 +361,7 @@ fun BoxScope.DownWhiteCloud(isDarkMood: Boolean) {
 }
 
 @Composable
-fun BoxScope.BigCircleInMoon(isDarkMood: Boolean) {
+private fun BoxScope.BigCircleInMoon(isDarkMood: Boolean) {
     AnimatedVisibility(
         visible = isDarkMood,
         enter = fadeIn(
@@ -386,7 +386,7 @@ fun BoxScope.BigCircleInMoon(isDarkMood: Boolean) {
 }
 
 @Composable
-fun BoxScope.SmallInMoon(isDarkMood: Boolean) {
+private fun BoxScope.SmallInMoon(isDarkMood: Boolean) {
     AnimatedVisibility(
         visible = isDarkMood,
         enter = fadeIn(
@@ -412,7 +412,7 @@ fun BoxScope.SmallInMoon(isDarkMood: Boolean) {
 
 @ThemePreviews
 @Composable
-fun PreviewSwitchButton() {
+private fun PreviewSwitchButton() {
     var isDarkMood by remember { mutableStateOf(false) }
     SwitchButton(
         isDarkMood = isDarkMood,
