@@ -5,7 +5,9 @@
     <string name="tudee_avatar">Tudee Avatar</string>
     <string name="tudee">Tudee</string>
     <string name="tudee_greeting">Your cute Helper for Every Task</string>
-    <string name="in_progresss">In progress</string>
-    <string name="to_do">To Do</string>
-    <string name="done">Done</string>
+    <string name="In_Progress">In Progress</string>
+    <string name="Done">Done</string>
+    <string name="To_Do">To-Do</string>
+    <string name="Circle">Circle</string>
+
 </resources>
