@@ -31,9 +31,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
+import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
@@ -41,7 +41,7 @@ fun TudeeTextField(
     modifier: Modifier = Modifier,
     icon: Int? = null,
     @StringRes hint: Int,
-    multiLined: Boolean = false
+    multiLined: Boolean = false,
 ) {
     var text by rememberSaveable { mutableStateOf("") }
 
@@ -123,12 +123,14 @@ fun TudeeTextField(
     }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 fun TudeeTextFieldPreview() {
-    TudeeTextField(
-        multiLined = true,
-        icon = R.drawable.add_date_icon,
-        hint = R.string.task_title
-    )
+    TudeeTheme {
+        TudeeTextField(
+            multiLined = false,
+            icon = R.drawable.add_date_icon,
+            hint = R.string.task_title
+        )
+    }
 }
