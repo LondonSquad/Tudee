@@ -30,6 +30,8 @@ val ErrorDark = Color(0xFFF95555)
 val ErrorVariantDark = Color(0xFF1F1111)
 val OverlayDark = Color(0x5202151E)
 val EmojiTintDark = Color(0xDE1F1F1F)
+val PrimaryGradientDark = listOf(Color(0xFF3090BF), Color(0xFF3A9CCD))
+
 
 val DarkTudeeColors = TudeeColors(
     primary = PrimaryDark,
@@ -58,5 +60,6 @@ val DarkTudeeColors = TudeeColors(
     purpleVariant = PurpleVariantDark,
     pinkAccent = PinkAccentDark,
     overlay = OverlayDark,
-    emojiTint = EmojiTintDark
+    emojiTint = EmojiTintDark,
+    primaryGradient = PrimaryGradientDark
 )
