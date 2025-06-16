@@ -23,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,9 +41,9 @@ fun TudeeTextField(
     icon: Int? = null,
     @StringRes hint: Int,
     multiLined: Boolean = false,
+    value: String,
+    onValueChange: (String) -> Unit,
 ) {
-    var text by rememberSaveable { mutableStateOf("") }
-
     val focusRequester = remember { FocusRequester() }
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
@@ -54,7 +53,7 @@ fun TudeeTextField(
     val focusedBorderColor = TudeeTheme.colors.primary
     val borderColor = if (isFocused) focusedBorderColor else outlineColor
 
-    val iconColor = if (text.isNotEmpty()) TudeeTheme.colors.body else TudeeTheme.colors.hint
+    val iconColor = if (value.isNotEmpty()) TudeeTheme.colors.body else TudeeTheme.colors.hint
 
     Box(
         modifier = modifier
@@ -97,12 +96,12 @@ fun TudeeTextField(
             Spacer(modifier = modifier.width(12.dp))
 
             BasicTextField(
-                value = text,
-                onValueChange = { text = it },
+                value = value,
+                onValueChange = { onValueChange },
                 singleLine = !multiLined,
                 interactionSource = interactionSource,
                 decorationBox = { innerTextField ->
-                    if (text.isEmpty()) {
+                    if (value.isEmpty()) {
                         Text(
                             text = stringResource(hint),
                             color = TudeeTheme.colors.hint,
@@ -126,11 +125,14 @@ fun TudeeTextField(
 @ThemePreviews
 @Composable
 fun TudeeTextFieldPreview() {
+    val textState = rememberSaveable { mutableStateOf("") }
     TudeeTheme {
         TudeeTextField(
             multiLined = false,
             icon = R.drawable.add_date_icon,
-            hint = R.string.task_title
+            hint = R.string.task_title,
+            value = textState.value,
+            onValueChange = { textState.value = it },
         )
     }
 }
