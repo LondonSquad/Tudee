@@ -23,7 +23,7 @@ import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
-fun TuddeeSecondaryButton(
+fun TudeeSecondaryButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     text: String? = null,
@@ -53,7 +53,7 @@ fun TuddeeSecondaryButton(
     ) {
         text?.let {
             Text(
-                text = text,
+                text = it,
                 modifier = Modifier,
                 style = TudeeTheme.typography.labelLarge,
                 color = if (isEnabled) TudeeTheme.colors.primary else TudeeTheme.colors.disabled
@@ -85,7 +85,7 @@ fun TuddeeSecondaryButton(
 @Composable
 private fun TuddeeSecondaryButtonPreview() {
     TudeeTheme {
-        TuddeeSecondaryButton(
+        TudeeSecondaryButton(
             onClick = { },
             painter = painterResource(R.drawable.pencil_edit_01),
         )

@@ -62,7 +62,7 @@ fun TudeeFloatingActionButton(
 
 @ThemePreviews
 @Composable
-fun TudeeFloatingActionButtonPreview() {
+private fun TudeeFloatingActionButtonPreview() {
     TudeeTheme {
         TudeeFloatingActionButton(
             painter = painterResource(R.drawable.note_add),
