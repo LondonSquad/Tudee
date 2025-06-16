@@ -3,16 +3,7 @@ package com.london.tudee.presentation.components
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,96 +29,107 @@ fun TudeeTab(
     modifier: Modifier = Modifier
 ) {
     if (!isSelected) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .background(TudeeTheme.colors.surfaceHigh)
-                .padding(horizontal = 32.dp, vertical = 12.dp)
-                .clickable(onClick = onClick),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = stringResource(text),
-                style = TudeeTheme.typography.labelSmall,
-                color = TudeeTheme.colors.hint,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+        TabRow(modifier, onClick, text)
     } else {
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .background(TudeeTheme.colors.surfaceHigh)
-                .padding(top = 2.dp)
-                .clickable(onClick = onClick),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = CenterHorizontally
-        ) {
-            Layout(
-                content = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = stringResource(text),
-                            style = TudeeTheme.typography.labelMedium,
-                            color = TudeeTheme.colors.title
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Box(
-                            modifier = Modifier
-                                .size(28.dp)
-                                .clip(shape = TudeeTheme.shapes.circle)
-                                .background(color = TudeeTheme.colors.surface),
-                            contentAlignment = Center
-                        ) {
-                            Text(
-                                text = number.toString(),
-                                style = TudeeTheme.typography.labelMedium,
-                                color = TudeeTheme.colors.body
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Box(
-                        modifier = Modifier
-                            .height(4.dp)
-                            .clip(shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
-                            .background(color = TudeeTheme.colors.secondary)
-                    )
-                }
-            ) { measurables, constraints ->
-                val rowMeasurable = measurables[0]
-                val rowPlaceable = rowMeasurable.measure(
-                    constraints.copy(minWidth = 0, maxWidth = constraints.maxWidth)
-                )
-                val spacerMeasurable = measurables[1]
-                val spacerPlaceable = spacerMeasurable.measure(constraints)
-                val boxMeasurable = measurables[2]
-                val boxPlaceable = boxMeasurable.measure(
-                    constraints.copy(minWidth = rowPlaceable.width, maxWidth = rowPlaceable.width)
-                )
-                val height = rowPlaceable.height + spacerPlaceable.height + boxPlaceable.height
-                layout(constraints.maxWidth, height) {
-                    rowPlaceable.placeRelative(
-                        x = (constraints.maxWidth - rowPlaceable.width) / 2,
-                        y = 0
-                    )
-                    spacerPlaceable.placeRelative(
-                        x = 0,
-                        y = rowPlaceable.height
-                    )
-                    boxPlaceable.placeRelative(
-                        x = (constraints.maxWidth - boxPlaceable.width) / 2,
-                        y = rowPlaceable.height + spacerPlaceable.height
-                    )
-                }
+        SelectedTabColumn(modifier, onClick, text, number)
+    }
+}
+
+@Composable
+private fun TabRow(modifier: Modifier, onClick: () -> Unit, @StringRes text: Int) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(TudeeTheme.colors.surfaceHigh)
+            .padding(horizontal = 32.dp, vertical = 12.dp)
+            .clickable(onClick = onClick),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = stringResource(text),
+            style = TudeeTheme.typography.labelSmall,
+            color = TudeeTheme.colors.hint,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+private fun SelectedTabColumn(
+    modifier: Modifier,
+    onClick: () -> Unit,
+    @StringRes text: Int,
+    number: Int
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(TudeeTheme.colors.surfaceHigh)
+            .padding(top = 2.dp)
+            .clickable(onClick = onClick),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = CenterHorizontally
+    ) {
+        Layout(
+            content = {
+                TabContentRow(text, number)
+                Spacer(modifier = Modifier.height(6.dp))
+                TabIndicator()
+            }
+        ) { measurables, constraints ->
+            val rowPlaceable = measurables[0].measure(constraints.copy(minWidth = 0))
+            val spacerPlaceable = measurables[1].measure(constraints)
+            val boxPlaceable = measurables[2].measure(constraints.copy(minWidth = rowPlaceable.width))
+
+            val totalHeight = rowPlaceable.height + spacerPlaceable.height + boxPlaceable.height
+
+            layout(constraints.maxWidth, totalHeight) {
+                rowPlaceable.placeRelative((constraints.maxWidth - rowPlaceable.width) / 2, 0)
+                spacerPlaceable.placeRelative(0, rowPlaceable.height)
+                boxPlaceable.placeRelative((constraints.maxWidth - boxPlaceable.width) / 2, rowPlaceable.height + spacerPlaceable.height)
             }
         }
     }
+}
+
+@Composable
+private fun TabContentRow(@StringRes text: Int, number: Int) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = stringResource(text),
+            style = TudeeTheme.typography.labelMedium,
+            color = TudeeTheme.colors.title
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Box(
+            modifier = Modifier
+                .size(28.dp)
+                .clip(TudeeTheme.shapes.circle)
+                .background(TudeeTheme.colors.surface),
+            contentAlignment = Center
+        ) {
+            Text(
+                text = number.toString(),
+                style = TudeeTheme.typography.labelMedium,
+                color = TudeeTheme.colors.body
+            )
+        }
+    }
+}
+
+@Composable
+private fun TabIndicator() {
+    Box(
+        modifier = Modifier
+            .height(4.dp)
+            .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+            .background(TudeeTheme.colors.secondary)
+    )
 }
 
 @ThemePreviews
@@ -143,4 +145,3 @@ private fun TudeeTabPreview() {
         )
     }
 }
-
