@@ -19,7 +19,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun DateItem(
     modifier: Modifier = Modifier,
-    day: String,
+    dayOfMonth: String,
     dayOfWeek: String,
     isSelected: Boolean = false,
     onClick: () -> Unit
@@ -47,7 +47,7 @@ fun DateItem(
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         Text(
-            text = day,
+            text = dayOfMonth,
             style = TudeeTheme.typography.titleMedium,
             color = if (isSelected) TudeeTheme.colors.onPrimary else TudeeTheme.colors.body
         )
@@ -71,14 +71,14 @@ fun DateItemPreview() {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             DateItem(
-                day = "15",
+                dayOfMonth = "15",
                 dayOfWeek = "Mon",
                 isSelected = true,
                 onClick = {}
             )
 
             DateItem(
-                day = "18",
+                dayOfMonth = "18",
                 dayOfWeek = "Thu",
                 isSelected = false,
                 onClick = {}
