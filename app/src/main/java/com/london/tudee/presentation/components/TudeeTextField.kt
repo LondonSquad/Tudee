@@ -34,9 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
-import com.london.tudee.presentation.design_system.theme.LocalTudeeColors
-import com.london.tudee.presentation.design_system.theme.LocalTudeeShape
-import com.london.tudee.presentation.design_system.theme.LocalTudeeTypography
+import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun TudeeTextField(
@@ -44,23 +42,23 @@ fun TudeeTextField(
     icon: Int? = null,
     @StringRes hint: Int,
     multiLined: Boolean = false
-){
+) {
     var text by rememberSaveable { mutableStateOf("") }
 
     val focusRequester = remember { FocusRequester() }
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
 
-    val cornerRadius = LocalTudeeShape.current.small
-    val outlineColor = LocalTudeeColors.current.stroke
-    val focusedBorderColor =  LocalTudeeColors.current.primary
+    val cornerRadius = TudeeTheme.shapes.small
+    val outlineColor = TudeeTheme.colors.stroke
+    val focusedBorderColor = TudeeTheme.colors.primary
     val borderColor = if (isFocused) focusedBorderColor else outlineColor
 
-    val iconColor = if (text.isNotEmpty()) LocalTudeeColors.current.body else LocalTudeeColors.current.hint
+    val iconColor = if (text.isNotEmpty()) TudeeTheme.colors.body else TudeeTheme.colors.hint
 
     Box(
         modifier = modifier
-            .background(LocalTudeeColors.current.surface)
+            .background(TudeeTheme.colors.surface)
             .fillMaxWidth()
             .height(if (multiLined) 168.dp else 56.dp)
             .border(
@@ -73,7 +71,7 @@ fun TudeeTextField(
             .clickable {
                 focusRequester.requestFocus()
             },
-        contentAlignment = if(multiLined) Alignment.TopCenter else Alignment.Center,
+        contentAlignment = if (multiLined) Alignment.TopCenter else Alignment.Center,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -107,14 +105,14 @@ fun TudeeTextField(
                     if (text.isEmpty()) {
                         Text(
                             text = stringResource(hint),
-                            color = LocalTudeeColors.current.hint,
-                            style = LocalTudeeTypography.current.labelMedium
+                            color = TudeeTheme.colors.hint,
+                            style = TudeeTheme.typography.labelMedium
                         )
                     }
                     innerTextField()
                 },
-                textStyle = LocalTudeeTypography.current.bodyMedium
-                    .copy(color = LocalTudeeColors.current.body),
+                textStyle = TudeeTheme.typography.bodyMedium
+                    .copy(color = TudeeTheme.colors.body),
                 maxLines = if (multiLined) Int.MAX_VALUE else 1,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -127,7 +125,7 @@ fun TudeeTextField(
 
 @Preview(showBackground = true)
 @Composable
-fun TudeeTextFieldPreview(){
+fun TudeeTextFieldPreview() {
     TudeeTextField(
         multiLined = true,
         icon = R.drawable.add_date_icon,
