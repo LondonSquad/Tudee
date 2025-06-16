@@ -30,6 +30,7 @@ val ErrorLight = Color(0xFFE5655C)
 val ErrorVariantLight = Color(0xFFFCE8E8)
 val OverlayLight = Color(0x5249BAF2)
 val EmojiTintLight = Color(0xDE1F1F1F)
+val PrimaryGradientLight = listOf(Color(0xFF49BAF2), Color(0xFF3A9CCD))
 
 val LightTudeeColors = TudeeColors(
     primary = PrimaryLight,
@@ -58,5 +59,6 @@ val LightTudeeColors = TudeeColors(
     purpleVariant = PurpleVariantLight,
     pinkAccent = PinkAccentLight,
     overlay = OverlayLight,
-    emojiTint = EmojiTintLight
+    emojiTint = EmojiTintLight,
+    primaryGradient = PrimaryGradientLight
 )
