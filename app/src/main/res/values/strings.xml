@@ -19,4 +19,5 @@
     <string name="hello_from">"Hello from "</string>
     <string name="move_to_in_progress">Move to in progress</string>">
     <string name="move_to_done">Move to done</string>">
+    <string name="task_details">Task Details</string>">
 </resources>

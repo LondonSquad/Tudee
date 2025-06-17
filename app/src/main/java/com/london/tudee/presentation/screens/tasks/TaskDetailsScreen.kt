@@ -71,7 +71,7 @@ private fun TaskDetailsBottomSheetContent(
 ) {
     Column {
         Text(
-            text = "Task Details",
+            text = stringResource(R.string.task_details),
             style = TudeeTheme.typography.titleLarge,
             color = TudeeTheme.colors.title,
             modifier = Modifier.padding(bottom = 12.dp)
