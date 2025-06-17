@@ -134,7 +134,7 @@ private fun RegularBottomSheetScreenPreview() {
                     Spacer(modifier = Modifier.height(32.dp))
 
                     TudeePrimaryButton(
-                        text = R.string.show_bottom_sheet,
+                        text = "Show Bottom Sheet",
                         onClick = { showBottomSheet = true },
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -162,7 +162,7 @@ private fun RegularBottomSheetScreenPreview() {
             },
             bottomSheetActions = {
                 TudeePrimaryButton(
-                    text = R.string.confirm,
+                    text = "Confirm",
                     onClick = { showBottomSheet = false },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -215,7 +215,7 @@ private fun ScrollableBottomSheetScreenPreview() {
                     Spacer(modifier = Modifier.height(32.dp))
 
                     TudeePrimaryButton(
-                        text = R.string.show_bottom_sheet,
+                        text = "Show Bottom Sheet",
                         onClick = { showBottomSheet = true },
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -260,7 +260,7 @@ private fun ScrollableBottomSheetScreenPreview() {
             },
             bottomSheetActions = {
                 TudeePrimaryButton(
-                    text = R.string.confirm,
+                    text = "Confirm",
                     onClick = { showBottomSheet = false },
                     modifier = Modifier.fillMaxWidth()
                 )

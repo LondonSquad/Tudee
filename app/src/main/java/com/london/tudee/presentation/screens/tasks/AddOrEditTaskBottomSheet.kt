@@ -55,8 +55,8 @@ fun AddOrEditTaskBottomSheet(
 
             TudeePrimaryButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = buttonText,
-                isDisabled = true,
+                text = stringResource(buttonText),
+                isDisabled = title.equals(null),
                 onClick = { },
             )
 

@@ -23,7 +23,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun TudeePrimaryButton(
     onClick: () -> Unit,
-    @StringRes text: Int,
+    text: String,
     modifier: Modifier = Modifier,
     isDisabled: Boolean = false,
     isLoading: Boolean = false
@@ -44,7 +44,7 @@ fun TudeePrimaryButton(
             horizontalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = stringResource(text),
+                text = text,
                 style = TudeeTheme.typography.labelLarge,
                 color = TudeeTheme.colors.onPrimary,
             )
@@ -70,7 +70,7 @@ fun TudeePrimaryButton(
             horizontalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = stringResource(text),
+                text = text,
                 style = TudeeTheme.typography.labelLarge,
                 color = TudeeTheme.colors.stroke,
             )
@@ -84,7 +84,7 @@ fun TudeePrimaryButton(
 private fun PreviewTudeePrimaryButton() {
     TudeeTheme {
         TudeePrimaryButton(
-            onClick = {}, text = R.string.submit, isLoading = true
+            onClick = {}, text = stringResource(R.string.submit), isLoading = true
         )
     }
 }
