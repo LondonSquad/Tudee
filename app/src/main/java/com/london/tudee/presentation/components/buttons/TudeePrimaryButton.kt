@@ -1,5 +1,6 @@
 package com.london.tudee.presentation.components.buttons
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,14 +14,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.london.tudee.R
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun TudeePrimaryButton(
     onClick: () -> Unit,
-    text: String,
+    @StringRes text: Int,
     modifier: Modifier = Modifier,
     isDisabled: Boolean = false,
     isLoading: Boolean = false
@@ -41,7 +44,7 @@ fun TudeePrimaryButton(
             horizontalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = text,
+                text = stringResource(text),
                 style = TudeeTheme.typography.labelLarge,
                 color = TudeeTheme.colors.onPrimary,
             )
@@ -67,7 +70,7 @@ fun TudeePrimaryButton(
             horizontalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = text,
+                text = stringResource(text),
                 style = TudeeTheme.typography.labelLarge,
                 color = TudeeTheme.colors.stroke,
             )
@@ -81,7 +84,7 @@ fun TudeePrimaryButton(
 private fun PreviewTudeePrimaryButton() {
     TudeeTheme {
         TudeePrimaryButton(
-            onClick = {}, text = "Submit", isLoading = true
+            onClick = {}, text = R.string.submit, isLoading = true
         )
     }
 }

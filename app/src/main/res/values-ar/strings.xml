@@ -10,4 +10,8 @@
     <string name="add_new_task">أضف مهمة جديدة</string>
     <string name="priority">مدى الأولوية</string>
     <string name="edit_task">تعديل المهمة</string>
+    <string name="add">أضف</string>
+    <string name="save">حفظ</string>
+    <string name="cancel">إلغاء</string>
+    <string name="submit">تأكيد</string>
 </resources>
