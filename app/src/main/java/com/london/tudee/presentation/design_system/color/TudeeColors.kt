@@ -30,6 +30,8 @@ data class TudeeColors(
     val pinkAccent: Color,
     val overlay: Color,
     val emojiTint: Color,
+    val onPrimaryCard : Color,
+    val onPrimaryStroke : Color,
     val primaryGradient: List<Color>
 )
 

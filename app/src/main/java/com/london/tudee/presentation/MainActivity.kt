@@ -22,18 +22,18 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.onboarding.OnboardingFlow
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            setContent {
-                TestScreen()
-            }
+            TestScreen()
         }
     }
 }
+
 
 @ThemePreviews
 @Composable
@@ -43,12 +43,11 @@ fun PreviewTestScreen() {
 
 @Composable
 fun TestScreen() {
-   //val isDark by remember { mutableStateOf(false) }
-  //  TudeeTheme (isDarkMode = isDark){}
+    //val isDark by remember { mutableStateOf(false) }
+    //  TudeeTheme (isDarkMode = isDark){}
     TudeeTheme {
         Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = TudeeTheme.colors.primary
+            modifier = Modifier.fillMaxSize(), color = TudeeTheme.colors.primary
         ) {
             Column(
                 modifier = Modifier
@@ -74,12 +73,10 @@ fun TestScreen() {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
-                    onClick = { /*isDark = !isDark*/ },
-                    colors = ButtonDefaults.buttonColors(
+                    onClick = { /*isDark = !isDark*/ }, colors = ButtonDefaults.buttonColors(
                         contentColor = TudeeTheme.colors.title,
                         containerColor = TudeeTheme.colors.pinkAccent
-                    ),
-                    shape = TudeeTheme.shapes.medium
+                    ), shape = TudeeTheme.shapes.medium
                 ) {
                     Text(
                         text = if (isSystemInDarkTheme()) "Switch to Light" else "Switch to Dark",

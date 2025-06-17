@@ -37,7 +37,7 @@ val TudeeTextStyle = TudeeTypography(
     headlineMedium = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.SemiBold, fontSize = 24.sp),
     headlineSmall = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.SemiBold, fontSize = 20.sp),
     titleLarge = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Medium, fontSize = 20.sp),
-    titleMedium = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Medium, fontSize = 18.sp),
+    titleMedium = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight(500), fontSize = 18.sp , lineHeight = 22.sp),
     titleSmall = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Medium, fontSize = 16.sp),
     bodyLarge = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Normal, fontSize = 18.sp),
     bodyMedium = TextStyle(fontFamily = nunitoFont, fontWeight = FontWeight.Normal, fontSize = 16.sp),
