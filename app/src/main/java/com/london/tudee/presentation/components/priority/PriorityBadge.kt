@@ -38,13 +38,20 @@ fun PriorityBadge(
 ) {
     val resources = getPriorityResources(priority)
 
+    val targetBackgroundColor = if (isSelected) resources.backgroundColor else TudeeTheme.colors.surfaceLow
+    val targetContentColor = if (isSelected) TudeeTheme.colors.onPrimary else TudeeTheme.colors.hint
+
     val backgroundColor by animateColorAsState(
-        targetValue = if (isSelected) resources.backgroundColor else TudeeTheme.colors.surfaceLow,
-        animationSpec = tween(durationMillis = 300)
+        targetValue = targetBackgroundColor,
+        animationSpec = tween(durationMillis = 100)
+    )
+    val contentColor by animateColorAsState(
+        targetValue = targetContentColor,
+        animationSpec = tween(durationMillis = 100)
     )
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .height(28.dp)
             .wrapContentWidth()
             .clickable(
@@ -72,7 +79,7 @@ fun PriorityBadge(
                     .size(12.dp),
                 painter = painterResource(id = resources.iconResId),
                 contentDescription = "Priority Icon",
-                tint = if (isSelected) TudeeTheme.colors.onPrimary else TudeeTheme.colors.hint
+                tint = contentColor
             )
             Text(
                 modifier = Modifier,
@@ -80,7 +87,7 @@ fun PriorityBadge(
                 style = TudeeTheme.typography.labelSmall,
                 lineHeight = 16.sp,
                 textAlign = TextAlign.Start,
-                color = if (isSelected) TudeeTheme.colors.onPrimary else TudeeTheme.colors.hint
+                color = contentColor
             )
         }
     }

@@ -10,11 +10,12 @@ import com.london.tudee.presentation.design_system.theme.ThemePreviews
 
 @Composable
 fun PrioritySelector(
+    modifier: Modifier = Modifier,
     selectedPriority: Priority,
     onPrioritySelected: (Priority) -> Unit
 ) {
     Row(
-        modifier = Modifier.wrapContentWidth(),
+        modifier = modifier.wrapContentWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Priority.entries.forEach {
