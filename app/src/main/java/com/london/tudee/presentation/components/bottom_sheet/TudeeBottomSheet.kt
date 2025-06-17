@@ -56,12 +56,11 @@ fun TudeeBottomSheet(
     actions: @Composable ColumnScope.() -> Unit = {}
 ) {
     val configuration = LocalConfiguration.current
-    val maxHeight = (configuration.screenHeightDp * 0.75).dp
+    val maxHeight = (configuration.screenHeightDp * 0.86).dp
 
     var offsetY by remember { mutableFloatStateOf(0f) }
     val dismissThreshold = 150f
 
-    // Reset offset when bottom sheet becomes visible
     LaunchedEffect(visible) {
         if (visible) {
             offsetY = 0f
@@ -107,12 +106,11 @@ fun TudeeBottomSheet(
                                 if (offsetY > dismissThreshold) {
                                     onDismiss()
                                 } else {
-                                    offsetY = 0f // Only reset if not dismissing
+                                    offsetY = 0f
                                 }
                             }
                         ) { _, dragAmount ->
                             val newOffset = offsetY + dragAmount.y
-                            // Only allow dragging down (positive offset)
                             offsetY = if (newOffset > 0) newOffset else 0f
                         }
                     }
