@@ -17,4 +17,6 @@
     <string name="low">Low</string>
     <string name="home">Home</string>
     <string name="hello_from">"Hello from "</string>
+    <string name="move_to_in_progress">Move to in progress</string>">
+    <string name="move_to_done">Move to done</string>">
 </resources>
