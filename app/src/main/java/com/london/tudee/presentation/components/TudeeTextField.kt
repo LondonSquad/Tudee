@@ -57,7 +57,6 @@ fun TudeeTextField(
 
     Box(
         modifier = modifier
-            .background(TudeeTheme.colors.surface)
             .fillMaxWidth()
             .height(if (multiLined) 168.dp else 56.dp)
             .border(
@@ -66,6 +65,7 @@ fun TudeeTextField(
                 shape = cornerRadius,
             )
             .clip(cornerRadius)
+            .background(TudeeTheme.colors.surface)
             .padding(top = if (multiLined) 12.dp else 0.dp)
             .clickable {
                 focusRequester.requestFocus()

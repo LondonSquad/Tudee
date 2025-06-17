@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name" translatable="false">Tudee</string>
-    <string name="back_arrow">Back Arrow</string>
-    <string name="filter_icon">Filter Icon</string>
-    <string name="tudee_avatar">Tudee Avatar</string>
-    <string name="tudee">Tudee</string>
-    <string name="tudee_greeting">Your cute Helper for Every Task</string>
+    <string name="back_arrow" translatable="false">Back Arrow</string>
+    <string name="filter_icon" translatable="false">Filter Icon</string>
+    <string name="tudee_avatar" translatable="false">Tudee Avatar</string>
+    <string name="tudee" translatable="false">Tudee</string>
+    <string name="tudee_greeting" translatable="false">Your cute Helper for Every Task</string>
     <string name="In_Progress">In Progress</string>
     <string name="Done">Done</string>
     <string name="To_Do">To-Do</string>
@@ -15,6 +15,10 @@
     <string name="high">High</string>
     <string name="medium">Medium</string>
     <string name="low">Low</string>
-    <string name="home">Home</string>
+    <string name="home" translatable="false">Home</string>
     <string name="hello_from">"Hello from "</string>
+    <string name="add_new_task">Add new task</string>
+    <string name="edit_task">Edit task</string>
+    <string name="priority">Priority</string>
+
 </resources>

@@ -7,4 +7,7 @@
     <string name="medium">متوسط</string>
     <string name="low">منخفض</string>
     <string name="hello_from">"مرحبا بك مع "</string>
+    <string name="add_new_task">أضف مهمة جديدة</string>
+    <string name="priority">مدى الأولوية</string>
+    <string name="edit_task">تعديل المهمة</string>
 </resources>
