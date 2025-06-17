@@ -181,9 +181,9 @@ private fun StatusRow(
         }
         Spacer(modifier = Modifier.width(8.dp))
         when (priority) {
-            Priority.HIGH -> PriorityBadge(priority = Priority.HIGH, selected = true)
-            Priority.MEDIUM -> PriorityBadge(priority = Priority.MEDIUM, selected = true)
-            Priority.LOW -> PriorityBadge(priority = Priority.LOW, selected = true)
+            Priority.HIGH -> PriorityBadge(priority = Priority.HIGH, isSelected = true)
+            Priority.MEDIUM -> PriorityBadge(priority = Priority.MEDIUM, isSelected = true)
+            Priority.LOW -> PriorityBadge(priority = Priority.LOW, isSelected = true)
         }
     }
 }
