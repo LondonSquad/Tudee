@@ -33,53 +33,54 @@ fun TudeeBottomNavigationBar(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    TudeeTheme {
-        NavigationBar(
-            modifier = modifier,
-            tonalElevation = 0.dp,
-            containerColor = TudeeTheme.colors.surfaceHigh
-        ) {
-            items.forEach { item ->
-                val isSelected = item.route == currentRoute
-                NavigationBarItem(
-                    selected = isSelected, onClick = {
-                        if (item.route != currentRoute) {
-                            navController.navigate(item.route) {
-                                launchSingleTop = true
-                                popUpTo(navController.graph.startDestinationId) { saveState = true }
-                                restoreState = true
-                            }
+
+    NavigationBar(
+        modifier = modifier,
+        tonalElevation = 0.dp,
+        containerColor = TudeeTheme.colors.surfaceHigh
+    ) {
+        items.forEach { item ->
+            val isSelected = item.route == currentRoute
+            NavigationBarItem(
+                selected = isSelected,
+                onClick = {
+                    if (item.route != currentRoute) {
+                        navController.navigate(item.route) {
+                            launchSingleTop = true
+                            popUpTo(navController.graph.startDestinationId) { saveState = true }
+                            restoreState = true
                         }
-                    }, icon = {
-                        if (isSelected) {
-                            Box(
-                                modifier = Modifier
-                                    .size(42.dp)
-                                    .background(
-                                        color = TudeeTheme.colors.primaryVariant,
-                                        shape = TudeeTheme.shapes.small
-                                    ), contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    modifier = Modifier.size(21.5.dp),
-                                    painter = painterResource(item.selectedIcon),
-                                    contentDescription = item.contentDescription,
-                                    tint = Color.Unspecified
-                                )
-                            }
-                        } else {
+                    }
+                },
+                icon = {
+                    if (isSelected) {
+                        Box(
+                            modifier = Modifier
+                                .size(42.dp)
+                                .background(
+                                    color = TudeeTheme.colors.primaryVariant,
+                                    shape = TudeeTheme.shapes.small
+                                ), contentAlignment = Alignment.Center
+                        ) {
                             Icon(
                                 modifier = Modifier.size(21.5.dp),
-                                painter = painterResource(item.unselectedIcon),
+                                painter = painterResource(item.selectedIcon),
                                 contentDescription = item.contentDescription,
-                                tint = TudeeTheme.colors.hint
+                                tint = Color.Unspecified
                             )
                         }
-                    }, colors = NavigationBarItemDefaults.colors(
-                        indicatorColor = Color.Transparent
-                    )
+                    } else {
+                        Icon(
+                            modifier = Modifier.size(21.5.dp),
+                            painter = painterResource(item.unselectedIcon),
+                            contentDescription = item.contentDescription,
+                            tint = TudeeTheme.colors.hint
+                        )
+                    }
+                }, colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = Color.Transparent
                 )
-            }
+            )
         }
     }
 }
@@ -89,19 +90,21 @@ fun TudeeBottomNavigationBar(
 @Composable
 fun PreviewTestScreen() {
     val navController = rememberNavController()
-    Scaffold(
-        bottomBar = {
-            TudeeBottomNavigationBar(navController = navController)
-        }
-    ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = Routes.HOME,
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable(Routes.HOME) { NavigationTestScreen(TudeeTheme.colors.primary) }
-            composable(Routes.TASKS) { NavigationTestScreen(TudeeTheme.colors.purpleAccent) }
-            composable(Routes.CATEGORIES) { NavigationTestScreen(TudeeTheme.colors.emojiTint) }
+    TudeeTheme {
+        Scaffold(
+            bottomBar = {
+                TudeeBottomNavigationBar(navController = navController)
+            }
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = Routes.HOME,
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                composable(Routes.HOME) { NavigationTestScreen(TudeeTheme.colors.primary) }
+                composable(Routes.TASKS) { NavigationTestScreen(TudeeTheme.colors.purpleAccent) }
+                composable(Routes.CATEGORIES) { NavigationTestScreen(TudeeTheme.colors.emojiTint) }
+            }
         }
     }
 }

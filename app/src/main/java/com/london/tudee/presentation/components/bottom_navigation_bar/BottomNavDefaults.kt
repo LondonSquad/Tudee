@@ -6,19 +6,19 @@ object TudeeBottomNavItems {
     val items = listOf(
         TudeeBottomNavItem(
             route = Routes.HOME,
-            contentDescription = "Home",
+            contentDescription = null,
             selectedIcon = R.drawable.home_nav_bar_selected,
             unselectedIcon = R.drawable.home_nav_bar_not_selected
         ),
         TudeeBottomNavItem(
             route = Routes.TASKS,
-            contentDescription = "Tasks",
+            contentDescription = null,
             selectedIcon = R.drawable.list_nav_bar_selected,
             unselectedIcon = R.drawable.list_nav_bar_not_selected
         ),
         TudeeBottomNavItem(
             route = Routes.CATEGORIES,
-            contentDescription = "Dashboard",
+            contentDescription = null,
             selectedIcon = R.drawable.categories_nav_bar_selected,
             unselectedIcon = R.drawable.categories_nav_bar_not_selected
         )

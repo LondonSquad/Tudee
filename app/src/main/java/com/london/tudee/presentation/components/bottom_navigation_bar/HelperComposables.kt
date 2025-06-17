@@ -11,7 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.london.tudee.R
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 
@@ -33,12 +35,12 @@ fun NavigationTestScreen(
             ) {
                 Row {
                     Text(
-                        text = "Hello from ",
+                        text = stringResource(R.string.hello_from),
                         color = TudeeTheme.colors.title,
                         style = TudeeTheme.typography.titleLarge
                     )
                     Text(
-                        text = "Tudee",
+                        text = stringResource(R.string.app_name),
                         color = TudeeTheme.colors.primaryVariant,
                         style = TudeeTheme.typography.cherryBomb
                     )
