@@ -12,7 +12,7 @@ val OnPrimaryLight = Color(0xDEFFFFFF)
 val TitleLight = Color(0xDE1F1F1F)
 val BodyLight = Color(0x991F1F1F)
 val HintLight = Color(0x611F1F1F)
-val StrokeLight = Color(0xFF1F1F1F)
+val StrokeLight = Color(0x1F1F1F1F)
 val SurfaceLowLight = Color(0xFFF0F0F0)
 val SurfaceHighLight = Color(0xFFFFFFFF)
 val CaptionLight = Color(0xB3FFFFFF)
@@ -31,6 +31,7 @@ val ErrorVariantLight = Color(0xFFFCE8E8)
 val OverlayLight = Color(0x5249BAF2)
 val EmojiTintLight = Color(0xDE1F1F1F)
 val PrimaryGradientLight = listOf(Color(0xFF49BAF2), Color(0xFF3A9CCD))
+val Surface = Color(0xFFF9F9F9)
 
 val LightTudeeColors = TudeeColors(
     primary = PrimaryLight,
