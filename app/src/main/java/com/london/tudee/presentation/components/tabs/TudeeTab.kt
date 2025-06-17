@@ -90,7 +90,7 @@ fun TudeeTab(
                         Box(
                             modifier = Modifier
                                 .size(28.dp)
-                                .clip(shape = RoundedCornerShape(100.dp))
+                                .clip(shape = TudeeTheme.shapes.circle)
                                 .background(color = TudeeTheme.colors.surface),
                             contentAlignment = Center
                         ) {
