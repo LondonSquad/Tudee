@@ -29,4 +29,8 @@
     <string name="category_budgeting">إعداد الميزانية</string>
     <string name="category_self_care">العناية بالنفس</string>
     <string name="category_event">الفعاليات</string>
+    <string name="add">أضف</string>
+    <string name="save">حفظ</string>
+    <string name="cancel">إلغاء</string>
+    <string name="submit">تأكيد</string>
 </resources>

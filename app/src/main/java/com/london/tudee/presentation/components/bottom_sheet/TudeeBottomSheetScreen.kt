@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.london.tudee.R
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
@@ -214,7 +215,7 @@ private fun ScrollableBottomSheetScreenPreview() {
                     Spacer(modifier = Modifier.height(32.dp))
 
                     TudeePrimaryButton(
-                        text = "Show Scrollable Bottom Sheet",
+                        text = "Show Bottom Sheet",
                         onClick = { showBottomSheet = true },
                         modifier = Modifier.fillMaxWidth()
                     )
