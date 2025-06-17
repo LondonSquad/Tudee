@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.components
+package com.london.tudee.presentation.components.tabs
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
