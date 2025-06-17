@@ -56,7 +56,7 @@ fun TudeeBottomSheet(
     actions: @Composable ColumnScope.() -> Unit = {}
 ) {
     val configuration = LocalConfiguration.current
-    val maxHeight = (configuration.screenHeightDp * 0.75).dp
+    val maxHeight = (configuration.screenHeightDp * 0.86).dp
 
     var offsetY by remember { mutableFloatStateOf(0f) }
     val dismissThreshold = 150f
