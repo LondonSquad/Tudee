@@ -15,4 +15,6 @@
     <string name="high">High</string>
     <string name="medium">Medium</string>
     <string name="low">Low</string>
+    <string name="home">Home</string>
+    <string name="hello_from">"Hello from "</string>
 </resources>

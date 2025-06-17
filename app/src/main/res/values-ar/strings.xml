@@ -6,4 +6,5 @@
     <string name="high">عالي</string>
     <string name="medium">متوسط</string>
     <string name="low">منخفض</string>
+    <string name="hello_from">"مرحبا بك مع "</string>
 </resources>
