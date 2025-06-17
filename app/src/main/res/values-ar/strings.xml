@@ -9,4 +9,8 @@
     <string name="on_bording_body_2">تودي ليس غاضبًا... فقط أشعر ببعض خيبة الأمل، لنعد إلى المسار الصحيح معًا.</string>
     <string name="on_bording_title_3">لنُكمل المهمة ونحتفل معًا.</string>
     <string name="on_bording_body_3">التقدم هو التقدم. سيحتفل بك تودي على كل فوز، كبيرًا كان أم صغيرًا.</string>
+    <string name="high">عالي</string>
+    <string name="medium">متوسط</string>
+    <string name="low">منخفض</string>
+    <string name="hello_from">"مرحبا بك مع "</string>
 </resources>

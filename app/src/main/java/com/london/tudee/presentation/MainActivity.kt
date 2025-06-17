@@ -1,5 +1,6 @@
 package com.london.tudee.presentation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,9 +23,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.onboarding.OnboardingFlow
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -32,57 +33,59 @@ class MainActivity : ComponentActivity() {
             TestScreen()
         }
     }
-}
 
+    @ThemePreviews
+    @Composable
+    fun PreviewTestScreen() {
+        TestScreen()
+    }
 
-@ThemePreviews
-@Composable
-fun PreviewTestScreen() {
-    TestScreen()
-}
-
-@Composable
-fun TestScreen() {
-    //val isDark by remember { mutableStateOf(false) }
-    //  TudeeTheme (isDarkMode = isDark){}
-    TudeeTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(), color = TudeeTheme.colors.primary
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+    @Composable
+    fun TestScreen() {
+        //val isDark by remember { mutableStateOf(false) }
+        //  TudeeTheme (isDarkMode = isDark){}
+        TudeeTheme {
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = TudeeTheme.colors.primary
             ) {
-                Row {
-                    Text(
-                        text = "Hello from ",
-                        color = TudeeTheme.colors.title,
-                        style = TudeeTheme.typography.titleLarge
-                    )
-                    Text(
-                        text = "Tudee",
-                        color = TudeeTheme.colors.primaryVariant,
-                        style = TudeeTheme.typography.cherryBomb
-                    )
-                }
-
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    onClick = { /*isDark = !isDark*/ }, colors = ButtonDefaults.buttonColors(
-                        contentColor = TudeeTheme.colors.title,
-                        containerColor = TudeeTheme.colors.pinkAccent
-                    ), shape = TudeeTheme.shapes.medium
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = if (isSystemInDarkTheme()) "Switch to Light" else "Switch to Dark",
-                        color = TudeeTheme.colors.onPrimary,
-                        style = TudeeTheme.typography.labelSmall
-                    )
+                    Row {
+                        Text(
+                            text = "Hello from ",
+                            color = TudeeTheme.colors.title,
+                            style = TudeeTheme.typography.titleLarge
+                        )
+                        Text(
+                            text = "Tudee",
+                            color = TudeeTheme.colors.primaryVariant,
+                            style = TudeeTheme.typography.cherryBomb
+                        )
+                    }
+
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = { /*isDark = !isDark*/ },
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = TudeeTheme.colors.title,
+                            containerColor = TudeeTheme.colors.pinkAccent
+                        ),
+                        shape = TudeeTheme.shapes.medium
+                    ) {
+                        Text(
+                            text = if (isSystemInDarkTheme()) "Switch to Light" else "Switch to Dark",
+                            color = TudeeTheme.colors.onPrimary,
+                            style = TudeeTheme.typography.labelSmall
+                        )
+                    }
                 }
             }
         }

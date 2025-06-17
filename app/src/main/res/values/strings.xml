@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tudee</string>
+    <string name="app_name" translatable="false">Tudee</string>
     <string name="back_arrow">Back Arrow</string>
     <string name="filter_icon">Filter Icon</string>
     <string name="tudee_avatar">Tudee Avatar</string>
@@ -12,6 +12,11 @@
     <string name="task_title">Task title</string>
     <string name="description">Description</string>
     <string name="category_title">Category title</string>
+    <string name="high">High</string>
+    <string name="medium">Medium</string>
+    <string name="low">Low</string>
+    <string name="home">Home</string>
+    <string name="hello_from">"Hello from "</string>
     <string name="on_bording_title_1">Overwhelmed with tasks?</string>
     <string name="on_bording_body_1">Let’s bring some order to the chaos. Tudee is here to help you sort, plan, and breathe easier.</string>
     <string name="on_bording_title_2">Uh-oh! Procrastinating again</string>
