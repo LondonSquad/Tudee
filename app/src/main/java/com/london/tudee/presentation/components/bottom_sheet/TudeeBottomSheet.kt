@@ -83,13 +83,13 @@ fun TudeeBottomSheet(
             modifier = modifier
                 .fillMaxWidth()
                 .heightIn(max = maxHeight)
+                .offset { IntOffset(0, offsetY.roundToInt()) }
                 .clip(
                     TudeeTheme.shapes.large.copy(
                         bottomEnd = CornerSize(0.dp),
                         bottomStart = CornerSize(0.dp)
                     )
                 )
-                .offset { IntOffset(0, offsetY.roundToInt()) }
                 .background(TudeeTheme.colors.surface),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
