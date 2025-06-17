@@ -15,13 +15,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.london.tudee.presentation.components.buttons.TudeeTextButton
-import kotlinx.coroutines.launch
+import com.london.tudee.presentation.design_system.theme.ThemePreviews
+import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import navigateNext
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnboardingFlow(onClickSkip: () -> Unit) {
+fun OnBoardingHorizontalPager(onClickSkip: () -> Unit) {
     val pagerState = rememberPagerState(pageCount = { OnBoardingContent.size })
     val coroutineScope = rememberCoroutineScope()
 
@@ -63,6 +64,14 @@ fun OnboardingFlow(onClickSkip: () -> Unit) {
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .systemGesturesPadding(),
-            )
+        )
+    }
+}
+
+@ThemePreviews
+@Composable
+fun PreviewOnboardingFlow() {
+    TudeeTheme {
+        OnBoardingHorizontalPager(onClickSkip = {})
     }
 }

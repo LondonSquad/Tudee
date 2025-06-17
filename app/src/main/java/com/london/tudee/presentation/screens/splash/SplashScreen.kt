@@ -14,7 +14,7 @@ fun PreviewTestScreen() {
     SplashScreen()
 }
 
-@Preview
+@ThemePreviews
 @Composable
 fun SplashScreen() {
     Box {
