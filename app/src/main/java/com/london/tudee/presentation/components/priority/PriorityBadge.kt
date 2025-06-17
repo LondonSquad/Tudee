@@ -1,6 +1,9 @@
 package com.london.tudee.presentation.components.priority
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -13,6 +16,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -28,21 +33,29 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 fun PriorityBadge(
     modifier: Modifier = Modifier,
     priority: Priority,
-    selected: Boolean = false,
-    clickable: Boolean = false,
-    onClick: (() -> Unit)? = null
+    isSelected: Boolean = false,
+    onClick: ((Priority) -> Unit)? = null
 ) {
     val resources = getPriorityResources(priority)
+
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isSelected) resources.backgroundColor else TudeeTheme.colors.surfaceLow,
+        animationSpec = tween(durationMillis = 300)
+    )
 
     Card(
         modifier = Modifier
             .height(28.dp)
             .wrapContentWidth()
-            .then(
-                if (clickable) Modifier.clickable { onClick?.invoke() } else Modifier
-            ),
+            .clickable(
+                enabled = onClick != null,
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                onClick?.invoke(priority)
+            },
         shape = TudeeTheme.shapes.circle,
-        colors = CardDefaults.cardColors(containerColor = if (selected) resources.backgroundColor else TudeeTheme.colors.surfaceLow)
+        colors = CardDefaults.cardColors(containerColor = backgroundColor)
     ) {
         Row(
             modifier = Modifier
@@ -55,11 +68,11 @@ fun PriorityBadge(
         ) {
             Icon(
                 modifier = Modifier
-                    .size(12.dp)
-                    .padding(end = 2.dp),
+                    .padding(end = 2.dp)
+                    .size(12.dp),
                 painter = painterResource(id = resources.iconResId),
                 contentDescription = "Priority Icon",
-                tint = if (selected) TudeeTheme.colors.onPrimary else TudeeTheme.colors.hint
+                tint = if (isSelected) TudeeTheme.colors.onPrimary else TudeeTheme.colors.hint
             )
             Text(
                 modifier = Modifier,
@@ -67,7 +80,7 @@ fun PriorityBadge(
                 style = TudeeTheme.typography.labelSmall,
                 lineHeight = 16.sp,
                 textAlign = TextAlign.Start,
-                color = if (selected) TudeeTheme.colors.onPrimary else TudeeTheme.colors.hint
+                color = if (isSelected) TudeeTheme.colors.onPrimary else TudeeTheme.colors.hint
             )
         }
     }
@@ -100,7 +113,7 @@ fun getPriorityResources(priority: Priority): PriorityResources {
 @Composable
 fun PreviewPriorityBadgeHigh() {
     TudeeTheme {
-        PriorityBadge(priority = Priority.HIGH, selected = true)
+        PriorityBadge(priority = Priority.HIGH, isSelected = true)
     }
 }
 
@@ -108,7 +121,7 @@ fun PreviewPriorityBadgeHigh() {
 @Composable
 fun PreviewPriorityBadgeMedium() {
     TudeeTheme {
-        PriorityBadge(priority = Priority.MEDIUM, selected = true)
+        PriorityBadge(priority = Priority.MEDIUM, isSelected = true)
     }
 }
 
@@ -116,7 +129,7 @@ fun PreviewPriorityBadgeMedium() {
 @Composable
 fun PreviewPriorityBadgeLowSelected() {
     TudeeTheme {
-        PriorityBadge(priority = Priority.LOW, selected = true)
+        PriorityBadge(priority = Priority.LOW, isSelected = true)
     }
 }
 
