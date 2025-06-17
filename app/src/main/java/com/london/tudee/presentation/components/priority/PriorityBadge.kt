@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -34,7 +35,7 @@ fun PriorityBadge(
     modifier: Modifier = Modifier,
     priority: Priority,
     isSelected: Boolean = false,
-    onClick: ((Priority) -> Unit)? = null
+    onClick: (Priority) -> Unit = {}
 ) {
     val resources = getPriorityResources(priority)
 
@@ -55,11 +56,10 @@ fun PriorityBadge(
             .height(28.dp)
             .wrapContentWidth()
             .clickable(
-                enabled = onClick != null,
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
             ) {
-                onClick?.invoke(priority)
+                onClick.invoke(priority)
             },
         shape = TudeeTheme.shapes.circle,
         colors = CardDefaults.cardColors(containerColor = backgroundColor)
