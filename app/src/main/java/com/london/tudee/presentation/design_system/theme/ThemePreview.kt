@@ -6,14 +6,12 @@ import androidx.compose.ui.tooling.preview.Preview
 @Preview(
     name = "LIGHT",
     uiMode = Configuration.UI_MODE_NIGHT_NO,
-    showBackground = true,
-    locale = "en"
+    showBackground = true
 )
 @Preview(
     name = "DARK",
     uiMode = Configuration.UI_MODE_NIGHT_YES,
-    showBackground = true,
-    locale = "en"
+    showBackground = true
 )
 @Preview(
     name = "Arabic - RTL",
