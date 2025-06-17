@@ -58,10 +58,8 @@ fun TudeeBottomSheetScreen(
             .fillMaxSize()
             .navigationBarsPadding()
     ) {
-        // Main screen content
         screenContent()
 
-        // Dark overlay that dims background content
         AnimatedVisibility(
             visible = showBottomSheet,
             enter = fadeIn(animationSpec = tween(300)),
@@ -80,7 +78,6 @@ fun TudeeBottomSheetScreen(
             )
         }
 
-        // Bottom Sheet positioned at bottom
         Box(
             modifier = Modifier
                 .fillMaxSize(),
@@ -92,9 +89,7 @@ fun TudeeBottomSheetScreen(
                 modifier = Modifier.clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null
-                ) {
-                    // Prevent click from propagating to background
-                },
+                ) {},
                 content = bottomSheetContent,
                 actions = bottomSheetActions
             )
