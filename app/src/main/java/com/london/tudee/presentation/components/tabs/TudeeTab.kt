@@ -1,7 +1,6 @@
 package com.london.tudee.presentation.components.tabs
 
 
-import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -32,7 +32,7 @@ import com.london.tudee.R
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
-@SuppressLint("UnrememberedMutableInteractionSource")
+
 @Composable
 fun TudeeTab(
     @StringRes text: Int,
@@ -41,6 +41,8 @@ fun TudeeTab(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     if (!isSelected) {
         Row(
             modifier = modifier
@@ -48,9 +50,9 @@ fun TudeeTab(
                 .background(TudeeTheme.colors.surfaceHigh)
                 .padding(horizontal = 32.dp, vertical = 12.dp)
                 .clickable(
-                    interactionSource = MutableInteractionSource(),
+                    interactionSource = interactionSource,
                     indication = null,
-                    onClick = { onClick() }
+                    onClick = onClick
                 ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
