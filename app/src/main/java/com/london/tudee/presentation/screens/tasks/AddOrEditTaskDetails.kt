@@ -12,10 +12,10 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
+import com.london.tudee.domain.entities.Priority
 import com.london.tudee.presentation.components.CategoryItem
 import com.london.tudee.presentation.components.DatePicker
 import com.london.tudee.presentation.components.TudeeTextField
-import com.london.tudee.presentation.components.priority.Priority
 import com.london.tudee.presentation.components.priority.PrioritySelector
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
