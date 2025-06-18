@@ -39,12 +39,13 @@ fun TaskItem(
     @DrawableRes iconResId: Int,
     title: String,
     description: String,
-    date: String? = null
+    date: String? = null,
+    isSelected: Boolean = false
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(123.dp),
+            .height(111.dp),
         shape = TudeeTheme.shapes.small,
         colors = CardDefaults.cardColors(containerColor = TudeeTheme.colors.surfaceHigh)
     ) {
@@ -57,7 +58,7 @@ fun TaskItem(
         ) {
             TaskItemIconSection(iconResId)
             Spacer(modifier = Modifier.width(8.dp))
-            TaskItemTopBar(priority = priority, date = date)
+            TaskItemTopBar(priority = priority, date = date, isSelected = isSelected)
         }
 
         TaskItemContent(
@@ -83,7 +84,7 @@ private fun TaskItemIconSection(iconResId: Int) {
 }
 
 @Composable
-private fun TaskItemTopBar(priority: Priority, date: String?) {
+private fun TaskItemTopBar(priority: Priority, date: String?, isSelected: Boolean) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -92,7 +93,7 @@ private fun TaskItemTopBar(priority: Priority, date: String?) {
             DateBadge(dateText = date)
         }
 
-        PriorityBadge(priority = priority)
+        PriorityBadge(priority = priority, isSelected = isSelected)
     }
 }
 
