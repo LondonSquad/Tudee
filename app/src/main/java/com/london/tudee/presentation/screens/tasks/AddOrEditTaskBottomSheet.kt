@@ -3,16 +3,13 @@ package com.london.tudee.presentation.screens.tasks
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,35 +26,25 @@ fun AddOrEditTaskBottomSheet(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
     @StringRes buttonText: Int,
+    onDismiss: () -> Unit,
+    screenContent: @Composable () -> Unit
 ) {
-    var showBottomSheet by remember { mutableStateOf(false) }
-
     TudeeBottomSheetScreen(
         showBottomSheet = true,
-        onDismiss = { showBottomSheet = true },
-        screenContent = {
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .background(TudeeTheme.colors.background),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-            }
-        },
+        onDismiss = onDismiss,
+        screenContent = { screenContent() },
         bottomSheetContent = {
             AddOrEditTaskDetails(
+                modifier = modifier,
                 title = title,
             )
         },
         bottomSheetActions = {
-
             TudeePrimaryButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(buttonText),
-                isDisabled = title.equals(null),
-                onClick = { },
+                isDisabled = false,
+                onClick = onDismiss,
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -65,9 +52,8 @@ fun AddOrEditTaskBottomSheet(
             TudeeSecondaryButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.cancel),
-                onClick = { },
+                onClick = onDismiss,
             )
-
         }
     )
 }
@@ -79,6 +65,14 @@ fun PreviewAddOrEditTaskBottomSheet() {
         AddOrEditTaskBottomSheet(
             title = R.string.task_title,
             buttonText = R.string.add,
+            onDismiss = {},
+            screenContent = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(TudeeTheme.colors.background)
+                )
+            }
         )
     }
 }

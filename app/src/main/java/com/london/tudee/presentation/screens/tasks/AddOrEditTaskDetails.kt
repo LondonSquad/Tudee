@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -26,11 +28,19 @@ fun AddOrEditTaskDetails(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
 ) {
-    TaskDetailsContent(
-        modifier = modifier,
-        title = title
-    )
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(TudeeTheme.colors.surface)
+            .height(500.dp) // Set a fixed height for the bottom sheet content
+    ) {
+        TaskDetailsContent(
+            title = title,
+            modifier = Modifier
+        )
+    }
 }
+
 
 @Composable
 private fun TaskDetailsContent(
@@ -40,10 +50,12 @@ private fun TaskDetailsContent(
     var selectedPriority by remember { mutableStateOf(Priority.HIGH) }
     var selectedCategory by remember { mutableStateOf<CategoryUiModel?>(null) }
     val categories = rememberSampleCategories()
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxSize()
+            .verticalScroll(scrollState)
             .background(TudeeTheme.colors.surface)
     ) {
         TaskHeader(title)
@@ -137,24 +149,49 @@ private fun CategoriesGrid(
     selectedCategory: CategoryUiModel?,
     onCategorySelected: (CategoryUiModel) -> Unit
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(horizontal = 16.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(categories) { category ->
-            CategoryItem(
-                iconRes = category.iconRes,
-                title = stringResource(category.title),
-                tint = category.tint,
-                isSelected = category == selectedCategory,
-                onClick = { onCategorySelected(category) }
-            )
+        // Split categories into rows of 3
+        categories.chunked(3).forEach { rowCategories ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                rowCategories.forEach { category ->
+                    CategoryItem(
+                        modifier = Modifier.weight(1f),
+                        iconRes = category.iconRes,
+                        title = stringResource(category.title),
+                        tint = category.tint,
+                        isSelected = category == selectedCategory,
+                        onClick = { onCategorySelected(category) }
+                    )
+
+                    // Add spacing between items, except for the last item in the row
+                    if (category != rowCategories.last()) {
+                        Spacer(modifier = Modifier.width(16.dp))
+                    }
+                }
+
+                // Fill empty spaces in the last row if needed
+                val emptySpaces = 3 - rowCategories.size
+                if (emptySpaces > 0) {
+                    repeat(emptySpaces) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        if (it < emptySpaces - 1) {
+                            Spacer(modifier = Modifier.width(16.dp))
+                        }
+                    }
+                }
+            }
         }
     }
 }
+
 
 @ThemePreviews
 @Composable
