@@ -52,13 +52,17 @@ fun SwitchButton(
     onToggle: (Boolean) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isDarkMode) TudeeTheme.colors.skyNightBackground else TudeeTheme.colors.primary,
+        animationSpec = tween(1000)
+    )
     Box(
         modifier = Modifier
             .height(36.dp)
             .width(64.dp)
             .clip(TudeeTheme.shapes.circle)
             .background(
-                color = if (isDarkMode) Color(0xff151535) else TudeeTheme.colors.primary,
+                color = backgroundColor,
                 shape = TudeeTheme.shapes.circle
             )
             .border(
@@ -142,10 +146,7 @@ fun SwitchButton(
                     .size(32.dp)
                     .background(
                         brush = Brush.linearGradient(
-                            listOf(
-                                Color(0xffE9F0FF),
-                                Color(0xffE0E9FE),
-                            )
+                            TudeeTheme.colors.linearMoodColor
                         ),
                         shape = TudeeTheme.shapes.circle
                     )
@@ -188,7 +189,11 @@ private fun BoxScope.UpperWhiteCloud(isDarkMood: Boolean) {
     )
 
     val backgroundColor by animateColorAsState(
-        targetValue = if (isDarkMood) Color(0xffE9EFFF) else TudeeTheme.colors.surfaceHigh,
+        targetValue = if (isDarkMood) {
+            TudeeTheme.colors.upperSmallCircleMoon
+        } else {
+            TudeeTheme.colors.surfaceHigh
+        },
         animationSpec = tween(durationMillis = 1000, easing = EaseOut)
     )
 
@@ -197,8 +202,8 @@ private fun BoxScope.UpperWhiteCloud(isDarkMood: Boolean) {
             .size(size)
             .offset {
                 IntOffset(
-                    x = with(density) { offsetX.roundToPx() },
-                    y = with(density) { offsetY.roundToPx() }
+                    x = offsetX.roundToPx(),
+                    y = offsetY.roundToPx()
                 )
             }
             .align(Alignment.TopEnd)
@@ -315,8 +320,8 @@ private fun BoxScope.DownGrayCloud(isDarkMood: Boolean) {
             .align(Alignment.BottomEnd)
             .offset {
                 IntOffset(
-                    x = with(density) { offsetX.roundToPx() },
-                    y = with(density) { offsetY.roundToPx() }
+                    x = offsetX.roundToPx(),
+                    y = offsetY.roundToPx()
                 )
             }
             .background(

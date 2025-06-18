@@ -138,7 +138,11 @@ private fun OverLayerBox() {
                 .align(Alignment.TopCenter)
         ) {
             DateBadge(
-                modifier = Modifier.height(17.dp).align(Alignment.CenterHorizontally),
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .height(17.dp)
+                    .align(Alignment.CenterHorizontally)
+                ,
                 shape = RectangleShape,
                 colors = CardDefaults.cardColors(containerColor = TudeeTheme.colors.surfaceHigh),
                 dateText = "today,12-03-2025",
@@ -148,7 +152,7 @@ private fun OverLayerBox() {
                 lineHeight = 16.sp,
                 iconColor = TudeeTheme.colors.body,
                 textColor = TudeeTheme.colors.body,
-                contentPadding = PaddingValues(vertical = 0.dp, horizontal = 8.dp)
+                contentPadding = PaddingValues(vertical = 0.dp, )
             )
 
             TaskStatusSlider(
@@ -157,7 +161,7 @@ private fun OverLayerBox() {
                 note = null,
                 emoji = R.drawable.okay_status,
                 tudeePicture = R.drawable.tudee_warning,
-                modifier = Modifier.padding(horizontal = 6.dp)
+                modifier = Modifier.padding(start = 6.dp)
             )
 
             Text(
@@ -242,7 +246,6 @@ private fun ToDoSection() {
                 Icon(
                     painter = painterResource(R.drawable.left_arrow_icon),
                     contentDescription = null,
-                    tint = TudeeTheme.colors.body
                 )
             }
         }
@@ -309,7 +312,6 @@ private fun InProgressSection() {
                 Icon(
                     painter = painterResource(R.drawable.left_arrow_icon),
                     contentDescription = null,
-                    tint = TudeeTheme.colors.body
                 )
             }
         }
@@ -376,7 +378,6 @@ private fun DoneSection() {
                 Icon(
                     painter = painterResource(R.drawable.left_arrow_icon),
                     contentDescription = null,
-                    tint = TudeeTheme.colors.body
                 )
             }
         }
