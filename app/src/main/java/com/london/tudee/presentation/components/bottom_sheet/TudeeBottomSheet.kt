@@ -126,15 +126,17 @@ fun TudeeBottomSheet(
                     content()
                 }
 
-                Column(
-                    modifier = Modifier
-                        .zIndex(1f)
-                        .shadow(elevation = 20.dp)
-                        .background(TudeeTheme.colors.surfaceHigh)
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .fillMaxWidth()
-                ) {
-                    actions()
+                if (actions != {}) {
+                    Column(
+                        modifier = Modifier
+                            .zIndex(1f)
+                            .shadow(elevation = 20.dp)
+                            .background(TudeeTheme.colors.surfaceHigh)
+                            .padding(horizontal = 16.dp, vertical = 12.dp)
+                            .fillMaxWidth()
+                    ) {
+                        actions()
+                    }
                 }
             }
         }
