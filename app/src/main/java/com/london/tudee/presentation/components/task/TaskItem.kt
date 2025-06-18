@@ -1,9 +1,9 @@
 package com.london.tudee.presentation.components.task
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,12 +35,8 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun TaskItem(
     modifier: Modifier = Modifier,
-    priority: Priority,
-    @DrawableRes iconResId: Int,
-    title: String,
-    description: String,
-    date: String? = null,
-    isSelected: Boolean = false
+    isSelected: Boolean = false,
+    task: Task
 ) {
     Card(
         modifier = modifier
@@ -56,15 +52,18 @@ fun TaskItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            TaskItemIconSection(iconResId)
+            TaskItemIconSection(task.iconResId)
             Spacer(modifier = Modifier.width(8.dp))
-            TaskItemTopBar(priority = priority, date = date, isSelected = isSelected)
+            TaskItemTopBar(
+                priority = task.priority,
+                date = task.date,
+                isSelected = isSelected
+            )
         }
 
         TaskItemContent(
-            modifier = Modifier,
-            title = title,
-            description = description
+            title = task.title,
+            description = task.description
         )
     }
 }
@@ -84,13 +83,31 @@ private fun TaskItemIconSection(iconResId: Int) {
 }
 
 @Composable
-private fun TaskItemTopBar(priority: Priority, date: String?, isSelected: Boolean) {
+private fun TaskItemTopBar(
+    modifier: Modifier = Modifier,
+    priority: Priority,
+    date: String?,
+    isSelected: Boolean,
+) {
     Row(
+        modifier = modifier.height(28.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         if (!date.isNullOrEmpty()) {
-            DateBadge(dateText = date)
+            DateBadge(
+                modifier = Modifier.height(28.dp),
+                shape = TudeeTheme.shapes.circle,
+                colors = CardDefaults.cardColors(containerColor = TudeeTheme.colors.surface),
+                dateText = "12-03-2025",
+                iconSize = 12.dp,
+                textSize = 13.sp,
+                textStyle = TudeeTheme.typography.labelSmall,
+                lineHeight = 16.sp,
+                iconColor = TudeeTheme.colors.body,
+                textColor = TudeeTheme.colors.body,
+                contentPadding = PaddingValues(vertical = 6.dp, horizontal = 8.dp)
+            )
         }
 
         PriorityBadge(priority = priority, isSelected = isSelected)
@@ -136,37 +153,49 @@ private fun TaskItemContent(
 fun PreviewTaskItemHigh() {
     TudeeTheme {
         TaskItem(
-            priority = Priority.HIGH,
-            iconResId = R.drawable.ic_education,
-            title = "Organize Study Desk",
-            description = "Review cell structure and functions for tomorrow...",
-            date = "12-04-2025"
+            task = Task(
+                priority = Priority.HIGH,
+                iconResId = R.drawable.ic_education,
+                title = "Organize Study Desk",
+                description = "Review cell structure and functions for tomorrow...",
+                date = "12-04-2025"
+            )
         )
     }
 }
+
 
 @ThemePreviews
 @Composable
 fun PreviewTaskItemMedium() {
     TudeeTheme {
         TaskItem(
-            priority = Priority.MEDIUM,
-            iconResId = R.drawable.ic_education,
-            title = "Organize Study Desk",
-            description = "Review cell structure and functions for tomorrow..."
+            task = Task(
+                priority = Priority.MEDIUM,
+                iconResId = R.drawable.ic_education,
+                title = "Organize Study Desk",
+                description = "Review cell structure and functions for tomorrow...",
+                date = "12-04-2025"
+            )
         )
     }
 }
+
 
 @ThemePreviews
 @Composable
 fun PreviewTaskItemLow() {
     TudeeTheme {
         TaskItem(
-            priority = Priority.LOW,
-            iconResId = R.drawable.ic_education,
-            title = "Organize Study Desk",
-            description = "Review cell structure and functions for tomorrow..."
+            task = Task(
+                priority = Priority.LOW,
+                iconResId = R.drawable.ic_education,
+                title = "Organize Study Desk",
+                description = "Review cell structure and functions for tomorrow...",
+                date = "12-04-2025"
+            )
         )
     }
 }
+
+
