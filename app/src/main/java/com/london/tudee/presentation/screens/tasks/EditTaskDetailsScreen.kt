@@ -1,17 +1,15 @@
-package com.london.tudee.presentation.screens
+package com.london.tudee.presentation.screens.tasks
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -22,20 +20,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.packFloats
 import com.london.tudee.R
 import com.london.tudee.presentation.components.TopAppBar
 import com.london.tudee.presentation.components.priority.Priority
 import com.london.tudee.presentation.components.tabs.TabItem
 import com.london.tudee.presentation.components.tabs.TudeeTabLayout
-import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.Task
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
-fun TudeeTask(
+fun EditTaskDetails(
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -86,7 +82,7 @@ fun TudeeTask(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.edit_icon),
-                        contentDescription = stringResource(R.string.edit_icon),
+                        contentDescription = "Edit Icon",
                         tint = TudeeTheme.colors.body
                     )
                 }
@@ -201,8 +197,8 @@ val tasks = listOf(
 
 @ThemePreviews
 @Composable
-private fun tudeeTaskPreview() {
+private fun TudeeTaskPreview() {
     TudeeTheme {
-        TudeeTask()
+        EditTaskDetails()
     }
 }
