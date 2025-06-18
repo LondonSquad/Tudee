@@ -73,7 +73,9 @@ private fun TaskDetailsBottomSheetContent(
     onEditClick: () -> Unit = {},
     onMoveClick: () -> Unit = {}
 ) {
-    Column {
+    Column(
+        modifier = Modifier.padding(bottom = 12.dp)
+    ) {
         Text(
             text = stringResource(R.string.task_details),
             style = TudeeTheme.typography.titleLarge,
