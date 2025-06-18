@@ -43,6 +43,8 @@ fun TudeeTextField(
     multiLined: Boolean = false,
     value: String,
     onValueChange: (String) -> Unit,
+    readOnly: Boolean = false,
+    onClick: (() -> Unit)? = null,
 ) {
     val focusRequester = remember { FocusRequester() }
     val interactionSource = remember { MutableInteractionSource() }
@@ -68,7 +70,11 @@ fun TudeeTextField(
             .background(TudeeTheme.colors.surface)
             .padding(top = if (multiLined) 12.dp else 0.dp)
             .clickable {
-                focusRequester.requestFocus()
+                if (readOnly && onClick != null) {
+                    onClick()
+                } else if (!readOnly) {
+                    focusRequester.requestFocus()
+                }
             },
         contentAlignment = if (multiLined) Alignment.TopCenter else Alignment.Center,
     ) {
@@ -98,6 +104,7 @@ fun TudeeTextField(
             BasicTextField(
                 value = value,
                 onValueChange = onValueChange,
+                readOnly = readOnly,
                 singleLine = !multiLined,
                 interactionSource = interactionSource,
                 decorationBox = { innerTextField ->
@@ -133,6 +140,22 @@ fun TudeeTextFieldPreview() {
             hint = R.string.task_title,
             value = textState.value,
             onValueChange = { textState.value = it },
+        )
+    }
+}
+
+@ThemePreviews
+@Composable
+fun TudeeTextFieldReadOnlyPreview() {
+    TudeeTheme {
+        TudeeTextField(
+            multiLined = false,
+            icon = R.drawable.add_date_icon,
+            hint = R.string.select_date,
+            value = "Jan 15, 2024",
+            onValueChange = { },
+            readOnly = true,
+            onClick = { /* Handle click */ }
         )
     }
 }

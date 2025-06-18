@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.presentation.components.CategoryItem
+import com.london.tudee.presentation.components.DatePicker
 import com.london.tudee.presentation.components.TudeeTextField
 import com.london.tudee.presentation.components.priority.Priority
 import com.london.tudee.presentation.components.priority.PrioritySelector
@@ -20,6 +21,8 @@ import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.categories.CategoryUiModel
 import com.london.tudee.presentation.screens.categories.rememberSampleCategories
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 fun AddOrEditTaskDetails(
@@ -57,18 +60,36 @@ private fun TaskDetailsContent(
 ) {
     var selectedPriority by remember { mutableStateOf(Priority.HIGH) }
     var selectedCategory by remember { mutableStateOf<CategoryUiModel?>(null) }
+    var selectedDate by remember { mutableStateOf<Long?>(null) }
+    var showDatePicker by remember { mutableStateOf(false) }
     val categories = rememberSampleCategories()
 
     Column(
         modifier = modifier
     ) {
         TaskHeader(title)
-        TaskInputFields()
+        TaskInputFields(
+            selectedDate = selectedDate,
+            onDateFieldClick = { showDatePicker = true }
+        )
         PrioritySection(selectedPriority) { selectedPriority = it }
         CategorySection(categories, selectedCategory) { selectedCategory = it }
 
         // Add bottom spacer to prevent last item from sticking to edge
         Spacer(modifier = Modifier.height(32.dp))
+    }
+
+    // Show DatePicker when needed
+    if (showDatePicker) {
+        DatePicker(
+            onDateSelected = { date ->
+                selectedDate = date
+                showDatePicker = false
+            },
+            onDismiss = {
+                showDatePicker = false
+            }
+        )
     }
 }
 
@@ -83,7 +104,10 @@ private fun TaskHeader(@StringRes title: Int) {
 }
 
 @Composable
-private fun TaskInputFields() {
+private fun TaskInputFields(
+    selectedDate: Long?,
+    onDateFieldClick: () -> Unit
+) {
     TudeeTextField(
         icon = R.drawable.add_task_icon,
         hint = R.string.task_title,
@@ -100,11 +124,17 @@ private fun TaskInputFields() {
     )
     Spacer(modifier = Modifier.height(16.dp))
 
+    // Date picker field
+    val dateFormatter = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+    val dateText = selectedDate?.let { dateFormatter.format(Date(it)) } ?: ""
+
     TudeeTextField(
         icon = R.drawable.add_date_icon,
         hint = R.string.select_date,
-        value = "",
-        onValueChange = {}
+        value = dateText,
+        onValueChange = {}, // Read-only field
+        readOnly = true,
+        onClick = onDateFieldClick
     )
     Spacer(modifier = Modifier.height(16.dp))
 }
@@ -149,6 +179,7 @@ private fun SectionTitle(@StringRes titleRes: Int) {
         color = TudeeTheme.colors.title
     )
 }
+
 @Composable
 private fun CategoriesGrid(
     categories: List<CategoryUiModel>,
@@ -196,7 +227,6 @@ private fun CategoriesGrid(
         }
     }
 }
-
 
 @ThemePreviews
 @Composable
