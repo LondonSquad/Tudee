@@ -1,7 +1,7 @@
 package com.london.tudee.presentation.components.task
 
 import androidx.annotation.DrawableRes
-import com.london.tudee.presentation.components.priority.Priority
+import com.london.tudee.domain.entities.Priority
 
 data class Task(
     val priority: Priority,

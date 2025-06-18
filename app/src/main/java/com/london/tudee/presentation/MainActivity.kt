@@ -20,12 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.london.tudee.data.local.room_db.TudeeDatabase
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -35,56 +33,56 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
 
-    @ThemePreviews
-    @Composable
-    fun PreviewTestScreen() {
-        TestScreen()
-    }
+@ThemePreviews
+@Composable
+fun PreviewTestScreen() {
+    TestScreen()
+}
 
-    @Composable
-    fun TestScreen() {
-        //val isDark by remember { mutableStateOf(false) }
-        //  TudeeTheme (isDarkMode = isDark){}
-        TudeeTheme {
-            Surface(
-                modifier = Modifier.fillMaxSize(), color = TudeeTheme.colors.primary
+@Composable
+fun TestScreen() {
+    //val isDark by remember { mutableStateOf(false) }
+    //  TudeeTheme (isDarkMode = isDark){}
+    TudeeTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(), color = TudeeTheme.colors.primary
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Row {
+                    Text(
+                        text = "Hello from ",
+                        color = TudeeTheme.colors.title,
+                        style = TudeeTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = "Tudee",
+                        color = TudeeTheme.colors.primaryVariant,
+                        style = TudeeTheme.typography.cherryBomb
+                    )
+                }
+
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = { /*isDark = !isDark*/ }, colors = ButtonDefaults.buttonColors(
+                        contentColor = TudeeTheme.colors.title,
+                        containerColor = TudeeTheme.colors.pinkAccent
+                    ), shape = TudeeTheme.shapes.medium
                 ) {
-                    Row {
-                        Text(
-                            text = "Hello from ",
-                            color = TudeeTheme.colors.title,
-                            style = TudeeTheme.typography.titleLarge
-                        )
-                        Text(
-                            text = "Tudee",
-                            color = TudeeTheme.colors.primaryVariant,
-                            style = TudeeTheme.typography.cherryBomb
-                        )
-                    }
-
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(
-                        onClick = { /*isDark = !isDark*/ }, colors = ButtonDefaults.buttonColors(
-                            contentColor = TudeeTheme.colors.title,
-                            containerColor = TudeeTheme.colors.pinkAccent
-                        ), shape = TudeeTheme.shapes.medium
-                    ) {
-                        Text(
-                            text = if (isSystemInDarkTheme()) "Switch to Light" else "Switch to Dark",
-                            color = TudeeTheme.colors.onPrimary,
-                            style = TudeeTheme.typography.labelSmall
-                        )
-                    }
+                    Text(
+                        text = if (isSystemInDarkTheme()) "Switch to Light" else "Switch to Dark",
+                        color = TudeeTheme.colors.onPrimary,
+                        style = TudeeTheme.typography.labelSmall
+                    )
                 }
             }
         }

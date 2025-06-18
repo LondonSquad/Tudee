@@ -24,11 +24,11 @@ interface TaskDao {
     fun getByTaskStatus(taskStatus: TaskStatus): Flow<List<TaskDto>>
 
     @Insert
-    suspend fun insert(task: TaskDto) : Long
+    suspend fun insert(task: TaskDto)
 
     @Update
-    suspend fun update(task: TaskDto):Int
+    suspend fun update(task: TaskDto)
 
     @Delete
-    suspend fun delete(task: TaskDto):Int
+    suspend fun delete(task: TaskDto)
 }

@@ -2,19 +2,13 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("kotlin-kapt")
-    id ("org.jetbrains.kotlin.kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
     namespace = "com.london.tudee"
     compileSdk = 35
 
-    kapt {
-        arguments {
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
-    }
     defaultConfig {
         applicationId = "com.london.tudee"
         minSdk = 24
@@ -65,12 +59,13 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     //Navigation compose
     implementation(libs.androidx.navigation.compose)
-
     implementation(libs.androidx.room.runtime)
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.room.rxjava3)
+    implementation(libs.koin.android)
+
 }
 
 tasks.register("installGitHooks") {

@@ -1,6 +1,6 @@
 package com.london.tudee.domain.entities
 
-class Category(
+data class Category(
     val id: Int,
     val name: String,
     val arName: String,

@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import androidx.room.Upsert
 import com.london.tudee.data.local.room_db.entities.CategoryDto
 import kotlinx.coroutines.flow.Flow
 
@@ -18,11 +17,11 @@ interface CategoryDao {
     fun getById(id: Int): CategoryDto
 
     @Insert
-    suspend fun insert(category: CategoryDto) :Long
+    suspend fun insert(category: CategoryDto)
 
     @Update
-    suspend fun update(category: CategoryDto):Int
+    suspend fun update(category: CategoryDto)
 
     @Delete
-    suspend fun delete(category: CategoryDto):Int
+    suspend fun delete(category: CategoryDto)
 }
