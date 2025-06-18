@@ -20,7 +20,7 @@ import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
-fun TudeeDeleteBottomSheet(
+fun TudeeDeleteTaskBottomSheet(
     visible: Boolean,
     onDismiss: () -> Unit,
     onConfirmDelete: () -> Unit
