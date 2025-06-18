@@ -9,6 +9,7 @@ import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -69,13 +70,15 @@ fun TudeeTextField(
             .clip(cornerRadius)
             .background(TudeeTheme.colors.surface)
             .padding(top = if (multiLined) 12.dp else 0.dp)
-            .clickable {
-                if (readOnly && onClick != null) {
-                    onClick()
-                } else if (!readOnly) {
-                    focusRequester.requestFocus()
+            .then(
+                if (!readOnly) {
+                    Modifier.clickable {
+                        focusRequester.requestFocus()
+                    }
+                } else {
+                    Modifier
                 }
-            },
+            ),
         contentAlignment = if (multiLined) Alignment.TopCenter else Alignment.Center,
     ) {
         Row(
@@ -124,6 +127,20 @@ fun TudeeTextField(
                     .fillMaxWidth()
                     .focusRequester(focusRequester)
                     .padding(end = 12.dp),
+            )
+        }
+
+        // Invisible clickable overlay for read-only fields
+        if (readOnly && onClick != null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null // No ripple effect
+                    ) {
+                        onClick()
+                    }
             )
         }
     }

@@ -125,7 +125,7 @@ private fun TaskInputFields(
     Spacer(modifier = Modifier.height(16.dp))
 
     // Date picker field
-    val dateFormatter = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+    val dateFormatter = SimpleDateFormat("dd, MM, yyyy", Locale.getDefault())
     val dateText = selectedDate?.let { dateFormatter.format(Date(it)) } ?: ""
 
     TudeeTextField(
