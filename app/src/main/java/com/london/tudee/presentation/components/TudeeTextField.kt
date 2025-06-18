@@ -9,6 +9,7 @@ import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -43,6 +44,8 @@ fun TudeeTextField(
     multiLined: Boolean = false,
     value: String,
     onValueChange: (String) -> Unit,
+    readOnly: Boolean = false,
+    onClick: (() -> Unit)? = null,
 ) {
     val focusRequester = remember { FocusRequester() }
     val interactionSource = remember { MutableInteractionSource() }
@@ -57,7 +60,6 @@ fun TudeeTextField(
 
     Box(
         modifier = modifier
-            .background(TudeeTheme.colors.surface)
             .fillMaxWidth()
             .height(if (multiLined) 168.dp else 56.dp)
             .border(
@@ -66,10 +68,17 @@ fun TudeeTextField(
                 shape = cornerRadius,
             )
             .clip(cornerRadius)
+            .background(TudeeTheme.colors.surface)
             .padding(top = if (multiLined) 12.dp else 0.dp)
-            .clickable {
-                focusRequester.requestFocus()
-            },
+            .then(
+                if (!readOnly) {
+                    Modifier.clickable {
+                        focusRequester.requestFocus()
+                    }
+                } else {
+                    Modifier
+                }
+            ),
         contentAlignment = if (multiLined) Alignment.TopCenter else Alignment.Center,
     ) {
         Row(
@@ -98,6 +107,7 @@ fun TudeeTextField(
             BasicTextField(
                 value = value,
                 onValueChange = onValueChange,
+                readOnly = readOnly,
                 singleLine = !multiLined,
                 interactionSource = interactionSource,
                 decorationBox = { innerTextField ->
@@ -119,6 +129,19 @@ fun TudeeTextField(
                     .padding(end = 12.dp),
             )
         }
+
+        if (readOnly && onClick != null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
+                        onClick()
+                    }
+            )
+        }
     }
 }
 
@@ -133,6 +156,22 @@ fun TudeeTextFieldPreview() {
             hint = R.string.task_title,
             value = textState.value,
             onValueChange = { textState.value = it },
+        )
+    }
+}
+
+@ThemePreviews
+@Composable
+fun TudeeTextFieldReadOnlyPreview() {
+    TudeeTheme {
+        TudeeTextField(
+            multiLined = false,
+            icon = R.drawable.add_date_icon,
+            hint = R.string.select_date,
+            value = "Jan 15, 2024",
+            onValueChange = { },
+            readOnly = true,
+            onClick = { }
         )
     }
 }
