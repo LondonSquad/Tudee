@@ -33,4 +33,6 @@
     <string name="cancel">إلغاء</string>
     <string name="coding">برمجة</string>
     <string name="edit_icon">تعديل الايقونة</string>
+    <string name="clear">حذف</string>
+    <string name="ok">موافق</string>
 </resources>

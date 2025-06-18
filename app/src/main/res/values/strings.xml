@@ -44,4 +44,6 @@
     <string name="cancel">Cancel</string>
     <string name="coding">Coding</string>
     <string name="edit_icon">Edit Icon</string>
+    <string name="clear">Clear</string>
+    <string name="ok">OK</string>
 </resources>
