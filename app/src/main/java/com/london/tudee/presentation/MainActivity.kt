@@ -25,8 +25,6 @@ import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 class MainActivity : ComponentActivity() {
-    private lateinit var db: TudeeDatabase
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
