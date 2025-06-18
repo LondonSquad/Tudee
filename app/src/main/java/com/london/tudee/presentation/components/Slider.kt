@@ -73,7 +73,7 @@ fun TaskStatusSlider(
                 Text(
                     text = subtitle ?: "",
                     style = TudeeTheme.typography.bodySmall,
-                    color = TudeeTheme.colors.title,
+                    color = TudeeTheme.colors.body,
                     lineHeight = 17.sp
                 )
                 Text(

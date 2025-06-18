@@ -57,7 +57,7 @@ fun SwitchButton(
             .width(64.dp)
             .clip(TudeeTheme.shapes.circle)
             .background(
-                color = if (isDarkMood) Color(0xff151535) else Color(0xff548EFE),
+                color = if (isDarkMood) Color(0xff151535) else TudeeTheme.colors.primary,
                 shape = TudeeTheme.shapes.circle
             )
             .border(
