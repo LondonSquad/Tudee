@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -219,7 +220,7 @@ private fun ToDoSection() {
             .padding(bottom = 8.dp)
     ) {
         Text(
-            text = "To-Do",
+            text = stringResource(R.string.To_Do),
             style = TudeeTheme.typography.titleLarge,
             color = TudeeTheme.colors.title
         )
@@ -285,7 +286,7 @@ private fun InProgressSection() {
             .padding(bottom = 8.dp)
     ) {
         Text(
-            text = "In progress",
+            text = stringResource(R.string.In_Progress),
             style = TudeeTheme.typography.titleLarge,
             color = TudeeTheme.colors.title
         )
@@ -351,7 +352,7 @@ private fun DoneSection() {
             .padding(bottom = 8.dp)
     ) {
         Text(
-            text = "Done",
+            text = stringResource(R.string.Done),
             style = TudeeTheme.typography.titleLarge,
             color = TudeeTheme.colors.title
         )
