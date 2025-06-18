@@ -6,6 +6,9 @@
     <string name="tudee" translatable="false">Tudee</string>
     <string name="tudee_greeting" translatable="false">Your cute Helper for Every Task</string>
     <string name="In_Progress">In Progress</string>
+    <string name="tudee">Tudee</string>
+    <string name="tudee_greeting">Your cute Helper for Every Task</string>
+    <string name="In_Progress">In progress</string>
     <string name="Done">Done</string>
     <string name="To_Do">To-Do</string>
     <string name="Circle">Circle</string>

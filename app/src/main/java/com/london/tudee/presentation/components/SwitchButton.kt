@@ -52,13 +52,17 @@ fun SwitchButton(
     onToggle: (Boolean) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isDarkMode) TudeeTheme.colors.skyNightBackground else TudeeTheme.colors.primary,
+        animationSpec = tween(1000)
+    )
     Box(
         modifier = Modifier
             .height(36.dp)
             .width(64.dp)
             .clip(TudeeTheme.shapes.circle)
             .background(
-                color = if (isDarkMode) Color(0xff151535) else Color(0xff548EFE),
+                color = backgroundColor,
                 shape = TudeeTheme.shapes.circle
             )
             .border(
@@ -142,10 +146,7 @@ fun SwitchButton(
                     .size(32.dp)
                     .background(
                         brush = Brush.linearGradient(
-                            listOf(
-                                Color(0xffE9F0FF),
-                                Color(0xffE0E9FE),
-                            )
+                            TudeeTheme.colors.linearMoodColor
                         ),
                         shape = TudeeTheme.shapes.circle
                     )
@@ -172,7 +173,6 @@ fun SwitchButton(
 
 @Composable
 private fun BoxScope.UpperWhiteCloud(isDarkMood: Boolean) {
-    val density = LocalDensity.current
     val offsetX by animateDpAsState(
         targetValue = if (isDarkMood) (-17).dp else 13.5.dp,
         animationSpec = tween(durationMillis = 1000, easing = EaseOut)
@@ -189,7 +189,11 @@ private fun BoxScope.UpperWhiteCloud(isDarkMood: Boolean) {
     )
 
     val backgroundColor by animateColorAsState(
-        targetValue = if (isDarkMood) Color(0xFFE9EFFF) else Color(0xFFFFFFFF),
+        targetValue = if (isDarkMood) {
+            TudeeTheme.colors.upperSmallCircleMoon
+        } else {
+            TudeeTheme.colors.surfaceHigh
+        },
         animationSpec = tween(durationMillis = 1000, easing = EaseOut)
     )
 
@@ -198,8 +202,8 @@ private fun BoxScope.UpperWhiteCloud(isDarkMood: Boolean) {
             .size(size)
             .offset {
                 IntOffset(
-                    x = with(density) { offsetX.roundToPx() },
-                    y = with(density) { offsetY.roundToPx() }
+                    x = offsetX.roundToPx(),
+                    y = offsetY.roundToPx()
                 )
             }
             .align(Alignment.TopEnd)
@@ -252,7 +256,7 @@ private fun BoxScope.MiddleWhiteCloud(isDarkMood: Boolean) {
                 )
             }
             .background(
-                color = TudeeTheme.colors.background,
+                color = TudeeTheme.colors.surfaceHigh,
                 shape = TudeeTheme.shapes.circle
             )
     )
@@ -295,7 +299,6 @@ private fun BoxScope.UpperGrayCloud(isDarkMood: Boolean) {
 
 @Composable
 private fun BoxScope.DownGrayCloud(isDarkMood: Boolean) {
-    val density = LocalDensity.current
     val offsetX by animateDpAsState(
         targetValue = if (isDarkMood) (-8).dp else (-8).dp,
         animationSpec = tween(durationMillis = 1000, easing = EaseOut)
@@ -317,12 +320,12 @@ private fun BoxScope.DownGrayCloud(isDarkMood: Boolean) {
             .align(Alignment.BottomEnd)
             .offset {
                 IntOffset(
-                    x = with(density) { offsetX.roundToPx() },
-                    y = with(density) { offsetY.roundToPx() }
+                    x = offsetX.roundToPx(),
+                    y = offsetY.roundToPx()
                 )
             }
             .background(
-                color = Color(0xFFF0F0F0),
+                color = TudeeTheme.colors.surfaceLow,
                 shape = TudeeTheme.shapes.circle
             )
     )
@@ -377,7 +380,7 @@ private fun BoxScope.DownWhiteCloud(isDarkMood: Boolean) {
                 .width(14.dp)
                 .height(16.dp)
                 .background(
-                    color = TudeeTheme.colors.background,
+                    color = TudeeTheme.colors.surfaceHigh,
                     shape = TudeeTheme.shapes.circle
                 )
         )
@@ -402,7 +405,7 @@ private fun BoxScope.BigCircleInMoon(isDarkMood: Boolean) {
                 .offset(x = (-16).dp, y = (-8).dp)
                 .innerShadow()
                 .background(
-                    TudeeTheme.colors.background,
+                    Color(0x01FFFFFF),
                     TudeeTheme.shapes.circle
                 )
         )
@@ -427,7 +430,7 @@ private fun BoxScope.SmallInMoon(isDarkMood: Boolean) {
                 .offset(x = (-11).dp, y = (-6).dp)
                 .innerShadow()
                 .background(
-                    TudeeTheme.colors.background,
+                    Color(0x01FFFFFF),
                     TudeeTheme.shapes.circle
                 )
         )
