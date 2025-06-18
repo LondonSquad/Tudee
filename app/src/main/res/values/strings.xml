@@ -11,7 +11,7 @@
     <string name="Circle">Circle</string>
     <string name="task_title">Task title</string>
     <string name="description">Description</string>
-    <string name="category_title">Category title</string>
+    <string name="category_title">Category</string>
     <string name="high">High</string>
     <string name="medium">Medium</string>
     <string name="low">Low</string>

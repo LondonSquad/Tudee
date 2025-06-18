@@ -61,7 +61,6 @@ private fun TaskDetailsContent(
 
     Column(
         modifier = modifier
-            .padding(16.dp) // Add internal padding
     ) {
         TaskHeader(title)
         TaskInputFields()
@@ -158,8 +157,7 @@ private fun CategoriesGrid(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // Split categories into rows of 3
