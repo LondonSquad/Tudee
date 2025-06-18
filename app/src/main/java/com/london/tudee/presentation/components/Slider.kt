@@ -20,7 +20,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import com.london.tudee.R
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
@@ -50,6 +52,7 @@ fun TaskStatusSlider(
         ) {
             Column(
                 modifier = modifier
+                    .weight(0.7f)
                     .padding(vertical = 15.dp)
             ) {
                 Row {
@@ -74,12 +77,16 @@ fun TaskStatusSlider(
                     text = subtitle ?: "",
                     style = TudeeTheme.typography.bodySmall,
                     color = TudeeTheme.colors.body,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     lineHeight = 17.sp
                 )
                 Text(
                     text = note ?: "",
                     style = TudeeTheme.typography.bodySmall,
-                    color = TudeeTheme.colors.title,
+                    color = TudeeTheme.colors.body,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     lineHeight = 17.sp
                 )
             }
@@ -88,7 +95,7 @@ fun TaskStatusSlider(
 
             Box(
                 modifier = Modifier
-                    .width(76.dp)
+                    .weight(0.17f)
                     .fillMaxHeight(),
                 contentAlignment = Alignment.CenterEnd
             ) {
@@ -129,7 +136,7 @@ fun TaskStatusSliderPreview() {
         subtitle = "You just scrolling, not working.",
         note = "Tudee is watching. back to work!!!",
         emoji = R.drawable.poor_emoji,
-        tudeePicture = R.drawable.poor,
+        tudeePicture = R.drawable.tudee_warning,
     )
 }
 
