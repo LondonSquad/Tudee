@@ -32,7 +32,6 @@ val OverlayDark = Color(0x5202151E)
 val EmojiTintDark = Color(0xDE1F1F1F)
 val PrimaryGradientDark = listOf(Color(0xFF3090BF), Color(0xFF3A9CCD))
 
-
 val OnPrimaryCardDark = Color(0x29060414)
 val OnPrimaryStrokeDark = Color(0x99242424)
 

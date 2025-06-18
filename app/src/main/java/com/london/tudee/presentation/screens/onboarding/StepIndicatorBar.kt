@@ -1,3 +1,4 @@
+package com.london.tudee.presentation.screens.onboarding
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
