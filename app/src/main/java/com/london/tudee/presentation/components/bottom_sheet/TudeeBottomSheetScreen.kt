@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.london.tudee.R
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
@@ -51,7 +52,8 @@ fun TudeeBottomSheetScreen(
     screenContent: @Composable () -> Unit,
     bottomSheetContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    bottomSheetActions: @Composable ColumnScope.() -> Unit = {}
+    bottomSheetActions: @Composable ColumnScope.() -> Unit = {},
+    showActions: Boolean = true
 ) {
     Box(
         modifier = modifier
@@ -91,7 +93,8 @@ fun TudeeBottomSheetScreen(
                     indication = null
                 ) {},
                 content = bottomSheetContent,
-                actions = bottomSheetActions
+                actions = bottomSheetActions,
+                showActions = showActions
             )
         }
     }
@@ -103,7 +106,7 @@ fun TudeeBottomSheetScreen(
 private fun RegularBottomSheetScreenPreview() {
     TudeeTheme {
         var showBottomSheet by remember { mutableStateOf(false) }
-        
+
         TudeeBottomSheetScreen(
             showBottomSheet = showBottomSheet,
             onDismiss = { showBottomSheet = false },
@@ -184,7 +187,7 @@ private fun RegularBottomSheetScreenPreview() {
 private fun ScrollableBottomSheetScreenPreview() {
     TudeeTheme {
         var showBottomSheet by remember { mutableStateOf(false) }
-        
+
         TudeeBottomSheetScreen(
             showBottomSheet = showBottomSheet,
             onDismiss = { showBottomSheet = false },
@@ -214,7 +217,7 @@ private fun ScrollableBottomSheetScreenPreview() {
                     Spacer(modifier = Modifier.height(32.dp))
 
                     TudeePrimaryButton(
-                        text = "Show Scrollable Bottom Sheet",
+                        text = "Show Bottom Sheet",
                         onClick = { showBottomSheet = true },
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -230,15 +233,15 @@ private fun ScrollableBottomSheetScreenPreview() {
                         style = TudeeTheme.typography.headlineMedium,
                         color = TudeeTheme.colors.title
                     )
-                    
+
                     Spacer(modifier = Modifier.height(16.dp))
-                    
+
                     Text(
                         text = "This bottom sheet has lots of content to demonstrate scrolling behavior when content exceeds 75% of screen height.",
                         style = TudeeTheme.typography.bodyMedium,
                         color = TudeeTheme.colors.body
                     )
-                    
+
                     repeat(20) { index ->
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
@@ -247,9 +250,9 @@ private fun ScrollableBottomSheetScreenPreview() {
                             color = TudeeTheme.colors.body
                         )
                     }
-                    
+
                     Spacer(modifier = Modifier.height(24.dp))
-                    
+
                     Text(
                         text = "End of scrollable content. You should be able to scroll through all items above.",
                         style = TudeeTheme.typography.bodyMedium,

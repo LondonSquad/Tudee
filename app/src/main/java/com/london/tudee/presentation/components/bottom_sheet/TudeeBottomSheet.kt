@@ -53,7 +53,8 @@ fun TudeeBottomSheet(
     content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit = {},
-    actions: @Composable ColumnScope.() -> Unit = {}
+    actions: @Composable ColumnScope.() -> Unit = {},
+    showActions: Boolean = true
 ) {
     val configuration = LocalConfiguration.current
     val maxHeight = (configuration.screenHeightDp * 0.86).dp
@@ -126,15 +127,17 @@ fun TudeeBottomSheet(
                     content()
                 }
 
-                Column(
-                    modifier = Modifier
-                        .zIndex(1f)
-                        .shadow(elevation = 20.dp)
-                        .background(TudeeTheme.colors.surfaceHigh)
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .fillMaxWidth()
-                ) {
-                    actions()
+                if (showActions) {
+                    Column(
+                        modifier = Modifier
+                            .zIndex(1f)
+                            .shadow(elevation = 20.dp)
+                            .background(TudeeTheme.colors.surfaceHigh)
+                            .padding(horizontal = 16.dp, vertical = 12.dp)
+                            .fillMaxWidth()
+                    ) {
+                        actions()
+                    }
                 }
             }
         }

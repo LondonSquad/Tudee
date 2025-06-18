@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="move_to_in_progress">انقل الي قيد التنفيذ</string>">
+    <string name="move_to_done">انقل الي تم</string>">
+    <string name="task_details">تفاصيل المهمة</string>">
+    <string name="back_arrow">الرجوع للخلف</string>
+    <string name="filter_icon">تصفية</string>
+    <string name="tudee_greeting">Your cute Helper for Every Task</string>
+    <string name="In_Progress">قيد التنفيذ</string>
+    <string name="Done">تم</string>
+    <string name="To_Do">للقيام به</string>
+    <string name="Circle">دائرة</string>
     <string name="task_title">عنوان المهمة</string>
     <string name="description">الوصف</string>
-    <string name="category_title">عنوان الصنف</string>
     <string name="on_bording_title_1">هل تشعر بالإرهاق من المهام؟</string>
     <string name="on_bording_body_1">هيا بنا نُعيد ترتيب الفوضى. تودي هنا لمساعدتك في الترتيب والتخطيط والتنفس بسهولة.</string>
     <string name="on_bording_title_2">يا إلهي! ها قد بدأتُ بالتسويف.</string>
     <string name="on_bording_body_2">تودي ليس غاضبًا... فقط أشعر ببعض خيبة الأمل، لنعد إلى المسار الصحيح معًا.</string>
     <string name="on_bording_title_3">لنُكمل المهمة ونحتفل معًا.</string>
     <string name="on_bording_body_3">التقدم هو التقدم. سيحتفل بك تودي على كل فوز، كبيرًا كان أم صغيرًا.</string>
+    <string name="category">عنوان الصنف</string>
+    <string name="category_title">الصنف</string>
     <string name="high">عالي</string>
     <string name="medium">متوسط</string>
     <string name="low">منخفض</string>
     <string name="hello_from">"مرحبا بك مع "</string>
+    <string name="add_new_task">أضف مهمة جديدة</string>
+    <string name="priority">مدى الأولوية</string>
+    <string name="edit_task">تعديل المهمة</string>
+    <string name="add">أضف</string>
+    <string name="save">حفظ</string>
+    <string name="submit">تأكيد</string>
+    <string name="select_date">حدد التاريخ</string>
     <string name="categories">الاصناف</string>
     <string name="fab_content_description">أضف صنف جديد</string>
     <string name="category_education">التعليم</string>
@@ -32,4 +50,11 @@
     <string name="category_budgeting">إعداد الميزانية</string>
     <string name="category_self_care">العناية بالنفس</string>
     <string name="category_event">الفعاليات</string>
+    <string name="delete_task_title">حذف المهمة</string>
+    <string name="delete_task_message">هل أنت متأكدة من المتابعة؟</string>
+    <string name="delete">حذف</string>
+    <string name="cancel">إلغاء</string>
+    <string name="clear">حذف</string>
+    <string name="ok">موافق</string>
+    <string name="coding">برمجة</string>
 </resources>
