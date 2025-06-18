@@ -11,7 +11,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun StepIndicatorBar(
-    activeStep: Int, totalSteps: Int = 3, modifier: Modifier = Modifier
+    activeStep: Int, modifier: Modifier = Modifier, totalSteps: Int = 3
 ) {
     Row(
         modifier = modifier

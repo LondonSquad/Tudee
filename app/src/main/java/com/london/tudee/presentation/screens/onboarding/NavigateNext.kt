@@ -1,11 +1,11 @@
+package com.london.tudee.presentation.screens.onboarding
+
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.pager.PagerState
 
-@OptIn(ExperimentalFoundationApi::class)
 fun navigateNext(pagerState: PagerState, scope: CoroutineScope) {
     scope.launch {
         val nextPage = pagerState.currentPage + 1

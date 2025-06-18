@@ -1,8 +1,6 @@
 package com.london.tudee.presentation.screens.onboarding
 
-import StepIndicatorBar
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -14,13 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.london.tudee.R
 import com.london.tudee.presentation.components.buttons.TudeeTextButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import navigateNext
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnBoardingHorizontalPager(onClickSkip: () -> Unit) {
     val pagerState = rememberPagerState(pageCount = { OnBoardingContent.size })
@@ -35,7 +33,7 @@ fun OnBoardingHorizontalPager(onClickSkip: () -> Unit) {
         ) {
             TudeeTextButton(
                 onClick = onClickSkip,
-                text = "Skip",
+                text = stringResource(R.string.skip),
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .systemGesturesPadding(),
