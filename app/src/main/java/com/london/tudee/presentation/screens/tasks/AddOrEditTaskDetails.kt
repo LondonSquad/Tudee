@@ -8,6 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
@@ -25,19 +26,29 @@ fun AddOrEditTaskDetails(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
 ) {
+    // Get screen height minus some padding
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+    val maxHeight = screenHeight * 0.75f // Leave 25% space at top
+
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .heightIn(max = maxHeight) // Critical constraint
             .background(TudeeTheme.colors.surface)
-            .height(500.dp) // Set a fixed height for the bottom sheet content
     ) {
-        TaskDetailsContent(
-            title = title,
+        // This Box provides proper scrolling boundaries
+        Box(
             modifier = Modifier
-        )
+                .weight(1f, fill = false) // Takes available space without forcing full height
+                .verticalScroll(rememberScrollState())
+        ) {
+            TaskDetailsContent(
+                title = title,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
-
 
 @Composable
 private fun TaskDetailsContent(
@@ -47,18 +58,18 @@ private fun TaskDetailsContent(
     var selectedPriority by remember { mutableStateOf(Priority.HIGH) }
     var selectedCategory by remember { mutableStateOf<CategoryUiModel?>(null) }
     val categories = rememberSampleCategories()
-    val scrollState = rememberScrollState()
 
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState)
-            .background(TudeeTheme.colors.surface)
+            .padding(16.dp) // Add internal padding
     ) {
         TaskHeader(title)
         TaskInputFields()
         PrioritySection(selectedPriority) { selectedPriority = it }
         CategorySection(categories, selectedCategory) { selectedCategory = it }
+
+        // Add bottom spacer to prevent last item from sticking to edge
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
