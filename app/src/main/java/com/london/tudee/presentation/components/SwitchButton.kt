@@ -63,7 +63,7 @@ fun SwitchButton(
             )
             .border(
                 1.dp,
-                Color(0x1F1F1F1F),
+                TudeeTheme.colors.stroke,
                 TudeeTheme.shapes.circle
             )
             .then(
@@ -109,8 +109,8 @@ fun SwitchButton(
                     .background(
                         brush = Brush.linearGradient(
                             listOf(
-                                Color(0xffF2C849),
-                                Color(0xffF49061),
+                                TudeeTheme.colors.yellowAccent,
+                                TudeeTheme.colors.secondary,
                             )
                         ),
                         shape = TudeeTheme.shapes.circle
@@ -287,7 +287,7 @@ private fun BoxScope.UpperGrayCloud(isDarkMood: Boolean) {
                 )
             }
             .background(
-                color = Color(0xFFF0F0F0),
+                color = TudeeTheme.colors.surfaceLow,
                 shape = TudeeTheme.shapes.circle
             )
     )
