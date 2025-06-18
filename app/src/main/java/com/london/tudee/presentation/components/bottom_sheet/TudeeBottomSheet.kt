@@ -53,7 +53,8 @@ fun TudeeBottomSheet(
     content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit = {},
-    actions: @Composable ColumnScope.() -> Unit = {}
+    actions: @Composable ColumnScope.() -> Unit = {},
+    showActions: Boolean = true
 ) {
     val configuration = LocalConfiguration.current
     val maxHeight = (configuration.screenHeightDp * 0.86).dp
@@ -126,7 +127,7 @@ fun TudeeBottomSheet(
                     content()
                 }
 
-                if (actions != {}) {
+                if (showActions) {
                     Column(
                         modifier = Modifier
                             .zIndex(1f)
