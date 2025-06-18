@@ -26,7 +26,7 @@ fun TaskItem(
     date: String? = null
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(123.dp),
         shape = TudeeTheme.shapes.small,
