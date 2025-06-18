@@ -53,11 +53,7 @@ fun SwipeToDeleteTask(
         }
 
         TaskItem(
-            priority = task.priority,
-            iconResId = task.iconResId,
-            title = task.title,
-            description = task.description,
-            date = task.date,
+            task = task,
             modifier = Modifier
                 .offset { IntOffset(offsetX.roundToInt(), 0) }
                 .pointerInput(Unit) {
@@ -72,7 +68,6 @@ fun SwipeToDeleteTask(
         )
     }
 }
-
 @Composable
 private fun DeleteBackground(onDeleteClick: () -> Unit) {
     Card(
