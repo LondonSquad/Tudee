@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.IntOffset
@@ -47,7 +48,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun SwitchButton(
-    isDarkMood: Boolean,
+    isDarkMode: Boolean,
     onToggle: (Boolean) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -57,19 +58,19 @@ fun SwitchButton(
             .width(64.dp)
             .clip(TudeeTheme.shapes.circle)
             .background(
-                color = if (isDarkMood) Color(0xff151535) else TudeeTheme.colors.primary,
+                color = if (isDarkMode) Color(0xff151535) else TudeeTheme.colors.primary,
                 shape = TudeeTheme.shapes.circle
             )
             .border(
                 1.dp,
-                Color(0x1F1F1F1F),
+                TudeeTheme.colors.stroke,
                 TudeeTheme.shapes.circle
             )
             .then(
-                if (isDarkMood) Modifier.padding(end = 2.dp) else Modifier.padding(start = 1.dp)
+                if (isDarkMode) Modifier.padding(end = 2.dp) else Modifier.padding(start = 1.dp)
             )
             .toggleable(
-                value = isDarkMood,
+                value = isDarkMode,
                 interactionSource = interactionSource,
                 enabled = true,
                 role = Role.Switch,
@@ -77,13 +78,13 @@ fun SwitchButton(
                 onValueChange = { onToggle(it) }
             )
     ) {
-        DownGrayCloud(isDarkMood)
-        UpperGrayCloud(isDarkMood)
-        MiddleWhiteCloud(isDarkMood)
-        DownWhiteCloud(!isDarkMood)
+        DownGrayCloud(isDarkMode)
+        UpperGrayCloud(isDarkMode)
+        MiddleWhiteCloud(isDarkMode)
+        DownWhiteCloud(!isDarkMode)
 
         AnimatedVisibility(
-            visible = !isDarkMood,
+            visible = !isDarkMode,
             enter = fadeIn(
                 animationSpec = tween(
                     durationMillis = 1000,
@@ -108,8 +109,8 @@ fun SwitchButton(
                     .background(
                         brush = Brush.linearGradient(
                             listOf(
-                                Color(0xffF2C849),
-                                Color(0xffF49061),
+                                TudeeTheme.colors.yellowAccent,
+                                TudeeTheme.colors.secondary,
                             )
                         ),
                         shape = TudeeTheme.shapes.circle
@@ -118,7 +119,7 @@ fun SwitchButton(
         }
 
         AnimatedVisibility(
-            visible = isDarkMood,
+            visible = isDarkMode,
             enter = fadeIn(
                 animationSpec = tween(
                     durationMillis = 1000,
@@ -151,7 +152,7 @@ fun SwitchButton(
             )
         }
 
-        if (isDarkMood) {
+        if (isDarkMode) {
             Image(
                 painter = painterResource(R.drawable.ellipse_stars),
                 contentDescription = null,
@@ -161,11 +162,11 @@ fun SwitchButton(
             )
         }
 
-        BigCircleInMoon(isDarkMood)
+        BigCircleInMoon(isDarkMode)
 
-        SmallInMoon(isDarkMood)
+        SmallInMoon(isDarkMode)
 
-        UpperWhiteCloud(isDarkMood)
+        UpperWhiteCloud(isDarkMode)
     }
 }
 
@@ -194,7 +195,12 @@ private fun BoxScope.UpperWhiteCloud(isDarkMood: Boolean) {
     Box(
         modifier = Modifier
             .size(size)
-            .offset(x = offsetX, y = offsetY)
+            .offset {
+                IntOffset(
+                    x = with(density) { offsetX.roundToPx() },
+                    y = with(density) { offsetY.roundToPx() }
+                )
+            }
             .align(Alignment.TopEnd)
             .background(
                 color = backgroundColor,
@@ -219,7 +225,7 @@ private fun Modifier.innerShadow() = this.drawWithContent {
 
 @Composable
 private fun BoxScope.MiddleWhiteCloud(isDarkMood: Boolean) {
-
+    val density = LocalDensity.current
     val offsetX by animateDpAsState(
         targetValue = if (isDarkMood) (29).dp else (-1).dp,
         animationSpec = tween(durationMillis = 1000, easing = EaseOut)
@@ -238,7 +244,12 @@ private fun BoxScope.MiddleWhiteCloud(isDarkMood: Boolean) {
         modifier = Modifier
             .size(size)
             .align(Alignment.BottomEnd)
-            .offset(x = offsetX, offsetY)
+            .offset {
+                IntOffset(
+                    x = with(density) { offsetX.roundToPx() },
+                    y = with(density) { offsetY.roundToPx() }
+                )
+            }
             .background(
                 color = TudeeTheme.colors.surfaceHigh,
                 shape = TudeeTheme.shapes.circle
@@ -248,6 +259,7 @@ private fun BoxScope.MiddleWhiteCloud(isDarkMood: Boolean) {
 
 @Composable
 private fun BoxScope.UpperGrayCloud(isDarkMood: Boolean) {
+    val density = LocalDensity.current
     val offsetX by animateDpAsState(
         targetValue = if (isDarkMood) 33.dp else 12.3.dp,
         animationSpec = tween(durationMillis = 1000, easing = EaseOut)
@@ -267,7 +279,12 @@ private fun BoxScope.UpperGrayCloud(isDarkMood: Boolean) {
         modifier = Modifier
             .size(size)
             .align(Alignment.TopEnd)
-            .offset(offsetX, offsetY)
+            .offset {
+                IntOffset(
+                    x = with(density) { offsetX.roundToPx() },
+                    y = with(density) { offsetY.roundToPx() }
+                )
+            }
             .background(
                 color = TudeeTheme.colors.surfaceLow,
                 shape = TudeeTheme.shapes.circle
@@ -296,7 +313,12 @@ private fun BoxScope.DownGrayCloud(isDarkMood: Boolean) {
         modifier = Modifier
             .size(size)
             .align(Alignment.BottomEnd)
-            .offset(offsetX, offsetY)
+            .offset {
+                IntOffset(
+                    x = with(density) { offsetX.roundToPx() },
+                    y = with(density) { offsetY.roundToPx() }
+                )
+            }
             .background(
                 color = TudeeTheme.colors.surfaceLow,
                 shape = TudeeTheme.shapes.circle
@@ -414,8 +436,10 @@ private fun BoxScope.SmallInMoon(isDarkMood: Boolean) {
 @Composable
 private fun PreviewSwitchButton() {
     var isDarkMood by remember { mutableStateOf(false) }
-    SwitchButton(
-        isDarkMood = isDarkMood,
-        onToggle = { isDarkMood = !isDarkMood }
-    )
+    TudeeTheme {
+        SwitchButton(
+            isDarkMode = isDarkMood,
+            onToggle = { isDarkMood = !isDarkMood }
+        )
+    }
 }
