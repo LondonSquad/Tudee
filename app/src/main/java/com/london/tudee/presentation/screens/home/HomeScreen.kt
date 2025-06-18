@@ -15,10 +15,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,17 +30,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.london.tudee.R
 import com.london.tudee.presentation.components.DateBadge
 import com.london.tudee.presentation.components.HomeTopBar
 import com.london.tudee.presentation.components.StatusCard
-import com.london.tudee.presentation.components.TaskItem
 import com.london.tudee.presentation.components.TaskStatusSlider
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.components.priority.Priority
+import com.london.tudee.presentation.components.task.Task
+import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
@@ -133,10 +138,17 @@ private fun OverLayerBox() {
                 .align(Alignment.TopCenter)
         ) {
             DateBadge(
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .align(Alignment.CenterHorizontally),
-                dateText = "today, 22 Jun 2025"
+                modifier = Modifier.height(17.dp).align(Alignment.CenterHorizontally),
+                shape = RectangleShape,
+                colors = CardDefaults.cardColors(containerColor = TudeeTheme.colors.surfaceHigh),
+                dateText = "today,12-03-2025",
+                iconSize = 16.dp,
+                textSize = 14.sp,
+                textStyle = TudeeTheme.typography.labelMedium,
+                lineHeight = 16.sp,
+                iconColor = TudeeTheme.colors.body,
+                textColor = TudeeTheme.colors.body,
+                contentPadding = PaddingValues(vertical = 0.dp, horizontal = 8.dp)
             )
 
             TaskStatusSlider(
@@ -245,12 +257,15 @@ private fun ToDoSection() {
     ) {
         items(20) {
             TaskItem(
-                modifier = Modifier,
-                priority = Priority.HIGH,
-                iconResId = R.drawable.ic_education,
-                title = "Organize Study Desk",
-                description = "Review cell structure and functions tomorrow...",
-                date = null
+                modifier = Modifier.width(320.dp),
+                isSelected = true,
+                task = Task(
+                    priority = Priority.HIGH,
+                    iconResId = R.drawable.ic_education,
+                    title = "Stay working!",
+                    description = "You've completed 3 out of 10 tasks Keep going!",
+                    date = "",
+                ),
             )
         }
     }
@@ -309,12 +324,15 @@ private fun InProgressSection() {
     ) {
         items(20) {
             TaskItem(
-                modifier = Modifier,
-                priority = Priority.HIGH,
-                iconResId = R.drawable.ic_education,
-                title = "Organize Study Desk",
-                description = "Review cell structure and functions tomorrow...",
-                date = null,
+                modifier = Modifier.width(320.dp),
+                isSelected = true,
+                task = Task(
+                    priority = Priority.HIGH,
+                    iconResId = R.drawable.ic_education,
+                    title = "Stay working!",
+                    description = "You've completed 3 out of 10 tasks Keep going!",
+                    date = "",
+                ),
             )
         }
     }
@@ -373,12 +391,15 @@ private fun DoneSection() {
     ) {
         items(20) {
             TaskItem(
-                modifier = Modifier,
-                priority = Priority.HIGH,
-                iconResId = R.drawable.ic_education,
-                title = "Organize Study Desk",
-                description = "Review cell structure and functions tomorrow...",
-                date = null,
+                modifier = Modifier.width(320.dp),
+                isSelected = true,
+                task = Task(
+                    priority = Priority.HIGH,
+                    iconResId = R.drawable.ic_education,
+                    title = "Stay working!",
+                    description = "You've completed 3 out of 10 tasks Keep going!",
+                    date = "",
+                ),
             )
         }
     }
