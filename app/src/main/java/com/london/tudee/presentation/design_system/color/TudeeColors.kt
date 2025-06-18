@@ -31,6 +31,9 @@ data class TudeeColors(
     val overlay: Color,
     val emojiTint: Color,
     val primaryGradient: List<Color>,
-    )
+    val skyNightBackground:Color = Color(0xff151535),
+    val linearMoodColor : List<Color> = listOf(Color(0xffE9F0FF), Color(0xffE0E9FE)),
+    val upperSmallCircleMoon: Color = Color(0xffE9EFFF)
+)
 
 

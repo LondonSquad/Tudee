@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="move_to_in_progress">انقل الي قيد التنفيذ</string>">
+    <string name="move_to_done">انقل الي تم</string>">
+    <string name="task_details">تفاصيل المهمة</string>">
+    <string name="back_arrow">الرجوع للخلف</string>
+    <string name="filter_icon">تصفية</string>
+    <string name="tudee_greeting">Your cute Helper for Every Task</string>
+    <string name="In_Progress">قيد التنفيذ</string>
+    <string name="Done">تم</string>
+    <string name="To_Do">للقيام به</string>
+    <string name="Circle">دائرة</string>
     <string name="task_title">عنوان المهمة</string>
     <string name="description">الوصف</string>
     <string name="category_title">عنوان الصنف</string>
@@ -7,4 +17,30 @@
     <string name="medium">متوسط</string>
     <string name="low">منخفض</string>
     <string name="hello_from">"مرحبا بك مع "</string>
+    <string name="categories">الاصناف</string>
+    <string name="fab_content_description">أضف صنف جديد</string>
+    <string name="category_education">التعليم</string>
+    <string name="category_shopping">التسوق</string>
+    <string name="category_medical">الرعاية الصحية</string>
+    <string name="category_gym">الرياضة</string>
+    <string name="category_entertainment">الترفيه</string>
+    <string name="category_cooking">الطبخ</string>
+    <string name="category_family_friend">العائلة والأصدقاء</string>
+    <string name="category_traveling">السفر</string>
+    <string name="category_agriculture">الزراعة</string>
+    <string name="category_coding">البرمجة</string>
+    <string name="category_adoration">العبادة</string>
+    <string name="category_fixing_bugs">تصليح الأعطال</string>
+    <string name="category_cleaning">التنظيف</string>
+    <string name="category_work">العمل</string>
+    <string name="category_budgeting">إعداد الميزانية</string>
+    <string name="category_self_care">العناية بالنفس</string>
+    <string name="category_event">الفعاليات</string>
+    <string name="delete_task_title">حذف المهمة</string>
+    <string name="delete_task_message">هل أنت متأكدة من المتابعة؟</string>
+    <string name="delete">حذف</string>
+    <string name="cancel">إلغاء</string>
+    <string name="clear">حذف</string>
+    <string name="ok">موافق</string>
+    <string name="coding">برمجة</string>
 </resources>
