@@ -2,10 +2,10 @@
     <string name="app_name" translatable="false">Tudee</string>
     <string name="back_arrow">Back Arrow</string>
     <string name="filter_icon">Filter Icon</string>
-    <string name="tudee_avatar">Tudee Avatar</string>
+    <string name="tudee_avatar" translatable="false">Tudee Avatar</string>
     <string name="tudee" translatable="false">Tudee</string>
     <string name="tudee_greeting" translatable="false">Your cute Helper for Every Task</string>
-    <string name="In_Progress">In Progress</string>
+    <string name="In_Progress">In progress</string>
     <string name="Done">Done</string>
     <string name="To_Do">To-Do</string>
     <string name="Circle">Circle</string>
@@ -42,8 +42,8 @@
     <string name="delete_task_message">Are you sure to continue?</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
-    <string name="coding">Coding</string>
     <string name="edit_icon">Edit Icon</string>
     <string name="clear">Clear</string>
     <string name="ok">OK</string>
+    <string name="coding">Coding</string>
 </resources>

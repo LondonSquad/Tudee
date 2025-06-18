@@ -47,35 +47,35 @@ fun TopAppBar(
                     TudeeTheme.shapes.circle
                 )
         ) {
-                Icon(
-                    painter = painterResource(R.drawable.back_arrow),
-                    contentDescription = stringResource(R.string.back_arrow),
-                    tint = TudeeTheme.colors.body
-                )
+            Icon(
+                painter = painterResource(R.drawable.back_arrow),
+                contentDescription = stringResource(R.string.back_arrow),
+                tint = TudeeTheme.colors.body
+            )
         }
     },
     actions: @Composable (onClickAction: () -> Unit) -> Unit = {
-            IconButton(
-                onClick = it,
-                modifier = Modifier
-                    .then(
-                        if (LocalLayoutDirection.current == LayoutDirection.Rtl)
-                            Modifier.rotate(180f)
-                        else Modifier
-                    )
-                    .border(
-                        1.dp,
-                        TudeeTheme.colors.stroke,
-                        TudeeTheme.shapes.circle
-                    )
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.filter_icon),
-                    contentDescription = stringResource(R.string.filter_icon),
-                    tint = TudeeTheme.colors.body
+        IconButton(
+            onClick = it,
+            modifier = Modifier
+                .then(
+                    if (LocalLayoutDirection.current == LayoutDirection.Rtl)
+                        Modifier.rotate(180f)
+                    else Modifier
                 )
-            }
+                .border(
+                    1.dp,
+                    TudeeTheme.colors.stroke,
+                    TudeeTheme.shapes.circle
+                )
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.filter_icon),
+                contentDescription = stringResource(R.string.filter_icon),
+                tint = TudeeTheme.colors.body
+            )
         }
+    }
 ) {
     Row(
         modifier = modifier
@@ -106,7 +106,7 @@ private fun TopAppBarPreview() {
         TopAppBar(
             title = R.string.app_name,
             onBackClick = {},
-            onClickAction = {},
-            )
+            onClickAction = {}
+        )
     }
 }
