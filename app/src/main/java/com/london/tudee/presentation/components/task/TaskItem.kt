@@ -26,8 +26,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.london.tudee.R
+import com.london.tudee.domain.entities.Priority
 import com.london.tudee.presentation.components.DateBadge
-import com.london.tudee.presentation.components.priority.Priority
 import com.london.tudee.presentation.components.priority.PriorityBadge
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
@@ -35,9 +35,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun TaskItem(
-    modifier: Modifier = Modifier,
-    isSelected: Boolean = false,
-    task: Task
+    modifier: Modifier = Modifier, isSelected: Boolean = false, task: Task
 ) {
     Card(
         modifier = modifier
@@ -56,15 +54,12 @@ fun TaskItem(
             TaskItemIconSection(task.iconResId)
             Spacer(modifier = Modifier.width(8.dp))
             TaskItemTopBar(
-                priority = task.priority,
-                date = task.date,
-                isSelected = isSelected
+                priority = task.priority, date = task.date, isSelected = isSelected
             )
         }
 
         TaskItemContent(
-            title = task.title,
-            description = task.description
+            title = task.title, description = task.description
         )
     }
 }
@@ -72,8 +67,7 @@ fun TaskItem(
 @Composable
 private fun TaskItemIconSection(@DrawableRes iconResId: Int) {
     Box(
-        modifier = Modifier.size(56.dp),
-        contentAlignment = Alignment.Center
+        modifier = Modifier.size(56.dp), contentAlignment = Alignment.Center
     ) {
         Icon(
             painter = painterResource(id = iconResId),
@@ -117,9 +111,7 @@ private fun TaskItemTopBar(
 
 @Composable
 private fun TaskItemContent(
-    modifier: Modifier = Modifier,
-    title: String,
-    description: String
+    modifier: Modifier = Modifier, title: String, description: String
 ) {
     Column(
         modifier = modifier
@@ -198,5 +190,3 @@ fun PreviewTaskItemLow() {
         )
     }
 }
-
-
