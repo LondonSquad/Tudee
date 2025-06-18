@@ -20,7 +20,16 @@
     <string name="add_new_task">Add new task</string>
     <string name="edit_task">Edit task</string>
     <string name="priority">Priority</string>
-
+    <string name="add">Add</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="show_bottom_sheet" translatable="false">Show Bottom Sheet</string>
+    <string name="confirm" translatable="false">Confirm</string>
+    <string name="submit">Submit</string>
+    <string name="select_date">Select date</string>
+    <string name="move_to_in_progress">Move to in progress</string>">
+    <string name="move_to_done">Move to done</string>">
+    <string name="task_details">Task Details</string>">
     <string name="categories">Categories</string>
     <string name="fab_content_description">Add category</string>
     <string name="category_education">Education</string>
@@ -40,12 +49,4 @@
     <string name="category_budgeting">Budgeting</string>
     <string name="category_self_care">Self-care</string>
     <string name="category_event">Event</string>
-    <string name="add">Add</string>
-    <string name="save">Save</string>
-    <string name="cancel">Cancel</string>
-    <string name="show_bottom_sheet" translatable="false">Show Bottom Sheet</string>
-    <string name="confirm" translatable="false">Confirm</string>
-    <string name="submit">Submit</string>
-    <string name="select_date">Select date</string>
-
 </resources>
