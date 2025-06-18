@@ -3,9 +3,6 @@ package com.london.tudee.presentation.screens.tasks
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -142,7 +139,6 @@ private fun SectionTitle(@StringRes titleRes: Int) {
         color = TudeeTheme.colors.title
     )
 }
-
 @Composable
 private fun CategoriesGrid(
     categories: List<CategoryUiModel>,
@@ -200,5 +196,27 @@ private fun PreviewAddOrEditTaskDetails() {
         AddOrEditTaskDetails(
             title = R.string.add_new_task,
         )
+    }
+}
+
+@ThemePreviews
+@Composable
+private fun PreviewCategorySection() {
+    TudeeTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(TudeeTheme.colors.surface)
+                .padding(16.dp)
+        ) {
+            var selectedCategory by remember { mutableStateOf<CategoryUiModel?>(null) }
+            val categories = rememberSampleCategories()
+
+            CategorySection(
+                categories = categories,
+                selectedCategory = selectedCategory,
+                onCategorySelected = { selectedCategory = it }
+            )
+        }
     }
 }

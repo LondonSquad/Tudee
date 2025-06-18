@@ -47,7 +47,6 @@ class MainActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Your existing main screen content
                     Row {
                         Text(
                             text = "Hello from ",
