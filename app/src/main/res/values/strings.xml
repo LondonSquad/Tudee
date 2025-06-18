@@ -49,4 +49,9 @@
     <string name="category_budgeting">Budgeting</string>
     <string name="category_self_care">Self-care</string>
     <string name="category_event">Event</string>
+    <string name="delete_task_title">Delete Task</string>
+    <string name="delete_task_message">Are you sure to continue?</string>
+    <string name="delete">Delete</string>
+    <string name="clear">Clear</string>
+    <string name="ok">OK</string>
 </resources>
