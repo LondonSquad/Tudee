@@ -82,9 +82,7 @@ fun DatePicker(
                 selectedDayContainerColor = TudeeTheme.colors.primary,
                 todayContentColor = TudeeTheme.colors.primary,
                 todayDateBorderColor = TudeeTheme.colors.primary,
-                yearContentColor = TudeeTheme.colors.body,
-                dayInSelectionRangeContentColor = Color.Black,
-                dayInSelectionRangeContainerColor = Color.Black
+                yearContentColor = TudeeTheme.colors.body
             )
         )
     }
