@@ -1,36 +1,40 @@
 package com.london.tudee.presentation
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.london.tudee.data.local.room_db.TudeeDatabase
+import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 class MainActivity : ComponentActivity() {
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+    private lateinit var db: TudeeDatabase
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            TestScreen()
+            TudeeTheme {
+                TestScreen()
+            }
         }
     }
 
@@ -46,8 +50,7 @@ class MainActivity : ComponentActivity() {
         //  TudeeTheme (isDarkMode = isDark){}
         TudeeTheme {
             Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = TudeeTheme.colors.primary
+                modifier = Modifier.fillMaxSize(), color = TudeeTheme.colors.primary
             ) {
                 Column(
                     modifier = Modifier
@@ -73,12 +76,10 @@ class MainActivity : ComponentActivity() {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
-                        onClick = { /*isDark = !isDark*/ },
-                        colors = ButtonDefaults.buttonColors(
+                        onClick = { /*isDark = !isDark*/ }, colors = ButtonDefaults.buttonColors(
                             contentColor = TudeeTheme.colors.title,
                             containerColor = TudeeTheme.colors.pinkAccent
-                        ),
-                        shape = TudeeTheme.shapes.medium
+                        ), shape = TudeeTheme.shapes.medium
                     ) {
                         Text(
                             text = if (isSystemInDarkTheme()) "Switch to Light" else "Switch to Dark",

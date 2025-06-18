@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.london.tudee.domain.entities.Priority
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 
 @Composable
