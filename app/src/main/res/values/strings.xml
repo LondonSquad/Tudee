@@ -15,7 +15,6 @@
     <string name="high">High</string>
     <string name="medium">Medium</string>
     <string name="low">Low</string>
-    <string name="home">Home</string>
     <string name="hello_from">"Hello from "</string>
     <string name="on_bording_title_1">Overwhelmed with tasks?</string>
     <string name="on_bording_body_1">Let’s bring some order to the chaos. Tudee is here to help you sort, plan, and breathe easier.</string>
@@ -23,4 +22,26 @@
     <string name="on_bording_body_2">Tudee not mad… just a little disappointed, Let’s get back on track together.</string>
     <string name="on_bording_title_3">Let’s complete task and celebrate together.</string>
     <string name="on_bording_body_3">Progress is progress. Tudee will celebrate you on for every win, big or small.</string>
+    <string name="move_to_in_progress">Move to in progress</string>">
+    <string name="move_to_done">Move to done</string>">
+    <string name="task_details">Task Details</string>">
+    <string name="categories">Categories</string>
+    <string name="fab_content_description">Add category</string>
+    <string name="category_education">Education</string>
+    <string name="category_shopping">Shopping</string>
+    <string name="category_medical">Medical</string>
+    <string name="category_gym">Gym</string>
+    <string name="category_entertainment">Entertainment</string>
+    <string name="category_cooking">Cooking</string>
+    <string name="category_family_friend">Family &amp; friend</string>
+    <string name="category_traveling">Traveling</string>
+    <string name="category_agriculture">Agriculture</string>
+    <string name="category_coding">Coding</string>
+    <string name="category_adoration">Adoration</string>
+    <string name="category_fixing_bugs">Fixing bugs</string>
+    <string name="category_cleaning">Cleaning</string>
+    <string name="category_work">Work</string>
+    <string name="category_budgeting">Budgeting</string>
+    <string name="category_self_care">Self-care</string>
+    <string name="category_event">Event</string>
 </resources>
