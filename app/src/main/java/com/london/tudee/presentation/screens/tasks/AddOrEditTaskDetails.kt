@@ -30,12 +30,12 @@ fun AddOrEditTaskDetails(
     @StringRes title: Int,
 ) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-    val maxHeight = screenHeight * 0.75f // Leave 25% space at top
+    val maxHeight = screenHeight * 0.75f
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(max = maxHeight) // Critical constraint
+            .heightIn(max = maxHeight)
             .background(TudeeTheme.colors.surface)
     ) {
         Box(
@@ -187,7 +187,6 @@ private fun CategoriesGrid(
             .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Split categories into rows of 3
         categories.chunked(3).forEach { rowCategories ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -202,14 +201,11 @@ private fun CategoriesGrid(
                         isSelected = category == selectedCategory,
                         onClick = { onCategorySelected(category) }
                     )
-
-                    // Add spacing between items, except for the last item in the row
                     if (category != rowCategories.last()) {
                         Spacer(modifier = Modifier.width(16.dp))
                     }
                 }
 
-                // Fill empty spaces in the last row if needed
                 val emptySpaces = 3 - rowCategories.size
                 if (emptySpaces > 0) {
                     repeat(emptySpaces) {

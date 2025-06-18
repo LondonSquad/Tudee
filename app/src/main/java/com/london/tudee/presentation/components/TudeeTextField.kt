@@ -130,14 +130,13 @@ fun TudeeTextField(
             )
         }
 
-        // Invisible clickable overlay for read-only fields
         if (readOnly && onClick != null) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = null // No ripple effect
+                        indication = null
                     ) {
                         onClick()
                     }
