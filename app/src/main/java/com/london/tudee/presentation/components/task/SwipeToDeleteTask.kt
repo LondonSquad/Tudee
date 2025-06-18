@@ -44,7 +44,7 @@ fun SwipeToDeleteTask(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(123.dp)
+            .height(111.dp)
     ) {
         if (offsetX < 0) {
             DeleteBackground(onDeleteClick = {
