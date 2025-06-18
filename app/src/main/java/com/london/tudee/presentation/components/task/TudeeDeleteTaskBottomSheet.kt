@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheet
@@ -73,6 +74,18 @@ fun TudeeDeleteTaskBottomSheet(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TudeeDeleteTaskBottomSheetPreview() {
+    TudeeTheme {
+        TudeeDeleteTaskBottomSheet(
+            visible = true,
+            onDismiss = {},
+            onConfirmDelete = {}
         )
     }
 }

@@ -24,9 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
+import com.london.tudee.presentation.components.priority.Priority
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import kotlin.math.roundToInt
 
@@ -34,7 +36,6 @@ import kotlin.math.roundToInt
 fun SwipeToDeleteTask(
     modifier: Modifier = Modifier,
     task: Task,
-    onDeleteConfirmed: () -> Unit
 ) {
     var offsetX by remember { mutableFloatStateOf(0f) }
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -97,6 +98,22 @@ private fun DeleteBackground(onDeleteClick: () -> Unit) {
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SwipeToDeleteTaskPreview() {
+    TudeeTheme {
+        SwipeToDeleteTask(
+            task = Task(
+                title = "Buy groceries",
+                description = "Milk, Bread, Eggs",
+                date = "18 June",
+                priority = Priority.HIGH,
+                iconResId = R.drawable.ic_education
+            )
+        )
     }
 }
 
