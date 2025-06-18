@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="back_arrow">الرجوع للخلف</string>
     <string name="task_title">عنوان المهمة</string>
     <string name="description">الوصف</string>
     <string name="category_title">عنوان الصنف</string>
@@ -30,6 +31,8 @@
     <string name="delete_task_message">هل أنت متأكدة من المتابعة؟</string>
     <string name="delete">حذف</string>
     <string name="cancel">إلغاء</string>
+    <string name="coding">برمجة</string>
+    <string name="edit_icon">تعديل الايقونة</string>
     <string name="clear">حذف</string>
     <string name="ok">موافق</string>
 </resources>
