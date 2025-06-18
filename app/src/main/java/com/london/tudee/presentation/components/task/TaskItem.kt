@@ -1,7 +1,21 @@
-package com.london.tudee.presentation.components
+package com.london.tudee.presentation.components.task
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -11,24 +25,27 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.london.tudee.R
+import com.london.tudee.presentation.components.DateBadge
 import com.london.tudee.presentation.components.priority.Priority
 import com.london.tudee.presentation.components.priority.PriorityBadge
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
+
 @Composable
 fun TaskItem(
     modifier: Modifier = Modifier,
     priority: Priority,
-    iconResId: Int,
+    @DrawableRes iconResId: Int,
     title: String,
     description: String,
-    date: String? = null
+    date: String? = null,
+    isSelected: Boolean = false
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(123.dp),
+            .height(111.dp),
         shape = TudeeTheme.shapes.small,
         colors = CardDefaults.cardColors(containerColor = TudeeTheme.colors.surfaceHigh)
     ) {
@@ -41,7 +58,7 @@ fun TaskItem(
         ) {
             TaskItemIconSection(iconResId)
             Spacer(modifier = Modifier.width(8.dp))
-            TaskItemTopBar(priority = priority, date = date)
+            TaskItemTopBar(priority = priority, date = date, isSelected = isSelected)
         }
 
         TaskItemContent(
@@ -67,7 +84,7 @@ private fun TaskItemIconSection(iconResId: Int) {
 }
 
 @Composable
-private fun TaskItemTopBar(priority: Priority, date: String?) {
+private fun TaskItemTopBar(priority: Priority, date: String?, isSelected: Boolean) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -76,7 +93,7 @@ private fun TaskItemTopBar(priority: Priority, date: String?) {
             DateBadge(dateText = date)
         }
 
-        PriorityBadge(priority = priority)
+        PriorityBadge(priority = priority, isSelected = isSelected)
     }
 }
 
@@ -90,7 +107,7 @@ private fun TaskItemContent(
         modifier = modifier
             .wrapContentHeight()
             .fillMaxWidth(0.9f)
-            .padding(start = 4.dp, end = 12.dp, bottom = 24.dp)
+            .padding(start = 4.dp, end = 12.dp, bottom = 12.dp)
     ) {
         Text(
             modifier = Modifier.padding(start = 8.dp, bottom = 2.dp),

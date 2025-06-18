@@ -8,12 +8,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -25,13 +27,14 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun DateBadge(
     modifier: Modifier = Modifier,
-    dateText: String
+    dateText: String,
+    shape: Shape,
+    colors: CardColors
 ) {
     Card(
-        modifier = modifier
-            .height(28.dp),
-        shape = TudeeTheme.shapes.circle,
-        colors = CardDefaults.cardColors(containerColor = TudeeTheme.colors.surface)
+        modifier = modifier,
+        shape = shape,
+        colors = colors
     ) {
         Row(
             modifier = Modifier
@@ -64,6 +67,11 @@ fun DateBadge(
 @Composable
 fun PreviewDateBadge() {
     TudeeTheme {
-        DateBadge(dateText = "12-03-2025")
+        DateBadge(
+            modifier = Modifier.height(28.dp),
+            shape = TudeeTheme.shapes.circle,
+            colors = CardDefaults.cardColors(containerColor = TudeeTheme.colors.surface),
+            dateText = "12-03-2025"
+        )
     }
 }
