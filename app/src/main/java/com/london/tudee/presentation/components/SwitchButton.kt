@@ -63,7 +63,7 @@ fun SwitchButton(
             )
             .border(
                 1.dp,
-                Color(0x1F1F1F1F),
+                TudeeTheme.colors.stroke,
                 TudeeTheme.shapes.circle
             )
             .then(
@@ -109,8 +109,8 @@ fun SwitchButton(
                     .background(
                         brush = Brush.linearGradient(
                             listOf(
-                                Color(0xffF2C849),
-                                Color(0xffF49061),
+                                TudeeTheme.colors.yellowAccent,
+                                TudeeTheme.colors.secondary,
                             )
                         ),
                         shape = TudeeTheme.shapes.circle
@@ -252,7 +252,7 @@ private fun BoxScope.MiddleWhiteCloud(isDarkMood: Boolean) {
                 )
             }
             .background(
-                color = Color(0xFFFFFFFF),
+                color = TudeeTheme.colors.background,
                 shape = TudeeTheme.shapes.circle
             )
     )
@@ -287,7 +287,7 @@ private fun BoxScope.UpperGrayCloud(isDarkMood: Boolean) {
                 )
             }
             .background(
-                color = Color(0xFFF0F0F0),
+                color = TudeeTheme.colors.surfaceLow,
                 shape = TudeeTheme.shapes.circle
             )
     )
@@ -377,7 +377,7 @@ private fun BoxScope.DownWhiteCloud(isDarkMood: Boolean) {
                 .width(14.dp)
                 .height(16.dp)
                 .background(
-                    color = Color(0xFFFFFFFF),
+                    color = TudeeTheme.colors.background,
                     shape = TudeeTheme.shapes.circle
                 )
         )
@@ -402,7 +402,7 @@ private fun BoxScope.BigCircleInMoon(isDarkMood: Boolean) {
                 .offset(x = (-16).dp, y = (-8).dp)
                 .innerShadow()
                 .background(
-                    Color(0x01FFFFFF),
+                    TudeeTheme.colors.background,
                     TudeeTheme.shapes.circle
                 )
         )
@@ -427,7 +427,7 @@ private fun BoxScope.SmallInMoon(isDarkMood: Boolean) {
                 .offset(x = (-11).dp, y = (-6).dp)
                 .innerShadow()
                 .background(
-                    Color(0x01FFFFFF),
+                    TudeeTheme.colors.background,
                     TudeeTheme.shapes.circle
                 )
         )
