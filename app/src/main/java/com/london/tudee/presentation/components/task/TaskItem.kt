@@ -1,5 +1,6 @@
 package com.london.tudee.presentation.components.task
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -69,7 +70,7 @@ fun TaskItem(
 }
 
 @Composable
-private fun TaskItemIconSection(iconResId: Int) {
+private fun TaskItemIconSection(@DrawableRes iconResId: Int) {
     Box(
         modifier = Modifier.size(56.dp),
         contentAlignment = Alignment.Center
