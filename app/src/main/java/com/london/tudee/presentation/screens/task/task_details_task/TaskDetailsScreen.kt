@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.tasks
+package com.london.tudee.presentation.screens.task.task_details_task
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background

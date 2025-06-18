@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Priority
-import com.london.tudee.presentation.components.DateBadge
+import com.london.tudee.presentation.components.date.DateBadge
 import com.london.tudee.presentation.components.HomeTopBar
 import com.london.tudee.presentation.components.StatusCard
 import com.london.tudee.presentation.components.TaskStatusSlider

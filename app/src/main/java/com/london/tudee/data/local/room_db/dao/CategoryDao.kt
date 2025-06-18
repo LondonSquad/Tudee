@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.london.tudee.data.local.room_db.entities.CategoryDto
+import com.london.tudee.data.local.room_db.dto.CategoryDto
 import kotlinx.coroutines.flow.Flow
 
 @Dao

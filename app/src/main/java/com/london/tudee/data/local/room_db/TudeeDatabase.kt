@@ -6,8 +6,8 @@ import androidx.room.TypeConverters
 import com.london.tudee.data.local.room_db.converter.Converters
 import com.london.tudee.data.local.room_db.dao.CategoryDao
 import com.london.tudee.data.local.room_db.dao.TaskDao
-import com.london.tudee.data.local.room_db.entities.CategoryDto
-import com.london.tudee.data.local.room_db.entities.TaskDto
+import com.london.tudee.data.local.room_db.dto.CategoryDto
+import com.london.tudee.data.local.room_db.dto.TaskDto
 
 @Database(entities = [TaskDto::class, CategoryDto::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
