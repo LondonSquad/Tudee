@@ -46,37 +46,19 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun HomeScreen() {
     Scaffold(
-        floatingActionButton = { TudeeFloatingActionButton(
-            painter = painterResource(R.drawable.note_add),
-            contentDescription = "note icon",
-            onClick = {  },
-            isEnabled = true
-        ) }
+        floatingActionButton = {
+            TudeeFloatingActionButton(
+                painter = painterResource(R.drawable.note_add),
+                contentDescription = "note icon",
+                onClick = { },
+                isEnabled = true
+            )
+        }
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            // Top App Bar with Status Bar Padding
-            Box(
-                modifier = Modifier
-                    .background(TudeeTheme.colors.primary)
-                    .padding(horizontal = 16.dp)
-                    .padding(WindowInsets.statusBars.asPaddingValues())
-                    .height(72.dp)
-                    .fillMaxWidth(),
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    val isDark = remember { mutableStateOf(false) }
-                    HomeTopBar(
-                        isDarkMode = isDark.value,
-                        onCheckedChange = { isDark.value = it },
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
-            }
+            TopAPPBar()
 
             Column(
                 modifier = Modifier
@@ -84,213 +66,320 @@ fun HomeScreen() {
                     .background(TudeeTheme.colors.surface)
                     .verticalScroll(rememberScrollState())
             ) {
-                // 🟡 This Box wraps both the background & lifted content
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 24.dp)
-                ) {
-                    // Background bar
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(55.dp)
-                            .background(TudeeTheme.colors.primary)
-                            .align(Alignment.TopCenter)
-                            .zIndex(0f)
-                    )
 
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .clip(shape = TudeeTheme.shapes.small)
-                            .background(TudeeTheme.colors.surfaceHigh)
-                            .zIndex(1f)
-                            .align(Alignment.TopCenter)
-                    ) {
-                        DateBadge(
-                            modifier = Modifier
-                                .padding(top = 8.dp)
-                                .align(Alignment.CenterHorizontally),
-                            dateText = "today, 22 Jun 2025"
-                        )
+                OverLayerBox()
 
-                        TaskStatusSlider(
-                            title = "Stay working!",
-                            subtitle = "You've completed 3 out of 10 tasks, keep going",
-                            note = null,
-                            emoji = R.drawable.okay_status,
-                            tudeePicture = R.drawable.tudee_warning,
-                            modifier = Modifier.padding(horizontal = 6.dp)
-                        )
-
-                        Text(
-                            text = "Overview",
-                            style = TudeeTheme.typography.titleLarge,
-                            color = TudeeTheme.colors.title,
-                            modifier = Modifier.padding(horizontal = 12.dp)
-                        )
-
-                        Spacer(Modifier.height(8.dp))
-
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier
-                                .padding(horizontal = 12.dp)
-                                .padding(bottom = 12.dp)
-                                .fillMaxWidth()
-                        ) {
-                            StatusCard(
-                                backgroundColor = TudeeTheme.colors.greenAccent,
-                                statusIcon = R.drawable.file_verified,
-                                tasksNumber = 2,
-                                taskStatusName = R.string.Done,
-                                modifier = Modifier.weight(1f)
-                            )
-
-                            StatusCard(
-                                backgroundColor = TudeeTheme.colors.yellowAccent,
-                                statusIcon = R.drawable.file_pin,
-                                tasksNumber = 16,
-                                taskStatusName = R.string.In_Progress,
-                                modifier = Modifier.weight(1f)
-                            )
-
-                            StatusCard(
-                                backgroundColor = TudeeTheme.colors.purpleAccent,
-                                statusIcon = R.drawable.file_unknown,
-                                tasksNumber = 1,
-                                taskStatusName = R.string.To_Do,
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                    }
-                }
-
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .padding(bottom = 8.dp)
-                ) {
-                    Text(
-                        text = "In progress",
-                        style = TudeeTheme.typography.titleLarge,
-                        color = TudeeTheme.colors.title
-                    )
-
-                    Box(
-                        Modifier
-                            .background(
-                                color = TudeeTheme.colors.surfaceHigh,
-                                shape = TudeeTheme.shapes.circle,
-                            )
-                            .padding(vertical = 6.dp, horizontal = 8.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(2.dp)
-                        ) {
-                            Text(
-                                text = "12",
-                                style = TudeeTheme.typography.labelSmall,
-                                color = TudeeTheme.colors.body
-                            )
-
-                            Icon(
-                                painter = painterResource(R.drawable.left_arrow_icon),
-                                contentDescription = null,
-                                tint = TudeeTheme.colors.body
-                            )
-                        }
-                    }
-                }
-
-                LazyHorizontalGrid(
-                    contentPadding = PaddingValues(horizontal = 16.dp),
-                    rows = GridCells.Fixed(2),
-                    modifier = Modifier.height(230.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(20) {
-                        TaskItem(
-                            modifier = Modifier,
-                            priority = Priority.HIGH,
-                            iconResId = R.drawable.ic_education,
-                            title = "Organize Study Desk",
-                            description = "Review cell structure and functions tomorrow...",
-                            date = null,
-                        )
-                    }
-                }
+                InProgressSection()
 
                 Spacer(Modifier.height(24.dp))
 
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .padding(bottom = 8.dp)
-                ) {
-                    Text(
-                        text = "To-Do",
-                        style = TudeeTheme.typography.titleLarge,
-                        color = TudeeTheme.colors.title
-                    )
+                ToDoSection()
 
-                    Box(
-                        Modifier
-                            .background(
-                                color = TudeeTheme.colors.surfaceHigh,
-                                shape = TudeeTheme.shapes.circle,
-                            )
-                            .padding(vertical = 6.dp, horizontal = 8.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(2.dp)
-                        ) {
-                            Text(
-                                text = "9",
-                                style = TudeeTheme.typography.labelSmall,
-                                color = TudeeTheme.colors.body
-                            )
+                Spacer(Modifier.height(24.dp))
 
-                            Icon(
-                                painter = painterResource(R.drawable.left_arrow_icon),
-                                contentDescription = null,
-                                tint = TudeeTheme.colors.body
-                            )
-                        }
-                    }
-                }
-
-                LazyHorizontalGrid(
-                    contentPadding = PaddingValues(horizontal = 16.dp),
-                    rows = GridCells.Fixed(2),
-                    modifier = Modifier.height(230.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(20) {
-                        TaskItem(
-                            modifier = Modifier,
-                            priority = Priority.HIGH,
-                            iconResId = R.drawable.ic_education,
-                            title = "Organize Study Desk",
-                            description = "Review cell structure and functions tomorrow...",
-                            date = null
-                        )
-                    }
-                }
+                DoneSection()
             }
+        }
+    }
+}
+
+@Composable
+private fun TopAPPBar() {
+    Box(
+        modifier = Modifier
+            .background(TudeeTheme.colors.primary)
+            .padding(horizontal = 16.dp)
+            .padding(WindowInsets.statusBars.asPaddingValues())
+            .height(72.dp)
+            .fillMaxWidth(),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            val isDark = remember { mutableStateOf(false) }
+            HomeTopBar(
+                isDarkMode = isDark.value,
+                onCheckedChange = { isDark.value = it },
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+}
+
+@Composable
+private fun OverLayerBox() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 24.dp)
+    ) {
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(55.dp)
+                .background(TudeeTheme.colors.primary)
+                .align(Alignment.TopCenter)
+                .zIndex(0f)
+        )
+
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(shape = TudeeTheme.shapes.small)
+                .background(TudeeTheme.colors.surfaceHigh)
+                .zIndex(1f)
+                .align(Alignment.TopCenter)
+        ) {
+            DateBadge(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .align(Alignment.CenterHorizontally),
+                dateText = "today, 22 Jun 2025"
+            )
+
+            TaskStatusSlider(
+                title = "Stay working!",
+                subtitle = "You've completed 3 out of 10 tasks, keep going",
+                note = null,
+                emoji = R.drawable.okay_status,
+                tudeePicture = R.drawable.tudee_warning,
+                modifier = Modifier.padding(horizontal = 6.dp)
+            )
+
+            Text(
+                text = "Overview",
+                style = TudeeTheme.typography.titleLarge,
+                color = TudeeTheme.colors.title,
+                modifier = Modifier.padding(horizontal = 12.dp)
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .padding(horizontal = 12.dp)
+                    .padding(bottom = 12.dp)
+                    .fillMaxWidth()
+            ) {
+                StatusCard(
+                    backgroundColor = TudeeTheme.colors.greenAccent,
+                    statusIcon = R.drawable.file_verified,
+                    tasksNumber = 2,
+                    taskStatusName = R.string.Done,
+                    modifier = Modifier.weight(1f)
+                )
+
+                StatusCard(
+                    backgroundColor = TudeeTheme.colors.yellowAccent,
+                    statusIcon = R.drawable.file_pin,
+                    tasksNumber = 16,
+                    taskStatusName = R.string.In_Progress,
+                    modifier = Modifier.weight(1f)
+                )
+
+                StatusCard(
+                    backgroundColor = TudeeTheme.colors.purpleAccent,
+                    statusIcon = R.drawable.file_unknown,
+                    tasksNumber = 1,
+                    taskStatusName = R.string.To_Do,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ToDoSection() {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 8.dp)
+    ) {
+        Text(
+            text = "To-Do",
+            style = TudeeTheme.typography.titleLarge,
+            color = TudeeTheme.colors.title
+        )
+
+        Box(
+            Modifier
+                .background(
+                    color = TudeeTheme.colors.surfaceHigh,
+                    shape = TudeeTheme.shapes.circle,
+                )
+                .padding(vertical = 6.dp, horizontal = 8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                Text(
+                    text = "9",
+                    style = TudeeTheme.typography.labelSmall,
+                    color = TudeeTheme.colors.body
+                )
+
+                Icon(
+                    painter = painterResource(R.drawable.left_arrow_icon),
+                    contentDescription = null,
+                    tint = TudeeTheme.colors.body
+                )
+            }
+        }
+    }
+
+    LazyHorizontalGrid(
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        rows = GridCells.Fixed(2),
+        modifier = Modifier.height(230.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(20) {
+            TaskItem(
+                modifier = Modifier,
+                priority = Priority.HIGH,
+                iconResId = R.drawable.ic_education,
+                title = "Organize Study Desk",
+                description = "Review cell structure and functions tomorrow...",
+                date = null
+            )
+        }
+    }
+}
+
+@Composable
+private fun InProgressSection() {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 8.dp)
+    ) {
+        Text(
+            text = "In progress",
+            style = TudeeTheme.typography.titleLarge,
+            color = TudeeTheme.colors.title
+        )
+
+        Box(
+            Modifier
+                .background(
+                    color = TudeeTheme.colors.surfaceHigh,
+                    shape = TudeeTheme.shapes.circle,
+                )
+                .padding(vertical = 6.dp, horizontal = 8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                Text(
+                    text = "12",
+                    style = TudeeTheme.typography.labelSmall,
+                    color = TudeeTheme.colors.body
+                )
+
+                Icon(
+                    painter = painterResource(R.drawable.left_arrow_icon),
+                    contentDescription = null,
+                    tint = TudeeTheme.colors.body
+                )
+            }
+        }
+    }
+
+    LazyHorizontalGrid(
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        rows = GridCells.Fixed(2),
+        modifier = Modifier.height(230.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(20) {
+            TaskItem(
+                modifier = Modifier,
+                priority = Priority.HIGH,
+                iconResId = R.drawable.ic_education,
+                title = "Organize Study Desk",
+                description = "Review cell structure and functions tomorrow...",
+                date = null,
+            )
+        }
+    }
+}
+
+@Composable
+private fun DoneSection() {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 8.dp)
+    ) {
+        Text(
+            text = "Done",
+            style = TudeeTheme.typography.titleLarge,
+            color = TudeeTheme.colors.title
+        )
+
+        Box(
+            Modifier
+                .background(
+                    color = TudeeTheme.colors.surfaceHigh,
+                    shape = TudeeTheme.shapes.circle,
+                )
+                .padding(vertical = 6.dp, horizontal = 8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                Text(
+                    text = "12",
+                    style = TudeeTheme.typography.labelSmall,
+                    color = TudeeTheme.colors.body
+                )
+
+                Icon(
+                    painter = painterResource(R.drawable.left_arrow_icon),
+                    contentDescription = null,
+                    tint = TudeeTheme.colors.body
+                )
+            }
+        }
+    }
+
+    LazyHorizontalGrid(
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        rows = GridCells.Fixed(2),
+        modifier = Modifier.height(230.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(20) {
+            TaskItem(
+                modifier = Modifier,
+                priority = Priority.HIGH,
+                iconResId = R.drawable.ic_education,
+                title = "Organize Study Desk",
+                description = "Review cell structure and functions tomorrow...",
+                date = null,
+            )
         }
     }
 }
