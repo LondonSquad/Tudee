@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -21,22 +22,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.packFloats
 import com.london.tudee.R
 import com.london.tudee.presentation.components.TopAppBar
 import com.london.tudee.presentation.components.priority.Priority
 import com.london.tudee.presentation.components.tabs.TabItem
 import com.london.tudee.presentation.components.tabs.TudeeTabLayout
+import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.Task
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
-fun tudeeTask(
-    modifier: Modifier = Modifier
-){
+fun TudeeTask(
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier
+            .background(TudeeTheme.colors.surface)
     ) {
         TopAppBar(
             title = R.string.coding,
@@ -88,21 +92,24 @@ fun tudeeTask(
                 }
             }
         )
-        Row(
+
+        TudeeTabLayout(
+            tabs = listOf(
+                TabItem(text = R.string.In_Progress, number = 14),
+                TabItem(text = R.string.Done, number = 10),
+                TabItem(text = R.string.To_Do, number = 2),
+            ),
+            selectedIndex = 0,
+            onTabSelected = {},
             modifier = Modifier.fillMaxWidth()
-        ) {
-            // when it selected text size will be 14 instead of that it will be 12
-            TudeeTabLayout(
-                tabs = listOf(
-                    TabItem(text = R.string.In_Progress, number = 14),
-                    TabItem(text = R.string.Done, number = 10),
-                    TabItem(text = R.string.To_Do, number = 2),
-                ),
-                selectedIndex = 0,
-                onTabSelected = {},
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(TudeeTheme.colors.stroke)
+        )
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -113,8 +120,9 @@ fun tudeeTask(
                     .fillMaxSize()
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
-                items(tasks.size) {index ->
-                    TaskItem(modifier = Modifier,
+                items(tasks.size) { index ->
+                    TaskItem(
+                        modifier = Modifier,
                         isSelected = true,
                         task = tasks[index]
                     )
@@ -122,9 +130,9 @@ fun tudeeTask(
                 }
             }
         }
-
     }
 }
+
 val tasks = listOf(
     Task(
         priority = Priority.MEDIUM,
@@ -190,10 +198,11 @@ val tasks = listOf(
         date = "2023-09-20"
     )
 )
+
 @ThemePreviews
 @Composable
 private fun tudeeTaskPreview() {
     TudeeTheme {
-        tudeeTask()
+        TudeeTask()
     }
 }

@@ -32,7 +32,6 @@ fun TopAppBar(
     onBackClick: () -> Unit,
     onClickAction: () -> Unit,
     modifier: Modifier = Modifier,
-    isFilter: Boolean,
     navigationIcon: @Composable (onBackClick: () -> Unit) -> Unit = {
         IconButton(
             onClick = it,
@@ -56,7 +55,6 @@ fun TopAppBar(
         }
     },
     actions: @Composable (onClickAction: () -> Unit) -> Unit = {
-        if (isFilter) {
             IconButton(
                 onClick = it,
                 modifier = Modifier
@@ -78,7 +76,6 @@ fun TopAppBar(
                 )
             }
         }
-    }
 ) {
     Row(
         modifier = modifier
@@ -110,7 +107,6 @@ private fun TopAppBarPreview() {
             title = R.string.app_name,
             onBackClick = {},
             onClickAction = {},
-            isFilter = true
-        )
+            )
     }
 }
