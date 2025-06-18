@@ -12,12 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheet
 import com.london.tudee.presentation.components.buttons.TudeeNegativeButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
+import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
@@ -26,59 +26,55 @@ fun TudeeDeleteTaskBottomSheet(
     onDismiss: () -> Unit,
     onConfirmDelete: () -> Unit
 ) {
-    if (visible) {
-        TudeeBottomSheet(
-            visible = true,
-            content = {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.tudee_delete),
-                        contentDescription = null,
-                        modifier = Modifier.size(120.dp)
-                    )
+    if (!visible) return
 
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    Text(
-                        text = "Delete Task",
-                        style = TudeeTheme.typography.headlineMedium,
-                        color = TudeeTheme.colors.title
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = "Are you sure to continue?",
-                        style = TudeeTheme.typography.bodyMedium,
-                        color = TudeeTheme.colors.body,
-                        modifier = Modifier.padding(horizontal = 8.dp)
-                    )
-
-                    Spacer(modifier = Modifier.height(24.dp))
-                }
-            },
-            actions = {
-                TudeeNegativeButton(
-                    text = "Delete",
-                    onClick = onConfirmDelete,
-                    modifier = Modifier.fillMaxWidth()
+    TudeeBottomSheet(
+        visible = true,
+        content = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Delete Task",
+                    style = TudeeTheme.typography.headlineMedium,
+                    color = TudeeTheme.colors.title,
+                    modifier = Modifier.align(Alignment.Start)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-
-                TudeeSecondaryButton(
-                    text = "Cancel",
-                    onClick = onDismiss,
-                    modifier = Modifier.fillMaxWidth()
+                Text(
+                    text = "Are you sure to continue?",
+                    style = TudeeTheme.typography.bodyMedium,
+                    color = TudeeTheme.colors.body,
+                    modifier = Modifier.align(Alignment.Start)
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Image(
+                    painter = painterResource(R.drawable.tudee_delete),
+                    contentDescription = null,
+                    modifier = Modifier.size(width = 107.dp, height = 100.dp)
                 )
             }
-        )
-    }
+        },
+        actions = {
+            TudeeNegativeButton(
+                text = "Delete",
+                onClick = onConfirmDelete,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            TudeeSecondaryButton(
+                text = "Cancel",
+                onClick = onDismiss,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    )
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
 fun TudeeDeleteTaskBottomSheetPreview() {
     TudeeTheme {
