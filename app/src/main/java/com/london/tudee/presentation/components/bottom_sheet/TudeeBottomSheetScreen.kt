@@ -52,7 +52,8 @@ fun TudeeBottomSheetScreen(
     screenContent: @Composable () -> Unit,
     bottomSheetContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    bottomSheetActions: @Composable ColumnScope.() -> Unit = {}
+    bottomSheetActions: @Composable ColumnScope.() -> Unit = {},
+    showActions: Boolean = true
 ) {
     Box(
         modifier = modifier
@@ -92,7 +93,8 @@ fun TudeeBottomSheetScreen(
                     indication = null
                 ) {},
                 content = bottomSheetContent,
-                actions = bottomSheetActions
+                actions = bottomSheetActions,
+                showActions = showActions
             )
         }
     }
@@ -104,7 +106,7 @@ fun TudeeBottomSheetScreen(
 private fun RegularBottomSheetScreenPreview() {
     TudeeTheme {
         var showBottomSheet by remember { mutableStateOf(false) }
-        
+
         TudeeBottomSheetScreen(
             showBottomSheet = showBottomSheet,
             onDismiss = { showBottomSheet = false },
@@ -185,7 +187,7 @@ private fun RegularBottomSheetScreenPreview() {
 private fun ScrollableBottomSheetScreenPreview() {
     TudeeTheme {
         var showBottomSheet by remember { mutableStateOf(false) }
-        
+
         TudeeBottomSheetScreen(
             showBottomSheet = showBottomSheet,
             onDismiss = { showBottomSheet = false },
@@ -231,15 +233,15 @@ private fun ScrollableBottomSheetScreenPreview() {
                         style = TudeeTheme.typography.headlineMedium,
                         color = TudeeTheme.colors.title
                     )
-                    
+
                     Spacer(modifier = Modifier.height(16.dp))
-                    
+
                     Text(
                         text = "This bottom sheet has lots of content to demonstrate scrolling behavior when content exceeds 75% of screen height.",
                         style = TudeeTheme.typography.bodyMedium,
                         color = TudeeTheme.colors.body
                     )
-                    
+
                     repeat(20) { index ->
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
@@ -248,9 +250,9 @@ private fun ScrollableBottomSheetScreenPreview() {
                             color = TudeeTheme.colors.body
                         )
                     }
-                    
+
                     Spacer(modifier = Modifier.height(24.dp))
-                    
+
                     Text(
                         text = "End of scrollable content. You should be able to scroll through all items above.",
                         style = TudeeTheme.typography.bodyMedium,

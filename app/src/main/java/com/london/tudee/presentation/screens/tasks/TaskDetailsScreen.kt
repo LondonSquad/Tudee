@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScreen
@@ -44,6 +45,8 @@ fun TaskDetailsScreen(
         showBottomSheet = true,
         onDismiss = {},
         screenContent = {},
+        bottomSheetActions = {},
+        showActions = false,
         bottomSheetContent = {
             TaskDetailsBottomSheetContent(
                 taskName = taskName,
@@ -54,7 +57,8 @@ fun TaskDetailsScreen(
                 onEditClick = onEditClick,
                 onMoveClick = onMoveClick
             )
-        })
+        }
+    )
 
 
 }
@@ -69,7 +73,9 @@ private fun TaskDetailsBottomSheetContent(
     onEditClick: () -> Unit = {},
     onMoveClick: () -> Unit = {}
 ) {
-    Column {
+    Column(
+        modifier = Modifier.padding(bottom = 12.dp)
+    ) {
         Text(
             text = stringResource(R.string.task_details),
             style = TudeeTheme.typography.titleLarge,
@@ -208,6 +214,7 @@ private fun ActionsRow(
 }
 
 @ThemePreviews
+@Preview
 @Composable
 private fun PreviewTaskDetail() {
     TaskDetailsScreen(

@@ -17,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.presentation.components.buttons.TudeeTextButton
-import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,27 +82,8 @@ fun DatePicker(
                 selectedDayContainerColor = TudeeTheme.colors.primary,
                 todayContentColor = TudeeTheme.colors.primary,
                 todayDateBorderColor = TudeeTheme.colors.primary,
-                yearContentColor = TudeeTheme.colors.body,
-                dayInSelectionRangeContentColor = Color.Black,
-                dayInSelectionRangeContainerColor = Color.Black
+                yearContentColor = TudeeTheme.colors.body
             )
-        )
-    }
-}
-
-@ThemePreviews
-@Composable
-private fun PreviewDatePicker() {
-    TudeeTheme {
-        DatePicker(
-            onDateSelected = { selectedDate ->
-                // Handle date selection in preview
-                println("Selected date: $selectedDate")
-            },
-            onDismiss = {
-                // Handle dismiss in preview
-                println("Date picker dismissed")
-            }
         )
     }
 }
