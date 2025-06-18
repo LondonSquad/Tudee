@@ -29,7 +29,6 @@ fun AddOrEditTaskDetails(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
 ) {
-    // Get screen height minus some padding
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val maxHeight = screenHeight * 0.75f // Leave 25% space at top
 
@@ -39,10 +38,9 @@ fun AddOrEditTaskDetails(
             .heightIn(max = maxHeight) // Critical constraint
             .background(TudeeTheme.colors.surface)
     ) {
-        // This Box provides proper scrolling boundaries
         Box(
             modifier = Modifier
-                .weight(1f, fill = false) // Takes available space without forcing full height
+                .weight(1f, fill = false)
                 .verticalScroll(rememberScrollState())
         ) {
             TaskDetailsContent(
@@ -75,11 +73,9 @@ private fun TaskDetailsContent(
         PrioritySection(selectedPriority) { selectedPriority = it }
         CategorySection(categories, selectedCategory) { selectedCategory = it }
 
-        // Add bottom spacer to prevent last item from sticking to edge
         Spacer(modifier = Modifier.height(32.dp))
     }
 
-    // Show DatePicker when needed
     if (showDatePicker) {
         DatePicker(
             onDateSelected = { date ->
@@ -124,7 +120,7 @@ private fun TaskInputFields(
     )
     Spacer(modifier = Modifier.height(16.dp))
 
-    // Date picker field
+
     val dateFormatter = SimpleDateFormat("dd, MM, yyyy", Locale.getDefault())
     val dateText = selectedDate?.let { dateFormatter.format(Date(it)) } ?: ""
 
@@ -132,7 +128,7 @@ private fun TaskInputFields(
         icon = R.drawable.add_date_icon,
         hint = R.string.select_date,
         value = dateText,
-        onValueChange = {}, // Read-only field
+        onValueChange = {},
         readOnly = true,
         onClick = onDateFieldClick
     )
