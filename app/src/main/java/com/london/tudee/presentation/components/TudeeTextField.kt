@@ -171,7 +171,7 @@ fun TudeeTextFieldReadOnlyPreview() {
             value = "Jan 15, 2024",
             onValueChange = { },
             readOnly = true,
-            onClick = { /* Handle click */ }
+            onClick = { }
         )
     }
 }

@@ -34,6 +34,8 @@ fun AddOrEditTaskBottomSheet(
             AddOrEditTaskDetails(
                 modifier = modifier,
                 title = title,
+                onTitleValueChange = {},
+                onDescriptionValueChange = {}
             )
         },
         bottomSheetActions = {
@@ -64,11 +66,7 @@ fun PreviewAddOrEditTaskBottomSheet() {
             buttonText = R.string.add,
             onDismiss = {},
             screenContent = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(TudeeTheme.colors.background)
-                )
+
             }
         )
     }

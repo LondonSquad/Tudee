@@ -28,6 +28,8 @@ import java.util.*
 fun AddOrEditTaskDetails(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
+    onTitleValueChange: (String) -> Unit,
+    onDescriptionValueChange: (String) -> Unit,
 ) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val maxHeight = screenHeight * 0.75f
@@ -45,7 +47,9 @@ fun AddOrEditTaskDetails(
         ) {
             TaskDetailsContent(
                 title = title,
-                modifier = Modifier.fillMaxWidth()
+                onTitleValueChange = onTitleValueChange,
+                onDescriptionValueChange = onDescriptionValueChange,
+                modifier = modifier.fillMaxWidth()
             )
         }
     }
@@ -54,7 +58,9 @@ fun AddOrEditTaskDetails(
 @Composable
 private fun TaskDetailsContent(
     modifier: Modifier,
-    @StringRes title: Int
+    @StringRes title: Int,
+    onTitleValueChange: (String) -> Unit,
+    onDescriptionValueChange: (String) -> Unit,
 ) {
     var selectedPriority by remember { mutableStateOf(Priority.HIGH) }
     var selectedCategory by remember { mutableStateOf<CategoryUiModel?>(null) }
@@ -67,6 +73,8 @@ private fun TaskDetailsContent(
     ) {
         TaskHeader(title)
         TaskInputFields(
+            onTitleValueChange = onTitleValueChange,
+            onDescriptionValueChange = onDescriptionValueChange,
             selectedDate = selectedDate,
             onDateFieldClick = { showDatePicker = true }
         )
@@ -101,6 +109,8 @@ private fun TaskHeader(@StringRes title: Int) {
 
 @Composable
 private fun TaskInputFields(
+    onTitleValueChange: (String) -> Unit,
+    onDescriptionValueChange: (String) -> Unit,
     selectedDate: Long?,
     onDateFieldClick: () -> Unit
 ) {
@@ -108,7 +118,7 @@ private fun TaskInputFields(
         icon = R.drawable.add_task_icon,
         hint = R.string.task_title,
         value = "",
-        onValueChange = {}
+        onValueChange = onTitleValueChange
     )
     Spacer(modifier = Modifier.height(16.dp))
 
@@ -116,10 +126,9 @@ private fun TaskInputFields(
         multiLined = true,
         hint = R.string.description,
         value = "",
-        onValueChange = {}
+        onValueChange = onDescriptionValueChange
     )
     Spacer(modifier = Modifier.height(16.dp))
-
 
     val dateFormatter = SimpleDateFormat("dd, MM, yyyy", Locale.getDefault())
     val dateText = selectedDate?.let { dateFormatter.format(Date(it)) } ?: ""
@@ -156,7 +165,7 @@ private fun CategorySection(
     selectedCategory: CategoryUiModel?,
     onCategorySelected: (CategoryUiModel) -> Unit
 ) {
-    SectionTitle(titleRes = R.string.category_title)
+    SectionTitle(titleRes = R.string.category)
     Spacer(modifier = Modifier.height(8.dp))
 
     CategoriesGrid(
@@ -201,6 +210,7 @@ private fun CategoriesGrid(
                         isSelected = category == selectedCategory,
                         onClick = { onCategorySelected(category) }
                     )
+
                     if (category != rowCategories.last()) {
                         Spacer(modifier = Modifier.width(16.dp))
                     }
@@ -226,6 +236,8 @@ private fun PreviewAddOrEditTaskDetails() {
     TudeeTheme {
         AddOrEditTaskDetails(
             title = R.string.add_new_task,
+            onTitleValueChange = {},
+            onDescriptionValueChange = {}
         )
     }
 }
