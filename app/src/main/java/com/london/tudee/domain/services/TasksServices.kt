@@ -15,4 +15,5 @@ interface TasksServices {
     fun createCategory(): Category
     fun editCategory(id:Int): Category
     fun deleteCategory(id:Int): Category
+
 }

@@ -7,6 +7,6 @@ data class Task(
     val description: String?,
     val priority: Priority,
     val categoryId: Int,
-    val taskStatus: TaskStatus
+    val taskStatus: TaskStatus,
 )
 

@@ -4,6 +4,6 @@ package com.london.tudee.domain.entities
 data class Category(
     val id: Int,
     val title:String,
-    val imageRes: Int, // val imageRes: ByteArray, bitmap
-    val task : List<Task> // val task : List<Int>
+    val imageRes: Int,
+    val task : List<Task>
 )
