@@ -1,4 +1,6 @@
-package com.london.tudee.presentation.screens.tasks
+@file:JvmName("TaskDetailsScreenKt")
+
+package com.london.tudee.presentation.screens.task.view_tasks
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

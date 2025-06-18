@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.components
+package com.london.tudee.presentation.components.date
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

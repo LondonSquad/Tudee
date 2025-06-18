@@ -1,6 +1,6 @@
 package com.london.tudee.data.mappers
 
-import com.london.tudee.data.local.room_db.entities.CategoryDto
+import com.london.tudee.data.local.room_db.dto.CategoryDto
 import com.london.tudee.domain.entities.Category
 
 fun CategoryDto.convertToCategory(): Category {

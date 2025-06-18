@@ -1,4 +1,4 @@
-package com.london.tudee.data.local.room_db.entities
+package com.london.tudee.data.local.room_db.dto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

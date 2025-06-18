@@ -1,6 +1,6 @@
 package com.london.tudee.data.mappers
 
-import com.london.tudee.data.local.room_db.entities.TaskDto
+import com.london.tudee.data.local.room_db.dto.TaskDto
 import com.london.tudee.domain.entities.Task
 
 fun TaskDto.convertToTask(): Task {
