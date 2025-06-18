@@ -16,6 +16,11 @@
     <string name="medium">Medium</string>
     <string name="low">Low</string>
     <string name="hello_from">"Hello from "</string>
+<<<<<<< feature/task-details-bottom-sheets
+    <string name="move_to_in_progress">Move to in progress</string>">
+    <string name="move_to_done">Move to done</string>">
+    <string name="task_details">Task Details</string>">
+=======
     <string name="categories">Categories</string>
     <string name="fab_content_description">Add category</string>
     <string name="category_education">Education</string>
@@ -35,4 +40,5 @@
     <string name="category_budgeting">Budgeting</string>
     <string name="category_self_care">Self-care</string>
     <string name="category_event">Event</string>
+>>>>>>> development
 </resources>
