@@ -31,6 +31,7 @@ import com.london.tudee.presentation.components.date.DateBadge
 import com.london.tudee.presentation.components.priority.PriorityBadge
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.model.TaskUiState
 
 
 @Composable
@@ -154,6 +155,7 @@ fun PreviewTaskItemHigh() {
     TudeeTheme {
         TaskItem(
             taskUiState = TaskUiState(
+                id = 1,
                 priority = Priority.HIGH,
                 iconResId = R.drawable.ic_education,
                 title = "Organize Study Desk",
@@ -171,6 +173,7 @@ fun PreviewTaskItemMedium() {
     TudeeTheme {
         TaskItem(
             taskUiState = TaskUiState(
+                id = 1,
                 priority = Priority.MEDIUM,
                 iconResId = R.drawable.ic_education,
                 title = "Organize Study Desk",
@@ -188,6 +191,7 @@ fun PreviewTaskItemLow() {
     TudeeTheme {
         TaskItem(
             taskUiState = TaskUiState(
+                id = 1,
                 priority = Priority.LOW,
                 iconResId = R.drawable.ic_education,
                 title = "Organize Study Desk",

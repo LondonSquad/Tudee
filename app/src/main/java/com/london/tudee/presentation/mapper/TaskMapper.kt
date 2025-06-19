@@ -1,13 +1,14 @@
-package com.london.tudee.presentation.components.task
+package com.london.tudee.presentation.mapper
 
-import com.london.tudee.R
 import com.london.tudee.domain.entities.Task
+import com.london.tudee.presentation.model.TaskUiState
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 fun Task.toPresentation(): TaskUiState {
     return TaskUiState(
+        id = this.id,
         priority = this.priority,
         iconResId = this.categoryId,
         title = this.title,

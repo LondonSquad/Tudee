@@ -27,10 +27,10 @@ import com.london.tudee.domain.entities.Priority
 import com.london.tudee.presentation.components.TopAppBar
 import com.london.tudee.presentation.components.tabs.TabItem
 import com.london.tudee.presentation.components.tabs.TudeeTabLayout
-import com.london.tudee.presentation.components.task.TaskUiState
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.model.TaskUiState
 
 @Composable
 fun EditTaskDetails(
@@ -133,6 +133,7 @@ fun EditTaskDetails(
 
 val taskUiStates = listOf(
     TaskUiState(
+        id = 1,
         priority = Priority.MEDIUM,
         iconResId = R.drawable.coding_icon,
         title = "Organize Study Desk",
@@ -140,6 +141,7 @@ val taskUiStates = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 2,
         priority = Priority.LOW,
         iconResId = R.drawable.coding_icon,
         title = "Organize Study Desk",
@@ -147,6 +149,7 @@ val taskUiStates = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 3,
         priority = Priority.HIGH,
         iconResId = R.drawable.coding_icon,
         title = "Organize Study Desk",
@@ -154,6 +157,7 @@ val taskUiStates = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 4,
         priority = Priority.MEDIUM,
         iconResId = R.drawable.coding_icon,
         title = "Organize Study Desk",
@@ -161,6 +165,7 @@ val taskUiStates = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 5,
         priority = Priority.HIGH,
         iconResId = R.drawable.coding_icon,
         title = "Task 1,",
@@ -168,6 +173,7 @@ val taskUiStates = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 5,
         priority = Priority.LOW,
         iconResId = R.drawable.coding_icon,
         title = "Task 1,",
@@ -175,6 +181,7 @@ val taskUiStates = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 6,
         priority = Priority.MEDIUM,
         iconResId = R.drawable.coding_icon,
         title = "Task 1,",
@@ -182,6 +189,7 @@ val taskUiStates = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 7,
         priority = Priority.LOW,
         iconResId = R.drawable.coding_icon,
         title = "Task 1,",
@@ -189,6 +197,7 @@ val taskUiStates = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 8,
         priority = Priority.HIGH,
         iconResId = R.drawable.coding_icon,
         title = "Task 1,",

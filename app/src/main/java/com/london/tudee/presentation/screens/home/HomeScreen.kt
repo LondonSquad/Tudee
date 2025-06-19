@@ -43,7 +43,7 @@ import com.london.tudee.presentation.components.HomeTopBar
 import com.london.tudee.presentation.components.StatusCard
 import com.london.tudee.presentation.components.TaskStatusSlider
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
-import com.london.tudee.presentation.components.task.TaskUiState
+import com.london.tudee.presentation.model.TaskUiState
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
@@ -142,8 +142,7 @@ private fun OverLayerBox() {
                 modifier = Modifier
                     .padding(top = 8.dp)
                     .height(17.dp)
-                    .align(Alignment.CenterHorizontally)
-                ,
+                    .align(Alignment.CenterHorizontally),
                 shape = RectangleShape,
                 colors = CardDefaults.cardColors(containerColor = TudeeTheme.colors.surfaceHigh),
                 dateText = "today,12-03-2025",
@@ -153,7 +152,7 @@ private fun OverLayerBox() {
                 lineHeight = 16.sp,
                 iconColor = TudeeTheme.colors.body,
                 textColor = TudeeTheme.colors.body,
-                contentPadding = PaddingValues(vertical = 0.dp, )
+                contentPadding = PaddingValues(vertical = 0.dp)
             )
 
             TaskStatusSlider(
@@ -264,6 +263,7 @@ private fun ToDoSection() {
                 modifier = Modifier.width(320.dp),
                 isSelected = true,
                 taskUiState = TaskUiState(
+                    id = it,
                     priority = Priority.HIGH,
                     iconResId = R.drawable.ic_education,
                     title = "Stay working!",
@@ -330,6 +330,7 @@ private fun InProgressSection() {
                 modifier = Modifier.width(320.dp),
                 isSelected = true,
                 taskUiState = TaskUiState(
+                    id = it,
                     priority = Priority.HIGH,
                     iconResId = R.drawable.ic_education,
                     title = "Stay working!",
@@ -396,6 +397,7 @@ private fun DoneSection() {
                 modifier = Modifier.width(320.dp),
                 isSelected = true,
                 taskUiState = TaskUiState(
+                    id = it,
                     priority = Priority.HIGH,
                     iconResId = R.drawable.ic_education,
                     title = "Stay working!",

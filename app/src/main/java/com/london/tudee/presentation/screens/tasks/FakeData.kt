@@ -3,7 +3,7 @@ package com.london.tudee.presentation.screens.tasks
 import androidx.compose.runtime.mutableStateListOf
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Priority
-import com.london.tudee.presentation.components.task.TaskUiState
+import com.london.tudee.presentation.model.TaskUiState
 
 data class DateItemClass(
     val dayOfMonth: String, val dayOfWeek: String, var isSelected: Boolean
@@ -24,6 +24,7 @@ val fakeDates = mutableStateListOf(
 
 val tasks1 = listOf(
     TaskUiState(
+        id = 1,
         priority = Priority.MEDIUM,
         iconResId = R.drawable.ic_education,
         title = "Organize Study Desk",
@@ -31,6 +32,7 @@ val tasks1 = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 2,
         priority = Priority.LOW,
         iconResId = R.drawable.ic_education,
         title = "Organize Study Desk",
@@ -38,6 +40,7 @@ val tasks1 = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 3,
         priority = Priority.HIGH,
         iconResId = R.drawable.ic_education,
         title = "Organize Study Desk",
@@ -45,6 +48,7 @@ val tasks1 = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 4,
         priority = Priority.MEDIUM,
         iconResId = R.drawable.ic_education,
         title = "Organize Study Desk",
@@ -52,6 +56,7 @@ val tasks1 = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 5,
         priority = Priority.HIGH,
         iconResId = R.drawable.ic_education,
         title = "Task 1,",
@@ -59,6 +64,7 @@ val tasks1 = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 6,
         priority = Priority.LOW,
         iconResId = R.drawable.ic_education,
         title = "Task 1,",
@@ -66,6 +72,7 @@ val tasks1 = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 7,
         priority = Priority.MEDIUM,
         iconResId = R.drawable.ic_education,
         title = "Task 1,",
@@ -73,6 +80,7 @@ val tasks1 = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 8,
         priority = Priority.LOW,
         iconResId = R.drawable.ic_education,
         title = "Task 1,",
@@ -80,6 +88,7 @@ val tasks1 = listOf(
         date = "2023-09-20"
     ),
     TaskUiState(
+        id = 9,
         priority = Priority.HIGH,
         iconResId = R.drawable.ic_education,
         title = "Task 1,",

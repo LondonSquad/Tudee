@@ -29,6 +29,7 @@ import com.london.tudee.R
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.model.TaskUiState
 import kotlin.math.roundToInt
 
 @Composable
@@ -100,6 +101,7 @@ fun SwipeToDeleteTaskPreview() {
     TudeeTheme {
         SwipeToDeleteTask(
             taskUiState = TaskUiState(
+                id = 1,
                 title = "Buy groceries",
                 description = "Milk, Bread, Eggs",
                 date = "18-06-2025",
