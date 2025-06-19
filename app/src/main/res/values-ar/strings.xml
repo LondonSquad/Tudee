@@ -43,4 +43,8 @@
     <string name="clear">حذف</string>
     <string name="ok">موافق</string>
     <string name="coding">برمجة</string>
+    <string name="category_name">قراءة الكتب</string>
+    <string name="edit_category">تعديل الفئه</string>
+    <string name="save">حفظ</string>
+    <string name="category_image">صورة الفئه</string>
 </resources>
