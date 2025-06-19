@@ -72,7 +72,7 @@ fun EditCategoryScreen(
 }
 
 @Composable
-fun CategoryEditContent(
+private fun CategoryEditContent(
     modifier: Modifier = Modifier,
     categoryId: Int,
     onSaveClick: () -> Unit,
@@ -129,7 +129,10 @@ fun CategoryEditContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        ImagePicker()
+        ImagePickerEditCategory { uri ->
+            // Handle the picked image URI here
+            //println("Picked image URI: $uri")
+        }
 
         Spacer(modifier = Modifier.height(36.dp))
 
@@ -154,9 +157,9 @@ fun CategoryEditContent(
 
 
 @Composable
-fun ImagePicker(
+private fun ImagePickerEditCategory(
     modifier: Modifier = Modifier,
-    onImagePicked: (Uri?) -> Unit = {}
+    onImagePicked: (Uri?) -> Unit
 ) {
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
