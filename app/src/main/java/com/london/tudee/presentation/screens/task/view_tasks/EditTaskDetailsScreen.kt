@@ -1,4 +1,6 @@
-package com.london.tudee.presentation.screens.tasks
+@file:JvmName("TaskDetailsScreenKt")
+
+package com.london.tudee.presentation.screens.task.view_tasks
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,8 +23,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
+import com.london.tudee.domain.entities.Priority
 import com.london.tudee.presentation.components.TopAppBar
-import com.london.tudee.presentation.components.priority.Priority
 import com.london.tudee.presentation.components.tabs.TabItem
 import com.london.tudee.presentation.components.tabs.TudeeTabLayout
 import com.london.tudee.presentation.components.task.Task

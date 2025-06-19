@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.components
+package com.london.tudee.presentation.components.date
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -12,16 +12,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.presentation.components.buttons.TudeeTextButton
+import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePicker(
+fun TudeeDatePicker(
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -33,7 +33,7 @@ fun DatePicker(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 TudeeTextButton(
@@ -75,15 +75,29 @@ fun DatePicker(
                 titleContentColor = TudeeTheme.colors.title,
                 headlineContentColor = TudeeTheme.colors.title,
                 navigationContentColor = TudeeTheme.colors.title,
-                weekdayContentColor = TudeeTheme.colors.title,
-                selectedYearContentColor = TudeeTheme.colors.onPrimary,
-                selectedYearContainerColor = TudeeTheme.colors.primary,
-                selectedDayContentColor = TudeeTheme.colors.onPrimary,
-                selectedDayContainerColor = TudeeTheme.colors.primary,
+                weekdayContentColor = TudeeTheme.colors.body,
+                dayContentColor = TudeeTheme.colors.body,
+                dayInSelectionRangeContentColor = TudeeTheme.colors.onPrimary,
+                dayInSelectionRangeContainerColor = TudeeTheme.colors.primary,
                 todayContentColor = TudeeTheme.colors.primary,
                 todayDateBorderColor = TudeeTheme.colors.primary,
-                yearContentColor = TudeeTheme.colors.body
+                selectedDayContentColor = TudeeTheme.colors.onPrimary,
+                selectedDayContainerColor = TudeeTheme.colors.primary,
+                yearContentColor = TudeeTheme.colors.body,
+                selectedYearContentColor = TudeeTheme.colors.onPrimary,
+                selectedYearContainerColor = TudeeTheme.colors.primary
             )
+        )
+    }
+}
+
+@ThemePreviews
+@Composable
+fun Prev() {
+    TudeeTheme {
+        TudeeDatePicker(
+            onDateSelected = {},
+            onDismiss = {}
         )
     }
 }
