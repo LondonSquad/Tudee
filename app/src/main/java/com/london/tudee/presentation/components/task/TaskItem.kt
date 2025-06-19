@@ -33,8 +33,9 @@ import com.london.tudee.presentation.components.priority.PriorityBadge
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.domain.entities.TaskStatus
-import com.london.tudee.presentation.screens.home.formatDate
+import com.london.tudee.presentation.utils.formatDate
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
 
 @Composable
@@ -167,7 +168,7 @@ fun PreviewTaskItemHigh() {
                 categoryId = R.drawable.ic_education,
                 title = "Organize Study Desk",
                 description = "Review cell structure and functions for tomorrow...",
-                timeStamp = Clock.System.now(),
+                timeStamp = Instant.parse("2023-09-20T00:00:00Z"),
                 taskStatus = TaskStatus.TODO
             ),
             hasDate = true
@@ -186,7 +187,7 @@ fun PreviewTaskItemMedium() {
                 categoryId = R.drawable.ic_education,
                 title = "Organize Study Desk",
                 description = "Review cell structure and functions for tomorrow...",
-                timeStamp = Clock.System.now(),
+                timeStamp =  Instant.parse("2023-09-20T00:00:00Z"),
                 taskStatus = TaskStatus.TODO
             ),
             hasDate = true
@@ -205,7 +206,7 @@ fun PreviewTaskItemLow() {
                 categoryId = R.drawable.ic_education,
                 title = "Organize Study Desk",
                 description = "Review cell structure and functions for tomorrow...",
-                timeStamp = Clock.System.now(),
+                timeStamp = Instant.parse("2023-09-20T00:00:00Z"),
                 taskStatus = TaskStatus.TODO
             ),
             hasDate = false
