@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class CategoryDto(
   @PrimaryKey(autoGenerate = true)  val id: Int = 0,
   val name: String,
-  val arName: String?,
-  val iconPath: String
+  val arName: String,
+  val iconPath: Int,
+  val isDefault : Boolean
 )

@@ -8,7 +8,8 @@ fun CategoryDto.convertToCategory(): Category {
         id = this.id,
         name = this.name,
         arName = this.arName,
-        iconPath = this.iconPath,
+        isDefault = this.isDefault,
+        iconPath = this.iconPath.toString()
     )
 }
 
@@ -17,6 +18,7 @@ fun Category.convertToCategoryDto(): CategoryDto {
         id = this.id,
         name = this.name,
         arName = this.arName,
-        iconPath = this.iconPath,
-        )
+        isDefault = this.isDefault,
+        iconPath = this.iconPath.toInt()
+    )
 }
