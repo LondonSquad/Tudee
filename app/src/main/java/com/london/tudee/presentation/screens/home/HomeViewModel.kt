@@ -25,20 +25,6 @@ class HomeViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO){
-           taskService.add(Task(id = 1, title = "Task 1", description = "Description 1",
-               taskStatus = TaskStatus.TODO,priority = Priority.HIGH,
-               categoryId = 1, timeStamp= Instant.parse("2023-09-20T00:00:00Z")))
-            taskService.add(Task(id = 1, title = "Task 1", description = "Description 1",
-                taskStatus = TaskStatus.IN_PROGRESS,priority = Priority.HIGH,
-                categoryId = 1, timeStamp= Instant.parse("2023-09-20T00:00:00Z")))
-            taskService.add(Task(id = 1, title = "Task 1", description = "Description 1",
-                taskStatus = TaskStatus.DONE,priority = Priority.MEDIUM,
-                categoryId = 1, timeStamp= Instant.parse("2023-09-20T00:00:00Z")))
-            taskService.add(Task(id = 1, title = "Task 1", description = "Description 1",
-                taskStatus = TaskStatus.TODO,priority = Priority.HIGH,
-                categoryId = 1, timeStamp= Instant.parse("2023-09-20T00:00:00Z")))
-        }
         getAllTasks()
         getDoneTasks()
         getToDoTasks()
