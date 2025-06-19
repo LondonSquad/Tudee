@@ -17,7 +17,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,10 +34,10 @@ import kotlin.math.roundToInt
 @Composable
 fun SwipeToDeleteTask(
     modifier: Modifier = Modifier,
-    task: Task,
+    taskUiState: TaskUiState,
+    onDeleteClick: () -> Unit
 ) {
     var offsetX by remember { mutableFloatStateOf(0f) }
-    var showBottomSheet by remember { mutableStateOf(false) }
     val swipeThreshold = 200f
 
     Box(
@@ -47,13 +46,11 @@ fun SwipeToDeleteTask(
             .height(111.dp)
     ) {
         if (offsetX < 0) {
-            DeleteBackground(onDeleteClick = {
-                showBottomSheet = true
-            })
+            DeleteBackground(onDeleteClick = onDeleteClick)
         }
 
         TaskItem(
-            task = task,
+            taskUiState = taskUiState,
             modifier = Modifier
                 .offset { IntOffset(offsetX.roundToInt(), 0) }
                 .pointerInput(Unit) {
@@ -68,6 +65,7 @@ fun SwipeToDeleteTask(
         )
     }
 }
+
 @Composable
 private fun DeleteBackground(onDeleteClick: () -> Unit) {
     Card(
@@ -101,13 +99,14 @@ private fun DeleteBackground(onDeleteClick: () -> Unit) {
 fun SwipeToDeleteTaskPreview() {
     TudeeTheme {
         SwipeToDeleteTask(
-            task = Task(
+            taskUiState = TaskUiState(
                 title = "Buy groceries",
                 description = "Milk, Bread, Eggs",
-                date = "18 June",
+                date = "18-06-2025",
                 priority = Priority.HIGH,
                 iconResId = R.drawable.ic_education
-            )
+            ),
+            onDeleteClick = {}
         )
     }
 }
