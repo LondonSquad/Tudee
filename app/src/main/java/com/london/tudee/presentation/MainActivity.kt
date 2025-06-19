@@ -24,6 +24,8 @@ import com.london.tudee.R
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskBottomSheet
+import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskViewModel
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,33 +33,38 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TudeeTheme {
-                AddOrEditTaskBottomSheet(
-                    title = R.string.task_title,
-                    buttonText = R.string.add,
-                    screenContent = {
-
-                    },
-                )
+                MainScreen()
             }
         }
     }
 }
 
-@ThemePreviews
 @Composable
-fun PreviewTestScreen() {
-    TudeeTheme {
-        TestScreen()
-    }
+fun MainScreen() {
+    val addTaskViewModel: AddOrEditTaskViewModel = koinViewModel()
+
+    AddOrEditTaskBottomSheet(
+        title = R.string.task_title,
+        buttonText = R.string.add,
+        screenContent = {
+            TestScreen(
+                onAddTaskClick = {
+                    addTaskViewModel.showBottomSheet()
+                }
+            )
+        },
+        viewModel = addTaskViewModel
+    )
 }
 
 @Composable
-fun TestScreen() {
-    //val isDark by remember { mutableStateOf(false) }
-    //  TudeeTheme (isDarkMode = isDark){}
+fun TestScreen(
+    onAddTaskClick: () -> Unit = {}
+) {
     TudeeTheme {
         Surface(
-            modifier = Modifier.fillMaxSize(), color = TudeeTheme.colors.primary
+            modifier = Modifier.fillMaxSize(),
+            color = TudeeTheme.colors.primary
         ) {
             Column(
                 modifier = Modifier
@@ -79,14 +86,15 @@ fun TestScreen() {
                     )
                 }
 
-
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
-                    onClick = { /*isDark = !isDark*/ }, colors = ButtonDefaults.buttonColors(
+                    onClick = { /*isDark = !isDark*/ },
+                    colors = ButtonDefaults.buttonColors(
                         contentColor = TudeeTheme.colors.title,
                         containerColor = TudeeTheme.colors.pinkAccent
-                    ), shape = TudeeTheme.shapes.medium
+                    ),
+                    shape = TudeeTheme.shapes.medium
                 ) {
                     Text(
                         text = if (isSystemInDarkTheme()) "Switch to Light" else "Switch to Dark",
@@ -94,7 +102,32 @@ fun TestScreen() {
                         style = TudeeTheme.typography.labelSmall
                     )
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Add Task Button
+                Button(
+                    onClick = onAddTaskClick,
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = TudeeTheme.colors.onPrimary,
+                        containerColor = TudeeTheme.colors.primaryVariant
+                    ),
+                    shape = TudeeTheme.shapes.medium
+                ) {
+                    Text(
+                        text = "Add New Task",
+                        style = TudeeTheme.typography.labelMedium
+                    )
+                }
             }
         }
+    }
+}
+
+@ThemePreviews
+@Composable
+fun PreviewTestScreen() {
+    TudeeTheme {
+        TestScreen()
     }
 }

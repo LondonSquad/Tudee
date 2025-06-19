@@ -22,13 +22,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.london.tudee.R
-import com.london.tudee.data.local.room_db.defaultCategory
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.presentation.components.CategoryItem
@@ -38,6 +35,7 @@ import com.london.tudee.presentation.components.priority.PrioritySelector
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.mapper.CategoryMapper
+import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -46,13 +44,8 @@ import java.util.Locale
 fun AddOrEditTaskDetails(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
-    onTitleValueChange: (String) -> Unit,
-    onDescriptionValueChange: (String) -> Unit,
-    onSelectedDateChange: () -> Unit,
-    onSelectedPriorityChange: () -> Unit,
-    onSelectedCategoryChange: () -> Unit,
-    viewModel: AddOrEditTaskViewModel = viewModel(),
-    categories: List<Category> = defaultCategory // Use defaultCategory as default
+    viewModel: AddOrEditTaskViewModel = koinViewModel(),
+    categories: List<Category> = emptyList()
 ) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val maxHeight = screenHeight * 0.75f
@@ -72,15 +65,9 @@ fun AddOrEditTaskDetails(
             TaskDetailsContent(
                 title = title,
                 uiState = uiState,
-                categories = categories,
-                onTitleValueChange = {
-                    viewModel.updateTitle(it)
-                    onTitleValueChange(it)
-                },
-                onDescriptionValueChange = {
-                    viewModel.updateDescription(it)
-                    onDescriptionValueChange(it)
-                },
+                categories = categories.ifEmpty { uiState.categories },
+                onTitleValueChange = { viewModel.updateTitle(it) },
+                onDescriptionValueChange = { viewModel.updateDescription(it) },
                 onDateFieldClick = { viewModel.showDatePicker() },
                 onPrioritySelected = { viewModel.updateSelectedPriority(it) },
                 onCategorySelected = { viewModel.updateSelectedCategory(it) },
@@ -88,10 +75,11 @@ fun AddOrEditTaskDetails(
             )
         }
     }
+
     if (uiState.showDatePicker) {
         TudeeDatePicker(
             onDateSelected = { date ->
-                viewModel.updateSelectedDate(date)
+                viewModel.updateSelectedDate(date ?: System.currentTimeMillis())
                 viewModel.hideDatePicker()
             },
             onDismiss = {
@@ -100,7 +88,6 @@ fun AddOrEditTaskDetails(
         )
     }
 }
-
 @Composable
 private fun TaskDetailsContent(
     modifier: Modifier,

@@ -2,20 +2,20 @@ package com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.london.tudee.data.local.room_db.defaultCategory
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
-import com.london.tudee.domain.mapper.convertFromTimeStampToDate
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import java.util.Date
+
 
 class AddOrEditTaskViewModel(
     private val taskService: TaskService,
@@ -25,9 +25,6 @@ class AddOrEditTaskViewModel(
     private val _uiState = MutableStateFlow(AddOrEditTaskUiState())
     val uiState: StateFlow<AddOrEditTaskUiState> = _uiState.asStateFlow()
 
-    private val _categories = MutableStateFlow<List<Category>>(defaultCategory)
-    val categories: StateFlow<List<Category>> = _categories.asStateFlow()
-
     init {
         loadCategories()
     }
@@ -35,129 +32,184 @@ class AddOrEditTaskViewModel(
     private fun loadCategories() {
         viewModelScope.launch {
             try {
-                // Get only the first emission from the Flow
-                val categoriesFromDb = categoryService.getAll().first()
-                if (categoriesFromDb.isNotEmpty()) {
-                    _categories.value = categoriesFromDb
-                } else {
-                    // If no categories in database, use default categories
-                    _categories.value = defaultCategory
-                    // Optionally save default categories to database
-                    defaultCategory.forEach { category ->
-                        categoryService.add(category)
+                categoryService.getAll().collect { categories ->
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            categories = categories,
+                            // Set default category if none is selected
+                            selectedCategory = currentState.selectedCategory ?: categories.firstOrNull()
+                        )
                     }
+                    validateForm()
                 }
             } catch (e: Exception) {
-                // Fallback to default categories
-                _categories.value = defaultCategory
+                _uiState.update { it.copy(errorMessage = e.message) }
+            }
+        }
+    }
+
+    fun initializeForEdit(taskId: Int) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            try {
+                val task = taskService.getById(taskId)
+                val category = categoryService.getById(task.categoryId)
+
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        taskId = task.id,
+                        title = task.title,
+                        description = task.description,
+                        selectedDate = task.timeStamp.time,
+                        selectedPriority = task.priority,
+                        selectedCategory = category,
+                        isEditMode = true,
+                        isLoading = false,
+                        showBottomSheet = true
+                    )
+                }
+                validateForm()
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        errorMessage = e.message,
+                        isLoading = false
+                    )
+                }
             }
         }
     }
 
     fun updateTitle(title: String) {
-        _uiState.value = _uiState.value.copy(
-            title = title,
-            isFormValid = validateForm(title)
-        )
+        _uiState.update { it.copy(title = title) }
+        validateForm()
     }
 
     fun updateDescription(description: String) {
-        _uiState.value = _uiState.value.copy(
-            description = description
-        )
+        _uiState.update { it.copy(description = description) }
+        // No need to validate form as description is optional
     }
 
-    fun updateSelectedDate(date: Long?) {
-        _uiState.value = _uiState.value.copy(selectedDate = date)
+    fun updateSelectedDate(date: Long) {
+        _uiState.update { it.copy(selectedDate = date) }
+        validateForm()
     }
 
     fun updateSelectedPriority(priority: Priority) {
-        _uiState.value = _uiState.value.copy(selectedPriority = priority)
+        _uiState.update { it.copy(selectedPriority = priority) }
+        validateForm()
     }
 
-    fun updateSelectedCategory(category: Category?) {
-        _uiState.value = _uiState.value.copy(selectedCategory = category)
+    fun updateSelectedCategory(category: Category) {
+        _uiState.update { it.copy(selectedCategory = category) }
+        validateForm()
     }
 
     fun showDatePicker() {
-        _uiState.value = _uiState.value.copy(showDatePicker = true)
+        _uiState.update { it.copy(showDatePicker = true) }
     }
 
     fun hideDatePicker() {
-        _uiState.value = _uiState.value.copy(showDatePicker = false)
+        _uiState.update { it.copy(showDatePicker = false) }
     }
 
     fun showBottomSheet() {
-        _uiState.value = _uiState.value.copy(showBottomSheet = true)
+        _uiState.update { it.copy(showBottomSheet = true) }
     }
 
     fun hideBottomSheet() {
-        _uiState.value = _uiState.value.copy(showBottomSheet = false)
+        _uiState.update {
+            it.copy(
+                showBottomSheet = false,
+                // Don't clear messages immediately so they can be shown
+            )
+        }
+
+        // Reset form after a delay to allow snackbar to show
+        viewModelScope.launch {
+            delay(500)
+            _uiState.update {
+                it.copy(
+                    // Reset form
+                    title = "",
+                    description = "",
+                    selectedDate = null,
+                    selectedPriority = Priority.LOW,
+                    selectedCategory = it.categories.firstOrNull(),
+                    successMessage = null,
+                    errorMessage = null,
+                    isEditMode = false,
+                    taskId = null
+                )
+            }
+            validateForm()
+        }
     }
 
     fun saveTask() {
         val currentState = _uiState.value
+
         if (!currentState.isFormValid) return
 
         viewModelScope.launch {
-            _uiState.value = currentState.copy(isLoading = true)
+            _uiState.update { it.copy(isLoading = true) }
 
             try {
                 val task = Task(
                     id = currentState.taskId ?: 0,
-                    title = currentState.title,
-                    description = currentState.description,
-                    priority = currentState.selectedPriority,
+                    title = currentState.title.trim(),
+                    description = currentState.description.trim(), // Description can be empty
                     taskStatus = TaskStatus.TODO,
-                    categoryId = currentState.selectedCategory?.id ?: taskService.getById(currentState.taskId ?: 0).categoryId,
-                    timeStamp = currentState.selectedDate?.convertFromTimeStampToDate() ?: Date(),
+                    priority = currentState.selectedPriority,
+                    categoryId = currentState.selectedCategory?.id ?: 1,
+                    timeStamp = currentState.selectedDate?.let { Date(it) } ?: Date()
                 )
 
-                if (_uiState.value.isEditMode) {
+                if (currentState.isEditMode) {
                     taskService.edit(task)
-                    _uiState.value = _uiState.value.copy(successMessage = "Edit Task Successfully")
                 } else {
                     taskService.add(task)
-                    _uiState.value = _uiState.value.copy(successMessage = "Add Task Successfully")
                 }
-            } catch (_: Exception) {
-                _uiState.value = _uiState.value.copy(errorMessage = "Some error happened")
-            } finally {
-                _uiState.value = _uiState.value.copy(isLoading = false)
+
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        successMessage = if (currentState.isEditMode)
+                            "Task updated successfully"
+                        else
+                            "Task added successfully",
+                        showBottomSheet = false
+                    )
+                }
+
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = e.message ?: "An error occurred"
+                    )
+                }
             }
         }
     }
 
-    fun clearForm() {
-        _uiState.value = AddOrEditTaskUiState()
+    private fun validateForm() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                isFormValid = currentState.title.isNotBlank() && // Title is mandatory
+                        currentState.selectedDate != null && // Date is mandatory
+                        currentState.selectedCategory != null && // Category is mandatory
+                        currentState.selectedPriority != null // Priority is mandatory (always has a value)
+            )
+        }
     }
 
-    private fun validateForm(title: String): Boolean {
-        return title.isNotBlank()
-    }
-
-    fun loadTask(taskId: Int?) {
-        if (taskId == null) return
-
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true)
-
-            try {
-                val task = taskService.getById(taskId)
-                val category = categoryService.getById(task.categoryId)
-                _uiState.value = _uiState.value.copy(
-                    title = task.title,
-                    description = task.description,
-                    selectedPriority = task.priority,
-                    selectedCategory = category,
-                    isEditMode = true,
-                    taskId = taskId
-                )
-            } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(errorMessage = "Failed to load task")
-            } finally {
-                _uiState.value = _uiState.value.copy(isLoading = false)
-            }
+    fun clearMessages() {
+        _uiState.update {
+            it.copy(
+                successMessage = null,
+                errorMessage = null
+            )
         }
     }
 }
