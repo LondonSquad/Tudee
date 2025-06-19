@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -77,13 +78,11 @@ private fun CreateCategoryContent(
             .fillMaxSize()
     ) {
 
-
         Text(
             text = stringResource(R.string.add_new_category),
             style = TudeeTheme.typography.titleLarge,
             color = TudeeTheme.colors.title
         )
-
 
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -173,35 +172,54 @@ private fun ImagePickerAddCategory(
                     contentDescription = "Selected Image",
                     modifier = Modifier
                         .matchParentSize()
-                        .clip(TudeeTheme.shapes.extraSmall)
-                        .clickable {
-                            imagePickerLauncher.launch("image/*")
-                        },
+                        .clip(TudeeTheme.shapes.extraSmall),
                     contentScale = ContentScale.Crop
                 )
-            } else {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_add_image),
-                        contentDescription = "Pick Image",
-                        tint = TudeeTheme.colors.hint,
-                    )
-                    Text(
-                        text = stringResource(R.string.upload),
-                        style = TudeeTheme.typography.labelMedium,
-                        color = TudeeTheme.colors.hint,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
-
             }
 
         }
 
+        if (imageUri != null) {
+            Box(
+                modifier = Modifier
+                    .size(34.dp)
+                    .clip(shape = TudeeTheme.shapes.extraSmall)
+                    .background(TudeeTheme.colors.surfaceHigh)
+                    .clickable {
+                        imagePickerLauncher.launch("image/*")
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.pencil_edit_01),
+                    contentDescription = "Pick Image",
+                    tint = TudeeTheme.colors.secondary,
+                    modifier = Modifier.padding(6.dp)
+                )
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable {
+                        imagePickerLauncher.launch("image/*")
+                    },
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_add_image),
+                    contentDescription = "Pick Image",
+                    tint = TudeeTheme.colors.hint,
+                )
+                Text(
+                    text = stringResource(R.string.upload),
+                    style = TudeeTheme.typography.labelMedium,
+                    color = TudeeTheme.colors.hint,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+        }
 
     }
 
