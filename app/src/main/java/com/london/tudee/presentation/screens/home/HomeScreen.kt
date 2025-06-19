@@ -1,6 +1,8 @@
 package com.london.tudee.presentation.screens.home
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +27,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,20 +41,55 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.london.tudee.R
-import com.london.tudee.domain.entities.Priority
-import com.london.tudee.presentation.components.date.DateBadge
 import com.london.tudee.presentation.components.HomeTopBar
 import com.london.tudee.presentation.components.StatusCard
 import com.london.tudee.presentation.components.TaskStatusSlider
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
-import com.london.tudee.presentation.model.TaskUiState
+import com.london.tudee.presentation.components.date.DateBadge
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.model.TaskUiState
+import org.koin.androidx.compose.koinViewModel
+
+@Composable
+fun HomeScreen(
+    viewModel: HomeViewModel = koinViewModel()
+) {
+
+    val uiState by viewModel.uiState.collectAsState()
+    when {
+        uiState.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
+        uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
+        else -> HomeScreenContent(uiState)
+    }
+}
+
+@Composable
+fun LoadingScreen(modifier: Modifier = Modifier) {
+    Box(modifier) {
+        Text(
+            text = "Loading...",
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}
+
+@Composable
+fun ErrorScreen(modifier: Modifier = Modifier) {
+    Box(modifier) {
+        Text(
+            text = "There was an unexpected error",
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen() {
+fun HomeScreenContent(
+    state: HomeUiState
+) {
     Scaffold(
         floatingActionButton = {
             TudeeFloatingActionButton(
@@ -73,17 +112,29 @@ fun HomeScreen() {
                     .verticalScroll(rememberScrollState())
             ) {
 
-                OverLayerBox()
+                OverLayerBox(
+                    numberOfAllTasks = state.allTasks.size,
+                    numberOfDoneTasks = state.doneTasks.size,
+                    numberOfInProgressTasks = state.inProgressTasks.size,
+                    numberOfToDoTasks = state.toDoTasks.size,
+                    dateOfToday = "today, ${HomeScreenUtils.customDateFormatter()}"
+                )
 
-                InProgressSection()
+                InProgressSection(
+                    inProgressTasks = state.inProgressTasks
+                )
 
                 Spacer(Modifier.height(24.dp))
 
-                ToDoSection()
+                ToDoSection(
+                    toDoTasks = state.toDoTasks
+                )
 
                 Spacer(Modifier.height(24.dp))
 
-                DoneSection()
+                DoneSection(
+                    doneTasks = state.doneTasks
+                )
             }
         }
     }
@@ -114,7 +165,13 @@ private fun TopAPPBar() {
 }
 
 @Composable
-private fun OverLayerBox() {
+private fun OverLayerBox(
+    numberOfAllTasks: Int,
+    numberOfDoneTasks: Int,
+    numberOfInProgressTasks: Int,
+    numberOfToDoTasks: Int,
+    dateOfToday: String
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -145,27 +202,30 @@ private fun OverLayerBox() {
                     .align(Alignment.CenterHorizontally),
                 shape = RectangleShape,
                 colors = CardDefaults.cardColors(containerColor = TudeeTheme.colors.surfaceHigh),
-                dateText = "today,12-03-2025",
+                dateText = dateOfToday,
                 iconSize = 16.dp,
                 textSize = 14.sp,
                 textStyle = TudeeTheme.typography.labelMedium,
                 lineHeight = 16.sp,
                 iconColor = TudeeTheme.colors.body,
                 textColor = TudeeTheme.colors.body,
-                contentPadding = PaddingValues(vertical = 0.dp)
+                contentPadding = PaddingValues(vertical = 0.dp),
+                isVisible = true
             )
 
             TaskStatusSlider(
-                title = "Stay working!",
-                subtitle = "You've completed 3 out of 10 tasks, keep going",
                 note = null,
-                emoji = R.drawable.okay_status,
-                tudeePicture = R.drawable.tudee_warning,
+                taskStatusUiState = getTaskStatus(
+                    allTasks = numberOfAllTasks,
+                    doneTasks = numberOfDoneTasks,
+                    inProgressTasks = numberOfInProgressTasks,
+                    toDoTasks = numberOfToDoTasks
+                ),
                 modifier = Modifier.padding(start = 6.dp)
             )
 
             Text(
-                text = "Overview",
+                text = stringResource(R.string.Overview),
                 style = TudeeTheme.typography.titleLarge,
                 color = TudeeTheme.colors.title,
                 modifier = Modifier.padding(horizontal = 12.dp)
@@ -183,7 +243,7 @@ private fun OverLayerBox() {
                 StatusCard(
                     backgroundColor = TudeeTheme.colors.greenAccent,
                     statusIcon = R.drawable.file_verified,
-                    tasksNumber = 2,
+                    tasksNumber = numberOfDoneTasks,
                     taskStatusName = R.string.Done,
                     modifier = Modifier.weight(1f)
                 )
@@ -191,7 +251,7 @@ private fun OverLayerBox() {
                 StatusCard(
                     backgroundColor = TudeeTheme.colors.yellowAccent,
                     statusIcon = R.drawable.file_pin,
-                    tasksNumber = 16,
+                    tasksNumber = numberOfInProgressTasks,
                     taskStatusName = R.string.In_Progress,
                     modifier = Modifier.weight(1f)
                 )
@@ -199,7 +259,7 @@ private fun OverLayerBox() {
                 StatusCard(
                     backgroundColor = TudeeTheme.colors.purpleAccent,
                     statusIcon = R.drawable.file_unknown,
-                    tasksNumber = 1,
+                    tasksNumber = numberOfToDoTasks,
                     taskStatusName = R.string.To_Do,
                     modifier = Modifier.weight(1f)
                 )
@@ -209,7 +269,9 @@ private fun OverLayerBox() {
 }
 
 @Composable
-private fun ToDoSection() {
+private fun ToDoSection(
+    toDoTasks: List<TaskUiState>
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -238,7 +300,7 @@ private fun ToDoSection() {
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 Text(
-                    text = "9",
+                    text = "${toDoTasks.size}",
                     style = TudeeTheme.typography.labelSmall,
                     color = TudeeTheme.colors.body
                 )
@@ -251,32 +313,39 @@ private fun ToDoSection() {
         }
     }
 
+    val itemHeight = 111.dp
+    val verticalSpacing = 8.dp
+    val maxRows = 2
+    val actualRows = if (toDoTasks.isEmpty()) 0 else minOf(maxRows, toDoTasks.size)
+    val contentHeight = if (actualRows == 0) 0.dp else {
+        (itemHeight * actualRows) + (verticalSpacing * maxOf(0, actualRows - 1))
+    }
+    val finalHeight = minOf(contentHeight, 230.dp)
+
     LazyHorizontalGrid(
         contentPadding = PaddingValues(horizontal = 16.dp),
-        rows = GridCells.Fixed(2),
-        modifier = Modifier.height(230.dp),
+        rows = GridCells.Fixed(actualRows.coerceAtLeast(1)),
+        modifier = Modifier.height(finalHeight),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(20) {
+        items(toDoTasks.size) {
             TaskItem(
-                modifier = Modifier.width(320.dp),
+                modifier = Modifier
+                    .width(320.dp)
+                    .height(111.dp),
                 isSelected = true,
-                taskUiState = TaskUiState(
-                    id = it,
-                    priority = Priority.HIGH,
-                    iconResId = R.drawable.ic_education,
-                    title = "Stay working!",
-                    description = "You've completed 3 out of 10 tasks Keep going!",
-                    date = "",
-                ),
+                taskUiState = toDoTasks[it],
+                hasDate = false,
             )
         }
     }
 }
 
 @Composable
-private fun InProgressSection() {
+private fun InProgressSection(
+    inProgressTasks: List<TaskUiState>
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -305,7 +374,7 @@ private fun InProgressSection() {
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 Text(
-                    text = "12",
+                    text = "${inProgressTasks.size}",
                     style = TudeeTheme.typography.labelSmall,
                     color = TudeeTheme.colors.body
                 )
@@ -318,32 +387,39 @@ private fun InProgressSection() {
         }
     }
 
+    val itemHeight = 111.dp
+    val verticalSpacing = 8.dp
+    val maxRows = 2
+    val actualRows = if (inProgressTasks.isEmpty()) 0 else minOf(maxRows, inProgressTasks.size)
+    val contentHeight = if (actualRows == 0) 0.dp else {
+        (itemHeight * actualRows) + (verticalSpacing * maxOf(0, actualRows - 1))
+    }
+    val finalHeight = minOf(contentHeight, 230.dp)
+
     LazyHorizontalGrid(
         contentPadding = PaddingValues(horizontal = 16.dp),
-        rows = GridCells.Fixed(2),
-        modifier = Modifier.height(230.dp),
+        rows = GridCells.Fixed(actualRows.coerceAtLeast(1)),
+        modifier = Modifier.height(finalHeight),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(20) {
+        items(inProgressTasks.size) {
             TaskItem(
-                modifier = Modifier.width(320.dp),
+                modifier = Modifier
+                    .width(320.dp)
+                    .height(111.dp),
                 isSelected = true,
-                taskUiState = TaskUiState(
-                    id = it,
-                    priority = Priority.HIGH,
-                    iconResId = R.drawable.ic_education,
-                    title = "Stay working!",
-                    description = "You've completed 3 out of 10 tasks Keep going!",
-                    date = "",
-                ),
+                taskUiState = inProgressTasks[it],
+                hasDate = false
             )
         }
     }
 }
 
 @Composable
-private fun DoneSection() {
+private fun DoneSection(
+    doneTasks: List<TaskUiState>
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -372,7 +448,7 @@ private fun DoneSection() {
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 Text(
-                    text = "12",
+                    text = "${doneTasks.size}",
                     style = TudeeTheme.typography.labelSmall,
                     color = TudeeTheme.colors.body
                 )
@@ -385,30 +461,36 @@ private fun DoneSection() {
         }
     }
 
+    val itemHeight = 111.dp
+    val verticalSpacing = 8.dp
+    val maxRows = 2
+    val actualRows = if (doneTasks.isEmpty()) 0 else minOf(maxRows, doneTasks.size)
+    val contentHeight = if (actualRows == 0) 0.dp else {
+        (itemHeight * actualRows) + (verticalSpacing * maxOf(0, actualRows - 1))
+    }
+    val finalHeight = minOf(contentHeight, 230.dp)
+
     LazyHorizontalGrid(
         contentPadding = PaddingValues(horizontal = 16.dp),
-        rows = GridCells.Fixed(2),
-        modifier = Modifier.height(230.dp),
+        rows = GridCells.Fixed(actualRows.coerceAtLeast(1)),
+        modifier = Modifier.height(finalHeight),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(20) {
+        items(doneTasks.size) {
             TaskItem(
-                modifier = Modifier.width(320.dp),
+                modifier = Modifier
+                    .width(320.dp)
+                    .height(111.dp),
                 isSelected = true,
-                taskUiState = TaskUiState(
-                    id = it,
-                    priority = Priority.HIGH,
-                    iconResId = R.drawable.ic_education,
-                    title = "Stay working!",
-                    description = "You've completed 3 out of 10 tasks Keep going!",
-                    date = "",
-                ),
+                taskUiState = doneTasks[it],
+                hasDate = false
             )
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ThemePreviews
 @Composable
 fun PreviewHomeScreen() {

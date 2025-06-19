@@ -1,6 +1,5 @@
 package com.london.tudee.presentation.components
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,21 +21,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
-import com.london.tudee.R
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.home.TaskStatusUiState
 
 
 @Composable
 fun TaskStatusSlider(
+    taskStatusUiState: TaskStatusUiState,
     modifier: Modifier = Modifier,
-    title: String,
-    subtitle: String?,
     note: String?,
-    @DrawableRes emoji: Int,
-    @DrawableRes tudeePicture: Int,
 ) {
     Box(
         modifier = modifier
@@ -57,7 +52,7 @@ fun TaskStatusSlider(
             ) {
                 Row {
                     Text(
-                        text = title,
+                        text = taskStatusUiState.title,
                         style = TudeeTheme.typography.titleSmall,
                         color = TudeeTheme.colors.title,
                         lineHeight = 20.sp
@@ -68,13 +63,13 @@ fun TaskStatusSlider(
                     Image(
                         modifier = Modifier
                             .size(20.dp),
-                        painter = painterResource(id = emoji),
+                        painter = painterResource(id = taskStatusUiState.emoji),
                         contentDescription = null,
                     )
                 }
 
                 Text(
-                    text = subtitle ?: "",
+                    text = taskStatusUiState.subtitle,
                     style = TudeeTheme.typography.bodySmall,
                     color = TudeeTheme.colors.body,
                     maxLines = 1,
@@ -116,7 +111,7 @@ fun TaskStatusSlider(
                         .padding(bottom = 8.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = tudeePicture),
+                        painter = painterResource(id = taskStatusUiState.tudeePicture),
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxSize()
@@ -132,11 +127,9 @@ fun TaskStatusSlider(
 fun TaskStatusSliderPreview() {
 
     TaskStatusSlider(
-        title = "Nothing on your list…",
-        subtitle = "You just scrolling, not working.",
         note = "Tudee is watching. back to work!!!",
-        emoji = R.drawable.poor_emoji,
-        tudeePicture = R.drawable.tudee_warning,
+        taskStatusUiState = TaskStatusUiState(),
+        modifier = Modifier.padding(start = 6.dp)
     )
 }
 

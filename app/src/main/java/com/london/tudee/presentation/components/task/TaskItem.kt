@@ -1,6 +1,7 @@
 package com.london.tudee.presentation.components.task
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,12 +33,12 @@ import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.model.TaskUiState
 
-
 @Composable
 fun TaskItem(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
-    taskUiState: TaskUiState
+    taskUiState: TaskUiState,
+    hasDate: Boolean
 ) {
     Card(
         modifier = modifier
@@ -59,7 +59,8 @@ fun TaskItem(
             TaskItemTopBar(
                 priority = taskUiState.priority,
                 date = taskUiState.date,
-                isSelected = isSelected
+                isSelected = isSelected,
+                hasDate = hasDate
             )
         }
 
@@ -75,10 +76,9 @@ private fun TaskItemIconSection(@DrawableRes iconResId: Int) {
     Box(
         modifier = Modifier.size(56.dp), contentAlignment = Alignment.Center
     ) {
-        Icon(
+        Image(
             painter = painterResource(id = iconResId),
             contentDescription = "Category Icon",
-            tint = TudeeTheme.colors.pinkAccent
         )
     }
 }
@@ -89,6 +89,7 @@ private fun TaskItemTopBar(
     priority: Priority,
     date: String?,
     isSelected: Boolean,
+    hasDate: Boolean
 ) {
     Row(
         modifier = modifier.height(28.dp),
@@ -107,7 +108,8 @@ private fun TaskItemTopBar(
                 lineHeight = 16.sp,
                 iconColor = TudeeTheme.colors.body,
                 textColor = TudeeTheme.colors.body,
-                contentPadding = PaddingValues(vertical = 6.dp, horizontal = 8.dp)
+                contentPadding = PaddingValues(vertical = 6.dp, horizontal = 8.dp),
+                isVisible = hasDate
             )
         }
 
@@ -161,7 +163,8 @@ fun PreviewTaskItemHigh() {
                 title = "Organize Study Desk",
                 description = "Review cell structure and functions for tomorrow...",
                 date = "12-04-2025"
-            )
+            ),
+            hasDate = true
         )
     }
 }
@@ -179,7 +182,8 @@ fun PreviewTaskItemMedium() {
                 title = "Organize Study Desk",
                 description = "Review cell structure and functions for tomorrow...",
                 date = "12-04-2025"
-            )
+            ),
+            hasDate = true
         )
     }
 }
@@ -197,7 +201,8 @@ fun PreviewTaskItemLow() {
                 title = "Organize Study Desk",
                 description = "Review cell structure and functions for tomorrow...",
                 date = "12-04-2025"
-            )
+            ),
+            hasDate = false
         )
     }
 }

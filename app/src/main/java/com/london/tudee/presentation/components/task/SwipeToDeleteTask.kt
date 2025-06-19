@@ -62,7 +62,8 @@ fun SwipeToDeleteTask(
                     ) { _, dragAmount ->
                         offsetX = (offsetX + dragAmount).coerceIn(-swipeThreshold, 0f)
                     }
-                }
+                },
+            hasDate = true
         )
     }
 }

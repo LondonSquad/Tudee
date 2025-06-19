@@ -69,5 +69,14 @@
     <string name="add_new_category">Add new category</string>
     <string name="upload">Upload</string>
     <string name="skip">Skip</string>
+    <string name="Overview">Overview</string>
     <string name="successfully">Successfully.</string>
+    <string name="Tadaa">Tadaa!.</string>
+    <string name="Stay_working">Stay working.</string>
+    <string name="Nothing_on_your_list">Nothing on your list....</string>
+    <string name="Zero_progress">Zero progress?!</string>
+    <string name="Fill_your_day_with_something_awesome.">Fill your day with something awesome.</string>
+    <string name="task_progress">You\'ve completed %1$d out of %2$d, keep going!</string>
+    <string name="encouragement_message">You\'re doing amazing!!!!&#10;Tudee is proud of you.</string>
+    <string name="blaming_message">You just scrolling, not working.&#10;Tudee is watching. back to work!!!!</string>
 </resources>
