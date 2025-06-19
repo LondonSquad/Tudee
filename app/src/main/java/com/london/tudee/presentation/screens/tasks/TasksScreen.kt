@@ -42,9 +42,10 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun TasksScreen(
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(TudeeTheme.colors.surface)
     ) {
