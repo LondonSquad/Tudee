@@ -21,7 +21,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePicker(
+fun TudeeDatePicker(
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -95,7 +95,7 @@ fun DatePicker(
 @Composable
 fun Prev() {
     TudeeTheme {
-        DatePicker(
+        TudeeDatePicker(
             onDateSelected = {},
             onDismiss = {}
         )
