@@ -5,9 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "CATEGORY_TABLE")
 data class CategoryDto(
-  @PrimaryKey(autoGenerate = true)  val id: Int,
+  @PrimaryKey(autoGenerate = true)  val id: Int = 0,
   val name: String,
-  val arName: String,
-  val isDefault: Boolean,
+  val arName: String?,
   val iconPath: String
 )

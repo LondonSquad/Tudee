@@ -13,11 +13,13 @@ class TasksServicesImpl(
     private val taskDao: TaskDao
 ) : TaskService {
     override suspend fun add(service: Task) {
-        return taskDao.insert(service.convertToTaskDto())
+        val task = service.copy(id = 0)
+        return taskDao.insert(task.convertToTaskDto())
     }
 
     override suspend fun edit(service: Task) {
-        return taskDao.update(service.convertToTaskDto())
+        val task = service.copy(id = 0)
+        return taskDao.update(task.convertToTaskDto())
     }
 
     override suspend fun delete(service: Task) {
