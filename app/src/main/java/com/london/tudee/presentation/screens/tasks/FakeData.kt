@@ -2,7 +2,7 @@ package com.london.tudee.presentation.screens.tasks
 
 import androidx.compose.runtime.mutableStateListOf
 import com.london.tudee.R
-import com.london.tudee.presentation.components.priority.Priority
+import com.london.tudee.domain.entities.Priority
 import com.london.tudee.presentation.components.task.Task
 
 data class DateItemClass(
