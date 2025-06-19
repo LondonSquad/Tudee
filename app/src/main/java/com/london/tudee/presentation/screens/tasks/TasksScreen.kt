@@ -64,8 +64,8 @@ fun TasksScreen(
                 modifier = Modifier.background(
                     color = TudeeTheme.colors.surfaceHigh,
                 ),
-                month = "Jun",
-                year = "2025",
+                month = currentMonth,
+                year = currentYear,
                 onClickLeft = {},
                 onClickRight = {},
                 onClickDate = { showDatePicker = true },
