@@ -1,14 +1,11 @@
 package com.london.tudee.presentation.screens.task.confirm_delete_task
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -20,16 +17,20 @@ import com.london.tudee.presentation.components.buttons.TudeeNegativeButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ConfirmDeleteTaskScreen(
-    onDeleteConfirmed: () -> Unit,
-    onDismiss: () -> Unit
+    viewModel: ConfirmDeleteTaskViewModel = koinViewModel(),
+    onTaskDeleted: () -> Unit
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    if (!uiState.isVisible) return
+
     TudeeBottomSheetScreen(
         showBottomSheet = true,
-        onDismiss = onDismiss,
+        onDismiss = { viewModel.dismissDialog() },
         screenContent = {},
         bottomSheetContent = {
             ConfirmDeleteBottomSheetContent()
@@ -37,11 +38,15 @@ fun ConfirmDeleteTaskScreen(
         bottomSheetActions = {
             ConfirmDeleteBottomSheetActions(
                 onDelete = {
-                    onDismiss()
-                    onDeleteConfirmed()
+                    viewModel.deleteTask(
+                        onSuccess = {
+                            viewModel.dismissDialog()
+                            onTaskDeleted()
+                        }
+                    )
                 },
                 onCancel = {
-                    onDismiss()
+                    viewModel.dismissDialog()
                 }
             )
         }
@@ -98,17 +103,6 @@ private fun ConfirmDeleteBottomSheetActions(
 
 @ThemePreviews
 @Composable
-fun ConfirmDeleteTaskScreenPreview() {
-    TudeeTheme {
-        ConfirmDeleteTaskScreen(
-            onDismiss = {},
-            onDeleteConfirmed = {}
-        )
-    }
-}
-
-@ThemePreviews
-@Composable
 fun ConfirmDeleteBottomSheetContentPreview() {
     TudeeTheme {
         ConfirmDeleteBottomSheetContent()
@@ -125,4 +119,3 @@ fun ConfirmDeleteBottomSheetActionsPreview() {
         )
     }
 }
-

@@ -58,4 +58,10 @@
     <string name="ok">موافق</string>
     <string name="coding">برمجة</string>
     <string name="skip">تخطي</string>
+    <string name="category_name">قراءة الكتب</string>
+    <string name="edit_category">تعديل الفئه</string>
+    <string name="category_image">صورة الفئه</string>
+    <string name="add_new_category">اضافة فئه جديده</string>
+    <string name="upload">تحميل</string>
+    <string name="successfully">تم بنجاح</string>
 </resources>

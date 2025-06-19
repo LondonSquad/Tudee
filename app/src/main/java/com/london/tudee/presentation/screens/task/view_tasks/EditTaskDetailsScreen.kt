@@ -27,10 +27,10 @@ import com.london.tudee.domain.entities.Priority
 import com.london.tudee.presentation.components.TopAppBar
 import com.london.tudee.presentation.components.tabs.TabItem
 import com.london.tudee.presentation.components.tabs.TudeeTabLayout
-import com.london.tudee.presentation.components.task.Task
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.model.TaskUiState
 
 @Composable
 fun EditTaskDetails(
@@ -118,11 +118,11 @@ fun EditTaskDetails(
                     .fillMaxSize()
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
-                items(tasks.size) { index ->
+                items(taskUiStates.size) { index ->
                     TaskItem(
                         modifier = Modifier,
                         isSelected = true,
-                        task = tasks[index]
+                        taskUiState = taskUiStates[index]
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -131,64 +131,73 @@ fun EditTaskDetails(
     }
 }
 
-val tasks = listOf(
-    Task(
+val taskUiStates = listOf(
+    TaskUiState(
+        id = 1,
         priority = Priority.MEDIUM,
         iconResId = R.drawable.coding_icon,
         title = "Organize Study Desk",
         description = "Review cell structure and functions for tomorrow...",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
+        id = 2,
         priority = Priority.LOW,
         iconResId = R.drawable.coding_icon,
         title = "Organize Study Desk",
         description = "",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
+        id = 3,
         priority = Priority.HIGH,
         iconResId = R.drawable.coding_icon,
         title = "Organize Study Desk",
         description = "",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
+        id = 4,
         priority = Priority.MEDIUM,
         iconResId = R.drawable.coding_icon,
         title = "Organize Study Desk",
         description = "Review cell structure and functions for tomorrow...",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
+        id = 5,
         priority = Priority.HIGH,
         iconResId = R.drawable.coding_icon,
         title = "Task 1,",
         description = "This is a task description",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
+        id = 5,
         priority = Priority.LOW,
         iconResId = R.drawable.coding_icon,
         title = "Task 1,",
         description = "This is a task description",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
+        id = 6,
         priority = Priority.MEDIUM,
         iconResId = R.drawable.coding_icon,
         title = "Task 1,",
         description = "This is a task description",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
+        id = 7,
         priority = Priority.LOW,
         iconResId = R.drawable.coding_icon,
         title = "Task 1,",
         description = "This is a task description",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
+        id = 8,
         priority = Priority.HIGH,
         iconResId = R.drawable.coding_icon,
         title = "Task 1,",

@@ -57,6 +57,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
     //Navigation compose
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.room.runtime)
@@ -66,6 +67,12 @@ dependencies {
     implementation(libs.androidx.room.rxjava3)
     implementation(libs.koin.android)
 
+    // coil
+    implementation (libs.coil.compose)
+    
+    // koin
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
 }
 
 tasks.register("installGitHooks") {
