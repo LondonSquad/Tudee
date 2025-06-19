@@ -34,4 +34,3 @@ val databaseModule = module {
     single { get<TudeeDatabase>().categoryDao() }
 
 }
-

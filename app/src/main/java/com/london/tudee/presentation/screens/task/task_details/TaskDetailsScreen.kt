@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.task.task_details_task
+package com.london.tudee.presentation.screens.task.task_details
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -19,10 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Priority
+import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScreen
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.components.priority.PriorityBadge
@@ -32,18 +32,45 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun TaskDetailsScreen(
+    taskId: Int,
+    viewModel: TaskDetailsViewModel = TaskDetailsViewModel(),
+    onEditClick: () -> Unit = {},
+    onDismiss: () -> Unit = {},
+    showBottomSheet: Boolean = false
+) {
+
+    viewModel.loadTask(taskId)
+    val taskDetailsUiState = viewModel.taskDetailsUiState
+
+    TaskDetailsScreenContent(
+        taskName = taskDetailsUiState.taskName,
+        taskDescription = taskDetailsUiState.taskDescription,
+        taskStatus = taskDetailsUiState.taskStatus,
+        taskPriority = taskDetailsUiState.taskPriority,
+        icon = taskDetailsUiState.icon,
+        onEditClick = onEditClick,
+        onMoveClick = {},
+        onDismiss = onDismiss,
+        showBottomSheet = showBottomSheet
+    )
+
+}
+
+@Composable
+private fun TaskDetailsScreenContent(
     taskName: String,
     taskDescription: String,
-    taskStatus: Status,
+    taskStatus: TaskStatus,
     taskPriority: Priority,
     @DrawableRes icon: Int,
     onEditClick: () -> Unit = {},
-    onMoveClick: () -> Unit = {}
+    onMoveClick: () -> Unit = {},
+    onDismiss: () -> Unit = {},
+    showBottomSheet: Boolean = false
 ) {
-
     TudeeBottomSheetScreen(
-        showBottomSheet = true,
-        onDismiss = {},
+        showBottomSheet = showBottomSheet,
+        onDismiss = onDismiss,
         screenContent = {},
         bottomSheetActions = {},
         showActions = false,
@@ -57,17 +84,15 @@ fun TaskDetailsScreen(
                 onEditClick = onEditClick,
                 onMoveClick = onMoveClick
             )
-        }
-    )
-
-
+        })
 }
+
 
 @Composable
 private fun TaskDetailsBottomSheetContent(
     taskName: String,
     taskDescription: String,
-    taskStatus: Status,
+    taskStatus: TaskStatus,
     taskPriority: Priority,
     @DrawableRes icon: Int,
     onEditClick: () -> Unit = {},
@@ -120,19 +145,19 @@ private fun TaskDetailsBottomSheetContent(
             modifier = Modifier.padding(top = 12.dp, bottom = 24.dp)
         )
         when (taskStatus) {
-            Status.TO_DO -> ActionsRow(
+            TaskStatus.TODO -> ActionsRow(
                 onClickEdit = onEditClick,
                 onClickMove = onMoveClick,
                 taskStatusTitle = stringResource(R.string.move_to_in_progress)
             )
 
-            Status.IN_PROGRESS -> ActionsRow(
+            TaskStatus.IN_PROGRESS -> ActionsRow(
                 onClickEdit = onEditClick,
                 onClickMove = onMoveClick,
                 taskStatusTitle = stringResource(R.string.move_to_done)
             )
 
-            Status.DONE -> {}
+            TaskStatus.DONE -> {}
         }
 
 
@@ -142,12 +167,12 @@ private fun TaskDetailsBottomSheetContent(
 
 @Composable
 private fun StatusRow(
-    modifier: Modifier = Modifier, status: Status, priority: Priority
+    modifier: Modifier = Modifier, status: TaskStatus, priority: Priority
 ) {
     val titleColor = when (status) {
-        Status.TO_DO -> TudeeTheme.colors.yellowAccent
-        Status.IN_PROGRESS -> TudeeTheme.colors.purpleAccent
-        Status.DONE -> TudeeTheme.colors.greenAccent
+        TaskStatus.TODO -> TudeeTheme.colors.yellowAccent
+        TaskStatus.IN_PROGRESS -> TudeeTheme.colors.purpleAccent
+        TaskStatus.DONE -> TudeeTheme.colors.greenAccent
     }
     Row(modifier = modifier) {
         Box(
@@ -156,9 +181,9 @@ private fun StatusRow(
                 .clip(TudeeTheme.shapes.circle)
                 .background(
                     color = when (status) {
-                        Status.TO_DO -> TudeeTheme.colors.yellowVariant
-                        Status.IN_PROGRESS -> TudeeTheme.colors.purpleVariant
-                        Status.DONE -> TudeeTheme.colors.greenVariant
+                        TaskStatus.TODO -> TudeeTheme.colors.yellowVariant
+                        TaskStatus.IN_PROGRESS -> TudeeTheme.colors.purpleVariant
+                        TaskStatus.DONE -> TudeeTheme.colors.greenVariant
                     }
                 ), contentAlignment = Alignment.Center
         ) {
@@ -176,9 +201,9 @@ private fun StatusRow(
                 )
                 Text(
                     text = when (status) {
-                        Status.TO_DO -> stringResource(R.string.To_Do)
-                        Status.IN_PROGRESS -> stringResource(R.string.In_Progress)
-                        Status.DONE -> stringResource(R.string.Done)
+                        TaskStatus.TODO -> stringResource(R.string.To_Do)
+                        TaskStatus.IN_PROGRESS -> stringResource(R.string.In_Progress)
+                        TaskStatus.DONE -> stringResource(R.string.Done)
                     },
                     style = TudeeTheme.typography.labelSmall,
                     color = titleColor,
@@ -214,19 +239,19 @@ private fun ActionsRow(
 }
 
 @ThemePreviews
-@Preview
 @Composable
 private fun PreviewTaskDetail() {
-    TaskDetailsScreen(
-        taskStatus = Status.TO_DO,
-        taskPriority = Priority.HIGH,
+    TaskDetailsScreenContent(
         taskName = "Task Name",
         taskDescription = "Task Description",
-        icon = R.drawable.ic_education
+        taskStatus = TaskStatus.TODO,
+        taskPriority = Priority.HIGH,
+        icon = R.drawable.ic_education,
+        onEditClick = { },
+        onMoveClick = {},
+        onDismiss = {},
+        showBottomSheet = true
     )
 }
 
 
-enum class Status {
-    TO_DO, IN_PROGRESS, DONE
-}
