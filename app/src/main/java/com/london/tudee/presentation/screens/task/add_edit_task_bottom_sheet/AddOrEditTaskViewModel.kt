@@ -2,24 +2,24 @@ package com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
 import java.util.Date
 
 
 class AddOrEditTaskViewModel(
-    private val taskService: TaskService,
-    private val categoryService: CategoryService
+    private val taskService: TaskService, private val categoryService: CategoryService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AddOrEditTaskUiState())
@@ -36,14 +36,13 @@ class AddOrEditTaskViewModel(
                     _uiState.update { currentState ->
                         currentState.copy(
                             categories = categories,
-                            // Set default category if none is selected
-                            selectedCategory = currentState.selectedCategory ?: categories.firstOrNull()
+                            selectedCategory = currentState.selectedCategory
                         )
                     }
                     validateForm()
                 }
-            } catch (e: Exception) {
-                _uiState.update { it.copy(errorMessage = e.message) }
+            } catch (_: Exception) {
+                _uiState.update { it.copy(errorMessage = R.string.some_error_happened) }
             }
         }
     }
@@ -69,11 +68,10 @@ class AddOrEditTaskViewModel(
                     )
                 }
                 validateForm()
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 _uiState.update {
                     it.copy(
-                        errorMessage = e.message,
-                        isLoading = false
+                        errorMessage = R.string.some_error_happened, isLoading = false
                     )
                 }
             }
@@ -87,7 +85,6 @@ class AddOrEditTaskViewModel(
 
     fun updateDescription(description: String) {
         _uiState.update { it.copy(description = description) }
-        // No need to validate form as description is optional
     }
 
     fun updateSelectedDate(date: Long) {
@@ -121,16 +118,13 @@ class AddOrEditTaskViewModel(
         _uiState.update {
             it.copy(
                 showBottomSheet = false,
-                // Don't clear messages immediately so they can be shown
             )
         }
 
-        // Reset form after a delay to allow snackbar to show
         viewModelScope.launch {
             delay(500)
             _uiState.update {
                 it.copy(
-                    // Reset form
                     title = "",
                     description = "",
                     selectedDate = null,
@@ -158,12 +152,11 @@ class AddOrEditTaskViewModel(
                 val task = Task(
                     id = currentState.taskId ?: 0,
                     title = currentState.title.trim(),
-                    description = currentState.description.trim(), // Description can be empty
+                    description = currentState.description.trim(),
                     taskStatus = TaskStatus.TODO,
                     priority = currentState.selectedPriority,
                     categoryId = currentState.selectedCategory?.id ?: 1,
-                    timeStamp = currentState.selectedDate?.let { Date(it) } ?: Date()
-                )
+                    timeStamp = currentState.selectedDate?.let { Date(it) } ?: Date())
 
                 if (currentState.isEditMode) {
                     taskService.edit(task)
@@ -174,19 +167,16 @@ class AddOrEditTaskViewModel(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        successMessage = if (currentState.isEditMode)
-                            "Task updated successfully"
-                        else
-                            "Task added successfully",
+                        successMessage = if (currentState.isEditMode) R.string.edit_task_successfully
+                        else R.string.add_task_successfully,
                         showBottomSheet = false
                     )
                 }
 
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 _uiState.update {
                     it.copy(
-                        isLoading = false,
-                        errorMessage = e.message ?: "An error occurred"
+                        isLoading = false, errorMessage = R.string.some_error_happened
                     )
                 }
             }
@@ -196,10 +186,9 @@ class AddOrEditTaskViewModel(
     private fun validateForm() {
         _uiState.update { currentState ->
             currentState.copy(
-                isFormValid = currentState.title.isNotBlank() && // Title is mandatory
-                        currentState.selectedDate != null && // Date is mandatory
-                        currentState.selectedCategory != null && // Category is mandatory
-                        currentState.selectedPriority != null // Priority is mandatory (always has a value)
+                isFormValid = currentState.title.isNotBlank()
+                        && currentState.selectedDate != null &&
+                        currentState.selectedCategory != null
             )
         }
     }
@@ -207,8 +196,7 @@ class AddOrEditTaskViewModel(
     fun clearMessages() {
         _uiState.update {
             it.copy(
-                successMessage = null,
-                errorMessage = null
+                successMessage = null, errorMessage = null
             )
         }
     }
