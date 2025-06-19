@@ -63,4 +63,5 @@
     <string name="category_image">صورة الفئه</string>
     <string name="add_new_category">اضافة فئه جديده</string>
     <string name="upload">تحميل</string>
+    <string name="successfully">تم بنجاح</string>
 </resources>

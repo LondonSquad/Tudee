@@ -1,5 +1,6 @@
 package com.london.tudee.presentation.components
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -21,7 +22,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.london.tudee.R
@@ -31,8 +32,9 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun SnackBar(
     modifier: Modifier = Modifier,
-    message: String,
+    @StringRes message: Int = R.string.successfully,
     iconPainter: Painter,
+    iconTint: Color = TudeeTheme.colors.greenAccent,
 ) {
     Box(
         modifier = modifier
@@ -67,14 +69,14 @@ fun SnackBar(
                     painter = iconPainter,
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = TudeeTheme.colors.greenAccent
+                    tint = iconTint
                 )
             }
 
             Spacer(modifier = Modifier.width(12.dp))
 
             Text(
-                text = message,
+                text = stringResource(message),
                 style = TudeeTheme.typography.bodyMedium,
                 color = TudeeTheme.colors.body,
                 lineHeight = 20.sp
@@ -90,7 +92,7 @@ fun SnackBarPreview() {
         SnackBar(
             modifier = Modifier
                 .offset(y = 56.dp),
-            message = "Successfully.",
+            message = R.string.successfully,
             iconPainter = painterResource(R.drawable.snack_bar_container),
         )
     }
