@@ -35,7 +35,9 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun TaskItem(
-    modifier: Modifier = Modifier, isSelected: Boolean = false, task: Task
+    modifier: Modifier = Modifier,
+    isSelected: Boolean = false,
+    taskUiState: TaskUiState
 ) {
     Card(
         modifier = modifier
@@ -51,15 +53,18 @@ fun TaskItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            TaskItemIconSection(task.iconResId)
+            TaskItemIconSection(taskUiState.iconResId)
             Spacer(modifier = Modifier.width(8.dp))
             TaskItemTopBar(
-                priority = task.priority, date = task.date, isSelected = isSelected
+                priority = taskUiState.priority,
+                date = taskUiState.date,
+                isSelected = isSelected
             )
         }
 
         TaskItemContent(
-            title = task.title, description = task.description
+            title = taskUiState.title,
+            description = taskUiState.description
         )
     }
 }
@@ -111,7 +116,9 @@ private fun TaskItemTopBar(
 
 @Composable
 private fun TaskItemContent(
-    modifier: Modifier = Modifier, title: String, description: String
+    modifier: Modifier = Modifier,
+    title: String,
+    description: String
 ) {
     Column(
         modifier = modifier
@@ -146,7 +153,7 @@ private fun TaskItemContent(
 fun PreviewTaskItemHigh() {
     TudeeTheme {
         TaskItem(
-            task = Task(
+            taskUiState = TaskUiState(
                 priority = Priority.HIGH,
                 iconResId = R.drawable.ic_education,
                 title = "Organize Study Desk",
@@ -163,7 +170,7 @@ fun PreviewTaskItemHigh() {
 fun PreviewTaskItemMedium() {
     TudeeTheme {
         TaskItem(
-            task = Task(
+            taskUiState = TaskUiState(
                 priority = Priority.MEDIUM,
                 iconResId = R.drawable.ic_education,
                 title = "Organize Study Desk",
@@ -180,7 +187,7 @@ fun PreviewTaskItemMedium() {
 fun PreviewTaskItemLow() {
     TudeeTheme {
         TaskItem(
-            task = Task(
+            taskUiState = TaskUiState(
                 priority = Priority.LOW,
                 iconResId = R.drawable.ic_education,
                 title = "Organize Study Desk",

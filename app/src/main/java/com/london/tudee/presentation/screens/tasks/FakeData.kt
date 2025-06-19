@@ -3,7 +3,7 @@ package com.london.tudee.presentation.screens.tasks
 import androidx.compose.runtime.mutableStateListOf
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Priority
-import com.london.tudee.presentation.components.task.Task
+import com.london.tudee.presentation.components.task.TaskUiState
 
 data class DateItemClass(
     val dayOfMonth: String, val dayOfWeek: String, var isSelected: Boolean
@@ -23,63 +23,63 @@ val fakeDates = mutableStateListOf(
 )
 
 val tasks1 = listOf(
-    Task(
+    TaskUiState(
         priority = Priority.MEDIUM,
         iconResId = R.drawable.ic_education,
         title = "Organize Study Desk",
         description = "Review cell structure and functions for tomorrow...",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
         priority = Priority.LOW,
         iconResId = R.drawable.ic_education,
         title = "Organize Study Desk",
         description = "",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
         priority = Priority.HIGH,
         iconResId = R.drawable.ic_education,
         title = "Organize Study Desk",
         description = "",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
         priority = Priority.MEDIUM,
         iconResId = R.drawable.ic_education,
         title = "Organize Study Desk",
         description = "Review cell structure and functions for tomorrow...",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
         priority = Priority.HIGH,
         iconResId = R.drawable.ic_education,
         title = "Task 1,",
         description = "This is a task description",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
         priority = Priority.LOW,
         iconResId = R.drawable.ic_education,
         title = "Task 1,",
         description = "This is a task description",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
         priority = Priority.MEDIUM,
         iconResId = R.drawable.ic_education,
         title = "Task 1,",
         description = "This is a task description",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
         priority = Priority.LOW,
         iconResId = R.drawable.ic_education,
         title = "Task 1,",
         description = "This is a task description",
         date = "2023-09-20"
     ),
-    Task(
+    TaskUiState(
         priority = Priority.HIGH,
         iconResId = R.drawable.ic_education,
         title = "Task 1,",
