@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.tasks
+package com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -24,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.presentation.components.CategoryItem
@@ -44,9 +46,14 @@ fun AddOrEditTaskDetails(
     @StringRes title: Int,
     onTitleValueChange: (String) -> Unit,
     onDescriptionValueChange: (String) -> Unit,
+    onSelectedDateChange: () -> Unit,
+    onSelectedPriorityChange: () -> Unit,
+    onSelectedCategoryChange: () -> Unit,
+    viewModel: AddOrEditTaskViewModel = viewModel(),
 ) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val maxHeight = screenHeight * 0.75f
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(
         modifier = modifier
@@ -61,11 +68,32 @@ fun AddOrEditTaskDetails(
         ) {
             TaskDetailsContent(
                 title = title,
-                onTitleValueChange = onTitleValueChange,
-                onDescriptionValueChange = onDescriptionValueChange,
+                uiState = uiState,
+                onTitleValueChange = {
+                    viewModel.updateTitle(it)
+                    onTitleValueChange(it)
+                },
+                onDescriptionValueChange = {
+                    viewModel.updateDescription(it)
+                    onDescriptionValueChange(it)
+                },
+                onDateFieldClick = { viewModel.showDatePicker() },
+                onPrioritySelected = { viewModel.updateSelectedPriority(it) },
+                onCategorySelected = { viewModel.updateSelectedCategory(it) },
                 modifier = modifier.fillMaxWidth()
             )
         }
+    }
+    if (uiState.showDatePicker) {
+        TudeeDatePicker(
+            onDateSelected = { date ->
+                viewModel.updateSelectedDate(date)
+                viewModel.hideDatePicker()
+            },
+            onDismiss = {
+                viewModel.hideDatePicker()
+            }
+        )
     }
 }
 
@@ -73,13 +101,14 @@ fun AddOrEditTaskDetails(
 private fun TaskDetailsContent(
     modifier: Modifier,
     @StringRes title: Int,
+    uiState: AddOrEditTaskUiState,
     onTitleValueChange: (String) -> Unit,
     onDescriptionValueChange: (String) -> Unit,
+    onDateFieldClick: () -> Unit,
+    onPrioritySelected: (Priority) -> Unit,
+    onCategorySelected: (CategoryUiModel) -> Unit,
 ) {
-    var selectedPriority by remember { mutableStateOf(Priority.HIGH) }
-    var selectedCategory by remember { mutableStateOf<CategoryUiModel?>(null) }
-    var selectedDate by remember { mutableStateOf<Long?>(null) }
-    var showDatePicker by remember { mutableStateOf(false) }
+
     val categories = rememberSampleCategories()
 
     Column(
@@ -87,27 +116,23 @@ private fun TaskDetailsContent(
     ) {
         TaskHeader(title)
         TaskInputFields(
+            title = uiState.title,
+            description = uiState.description,
+            selectedDate = uiState.selectedDate,
             onTitleValueChange = onTitleValueChange,
             onDescriptionValueChange = onDescriptionValueChange,
-            selectedDate = selectedDate,
-            onDateFieldClick = { showDatePicker = true }
+            onDateFieldClick = onDateFieldClick
         )
-        PrioritySection(selectedPriority) { selectedPriority = it }
-        CategorySection(categories, selectedCategory) { selectedCategory = it }
-
+        PrioritySection(
+            selectedPriority = uiState.selectedPriority,
+            onPrioritySelected = onPrioritySelected
+        )
+        CategorySection(
+            categories = categories,
+            selectedCategory = uiState.selectedCategory,
+            onCategorySelected = onCategorySelected
+        )
         Spacer(modifier = Modifier.height(32.dp))
-    }
-
-    if (showDatePicker) {
-        TudeeDatePicker(
-            onDateSelected = { date ->
-                selectedDate = date
-                showDatePicker = false
-            },
-            onDismiss = {
-                showDatePicker = false
-            }
-        )
     }
 }
 
@@ -123,15 +148,17 @@ private fun TaskHeader(@StringRes title: Int) {
 
 @Composable
 private fun TaskInputFields(
+    title: String,
+    description: String,
+    selectedDate: Long?,
     onTitleValueChange: (String) -> Unit,
     onDescriptionValueChange: (String) -> Unit,
-    selectedDate: Long?,
     onDateFieldClick: () -> Unit
 ) {
     TudeeTextField(
         icon = R.drawable.add_task_icon,
         hint = R.string.task_title,
-        value = "",
+        value = title,
         onValueChange = onTitleValueChange
     )
     Spacer(modifier = Modifier.height(16.dp))
@@ -139,7 +166,7 @@ private fun TaskInputFields(
     TudeeTextField(
         multiLined = true,
         hint = R.string.description,
-        value = "",
+        value = description,
         onValueChange = onDescriptionValueChange
     )
     Spacer(modifier = Modifier.height(16.dp))
@@ -220,7 +247,6 @@ private fun CategoriesGrid(
                         modifier = Modifier.weight(1f),
                         iconRes = category.iconRes,
                         title = stringResource(category.title),
-                        tint = category.tint,
                         isSelected = category == selectedCategory,
                         onClick = { onCategorySelected(category) }
                     )
@@ -244,17 +270,18 @@ private fun CategoriesGrid(
     }
 }
 
-@ThemePreviews
-@Composable
-private fun PreviewAddOrEditTaskDetails() {
-    TudeeTheme {
-        AddOrEditTaskDetails(
-            title = R.string.add_new_task,
-            onTitleValueChange = {},
-            onDescriptionValueChange = {}
-        )
-    }
-}
+//@ThemePreviews
+//@Composable
+//private fun PreviewAddOrEditTaskDetails() {
+//    TudeeTheme {
+//        AddOrEditTaskDetails(
+//            title = R.string.add_new_task,
+//            onTitleValueChange = {},
+//            onDescriptionValueChange = {},
+//            onSelectedDateChange = {
+//            },
+//    }
+//}
 
 @ThemePreviews
 @Composable
