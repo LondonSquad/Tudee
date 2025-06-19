@@ -24,13 +24,17 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Priority
+import com.london.tudee.domain.entities.Task
+import com.london.tudee.domain.entities.TaskStatus
+import com.london.tudee.domain.services.CategoryService
+import com.london.tudee.presentation.components.TaskStatusSlider
 import com.london.tudee.presentation.components.TopAppBar
 import com.london.tudee.presentation.components.tabs.TabItem
 import com.london.tudee.presentation.components.tabs.TudeeTabLayout
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.model.TaskUiState
+import kotlinx.datetime.Instant
 
 @Composable
 fun EditTaskDetails(
@@ -122,7 +126,7 @@ fun EditTaskDetails(
                     TaskItem(
                         modifier = Modifier,
                         isSelected = true,
-                        taskUiState = taskUiStates[index],
+                        task = taskUiStates[index],
                         hasDate = true
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -133,77 +137,86 @@ fun EditTaskDetails(
 }
 
 val taskUiStates = listOf(
-    TaskUiState(
+    Task(
         id = 1,
         priority = Priority.MEDIUM,
-        iconResId = R.drawable.coding_icon,
+        categoryId = R.drawable.ic_education,
         title = "Organize Study Desk",
         description = "Review cell structure and functions for tomorrow...",
-        date = "2023-09-20"
+        taskStatus = TaskStatus.TODO,
+        timeStamp = Instant.parse("2023-09-20T00:00:00Z")
     ),
-    TaskUiState(
+    Task(
         id = 2,
         priority = Priority.LOW,
-        iconResId = R.drawable.coding_icon,
+        categoryId = R.drawable.coding_icon,
         title = "Organize Study Desk",
         description = "",
-        date = "2023-09-20"
+        taskStatus = TaskStatus.TODO,
+        timeStamp = Instant.parse("2023-09-20T00:00:00Z")
     ),
-    TaskUiState(
+    Task(
         id = 3,
         priority = Priority.HIGH,
-        iconResId = R.drawable.coding_icon,
-        title = "Organize Study Desk",
-        description = "",
-        date = "2023-09-20"
-    ),
-    TaskUiState(
-        id = 4,
-        priority = Priority.MEDIUM,
-        iconResId = R.drawable.coding_icon,
+        categoryId = R.drawable.coding_icon,
         title = "Organize Study Desk",
         description = "Review cell structure and functions for tomorrow...",
-        date = "2023-09-20"
+        taskStatus = TaskStatus.TODO,
+        timeStamp = Instant.parse("2023-09-20T00:00:00Z")
     ),
-    TaskUiState(
+    Task(
+        id = 4,
+        priority = Priority.MEDIUM,
+        categoryId = R.drawable.coding_icon,
+        title = "Organize Study Desk",
+        description = "Review cell structure and functions for tomorrow...",
+        taskStatus = TaskStatus.TODO,
+        timeStamp = Instant.parse("2023-09-20T00:00:00Z")
+    ),
+    Task(
         id = 5,
         priority = Priority.HIGH,
-        iconResId = R.drawable.coding_icon,
+        categoryId = R.drawable.coding_icon,
         title = "Task 1,",
         description = "This is a task description",
-        date = "2023-09-20"
+        taskStatus = TaskStatus.TODO,
+        timeStamp = Instant.parse("2023-09-20T00:00:00Z")
     ),
-    TaskUiState(
+    Task(
         id = 5,
         priority = Priority.LOW,
-        iconResId = R.drawable.coding_icon,
+        categoryId = R.drawable.coding_icon,
         title = "Task 1,",
         description = "This is a task description",
-        date = "2023-09-20"
+        taskStatus = TaskStatus.TODO,
+        timeStamp = Instant.parse("2023-09-20T00:00:00Z")
     ),
-    TaskUiState(
+    Task(
         id = 6,
         priority = Priority.MEDIUM,
-        iconResId = R.drawable.coding_icon,
+        categoryId = R.drawable.coding_icon,
         title = "Task 1,",
         description = "This is a task description",
-        date = "2023-09-20"
+        taskStatus = TaskStatus.TODO,
+        timeStamp = Instant.parse("2023-09-20T00:00:00Z")
     ),
-    TaskUiState(
+    Task(
         id = 7,
         priority = Priority.LOW,
-        iconResId = R.drawable.coding_icon,
+        categoryId = R.drawable.coding_icon,
         title = "Task 1,",
         description = "This is a task description",
-        date = "2023-09-20"
+        taskStatus = TaskStatus.TODO,
+        timeStamp = Instant.parse("2023-09-20T00:00:00Z")
     ),
-    TaskUiState(
+    Task(
         id = 8,
         priority = Priority.HIGH,
-        iconResId = R.drawable.coding_icon,
+        categoryId = R.drawable.coding_icon,
         title = "Task 1,",
-        description = "This is a task description",
-        date = "2023-09-20"
+        description = "Review cell structure and functions for tomorrow...",
+        taskStatus = TaskStatus.IN_PROGRESS,
+        timeStamp = Instant.parse("2023-09-20T00:00:00Z")
     )
 )
 

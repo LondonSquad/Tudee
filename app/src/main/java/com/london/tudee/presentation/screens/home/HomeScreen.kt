@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.london.tudee.R
+import com.london.tudee.domain.entities.Task
 import com.london.tudee.presentation.components.HomeTopBar
 import com.london.tudee.presentation.components.StatusCard
 import com.london.tudee.presentation.components.TaskStatusSlider
@@ -49,7 +50,6 @@ import com.london.tudee.presentation.components.date.DateBadge
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.model.TaskUiState
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -270,7 +270,7 @@ private fun OverLayerBox(
 
 @Composable
 private fun ToDoSection(
-    toDoTasks: List<TaskUiState>
+    toDoTasks: List<Task>
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -335,7 +335,7 @@ private fun ToDoSection(
                     .width(320.dp)
                     .height(111.dp),
                 isSelected = true,
-                taskUiState = toDoTasks[it],
+                task = toDoTasks[it],
                 hasDate = false,
             )
         }
@@ -344,7 +344,7 @@ private fun ToDoSection(
 
 @Composable
 private fun InProgressSection(
-    inProgressTasks: List<TaskUiState>
+    inProgressTasks: List<Task>
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -409,7 +409,7 @@ private fun InProgressSection(
                     .width(320.dp)
                     .height(111.dp),
                 isSelected = true,
-                taskUiState = inProgressTasks[it],
+                task = inProgressTasks[it],
                 hasDate = false
             )
         }
@@ -418,7 +418,7 @@ private fun InProgressSection(
 
 @Composable
 private fun DoneSection(
-    doneTasks: List<TaskUiState>
+    doneTasks: List<Task>
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -483,7 +483,7 @@ private fun DoneSection(
                     .width(320.dp)
                     .height(111.dp),
                 isSelected = true,
-                taskUiState = doneTasks[it],
+                task = doneTasks[it],
                 hasDate = false
             )
         }

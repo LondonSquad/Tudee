@@ -2,16 +2,19 @@ package com.london.tudee.presentation.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.london.tudee.R
+import com.london.tudee.domain.entities.Priority
+import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
-import com.london.tudee.presentation.mapper.toPresentation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Instant
 
 class HomeViewModel(
     private val taskService: TaskService,
@@ -22,6 +25,20 @@ class HomeViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
+        viewModelScope.launch(Dispatchers.IO){
+           taskService.add(Task(id = 1, title = "Task 1", description = "Description 1",
+               taskStatus = TaskStatus.TODO,priority = Priority.HIGH,
+               categoryId = 1, timeStamp= Instant.parse("2023-09-20T00:00:00Z")))
+            taskService.add(Task(id = 1, title = "Task 1", description = "Description 1",
+                taskStatus = TaskStatus.IN_PROGRESS,priority = Priority.HIGH,
+                categoryId = 1, timeStamp= Instant.parse("2023-09-20T00:00:00Z")))
+            taskService.add(Task(id = 1, title = "Task 1", description = "Description 1",
+                taskStatus = TaskStatus.DONE,priority = Priority.MEDIUM,
+                categoryId = 1, timeStamp= Instant.parse("2023-09-20T00:00:00Z")))
+            taskService.add(Task(id = 1, title = "Task 1", description = "Description 1",
+                taskStatus = TaskStatus.TODO,priority = Priority.HIGH,
+                categoryId = 1, timeStamp= Instant.parse("2023-09-20T00:00:00Z")))
+        }
         getAllTasks()
         getDoneTasks()
         getToDoTasks()
@@ -41,7 +58,6 @@ class HomeViewModel(
                         errMessage = null,
                         allTasks = tasks.map {
                             it.copy(categoryId = categoryService.getIconPathById(it.categoryId))
-                                .toPresentation()
                         },
                     )
                 }
@@ -62,7 +78,6 @@ class HomeViewModel(
                         errMessage = null,
                         doneTasks = tasks.map {
                             it.copy(categoryId = categoryService.getIconPathById(it.categoryId))
-                                .toPresentation()
                         },
                     )
                 }
@@ -83,7 +98,6 @@ class HomeViewModel(
                         errMessage = null,
                         inProgressTasks = tasks.map {
                             it.copy(categoryId = categoryService.getIconPathById(it.categoryId))
-                                .toPresentation()
                         }
                     )
                 }
@@ -104,7 +118,6 @@ class HomeViewModel(
                         errMessage = null,
                         toDoTasks = tasks.map {
                             it.copy(categoryId = categoryService.getIconPathById(it.categoryId))
-                                .toPresentation()
                         }
                     )
                 }
