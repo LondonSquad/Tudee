@@ -12,6 +12,12 @@
     <string name="Circle">دائرة</string>
     <string name="task_title">عنوان المهمة</string>
     <string name="description">الوصف</string>
+    <string name="on_bording_title_1">هل تشعر بالإرهاق من المهام؟</string>
+    <string name="on_bording_body_1">هيا بنا نُعيد ترتيب الفوضى. تودي هنا لمساعدتك في الترتيب والتخطيط والتنفس بسهولة.</string>
+    <string name="on_bording_title_2">يا إلهي! ها قد بدأتُ بالتسويف.</string>
+    <string name="on_bording_body_2">تودي ليس غاضبًا... فقط أشعر ببعض خيبة الأمل، لنعد إلى المسار الصحيح معًا.</string>
+    <string name="on_bording_title_3">لنُكمل المهمة ونحتفل معًا.</string>
+    <string name="on_bording_body_3">التقدم هو التقدم. سيحتفل بك تودي على كل فوز، كبيرًا كان أم صغيرًا.</string>
     <string name="category">عنوان الصنف</string>
     <string name="category_title">الصنف</string>
     <string name="high">عالي</string>
@@ -51,4 +57,5 @@
     <string name="clear">حذف</string>
     <string name="ok">موافق</string>
     <string name="coding">برمجة</string>
+    <string name="skip">تخطي</string>
 </resources>

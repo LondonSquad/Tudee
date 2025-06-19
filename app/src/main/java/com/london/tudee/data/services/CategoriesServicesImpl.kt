@@ -13,11 +13,13 @@ class CategoriesServicesImpl(
 ) : Services<Category> {
 
     override suspend fun add(service: Category) {
-        return categoryDao.insert(service.convertToCategoryDto())
+        val category = service.copy(id = 0)
+        return categoryDao.insert(category.convertToCategoryDto())
     }
 
     override suspend fun edit(service: Category) {
-        return categoryDao.update(service.convertToCategoryDto())
+        val category = service.copy(id = 0)
+        return categoryDao.update(category.convertToCategoryDto())
     }
 
     override suspend fun delete(service: Category) {

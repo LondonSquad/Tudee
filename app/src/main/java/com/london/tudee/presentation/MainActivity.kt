@@ -38,7 +38,9 @@ class MainActivity : ComponentActivity() {
 @ThemePreviews
 @Composable
 fun PreviewTestScreen() {
-    TestScreen()
+    TudeeTheme {
+        TestScreen()
+    }
 }
 
 @Composable
