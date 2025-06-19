@@ -7,5 +7,5 @@ data class Task(
     val taskStatus: TaskStatus,
     val priority: Priority,
     val categoryId: Int,
-    val timeStamp: Long
+    val timeStamp: Long = System.currentTimeMillis()
 )
