@@ -38,8 +38,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
-import com.london.tudee.presentation.components.DateItem
 import com.london.tudee.presentation.components.buttons.TudeeTextButton
+import com.london.tudee.presentation.components.date.DateItem
 import com.london.tudee.presentation.components.tabs.TabItem
 import com.london.tudee.presentation.components.tabs.TudeeTabLayout
 import com.london.tudee.presentation.components.task.SwipeToDeleteTask
@@ -51,8 +51,6 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun TasksScreen(
 ) {
-
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -224,7 +222,6 @@ fun DatePicker(
         )
     }
 }
-
 
 @Composable
 fun DateSection(
