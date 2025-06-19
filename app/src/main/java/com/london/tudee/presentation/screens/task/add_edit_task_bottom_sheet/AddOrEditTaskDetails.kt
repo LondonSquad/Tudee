@@ -22,11 +22,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.london.tudee.R
+import com.london.tudee.data.local.room_db.defaultCategory
+import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.presentation.components.CategoryItem
 import com.london.tudee.presentation.components.TudeeTextField
@@ -34,8 +37,7 @@ import com.london.tudee.presentation.components.date.TudeeDatePicker
 import com.london.tudee.presentation.components.priority.PrioritySelector
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.categories.CategoryUiModel
-import com.london.tudee.presentation.screens.categories.rememberSampleCategories
+import com.london.tudee.presentation.mapper.CategoryMapper
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -50,6 +52,7 @@ fun AddOrEditTaskDetails(
     onSelectedPriorityChange: () -> Unit,
     onSelectedCategoryChange: () -> Unit,
     viewModel: AddOrEditTaskViewModel = viewModel(),
+    categories: List<Category> = defaultCategory // Use defaultCategory as default
 ) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val maxHeight = screenHeight * 0.75f
@@ -69,6 +72,7 @@ fun AddOrEditTaskDetails(
             TaskDetailsContent(
                 title = title,
                 uiState = uiState,
+                categories = categories,
                 onTitleValueChange = {
                     viewModel.updateTitle(it)
                     onTitleValueChange(it)
@@ -102,15 +106,13 @@ private fun TaskDetailsContent(
     modifier: Modifier,
     @StringRes title: Int,
     uiState: AddOrEditTaskUiState,
+    categories: List<Category>,
     onTitleValueChange: (String) -> Unit,
     onDescriptionValueChange: (String) -> Unit,
     onDateFieldClick: () -> Unit,
     onPrioritySelected: (Priority) -> Unit,
-    onCategorySelected: (CategoryUiModel) -> Unit,
+    onCategorySelected: (Category) -> Unit,
 ) {
-
-    val categories = rememberSampleCategories()
-
     Column(
         modifier = modifier
     ) {
@@ -202,9 +204,9 @@ private fun PrioritySection(
 
 @Composable
 private fun CategorySection(
-    categories: List<CategoryUiModel>,
-    selectedCategory: CategoryUiModel?,
-    onCategorySelected: (CategoryUiModel) -> Unit
+    categories: List<Category>,
+    selectedCategory: Category?,
+    onCategorySelected: (Category) -> Unit
 ) {
     SectionTitle(titleRes = R.string.category)
     Spacer(modifier = Modifier.height(8.dp))
@@ -228,9 +230,9 @@ private fun SectionTitle(@StringRes titleRes: Int) {
 
 @Composable
 private fun CategoriesGrid(
-    categories: List<CategoryUiModel>,
-    selectedCategory: CategoryUiModel?,
-    onCategorySelected: (CategoryUiModel) -> Unit
+    categories: List<Category>,
+    selectedCategory: Category?,
+    onCategorySelected: (Category) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -245,8 +247,8 @@ private fun CategoriesGrid(
                 rowCategories.forEach { category ->
                     CategoryItem(
                         modifier = Modifier.weight(1f),
-                        iconRes = category.iconRes,
-                        title = stringResource(category.title),
+                        iconRes = CategoryMapper.getIconResource(category),
+                        title = CategoryMapper.getCategoryDisplayName(category),
                         isSelected = category == selectedCategory,
                         onClick = { onCategorySelected(category) }
                     )
@@ -270,19 +272,6 @@ private fun CategoriesGrid(
     }
 }
 
-//@ThemePreviews
-//@Composable
-//private fun PreviewAddOrEditTaskDetails() {
-//    TudeeTheme {
-//        AddOrEditTaskDetails(
-//            title = R.string.add_new_task,
-//            onTitleValueChange = {},
-//            onDescriptionValueChange = {},
-//            onSelectedDateChange = {
-//            },
-//    }
-//}
-
 @ThemePreviews
 @Composable
 private fun PreviewCategorySection() {
@@ -293,14 +282,85 @@ private fun PreviewCategorySection() {
                 .background(TudeeTheme.colors.surface)
                 .padding(16.dp)
         ) {
-            var selectedCategory by remember { mutableStateOf<CategoryUiModel?>(null) }
-            val categories = rememberSampleCategories()
+            var selectedCategory by remember { mutableStateOf<Category?>(null) }
+            val sampleCategories = rememberSampleDomainCategories()
 
             CategorySection(
-                categories = categories,
+                categories = sampleCategories,
                 selectedCategory = selectedCategory,
                 onCategorySelected = { selectedCategory = it }
             )
         }
+    }
+}
+
+@Composable
+private fun rememberSampleDomainCategories(): List<Category> {
+    return remember {
+        listOf(
+            Category(
+                id = 1,
+                name = "Education",
+                arName = "التعليم",
+                iconPath = "ic_education",
+                isDefault = true
+            ),
+            Category(
+                id = 2,
+                name = "Shopping",
+                arName = "التسوق",
+                iconPath = "ic_shopping",
+                isDefault = true
+            ),
+            Category(
+                id = 3,
+                name = "Medical",
+                arName = "طبي",
+                iconPath = "ic_medical",
+                isDefault = true
+            ),
+            Category(
+                id = 4,
+                name = "Gym",
+                arName = "رياضة",
+                iconPath = "ic_gym",
+                isDefault = false
+            ),
+            Category(
+                id = 5,
+                name = "Entertainment",
+                arName = "ترفيه",
+                iconPath = "ic_entertainment",
+                isDefault = false
+            ),
+            Category(
+                id = 6,
+                name = "Cooking",
+                arName = "طبخ",
+                iconPath = "ic_cooking",
+                isDefault = false
+            ),
+            Category(
+                id = 7,
+                name = "Family & Friends",
+                arName = "العائلة والأصدقاء",
+                iconPath = "ic_family",
+                isDefault = false
+            ),
+            Category(
+                id = 8,
+                name = "Traveling",
+                arName = "سفر",
+                iconPath = "ic_travel",
+                isDefault = false
+            ),
+            Category(
+                id = 9,
+                name = "Agriculture",
+                arName = "زراعة",
+                iconPath = "ic_agriculture",
+                isDefault = false
+            )
+        )
     }
 }

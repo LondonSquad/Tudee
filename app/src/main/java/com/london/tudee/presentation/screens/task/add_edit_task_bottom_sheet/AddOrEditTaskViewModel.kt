@@ -1,18 +1,19 @@
 package com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet
 
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.london.tudee.data.local.room_db.defaultCategory
+import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.mapper.convertFromTimeStampToDate
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
-import com.london.tudee.presentation.screens.categories.CategoryUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -23,6 +24,35 @@ class AddOrEditTaskViewModel(
 
     private val _uiState = MutableStateFlow(AddOrEditTaskUiState())
     val uiState: StateFlow<AddOrEditTaskUiState> = _uiState.asStateFlow()
+
+    private val _categories = MutableStateFlow<List<Category>>(defaultCategory)
+    val categories: StateFlow<List<Category>> = _categories.asStateFlow()
+
+    init {
+        loadCategories()
+    }
+
+    private fun loadCategories() {
+        viewModelScope.launch {
+            try {
+                // Get only the first emission from the Flow
+                val categoriesFromDb = categoryService.getAll().first()
+                if (categoriesFromDb.isNotEmpty()) {
+                    _categories.value = categoriesFromDb
+                } else {
+                    // If no categories in database, use default categories
+                    _categories.value = defaultCategory
+                    // Optionally save default categories to database
+                    defaultCategory.forEach { category ->
+                        categoryService.add(category)
+                    }
+                }
+            } catch (e: Exception) {
+                // Fallback to default categories
+                _categories.value = defaultCategory
+            }
+        }
+    }
 
     fun updateTitle(title: String) {
         _uiState.value = _uiState.value.copy(
@@ -45,7 +75,7 @@ class AddOrEditTaskViewModel(
         _uiState.value = _uiState.value.copy(selectedPriority = priority)
     }
 
-    fun updateSelectedCategory(category: CategoryUiModel?) {
+    fun updateSelectedCategory(category: Category?) {
         _uiState.value = _uiState.value.copy(selectedCategory = category)
     }
 
@@ -79,7 +109,7 @@ class AddOrEditTaskViewModel(
                     description = currentState.description,
                     priority = currentState.selectedPriority,
                     taskStatus = TaskStatus.TODO,
-                    categoryId = taskService.getById(currentState.taskId ?: 0).categoryId,
+                    categoryId = currentState.selectedCategory?.id ?: taskService.getById(currentState.taskId ?: 0).categoryId,
                     timeStamp = currentState.selectedDate?.convertFromTimeStampToDate() ?: Date(),
                 )
 
@@ -106,26 +136,28 @@ class AddOrEditTaskViewModel(
         return title.isNotBlank()
     }
 
-//    fun loadTask(taskId: Int?) {
-//        if (taskId == null) return
-//
-//        viewModelScope.launch {
-//            _uiState.value = _uiState.value.copy(isLoading = true)
-//
-//            try {
-//                val task = taskService.getById(taskId)
-//                val category = categoryService.getById(task.categoryId)
-//                 _uiState.value = _uiState.value.copy(
-//                     title = task.title,
-//                     description = task.description,
-//                     selectedPriority = task.priority,
-//                     selectedCategory = task.category
-//                 )
-//            } catch (e: Exception) {
-//                // Handle error
-//            } finally {
-//                _uiState.value = _uiState.value.copy(isLoading = false)
-//            }
-//        }
-//    }
+    fun loadTask(taskId: Int?) {
+        if (taskId == null) return
+
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
+
+            try {
+                val task = taskService.getById(taskId)
+                val category = categoryService.getById(task.categoryId)
+                _uiState.value = _uiState.value.copy(
+                    title = task.title,
+                    description = task.description,
+                    selectedPriority = task.priority,
+                    selectedCategory = category,
+                    isEditMode = true,
+                    taskId = taskId
+                )
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(errorMessage = "Failed to load task")
+            } finally {
+                _uiState.value = _uiState.value.copy(isLoading = false)
+            }
+        }
+    }
 }

@@ -1,14 +1,15 @@
 package com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet
 
+import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
-import com.london.tudee.presentation.screens.categories.CategoryUiModel
+
 
 data class AddOrEditTaskUiState(
     val title: String = "",
     val description: String = "",
     val selectedDate: Long? = null,
     val selectedPriority: Priority = Priority.HIGH,
-    val selectedCategory: CategoryUiModel? = null,
+    val selectedCategory: Category? = null,
     val isLoading: Boolean = false,
     val isFormValid: Boolean = false,
     val showDatePicker: Boolean = false,
