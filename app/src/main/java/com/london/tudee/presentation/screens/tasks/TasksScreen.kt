@@ -101,7 +101,8 @@ fun TasksScreen(
                     items(tasks1.size) { index ->
                         SwipeToDeleteTask(
                             modifier = Modifier,
-                            task = tasks1[index]
+                            taskUiState = tasks1[index],
+                            onDeleteClick = {}
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                     }
