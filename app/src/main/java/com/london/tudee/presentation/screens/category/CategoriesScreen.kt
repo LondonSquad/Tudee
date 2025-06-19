@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.categories
+package com.london.tudee.presentation.screens.category
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background

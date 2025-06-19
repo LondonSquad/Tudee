@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.tasks
+package com.london.tudee.presentation.screens.task.task_details_task
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -22,9 +22,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
+import com.london.tudee.domain.entities.Priority
 import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScreen
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
-import com.london.tudee.presentation.components.priority.Priority
 import com.london.tudee.presentation.components.priority.PriorityBadge
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme

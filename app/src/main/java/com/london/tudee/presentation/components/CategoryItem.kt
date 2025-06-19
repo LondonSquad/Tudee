@@ -18,10 +18,10 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun CategoryItem(
+    modifier: Modifier = Modifier,
     @DrawableRes iconRes: Int,
     title: String,
     tint: Color,
-    modifier: Modifier = Modifier,
     count: Int? = null,
     isSelected: Boolean = false,
     onClick: () -> Unit
