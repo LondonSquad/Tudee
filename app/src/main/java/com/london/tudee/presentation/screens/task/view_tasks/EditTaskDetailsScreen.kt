@@ -122,7 +122,8 @@ fun EditTaskDetails(
                     TaskItem(
                         modifier = Modifier,
                         isSelected = true,
-                        taskUiState = taskUiStates[index]
+                        taskUiState = taskUiStates[index],
+                        hasDate = true
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
