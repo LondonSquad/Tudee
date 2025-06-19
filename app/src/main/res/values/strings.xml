@@ -69,4 +69,5 @@
     <string name="add_new_category">Add new category</string>
     <string name="upload">Upload</string>
     <string name="skip">Skip</string>
+    <string name="successfully">Successfully.</string>
 </resources>
