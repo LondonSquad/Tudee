@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.tasks
+package com.london.tudee.presentation.screens.task.confirm_delete_task
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
