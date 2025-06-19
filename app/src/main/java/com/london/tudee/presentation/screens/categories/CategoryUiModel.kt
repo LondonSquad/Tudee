@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.category
+package com.london.tudee.presentation.screens.categories
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
