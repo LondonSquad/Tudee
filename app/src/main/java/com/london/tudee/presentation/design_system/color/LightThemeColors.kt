@@ -33,6 +33,7 @@ val EmojiTintLight = Color(0xDE1F1F1F)
 val OnPrimaryCard = Color(0x29FFFFFF)
 val OnPrimaryStroke = Color(0x99FFFFFF)
 val PrimaryGradientLight = listOf(Color(0xFF49BAF2), Color(0xFF3A9CCD))
+val Surface = Color(0xFFF9F9F9)
 
 
 val LightTudeeColors = TudeeColors(
