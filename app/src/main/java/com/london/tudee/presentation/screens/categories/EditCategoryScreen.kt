@@ -6,9 +6,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,9 +46,11 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 
 @Composable
-fun CreateCategoryScreen(
+fun EditCategoryScreen(
     modifier: Modifier = Modifier,
-    onAddClick: () -> Unit,
+    categoryId: Int,
+    onSaveClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
     TudeeBottomSheetScreen(
@@ -56,9 +60,11 @@ fun CreateCategoryScreen(
         screenContent = {},
         bottomSheetActions = {},
         bottomSheetContent = {
-            CreateCategoryContent(
+            CategoryEditContent(
                 modifier = modifier,
-                onAddClick = onAddClick,
+                categoryId = categoryId,
+                onSaveClick = onSaveClick,
+                onDeleteClick = onDeleteClick,
                 onDismiss = onDismiss
             )
         }
@@ -66,24 +72,42 @@ fun CreateCategoryScreen(
 }
 
 @Composable
-private fun CreateCategoryContent(
-    modifier: Modifier,
-    onAddClick: () -> Unit,
+private fun CategoryEditContent(
+    modifier: Modifier = Modifier,
+    categoryId: Int,
+    onSaveClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
 
+    val interactionSource = remember { MutableInteractionSource() }
 
     Column(
         modifier = modifier
             .fillMaxSize()
     ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = stringResource(R.string.edit_category),
+                style = TudeeTheme.typography.titleLarge,
+                color = TudeeTheme.colors.title
+            )
+            Text(
+                text = stringResource(R.string.delete),
+                style = TudeeTheme.typography.labelLarge,
+                color = TudeeTheme.colors.error,
+                modifier = Modifier.clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = onDeleteClick,
+                )
+            )
 
-        Text(
-            text = stringResource(R.string.add_new_category),
-            style = TudeeTheme.typography.titleLarge,
-            color = TudeeTheme.colors.title
-        )
-
+        }
 
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -105,7 +129,7 @@ private fun CreateCategoryContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        ImagePickerAddCategory { uri ->
+        ImagePickerEditCategory { uri ->
             // Handle the picked image URI here
             //println("Picked image URI: $uri")
         }
@@ -114,9 +138,8 @@ private fun CreateCategoryContent(
 
 
         TudeePrimaryButton(
-            onClick = onAddClick,
-            isDisabled = text.isBlank(),
-            text = stringResource(R.string.add),
+            onClick = onSaveClick,
+            text = stringResource(R.string.save),
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -126,12 +149,15 @@ private fun CreateCategoryContent(
             onClick = onDismiss,
             text = stringResource(R.string.cancel),
             modifier = Modifier.fillMaxWidth()
+
         )
     }
+
 }
 
+
 @Composable
-private fun ImagePickerAddCategory(
+private fun ImagePickerEditCategory(
     modifier: Modifier = Modifier,
     onImagePicked: (Uri?) -> Unit
 ) {
@@ -179,59 +205,36 @@ private fun ImagePickerAddCategory(
 
         }
 
-        if (imageUri != null) {
-            Box(
-                modifier = Modifier
-                    .size(34.dp)
-                    .clip(shape = TudeeTheme.shapes.extraSmall)
-                    .background(TudeeTheme.colors.surfaceHigh)
-                    .clickable {
-                        imagePickerLauncher.launch("image/*")
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.pencil_edit_01),
-                    contentDescription = "Pick Image",
-                    tint = TudeeTheme.colors.secondary,
-                    modifier = Modifier.padding(6.dp)
-                )
-            }
-        } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable {
-                        imagePickerLauncher.launch("image/*")
-                    },
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_add_image),
-                    contentDescription = "Pick Image",
-                    tint = TudeeTheme.colors.hint,
-                )
-                Text(
-                    text = stringResource(R.string.upload),
-                    style = TudeeTheme.typography.labelMedium,
-                    color = TudeeTheme.colors.hint,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-            }
+        Box(
+            modifier = Modifier
+                .size(34.dp)
+                .clip(shape = TudeeTheme.shapes.extraSmall)
+                .background(TudeeTheme.colors.surfaceHigh)
+                .clickable {
+                    imagePickerLauncher.launch("image/*")
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.pencil_edit_01),
+                contentDescription = "Pick Image",
+                tint = TudeeTheme.colors.secondary,
+                modifier = Modifier.padding(6.dp)
+            )
         }
-
     }
 
 }
 
 @ThemePreviews
 @Composable
-private fun CreateCategoryPreview() {
+private fun EditCategoryScreenPreview() {
     TudeeTheme {
-        CreateCategoryScreen(
+        EditCategoryScreen(
             modifier = Modifier,
-            onAddClick = {},
+            categoryId = 1,
+            onSaveClick = {},
+            onDeleteClick = {},
             onDismiss = {}
         )
     }

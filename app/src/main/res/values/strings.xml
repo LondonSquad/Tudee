@@ -63,5 +63,10 @@
     <string name="clear">Clear</string>
     <string name="ok">OK</string>
     <string name="coding">Coding</string>
+    <string name="category_name">Reading novels</string>
+    <string name="edit_category">Edit Category</string>
+    <string name="category_image">Category image</string>
+    <string name="add_new_category">Add new category</string>
+    <string name="upload">Upload</string>
     <string name="skip">Skip</string>
 </resources>
