@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.categories
+package com.london.tudee.presentation.screens.categories.crud
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
+import com.london.tudee.domain.entities.Category
 import com.london.tudee.presentation.components.TudeeTextField
 import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScreen
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
@@ -41,12 +42,12 @@ import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.color.RectBorderColor
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun CreateCategoryScreen(
     modifier: Modifier = Modifier,
-    onAddClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
     TudeeBottomSheetScreen(
@@ -58,7 +59,6 @@ fun CreateCategoryScreen(
         bottomSheetContent = {
             CreateCategoryContent(
                 modifier = modifier,
-                onAddClick = onAddClick,
                 onDismiss = onDismiss
             )
         }
@@ -68,10 +68,12 @@ fun CreateCategoryScreen(
 @Composable
 private fun CreateCategoryContent(
     modifier: Modifier,
-    onAddClick: () -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    viewModel: CreateCategoryScreenViewModel = koinViewModel()
 ) {
 
+    var categoryName by remember { mutableStateOf("Category Title") }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
 
     Column(
         modifier = modifier
@@ -87,12 +89,12 @@ private fun CreateCategoryContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        var text by remember { mutableStateOf("") }
+
         TudeeTextField(
             icon = R.drawable.add_category_icon,
             hint = R.string.category_name,
-            value = text,
-            onValueChange = { text = it },
+            value = categoryName,
+            onValueChange = { categoryName = it },
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -106,16 +108,30 @@ private fun CreateCategoryContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         ImagePickerAddCategory { uri ->
-            // Handle the picked image URI here
-            //println("Picked image URI: $uri")
+            imageUri = uri
         }
 
         Spacer(modifier = Modifier.height(36.dp))
 
 
         TudeePrimaryButton(
-            onClick = onAddClick,
-            isDisabled = text.isBlank(),
+            onClick = {
+                viewModel.createCategory(
+                    category = Category(
+                        id = 1,
+                        name = categoryName,
+                        arName = categoryName,
+                        iconPath = R.drawable.ic_work.toString(),
+                        isDefault = false
+                    )
+
+                )
+                if (viewModel.uiState.value.isDeleted) {
+                    onDismiss()
+                }
+
+            },
+            isDisabled = categoryName.isBlank() && imageUri == null,
             text = stringResource(R.string.add),
             modifier = Modifier.fillMaxWidth()
         )
@@ -231,7 +247,6 @@ private fun CreateCategoryPreview() {
     TudeeTheme {
         CreateCategoryScreen(
             modifier = Modifier,
-            onAddClick = {},
             onDismiss = {}
         )
     }

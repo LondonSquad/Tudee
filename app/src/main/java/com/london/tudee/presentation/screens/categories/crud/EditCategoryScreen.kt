@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.categories
+package com.london.tudee.presentation.screens.categories.crud
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
+import com.london.tudee.domain.entities.Category
 import com.london.tudee.presentation.components.TudeeTextField
 import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScreen
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
@@ -43,14 +44,13 @@ import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.color.RectBorderColor
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun EditCategoryScreen(
     modifier: Modifier = Modifier,
-    categoryId: Int,
-    onSaveClick: () -> Unit,
-    onDeleteClick: () -> Unit,
+    category: Category,
     onDismiss: () -> Unit
 ) {
     TudeeBottomSheetScreen(
@@ -62,10 +62,8 @@ fun EditCategoryScreen(
         bottomSheetContent = {
             CategoryEditContent(
                 modifier = modifier,
-                categoryId = categoryId,
-                onSaveClick = onSaveClick,
-                onDeleteClick = onDeleteClick,
-                onDismiss = onDismiss
+                category = category,
+                onDismiss = onDismiss,
             )
         }
     )
@@ -74,13 +72,13 @@ fun EditCategoryScreen(
 @Composable
 private fun CategoryEditContent(
     modifier: Modifier = Modifier,
-    categoryId: Int,
-    onSaveClick: () -> Unit,
-    onDeleteClick: () -> Unit,
-    onDismiss: () -> Unit
+    category: Category,
+    onDismiss: () -> Unit,
+    viewModel: EditCategoryScreenViewModel = koinViewModel()
 ) {
-
     val interactionSource = remember { MutableInteractionSource() }
+    var categoryName by remember { mutableStateOf(category.name) }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
 
     Column(
         modifier = modifier
@@ -103,20 +101,20 @@ private fun CategoryEditContent(
                 modifier = Modifier.clickable(
                     interactionSource = interactionSource,
                     indication = null,
-                    onClick = onDeleteClick,
+                    onClick = {
+                        // nav to delete category screen
+                    },
                 )
             )
-
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        var text by remember { mutableStateOf("") }
         TudeeTextField(
             icon = R.drawable.add_category_icon,
             hint = R.string.category_name,
-            value = text,
-            onValueChange = { text = it },
+            value = categoryName,
+            onValueChange = { categoryName = it },
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -130,15 +128,28 @@ private fun CategoryEditContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         ImagePickerEditCategory { uri ->
-            // Handle the picked image URI here
-            //println("Picked image URI: $uri")
+            imageUri = uri
         }
 
         Spacer(modifier = Modifier.height(36.dp))
 
-
         TudeePrimaryButton(
-            onClick = onSaveClick,
+            onClick = {
+                viewModel.editCategory(
+                    category = Category(
+                        id = category.id,
+                        name = categoryName,
+                        arName = categoryName,
+                        //  iconPath = imageUri?.toString() ?: category.iconPath,
+                        iconPath = R.drawable.ic_work.toString(),
+                        isDefault = category.isDefault
+                    )
+                )
+
+                if (viewModel.uiState.value.isDeleted) {
+                    onDismiss()
+                }
+            },
             text = stringResource(R.string.save),
             modifier = Modifier.fillMaxWidth()
         )
@@ -149,10 +160,8 @@ private fun CategoryEditContent(
             onClick = onDismiss,
             text = stringResource(R.string.cancel),
             modifier = Modifier.fillMaxWidth()
-
         )
     }
-
 }
 
 
@@ -232,9 +241,13 @@ private fun EditCategoryScreenPreview() {
     TudeeTheme {
         EditCategoryScreen(
             modifier = Modifier,
-            categoryId = 1,
-            onSaveClick = {},
-            onDeleteClick = {},
+            category = Category(
+                id = 1,
+                name = "Work",
+                arName = "العمل",
+                iconPath = "ic_work",
+                isDefault = true
+            ),
             onDismiss = {}
         )
     }
