@@ -19,8 +19,7 @@ class CategoriesServicesImpl(
     }
 
     override suspend fun edit(service: Category) {
-        val category = service.copy(id = 0)
-        return categoryDao.update(category.convertToCategoryDto())
+        return categoryDao.update(service.convertToCategoryDto())
     }
 
     override suspend fun delete(service: Category) {
