@@ -1,6 +1,6 @@
 package com.london.tudee.presentation.screens.tasks
 
-import com.london.tudee.presentation.model.TaskUiState
+import com.london.tudee.domain.entities.Task
 
 data class FilterTasksUiState(
     val isLoading: Boolean = true,
@@ -11,9 +11,9 @@ data class FilterTasksUiState(
     val currentMonth: String? = null,
     val currentYear: String? = null,
     val tasksCount: Int? = null,
-    val allTasks: List<TaskUiState> = listOf(),
+    val allTasks: List<Task> = listOf(),
     val isDaySelected: Boolean? = null,
-    val doneTasks: List<TaskUiState> = listOf(),
-    val inProgressTasks: List<TaskUiState> = listOf(),
-    val toDoTasks: List<TaskUiState> = listOf(),
+    val doneTasks: List<Task> = listOf(),
+    val inProgressTasks: List<Task> = listOf(),
+    val toDoTasks: List<Task> = listOf(),
 )
