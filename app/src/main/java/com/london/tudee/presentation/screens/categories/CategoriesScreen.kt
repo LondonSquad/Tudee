@@ -62,7 +62,6 @@ fun CategoriesScreen(
                     CategoryItem(
                         iconRes = category.iconRes,
                         title = stringResource(category.title),
-                        tint = category.tint,
                         count = category.count,
                         isSelected = category.isSelected,
                         onClick = { onCategoryClick(category) }
