@@ -91,38 +91,49 @@ fun TasksScreen(
                     0 -> uiState.inProgressTasks
                     1 -> uiState.toDoTasks
                     2 -> uiState.doneTasks
-                    else -> uiState.inProgressTasks // No tasks found added here
+                    else -> emptyList()
                 }
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(TudeeTheme.colors.surface)
                 ) {
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                    ) {
-                        items(tasks.size) { index ->
-                            SwipeToDeleteTask(
-                                modifier = Modifier,
-                                task = tasks[index],
-                                onDeleteClick = {}
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
+                    if (tasks.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(top = 121.dp),
+                            contentAlignment = Alignment.TopCenter
+                        ) {
+                            EmptyTasksScreen()
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            items(tasks.size) { index ->
+                                SwipeToDeleteTask(
+                                    modifier = Modifier,
+                                    task = tasks[index],
+                                    onDeleteClick = {}
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
                         }
                     }
                 }
-            }
 
-            if (showDatePicker) {
-                TudeeDatePicker(
-                    onDateSelected = { date ->
-                        selectedDate = date
-                        showDatePicker = false
-                    },
-                    onDismiss = { showDatePicker = false }
-                )
+                if (showDatePicker) {
+                    TudeeDatePicker(
+                        onDateSelected = { date ->
+                            selectedDate = date
+                            showDatePicker = false
+                        },
+                        onDismiss = { showDatePicker = false }
+                    )
+                }
             }
         }
     }
