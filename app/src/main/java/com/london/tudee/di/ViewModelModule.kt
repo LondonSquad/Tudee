@@ -4,12 +4,14 @@ import com.london.tudee.presentation.screens.categories.crud.CreateCategoryScree
 import com.london.tudee.presentation.screens.categories.crud.DeleteCategoryScreenViewModel
 import com.london.tudee.presentation.screens.categories.crud.EditCategoryScreenViewModel
 import com.london.tudee.presentation.screens.home.HomeViewModel
+import com.london.tudee.presentation.screens.onboarding.OnBoardingViewModel
+import com.london.tudee.presentation.screens.onboarding.OnboardingPreferences
 import com.london.tudee.presentation.screens.task.confirm_delete_task.ConfirmDeleteTaskViewModel
 import com.london.tudee.presentation.screens.task.task_details.TaskDetailsViewModel
 import com.london.tudee.presentation.screens.task.view_tasks.EditTaskViewModel
 import com.london.tudee.presentation.screens.tasks.TasksScreenViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.scope.get
+import org.koin.core.module.dsl.viewModel
+
 import org.koin.dsl.module
 
 val viewModelModule = module {
