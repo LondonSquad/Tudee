@@ -18,8 +18,7 @@ class TasksServicesImpl(
     }
 
     override suspend fun edit(service: Task) {
-        val task = service.copy(id = 0)
-        return taskDao.update(task.convertToTaskDto())
+        return taskDao.update(service.convertToTaskDto())
     }
 
     override suspend fun delete(service: Task) {

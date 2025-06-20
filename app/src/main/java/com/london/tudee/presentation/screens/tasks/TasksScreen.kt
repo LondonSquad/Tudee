@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,15 +36,19 @@ import com.london.tudee.R
 import com.london.tudee.presentation.components.date.DateItem
 import com.london.tudee.presentation.components.date.TudeeDatePicker
 import com.london.tudee.presentation.components.tabs.TabItem
-import com.london.tudee.presentation.components.tabs.TudeeTabLayout
+import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.SwipeToDeleteTask
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TasksScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: TasksScreenViewModel = koinViewModel()
 ) {
+
+    val uiState by viewModel.uiState.collectAsState()
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -71,51 +76,61 @@ fun TasksScreen(
                 onClickDate = { showDatePicker = true },
                 dates = fakeDates
             )
-            TudeeTabLayout(
+            TudeeTabLayoutWithPager(
                 tabs = listOf(
-                    TabItem(text = R.string.In_Progress, number = 14),
-                    TabItem(text = R.string.To_Do, number = 2),
-                    TabItem(text = R.string.Done, number = 10),
-                ),
-                selectedIndex = 0,
-                onTabSelected = {},
-                modifier = Modifier.fillMaxWidth()
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(TudeeTheme.colors.stroke)
-            )
+                    TabItem(text = R.string.In_Progress, number = uiState.inProgressTasks.size),
+                    TabItem(text = R.string.To_Do, number = uiState.toDoTasks.size),
+                    TabItem(text = R.string.Done, number = uiState.doneTasks.size),
 
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(TudeeTheme.colors.surface)
-            ) {
-                LazyColumn(
+                    )
+            ) { page ->
+                val tasks = when (page) {
+                    0 -> uiState.inProgressTasks
+                    1 -> uiState.toDoTasks
+                    2 -> uiState.doneTasks
+                    else -> emptyList()
+                }
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .background(TudeeTheme.colors.surface)
                 ) {
-                    items(tasks1.size) { index ->
-                        SwipeToDeleteTask(
-                            modifier = Modifier,
-                            task = tasks1[index],
-                            onDeleteClick = {}
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
+                    if (tasks.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(top = 121.dp),
+                            contentAlignment = Alignment.TopCenter
+                        ) {
+                            EmptyTasksScreen()
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            items(tasks.size) { index ->
+                                SwipeToDeleteTask(
+                                    modifier = Modifier,
+                                    task = tasks[index],
+                                    onDeleteClick = {}
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
+                        }
                     }
                 }
-            }
-            if (showDatePicker) {
-                TudeeDatePicker(
-                    onDateSelected = { date ->
-                        selectedDate = date
-                        showDatePicker = false
-                    },
-                    onDismiss = { showDatePicker = false }
-                )
+
+                if (showDatePicker) {
+                    TudeeDatePicker(
+                        onDateSelected = { date ->
+                            selectedDate = date
+                            showDatePicker = false
+                        },
+                        onDismiss = { showDatePicker = false }
+                    )
+                }
             }
         }
     }

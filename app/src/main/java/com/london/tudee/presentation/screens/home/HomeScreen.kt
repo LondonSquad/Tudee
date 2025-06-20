@@ -1,8 +1,6 @@
 package com.london.tudee.presentation.screens.home
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -490,7 +488,6 @@ private fun DoneSection(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @ThemePreviews
 @Composable
 fun PreviewHomeScreen() {

@@ -76,4 +76,6 @@
     <string name="encouragement_message">انت رائع!&#10;تادي فخور بك</string>
     <string name="blaming_message">تادي يشاهدك! هيا الي العمل&#10;انت فقط تشاهد ليس هناك عمل!</string>
     <string name="Overview">نظره عامه</string>
+    <string name="no_task_today">لا توجد مهام.</string>
+    <string name="tap_to_add_task">اضغط على زر + لإضافة أول مهمة.</string>
 </resources>
