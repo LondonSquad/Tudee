@@ -8,7 +8,8 @@ import com.london.tudee.presentation.screens.task.confirm_delete_task.ConfirmDel
 import com.london.tudee.presentation.screens.task.task_details.TaskDetailsViewModel
 import com.london.tudee.presentation.screens.task.view_tasks.EditTaskViewModel
 import com.london.tudee.presentation.screens.tasks.TasksScreenViewModel
-import org.koin.core.module.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.scope.get
 import org.koin.dsl.module
 
 val viewModelModule = module {
@@ -21,4 +22,7 @@ val viewModelModule = module {
     viewModel { EditCategoryScreenViewModel(get()) }
     viewModel { CreateCategoryScreenViewModel(get()) }
     viewModel { DeleteCategoryScreenViewModel(get()) }
+    single { OnboardingPreferences(get()) }
+    viewModel { OnBoardingViewModel(get()) }
+
 }
