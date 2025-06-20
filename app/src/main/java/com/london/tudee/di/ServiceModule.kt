@@ -6,6 +6,7 @@ import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
+import com.london.tudee.domain.services.Services
 import org.koin.dsl.module
 
 val serviceModule = module {
