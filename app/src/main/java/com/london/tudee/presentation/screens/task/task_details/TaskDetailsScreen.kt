@@ -32,6 +32,7 @@ import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.runtime.getValue
+import com.london.tudee.presentation.screens.task.task_details.TaskDetailsViewModel
 
 @Composable
 fun TaskDetailsScreen(

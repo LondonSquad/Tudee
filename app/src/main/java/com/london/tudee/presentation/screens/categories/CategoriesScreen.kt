@@ -28,8 +28,8 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun CategoriesScreen(
     @StringRes screenTitle: Int = R.string.categories,
-    categories: List<CategoryUiModel> = rememberSampleCategories(),
-    onCategoryClick: (CategoryUiModel) -> Unit,
+    categories: List<CategoryUiModel> = getSampleCategories(TudeeTheme.colors),
+    onCategoryClick: (Int) -> Unit,
     onAddCategoryClick: () -> Unit
 ) {
     Box(
@@ -64,7 +64,7 @@ fun CategoriesScreen(
                         title = stringResource(category.title),
                         count = category.count,
                         isSelected = category.isSelected,
-                        onClick = { onCategoryClick(category) }
+                        onClick = { onCategoryClick(category.id) }
                     )
                 }
             }
@@ -88,7 +88,7 @@ fun CategoriesScreenPreview() {
     TudeeTheme {
         CategoriesScreen(
             screenTitle = R.string.categories,
-            categories = rememberSampleCategories(),
+            categories = getSampleCategories(TudeeTheme.colors),
             onCategoryClick = {},
             onAddCategoryClick = {}
         )

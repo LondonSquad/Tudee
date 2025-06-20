@@ -17,6 +17,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -65,7 +66,8 @@ fun SwipeToDeleteTask(
                         offsetX = (offsetX + dragAmount).coerceIn(-swipeThreshold, 0f)
                     }
                 },
-            hasDate = true
+            hasDate = true,
+            onTaskClicked = {}
         )
     }
 }

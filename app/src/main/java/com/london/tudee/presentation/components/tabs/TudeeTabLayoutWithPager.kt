@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,6 +51,7 @@ fun TudeeTabLayout(
 @Composable
 fun TudeeTabLayoutWithPager(
     modifier: Modifier = Modifier,
+   // pagerState: PagerState,
     tabs: List<TabItem> = listOf(
         TabItem(text = R.string.In_Progress, number = 14),
         TabItem(text = R.string.To_Do, number = 8),
@@ -87,7 +89,9 @@ fun TabLayoutScreen(modifier: Modifier = Modifier) {
             .fillMaxSize()
             .background(TudeeTheme.colors.surface)
     ) {
-        TudeeTabLayoutWithPager { page ->
+        TudeeTabLayoutWithPager(
+            //pagerState = rememberPagerState { 3 }
+        ) { page ->
             // Content for each tab
             Box(
                 modifier = Modifier.fillMaxSize(), contentAlignment = Center

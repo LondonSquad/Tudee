@@ -2,6 +2,7 @@ package com.london.tudee.presentation.components.task
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,13 +44,15 @@ fun TaskItem(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
     task: Task,
-    hasDate: Boolean
+    hasDate: Boolean,
+    onTaskClicked: (Task) -> Unit
 ) {
 
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(111.dp),
+            .height(111.dp)
+            .clickable{ onTaskClicked(task) },
         shape = TudeeTheme.shapes.small,
         colors = CardDefaults.cardColors(containerColor = TudeeTheme.colors.surfaceHigh)
     ) {
@@ -171,7 +174,8 @@ fun PreviewTaskItemHigh() {
                 timeStamp = Instant.parse("2023-09-20T00:00:00Z"),
                 taskStatus = TaskStatus.TODO
             ),
-            hasDate = true
+            hasDate = true,
+            onTaskClicked = {}
         )
     }
 }
@@ -190,7 +194,8 @@ fun PreviewTaskItemMedium() {
                 timeStamp =  Instant.parse("2023-09-20T00:00:00Z"),
                 taskStatus = TaskStatus.TODO
             ),
-            hasDate = true
+            hasDate = true,
+            onTaskClicked = {}
         )
     }
 }
@@ -209,7 +214,8 @@ fun PreviewTaskItemLow() {
                 timeStamp = Instant.parse("2023-09-20T00:00:00Z"),
                 taskStatus = TaskStatus.TODO
             ),
-            hasDate = false
+            hasDate = false,
+            onTaskClicked = {}
         )
     }
 }

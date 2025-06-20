@@ -34,6 +34,8 @@ import com.london.tudee.presentation.components.date.TudeeDatePicker
 import com.london.tudee.presentation.components.priority.PrioritySelector
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.categories.CategoryUiModel
+import com.london.tudee.presentation.screens.categories.getSampleCategories
 import com.london.tudee.presentation.mapper.CategoryMapper
 import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
@@ -100,6 +102,12 @@ private fun TaskDetailsContent(
     onPrioritySelected: (Priority) -> Unit,
     onCategorySelected: (Category) -> Unit,
 ) {
+    var selectedPriority by remember { mutableStateOf(Priority.HIGH) }
+    var selectedCategory by remember { mutableStateOf<CategoryUiModel?>(null) }
+    var selectedDate by remember { mutableStateOf<Long?>(null) }
+    var showDatePicker by remember { mutableStateOf(false) }
+    //val categories = getSampleCategories(TudeeTheme.colors)
+
     Column(
         modifier = modifier
     ) {

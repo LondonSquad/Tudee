@@ -30,29 +30,33 @@ fun TudeeBottomNavigationBar(
     navController: NavHostController,
     items: List<TudeeBottomNavItem> = TudeeBottomNavItems.items,
 ) {
+//    val navBackStackEntry by navController.currentBackStackEntryAsState()
+//    val currentRoute = navBackStackEntry?.destination?.route
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-
-
+    val currentRoute = navBackStackEntry?.destination?.route?.substringBefore("?")
     NavigationBar(
         modifier = modifier,
         tonalElevation = 0.dp,
         containerColor = TudeeTheme.colors.surfaceHigh
     ) {
+
+
         items.forEach { item ->
             val isSelected = item.route == currentRoute
             NavigationBarItem(
                 selected = isSelected,
                 onClick = {
-                    if (item.route != currentRoute) {
+                    if (!isSelected) {
                         navController.navigate(item.route) {
                             launchSingleTop = true
-                            popUpTo(navController.graph.startDestinationId) { saveState = true }
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
                             restoreState = true
                         }
                     }
-                },
-                icon = {
+                }, icon = {
                     if (isSelected) {
                         Box(
                             modifier = Modifier

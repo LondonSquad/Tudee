@@ -111,23 +111,32 @@ private fun ConfirmDeleteBottomSheetActions(
         )
     }
 
-}
-
-@ThemePreviews
-@Composable
-fun ConfirmDeleteBottomSheetContentPreview() {
-    TudeeTheme {
-        ConfirmDeleteBottomSheetContent()
+    //@ThemePreviews
+    @Composable
+    fun ConfirmDeleteTaskScreenPreview() {
+        TudeeTheme {
+//        ConfirmDeleteTaskScreen(
+//            onDeleteConfirmed = {},
+//        )
+        }
     }
-}
 
-@ThemePreviews
-@Composable
-fun ConfirmDeleteBottomSheetActionsPreview() {
-    TudeeTheme {
-        ConfirmDeleteBottomSheetActions(
-            onDelete = {},
-            onCancel = {}
-        )
+    //@ThemePreviews
+    @Composable
+    fun ConfirmDeleteBottomSheetContentPreview() {
+        TudeeTheme {
+            ConfirmDeleteBottomSheetContent()
+        }
+    }
+
+   // @ThemePreviews
+    @Composable
+    fun ConfirmDeleteBottomSheetActionsPreview() {
+        TudeeTheme {
+            ConfirmDeleteBottomSheetActions(
+                onDelete = {},
+                onCancel = {}
+            )
+        }
     }
 }

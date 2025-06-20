@@ -2,6 +2,7 @@ package com.london.tudee.presentation.screens.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,17 +50,26 @@ import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import org.koin.androidx.compose.koinViewModel
+import com.london.tudee.presentation.navigation.TaskTabStatus
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = koinViewModel()
+    viewModel: HomeViewModel = koinViewModel(),
+    onFabClicked: () -> Unit,
+    onTaskClicked: (Task) -> Unit,
+    onArrowClicked: (TaskTabStatus) -> Unit
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
     when {
         uiState.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
-        else -> HomeScreenContent(uiState)
+        else -> HomeScreenContent(
+            state =  uiState,
+            onFabClicked = onFabClicked,
+            onArrowClicked = onArrowClicked,
+            onTaskClicked = onTaskClicked
+        )
     }
 }
 
@@ -86,14 +96,17 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreenContent(
-    state: HomeUiState
+    state: HomeUiState,
+    onFabClicked: () -> Unit,
+    onTaskClicked: (Task) -> Unit,
+    onArrowClicked: (TaskTabStatus) -> Unit
 ) {
     Scaffold(
         floatingActionButton = {
             TudeeFloatingActionButton(
                 painter = painterResource(R.drawable.note_add),
                 contentDescription = "note icon",
-                onClick = { },
+                onClick = onFabClicked,
                 isEnabled = true
             )
         }
@@ -119,19 +132,25 @@ fun HomeScreenContent(
                 )
 
                 InProgressSection(
-                    inProgressTasks = state.inProgressTasks
+                    inProgressTasks = state.inProgressTasks,
+                            onTaskClicked  = onTaskClicked
+                    , onArrowClicked= onArrowClicked
                 )
 
                 Spacer(Modifier.height(24.dp))
 
                 ToDoSection(
-                    toDoTasks = state.toDoTasks
+                    toDoTasks = state.toDoTasks,
+                    onTaskClicked  = onTaskClicked,
+                    onArrowClicked = onArrowClicked
                 )
 
                 Spacer(Modifier.height(24.dp))
 
                 DoneSection(
-                    doneTasks = state.doneTasks
+                    doneTasks = state.doneTasks,
+                    onTaskClicked = onTaskClicked,
+                    onArrowClicked = onArrowClicked
                 )
             }
         }
@@ -268,7 +287,9 @@ private fun OverLayerBox(
 
 @Composable
 private fun ToDoSection(
-    toDoTasks: List<Task>
+    toDoTasks: List<Task>,
+    onTaskClicked: (Task) -> Unit,
+    onArrowClicked: (TaskTabStatus) -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -294,6 +315,7 @@ private fun ToDoSection(
             contentAlignment = Alignment.Center
         ) {
             Row(
+                modifier = Modifier.clickable{ onArrowClicked(TaskTabStatus.TODO) },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
@@ -335,6 +357,7 @@ private fun ToDoSection(
                 isSelected = true,
                 task = toDoTasks[it],
                 hasDate = false,
+                onTaskClicked = onTaskClicked
             )
         }
     }
@@ -342,7 +365,9 @@ private fun ToDoSection(
 
 @Composable
 private fun InProgressSection(
-    inProgressTasks: List<Task>
+    inProgressTasks: List<Task>,
+    onTaskClicked: (Task) -> Unit,
+    onArrowClicked: (TaskTabStatus) -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -368,6 +393,7 @@ private fun InProgressSection(
             contentAlignment = Alignment.Center
         ) {
             Row(
+                modifier = Modifier.clickable{ onArrowClicked(TaskTabStatus.IN_PROGRESS) },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
@@ -408,7 +434,8 @@ private fun InProgressSection(
                     .height(111.dp),
                 isSelected = true,
                 task = inProgressTasks[it],
-                hasDate = false
+                hasDate = false,
+                onTaskClicked = onTaskClicked
             )
         }
     }
@@ -416,7 +443,9 @@ private fun InProgressSection(
 
 @Composable
 private fun DoneSection(
-    doneTasks: List<Task>
+    doneTasks: List<Task>,
+    onTaskClicked: (Task) -> Unit,
+    onArrowClicked: (TaskTabStatus) -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -442,6 +471,7 @@ private fun DoneSection(
             contentAlignment = Alignment.Center
         ) {
             Row(
+                modifier = Modifier.clickable{ onArrowClicked(TaskTabStatus.DONE) },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
@@ -482,7 +512,8 @@ private fun DoneSection(
                     .height(111.dp),
                 isSelected = true,
                 task = doneTasks[it],
-                hasDate = false
+                hasDate = false,
+                onTaskClicked = onTaskClicked
             )
         }
     }
@@ -492,6 +523,6 @@ private fun DoneSection(
 @Composable
 fun PreviewHomeScreen() {
     TudeeTheme {
-        HomeScreen()
+       // HomeScreen()
     }
 }
