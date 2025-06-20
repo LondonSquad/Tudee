@@ -1,11 +1,7 @@
 package com.london.tudee.presentation.screens.tasks
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.london.tudee.domain.entities.Priority
-import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
@@ -15,9 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Instant
 
-@RequiresApi(Build.VERSION_CODES.O)
 class TasksScreenViewModel(
     private val taskService: TaskService,
     private val categoryService: CategoryService

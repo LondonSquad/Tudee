@@ -1,7 +1,5 @@
 package com.london.tudee.presentation.screens.tasks
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -44,7 +42,6 @@ import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import org.koin.androidx.compose.koinViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TasksScreen(
     modifier: Modifier = Modifier,
@@ -277,7 +274,6 @@ fun DayOfWeekSelector(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @ThemePreviews
 @Composable
 fun TasksScreenPreview() {
