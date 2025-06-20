@@ -63,7 +63,7 @@
     <string name="clear">Clear</string>
     <string name="ok">OK</string>
     <string name="coding">Coding</string>
-    <string name="category_name">Reading novels</string>
+    <string name="category_name">Category Title</string>
     <string name="edit_category">Edit Category</string>
     <string name="category_image">Category image</string>
     <string name="add_new_category">Add new category</string>
@@ -79,4 +79,5 @@
     <string name="task_progress">You\'ve completed %1$d out of %2$d, keep going!</string>
     <string name="encouragement_message">You\'re doing amazing!!!!&#10;Tudee is proud of you.</string>
     <string name="blaming_message">You just scrolling, not working.&#10;Tudee is watching. back to work!!!!</string>
+    <string name="delete_category">Delete Category</string>
 </resources>

@@ -1,5 +1,8 @@
 package com.london.tudee.di
 
+import com.london.tudee.presentation.screens.categories.crud.CreateCategoryScreenViewModel
+import com.london.tudee.presentation.screens.categories.crud.DeleteCategoryScreenViewModel
+import com.london.tudee.presentation.screens.categories.crud.EditCategoryScreenViewModel
 import com.london.tudee.presentation.screens.home.HomeViewModel
 import com.london.tudee.presentation.screens.task.confirm_delete_task.ConfirmDeleteTaskViewModel
 import com.london.tudee.presentation.screens.task.task_details.TaskDetailsViewModel
@@ -15,4 +18,7 @@ val viewModelModule = module {
     viewModel { TaskDetailsViewModel(get(), get()) }
     viewModel { HomeViewModel(get(), get()) }
     viewModel { EditTaskViewModel(get(), get()) }
+    viewModel { EditCategoryScreenViewModel(get()) }
+    viewModel { CreateCategoryScreenViewModel(get()) }
+    viewModel { DeleteCategoryScreenViewModel(get()) }
 }

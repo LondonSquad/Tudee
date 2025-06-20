@@ -73,4 +73,5 @@
     <string name="encouragement_message">انت رائع!&#10;تادي فخور بك</string>
     <string name="blaming_message">تادي يشاهدك! هيا الي العمل&#10;انت فقط تشاهد ليس هناك عمل!</string>
     <string name="Overview">نظره عامه</string>
+    <string name="delete_category">حذف الفئه</string>
 </resources>
