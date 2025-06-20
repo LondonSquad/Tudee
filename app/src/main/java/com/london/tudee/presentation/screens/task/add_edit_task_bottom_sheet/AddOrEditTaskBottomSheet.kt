@@ -76,7 +76,6 @@ fun AddOrEditTaskBottomSheet(
             }
         )
 
-        // Show SnackBar at the top of the screen
         if (uiState.successMessage != null || uiState.errorMessage != null) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -105,7 +104,6 @@ fun AddOrEditTaskBottomSheet(
                 }
             }
 
-            // Auto-hide snackbar after 3 seconds
             LaunchedEffect(uiState.successMessage, uiState.errorMessage) {
                 delay(3000)
                 viewModel.clearMessages()

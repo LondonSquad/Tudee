@@ -105,7 +105,6 @@ fun TestScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Add Task Button
                 Button(
                     onClick = onAddTaskClick,
                     colors = ButtonDefaults.buttonColors(
