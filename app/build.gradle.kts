@@ -65,14 +65,15 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.room.rxjava3)
-    implementation(libs.koin.android)
 
     // coil
     implementation (libs.coil.compose)
     
     // koin
-    implementation(libs.koin.android)
-    implementation(libs.koin.compose)
+    implementation (libs.koin.android)
+    implementation (libs.koin.androidx.compose)
+
+    implementation(libs.kotlinx.datetime)
 }
 
 tasks.register("installGitHooks") {

@@ -42,8 +42,10 @@ fun DateBadge(
     lineHeight: TextUnit,
     iconColor: Color,
     textColor: Color,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
+    isVisible: Boolean
 ) {
+    if (!isVisible) return
     Card(
         modifier = modifier,
         shape = shape,
@@ -92,7 +94,8 @@ fun PreviewDateBadge() {
             lineHeight = 16.sp,
             iconColor = TudeeTheme.colors.body,
             textColor = TudeeTheme.colors.body,
-            contentPadding = PaddingValues(vertical = 6.dp, horizontal = 8.dp)
+            contentPadding = PaddingValues(vertical = 6.dp, horizontal = 8.dp),
+            isVisible = true
         )
     }
 }
@@ -112,7 +115,8 @@ fun PreviewDateBadgeHomeScreen() {
             lineHeight = 16.sp,
             iconColor = TudeeTheme.colors.body,
             textColor = TudeeTheme.colors.body,
-            contentPadding = PaddingValues(vertical = 0.dp, horizontal = 8.dp)
+            contentPadding = PaddingValues(vertical = 0.dp, horizontal = 8.dp),
+            isVisible = false
         )
     }
 }

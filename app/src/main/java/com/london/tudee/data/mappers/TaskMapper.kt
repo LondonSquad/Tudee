@@ -2,7 +2,8 @@ package com.london.tudee.data.mappers
 
 import com.london.tudee.data.local.room_db.dto.TaskDto
 import com.london.tudee.domain.entities.Task
-import com.london.tudee.domain.mapper.convertFromTimeStampToDate
+import com.london.tudee.domain.mapper.convertToInstant
+import com.london.tudee.domain.mapper.convertToMillis
 
 fun TaskDto.convertToTask(): Task {
     return Task(
@@ -12,8 +13,7 @@ fun TaskDto.convertToTask(): Task {
         taskStatus = this.taskStatus,
         priority = this.priority,
         categoryId = this.categoryId,
-        timeStamp = this.timeStamp.convertFromTimeStampToDate(),
-
+        timeStamp = this.timeStamp.convertToInstant(),
     )
 }
 
@@ -25,6 +25,6 @@ fun Task.convertToTaskDto(): TaskDto {
         taskStatus = this.taskStatus,
         priority = this.priority,
         categoryId = this.categoryId,
-        timeStamp = this.timeStamp.convertFromTimeStampToDate(),
+        timeStamp = this.timeStamp.convertToMillis(),
     )
 }

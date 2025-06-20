@@ -64,4 +64,13 @@
     <string name="add_new_category">اضافة فئه جديده</string>
     <string name="upload">تحميل</string>
     <string name="successfully">تم بنجاح</string>
+    <string name="Tadaa">تهانينا!</string>
+    <string name="Stay_working">واصل العمل!</string>
+    <string name="Nothing_on_your_list">ليس لديك مهام بعد</string>
+    <string name="Zero_progress">لا يوجد تقدم؟!</string>
+    <string name="Fill_your_day_with_something_awesome.">ابدا بوضع خطط ليومك</string>
+    <string name="task_progress">لقد اكملت %1$d من %2$d واصل العمل!</string>
+    <string name="encouragement_message">انت رائع!&#10;تادي فخور بك</string>
+    <string name="blaming_message">تادي يشاهدك! هيا الي العمل&#10;انت فقط تشاهد ليس هناك عمل!</string>
+    <string name="Overview">نظره عامه</string>
 </resources>
