@@ -27,15 +27,17 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Priority
+import com.london.tudee.domain.entities.Task
+import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.model.TaskUiState
+import kotlinx.datetime.Clock
 import kotlin.math.roundToInt
 
 @Composable
 fun SwipeToDeleteTask(
     modifier: Modifier = Modifier,
-    taskUiState: TaskUiState,
+    task: Task,
     onDeleteClick: () -> Unit
 ) {
     var offsetX by remember { mutableFloatStateOf(0f) }
@@ -51,7 +53,7 @@ fun SwipeToDeleteTask(
         }
 
         TaskItem(
-            taskUiState = taskUiState,
+            task = task,
             modifier = Modifier
                 .offset { IntOffset(offsetX.roundToInt(), 0) }
                 .pointerInput(Unit) {
@@ -101,13 +103,14 @@ private fun DeleteBackground(onDeleteClick: () -> Unit) {
 fun SwipeToDeleteTaskPreview() {
     TudeeTheme {
         SwipeToDeleteTask(
-            taskUiState = TaskUiState(
+            task = Task(
                 id = 1,
                 title = "Buy groceries",
                 description = "Milk, Bread, Eggs",
-                date = "18-06-2025",
+                timeStamp = Clock.System.now(),
                 priority = Priority.HIGH,
-                iconResId = R.drawable.ic_education
+                categoryId = 1,
+                taskStatus = TaskStatus.TODO
             ),
             onDeleteClick = {}
         )

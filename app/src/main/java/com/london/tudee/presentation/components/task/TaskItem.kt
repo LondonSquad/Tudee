@@ -27,19 +27,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Priority
+import com.london.tudee.domain.entities.Task
 import com.london.tudee.presentation.components.date.DateBadge
 import com.london.tudee.presentation.components.priority.PriorityBadge
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.model.TaskUiState
+import com.london.tudee.domain.entities.TaskStatus
+import com.london.tudee.presentation.utils.formatDate
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+
 
 @Composable
 fun TaskItem(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
-    taskUiState: TaskUiState,
+    task: Task,
     hasDate: Boolean
 ) {
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -54,19 +60,19 @@ fun TaskItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            TaskItemIconSection(taskUiState.iconResId)
+            TaskItemIconSection(task.categoryId)
             Spacer(modifier = Modifier.width(8.dp))
             TaskItemTopBar(
-                priority = taskUiState.priority,
-                date = taskUiState.date,
+                priority = task.priority,
+                date = formatDate(task.timeStamp),
                 isSelected = isSelected,
                 hasDate = hasDate
             )
         }
 
         TaskItemContent(
-            title = taskUiState.title,
-            description = taskUiState.description
+            title = task.title,
+            description = task.description
         )
     }
 }
@@ -156,51 +162,52 @@ private fun TaskItemContent(
 fun PreviewTaskItemHigh() {
     TudeeTheme {
         TaskItem(
-            taskUiState = TaskUiState(
+            task = Task(
                 id = 1,
                 priority = Priority.HIGH,
-                iconResId = R.drawable.ic_education,
+                categoryId = R.drawable.ic_education,
                 title = "Organize Study Desk",
                 description = "Review cell structure and functions for tomorrow...",
-                date = "12-04-2025"
+                timeStamp = Instant.parse("2023-09-20T00:00:00Z"),
+                taskStatus = TaskStatus.TODO
             ),
             hasDate = true
         )
     }
 }
-
 
 @ThemePreviews
 @Composable
 fun PreviewTaskItemMedium() {
     TudeeTheme {
         TaskItem(
-            taskUiState = TaskUiState(
+            task = Task(
                 id = 1,
                 priority = Priority.MEDIUM,
-                iconResId = R.drawable.ic_education,
+                categoryId = R.drawable.ic_education,
                 title = "Organize Study Desk",
                 description = "Review cell structure and functions for tomorrow...",
-                date = "12-04-2025"
+                timeStamp =  Instant.parse("2023-09-20T00:00:00Z"),
+                taskStatus = TaskStatus.TODO
             ),
             hasDate = true
         )
     }
 }
 
-
 @ThemePreviews
 @Composable
 fun PreviewTaskItemLow() {
     TudeeTheme {
         TaskItem(
-            taskUiState = TaskUiState(
+            task = Task(
                 id = 1,
                 priority = Priority.LOW,
-                iconResId = R.drawable.ic_education,
+                categoryId = R.drawable.ic_education,
                 title = "Organize Study Desk",
                 description = "Review cell structure and functions for tomorrow...",
-                date = "12-04-2025"
+                timeStamp = Instant.parse("2023-09-20T00:00:00Z"),
+                taskStatus = TaskStatus.TODO
             ),
             hasDate = false
         )
