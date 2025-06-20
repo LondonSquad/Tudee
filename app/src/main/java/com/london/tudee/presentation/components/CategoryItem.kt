@@ -23,7 +23,6 @@ fun CategoryItem(
     title: String,
     tint: Color,
     count: Int? = null,
-    isSelected: Boolean = false,
     onClick: () -> Unit
 ) {
     Column(
@@ -49,45 +48,24 @@ fun CategoryItem(
                 tint = tint
             )
 
-            if (isSelected) {
+            count?.let {
                 Box(
                     modifier = Modifier
+                        .width(36.dp)
                         .align(Alignment.TopEnd)
                         .offset(x = 20.dp, y = (-20).dp)
-                        .size(  20.dp)
                         .background(
-                            color = TudeeTheme.colors.greenAccent,
+                            color = TudeeTheme.colors.surfaceLow,
                             shape = TudeeTheme.shapes.circle
-                        ),
+                        )
+                        .padding(horizontal = 6.dp, vertical = 2.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_check),
-                        contentDescription = null,
-                        modifier = Modifier.size(12.dp),
-                        tint = TudeeTheme.colors.onPrimary.copy(alpha = 0.87f)
+                    Text(
+                        text = count.toString(),
+                        style = TudeeTheme.typography.labelSmall,
+                        color = TudeeTheme.colors.hint
                     )
-                }
-            } else {
-                count?.let {
-                    Box(
-                        modifier = Modifier
-                            .width(36.dp)
-                            .align(Alignment.TopEnd)
-                            .offset(x = 20.dp, y = (-20).dp)
-                            .background(
-                                color = TudeeTheme.colors.surfaceLow,
-                                shape = TudeeTheme.shapes.circle
-                            )
-                            .padding(horizontal = 6.dp, vertical = 2.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = count.toString(),
-                            style = TudeeTheme.typography.labelSmall,
-                            color = TudeeTheme.colors.hint
-                        )
-                    }
                 }
             }
         }
@@ -125,7 +103,6 @@ fun CategoryItemPreview() {
                 title = "Event",
                 tint = TudeeTheme.colors.pinkAccent,
                 count = 2,
-                isSelected = true,
                 onClick = {}
             )
 

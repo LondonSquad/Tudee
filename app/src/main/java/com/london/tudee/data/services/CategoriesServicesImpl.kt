@@ -5,7 +5,6 @@ import com.london.tudee.data.mappers.convertToCategory
 import com.london.tudee.data.mappers.convertToCategoryDto
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.services.CategoryService
-import com.london.tudee.domain.services.Services
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -36,7 +35,7 @@ class CategoriesServicesImpl(
         return categoryDao.getById(id).convertToCategory()
     }
 
-    override fun getIconPathById(id: Int): Int {
-        return categoryDao.getIconPathById(id)
+    override fun getIconResById(id: Int): Int {
+        return categoryDao.getIconResById(id)
     }
 }

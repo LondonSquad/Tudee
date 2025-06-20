@@ -22,7 +22,7 @@ class TaskDetailsViewModel(
     fun loadTask(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             val task = taskService.getById(id)
-            val icon = categoryService.getIconPathById(task.categoryId)
+            val icon = categoryService.getIconResById(task.categoryId)
             _uiState.update {
                 it.copy(task = task, categoryIcon = icon)
             }

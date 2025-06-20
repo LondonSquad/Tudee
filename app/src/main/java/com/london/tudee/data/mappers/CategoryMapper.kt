@@ -9,7 +9,9 @@ fun CategoryDto.convertToCategory(): Category {
         name = this.name,
         arName = this.arName,
         isDefault = this.isDefault,
-        iconPath = this.iconPath.toString()
+        iconRes = this.iconRes,
+        taskCount = this.taskCount,
+        tint = this.tint
     )
 }
 
@@ -19,6 +21,8 @@ fun Category.convertToCategoryDto(): CategoryDto {
         name = this.name,
         arName = this.arName,
         isDefault = this.isDefault,
-        iconPath = this.iconPath.toInt()
+        iconRes = this.iconRes,
+        taskCount = this.taskCount,
+        tint = this.tint
     )
 }

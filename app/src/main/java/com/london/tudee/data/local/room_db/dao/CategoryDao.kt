@@ -16,8 +16,8 @@ interface CategoryDao {
     @Query("SELECT * FROM CATEGORY_TABLE WHERE id = :id")
     fun getById(id: Int): CategoryDto
 
-    @Query("SELECT iconPath FROM CATEGORY_TABLE WHERE id = :id")
-    fun getIconPathById(id: Int): Int
+    @Query("SELECT iconRes FROM CATEGORY_TABLE WHERE id = :id")
+    fun getIconResById(id: Int): Int
 
     @Insert
     suspend fun insert(category: CategoryDto)

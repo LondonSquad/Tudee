@@ -40,7 +40,7 @@ class EditTaskViewModel(
                         isLoading = false,
                         errMessage = null,
                         allTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconPathById(it.categoryId))
+                            it.copy(categoryId = categoryService.getIconResById(it.categoryId))
                         },
                     )
                 }
@@ -60,7 +60,7 @@ class EditTaskViewModel(
                         isLoading = false,
                         errMessage = null,
                         doneTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconPathById(it.categoryId))
+                            it.copy(categoryId = categoryService.getIconResById(it.categoryId))
                         },
                     )
                 }
@@ -80,7 +80,7 @@ class EditTaskViewModel(
                         isLoading = false,
                         errMessage = null,
                         inProgressTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconPathById(it.categoryId))
+                            it.copy(categoryId = categoryService.getIconResById(it.categoryId))
                         }
                     )
                 }
@@ -100,7 +100,7 @@ class EditTaskViewModel(
                         isLoading = false,
                         errMessage = null,
                         toDoTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconPathById(it.categoryId))
+                            it.copy(categoryId = categoryService.getIconResById(it.categoryId))
                         }
                     )
                 }

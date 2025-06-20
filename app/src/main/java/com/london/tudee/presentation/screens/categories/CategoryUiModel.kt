@@ -11,8 +11,7 @@ data class CategoryUiModel(
     @DrawableRes val iconRes: Int,
     @StringRes val title: Int,
     val tint: Color,
-    val count: Int,
-    val isSelected: Boolean = false
+    val count: Int
 )
 
 @Composable

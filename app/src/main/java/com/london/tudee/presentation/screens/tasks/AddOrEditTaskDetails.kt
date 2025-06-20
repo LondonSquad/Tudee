@@ -21,7 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
@@ -45,7 +45,7 @@ fun AddOrEditTaskDetails(
     onTitleValueChange: (String) -> Unit,
     onDescriptionValueChange: (String) -> Unit,
 ) {
-    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+    val screenHeight = LocalWindowInfo.current.containerSize.height.dp
     val maxHeight = screenHeight * 0.75f
 
     Column(
@@ -221,7 +221,6 @@ private fun CategoriesGrid(
                         iconRes = category.iconRes,
                         title = stringResource(category.title),
                         tint = category.tint,
-                        isSelected = category == selectedCategory,
                         onClick = { onCategorySelected(category) }
                     )
 

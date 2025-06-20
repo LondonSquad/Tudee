@@ -12,8 +12,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
-const val DATABASE_NAME = "TudeeDatabase"
-
+const val DATABASE_NAME = "TudeeDataBase"
 
 val databaseModule = module {
     single {
@@ -32,5 +31,4 @@ val databaseModule = module {
     }
     single { get<TudeeDatabase>().taskDao() }
     single { get<TudeeDatabase>().categoryDao() }
-
 }
