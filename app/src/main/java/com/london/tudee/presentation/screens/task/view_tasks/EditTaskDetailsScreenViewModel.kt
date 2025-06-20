@@ -48,7 +48,6 @@ class EditTaskViewModel(
         }
     }
 
-
     private fun getDoneTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByTaskStatus(TaskStatus.DONE).catch { throwable ->

@@ -9,7 +9,7 @@ data class EditTaskDetailsState(
     val allTasks: List<Task> = listOf(),
     val doneTasks: List<Task> = listOf(),
     val inProgressTasks: List<Task> = listOf(),
-    val toDoTasks: List<Task> = listOf()
+    val toDoTasks: List<Task> = listOf(),
 )
 
 
