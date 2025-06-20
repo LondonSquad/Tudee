@@ -26,6 +26,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
+import com.london.tudee.domain.entities.Priority
+import com.london.tudee.domain.entities.Task
+import com.london.tudee.domain.entities.TaskStatus
+import com.london.tudee.domain.services.CategoryService
+import com.london.tudee.presentation.components.TaskStatusSlider
 import com.london.tudee.presentation.components.TopAppBar
 import com.london.tudee.presentation.components.tabs.TabItem
 import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
@@ -33,6 +38,7 @@ import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import org.koin.androidx.compose.koinViewModel
+import kotlinx.datetime.Instant
 
 @Composable
 fun EditTaskDetails(
@@ -100,6 +106,7 @@ fun EditTaskDetailsContent(
                     .fillMaxSize()
                     .background(TudeeTheme.colors.surface)
             ) {
+
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -171,7 +178,19 @@ private fun TopAPPBar() {
                 )
             }
         }
-    )
+=======
+                items(taskUiStates.size) { index ->
+                    TaskItem(
+                        modifier = Modifier,
+                        isSelected = true,
+                        task = taskUiStates[index],
+                        hasDate = true
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            }
+        }
+    }
 }
 
 @ThemePreviews
