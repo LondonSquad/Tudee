@@ -74,6 +74,9 @@ dependencies {
     implementation (libs.koin.androidx.compose)
 
     implementation(libs.kotlinx.datetime)
+
+    implementation(libs.androidx.datastore.preferences)
+
 }
 
 tasks.register("installGitHooks") {

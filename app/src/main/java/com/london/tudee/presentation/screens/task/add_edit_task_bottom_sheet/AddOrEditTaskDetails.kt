@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.tasks
+package com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -21,10 +21,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.tudee.R
+import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.presentation.components.CategoryItem
 import com.london.tudee.presentation.components.TudeeTextField
@@ -32,8 +34,8 @@ import com.london.tudee.presentation.components.date.TudeeDatePicker
 import com.london.tudee.presentation.components.priority.PrioritySelector
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.categories.CategoryUiModel
-import com.london.tudee.presentation.screens.categories.rememberSampleCategories
+import com.london.tudee.presentation.mapper.CategoryMapper
+import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -42,11 +44,12 @@ import java.util.Locale
 fun AddOrEditTaskDetails(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
-    onTitleValueChange: (String) -> Unit,
-    onDescriptionValueChange: (String) -> Unit,
+    viewModel: AddOrEditTaskViewModel = koinViewModel(),
+    categories: List<Category> = emptyList()
 ) {
-    val screenHeight = LocalWindowInfo.current.containerSize.height.dp
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val maxHeight = screenHeight * 0.75f
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(
         modifier = modifier
@@ -61,53 +64,64 @@ fun AddOrEditTaskDetails(
         ) {
             TaskDetailsContent(
                 title = title,
-                onTitleValueChange = onTitleValueChange,
-                onDescriptionValueChange = onDescriptionValueChange,
+                uiState = uiState,
+                categories = categories.ifEmpty { uiState.categories },
+                onTitleValueChange = { viewModel.updateTitle(it) },
+                onDescriptionValueChange = { viewModel.updateDescription(it) },
+                onDateFieldClick = { viewModel.showDatePicker() },
+                onPrioritySelected = { viewModel.updateSelectedPriority(it) },
+                onCategorySelected = { viewModel.updateSelectedCategory(it) },
                 modifier = modifier.fillMaxWidth()
             )
         }
     }
-}
 
+    if (uiState.showDatePicker) {
+        TudeeDatePicker(
+            onDateSelected = { date ->
+                viewModel.updateSelectedDate(date ?: System.currentTimeMillis())
+                viewModel.hideDatePicker()
+            },
+            onDismiss = {
+                viewModel.hideDatePicker()
+            }
+        )
+    }
+}
 @Composable
 private fun TaskDetailsContent(
     modifier: Modifier,
     @StringRes title: Int,
+    uiState: AddOrEditTaskUiState,
+    categories: List<Category>,
     onTitleValueChange: (String) -> Unit,
     onDescriptionValueChange: (String) -> Unit,
+    onDateFieldClick: () -> Unit,
+    onPrioritySelected: (Priority) -> Unit,
+    onCategorySelected: (Category) -> Unit,
 ) {
-    var selectedPriority by remember { mutableStateOf(Priority.HIGH) }
-    var selectedCategory by remember { mutableStateOf<CategoryUiModel?>(null) }
-    var selectedDate by remember { mutableStateOf<Long?>(null) }
-    var showDatePicker by remember { mutableStateOf(false) }
-    val categories = rememberSampleCategories()
-
     Column(
         modifier = modifier
     ) {
         TaskHeader(title)
         TaskInputFields(
+            title = uiState.title,
+            description = uiState.description,
+            selectedDate = uiState.selectedDate,
             onTitleValueChange = onTitleValueChange,
             onDescriptionValueChange = onDescriptionValueChange,
-            selectedDate = selectedDate,
-            onDateFieldClick = { showDatePicker = true }
+            onDateFieldClick = onDateFieldClick
         )
-        PrioritySection(selectedPriority) { selectedPriority = it }
-        CategorySection(categories, selectedCategory) { selectedCategory = it }
-
+        PrioritySection(
+            selectedPriority = uiState.selectedPriority,
+            onPrioritySelected = onPrioritySelected
+        )
+        CategorySection(
+            categories = categories,
+            selectedCategory = uiState.selectedCategory,
+            onCategorySelected = onCategorySelected
+        )
         Spacer(modifier = Modifier.height(32.dp))
-    }
-
-    if (showDatePicker) {
-        TudeeDatePicker(
-            onDateSelected = { date ->
-                selectedDate = date
-                showDatePicker = false
-            },
-            onDismiss = {
-                showDatePicker = false
-            }
-        )
     }
 }
 
@@ -123,15 +137,17 @@ private fun TaskHeader(@StringRes title: Int) {
 
 @Composable
 private fun TaskInputFields(
+    title: String,
+    description: String,
+    selectedDate: Long?,
     onTitleValueChange: (String) -> Unit,
     onDescriptionValueChange: (String) -> Unit,
-    selectedDate: Long?,
     onDateFieldClick: () -> Unit
 ) {
     TudeeTextField(
         icon = R.drawable.add_task_icon,
         hint = R.string.task_title,
-        value = "",
+        value = title,
         onValueChange = onTitleValueChange
     )
     Spacer(modifier = Modifier.height(16.dp))
@@ -139,7 +155,7 @@ private fun TaskInputFields(
     TudeeTextField(
         multiLined = true,
         hint = R.string.description,
-        value = "",
+        value = description,
         onValueChange = onDescriptionValueChange
     )
     Spacer(modifier = Modifier.height(16.dp))
@@ -175,9 +191,9 @@ private fun PrioritySection(
 
 @Composable
 private fun CategorySection(
-    categories: List<CategoryUiModel>,
-    selectedCategory: CategoryUiModel?,
-    onCategorySelected: (CategoryUiModel) -> Unit
+    categories: List<Category>,
+    selectedCategory: Category?,
+    onCategorySelected: (Category) -> Unit
 ) {
     SectionTitle(titleRes = R.string.category)
     Spacer(modifier = Modifier.height(8.dp))
@@ -201,9 +217,9 @@ private fun SectionTitle(@StringRes titleRes: Int) {
 
 @Composable
 private fun CategoriesGrid(
-    categories: List<CategoryUiModel>,
-    selectedCategory: CategoryUiModel?,
-    onCategorySelected: (CategoryUiModel) -> Unit
+    categories: List<Category>,
+    selectedCategory: Category?,
+    onCategorySelected: (Category) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -218,9 +234,9 @@ private fun CategoriesGrid(
                 rowCategories.forEach { category ->
                     CategoryItem(
                         modifier = Modifier.weight(1f),
-                        iconRes = category.iconRes,
-                        title = stringResource(category.title),
-                        tint = category.tint,
+                        iconRes = CategoryMapper.getIconResource(category),
+                        title = CategoryMapper.getCategoryDisplayName(category),
+                        isSelected = category == selectedCategory,
                         onClick = { onCategorySelected(category) }
                     )
 
@@ -245,18 +261,6 @@ private fun CategoriesGrid(
 
 @ThemePreviews
 @Composable
-private fun PreviewAddOrEditTaskDetails() {
-    TudeeTheme {
-        AddOrEditTaskDetails(
-            title = R.string.add_new_task,
-            onTitleValueChange = {},
-            onDescriptionValueChange = {}
-        )
-    }
-}
-
-@ThemePreviews
-@Composable
 private fun PreviewCategorySection() {
     TudeeTheme {
         Column(
@@ -265,14 +269,85 @@ private fun PreviewCategorySection() {
                 .background(TudeeTheme.colors.surface)
                 .padding(16.dp)
         ) {
-            var selectedCategory by remember { mutableStateOf<CategoryUiModel?>(null) }
-            val categories = rememberSampleCategories()
+            var selectedCategory by remember { mutableStateOf<Category?>(null) }
+            val sampleCategories = rememberSampleDomainCategories()
 
             CategorySection(
-                categories = categories,
+                categories = sampleCategories,
                 selectedCategory = selectedCategory,
                 onCategorySelected = { selectedCategory = it }
             )
         }
+    }
+}
+
+@Composable
+private fun rememberSampleDomainCategories(): List<Category> {
+    return remember {
+        listOf(
+            Category(
+                id = 1,
+                name = "Education",
+                arName = "التعليم",
+                iconPath = "ic_education",
+                isDefault = true
+            ),
+            Category(
+                id = 2,
+                name = "Shopping",
+                arName = "التسوق",
+                iconPath = "ic_shopping",
+                isDefault = true
+            ),
+            Category(
+                id = 3,
+                name = "Medical",
+                arName = "طبي",
+                iconPath = "ic_medical",
+                isDefault = true
+            ),
+            Category(
+                id = 4,
+                name = "Gym",
+                arName = "رياضة",
+                iconPath = "ic_gym",
+                isDefault = false
+            ),
+            Category(
+                id = 5,
+                name = "Entertainment",
+                arName = "ترفيه",
+                iconPath = "ic_entertainment",
+                isDefault = false
+            ),
+            Category(
+                id = 6,
+                name = "Cooking",
+                arName = "طبخ",
+                iconPath = "ic_cooking",
+                isDefault = false
+            ),
+            Category(
+                id = 7,
+                name = "Family & Friends",
+                arName = "العائلة والأصدقاء",
+                iconPath = "ic_family",
+                isDefault = false
+            ),
+            Category(
+                id = 8,
+                name = "Traveling",
+                arName = "سفر",
+                iconPath = "ic_travel",
+                isDefault = false
+            ),
+            Category(
+                id = 9,
+                name = "Agriculture",
+                arName = "زراعة",
+                iconPath = "ic_agriculture",
+                isDefault = false
+            )
+        )
     }
 }

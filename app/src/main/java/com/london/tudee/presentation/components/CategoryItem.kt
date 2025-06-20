@@ -1,6 +1,7 @@
 package com.london.tudee.presentation.components
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,7 +22,6 @@ fun CategoryItem(
     modifier: Modifier = Modifier,
     @DrawableRes iconRes: Int,
     title: String,
-    tint: Color,
     count: Int? = null,
     onClick: () -> Unit
 ) {
@@ -41,11 +41,10 @@ fun CategoryItem(
                 )
                 .padding(23.dp)
         ) {
-            Icon(
+            Image(
                 painter = painterResource(id = iconRes),
                 contentDescription = title,
                 modifier = Modifier.size(32.dp),
-                tint = tint
             )
 
             count?.let {
@@ -93,7 +92,6 @@ fun CategoryItemPreview() {
             CategoryItem(
                 iconRes = R.drawable.ic_entertainment,
                 title = "Entertainment",
-                tint = TudeeTheme.colors.yellowAccent,
                 count = 33,
                 onClick = {}
             )
@@ -101,7 +99,6 @@ fun CategoryItemPreview() {
             CategoryItem(
                 iconRes = R.drawable.ic_event,
                 title = "Event",
-                tint = TudeeTheme.colors.pinkAccent,
                 count = 2,
                 onClick = {}
             )
@@ -109,7 +106,6 @@ fun CategoryItemPreview() {
             CategoryItem(
                 iconRes = R.drawable.ic_budgeting,
                 title = "Budgeting",
-                tint = TudeeTheme.colors.purpleAccent,
                 count = 23,
                 onClick = {}
             )

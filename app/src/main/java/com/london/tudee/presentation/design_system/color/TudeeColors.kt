@@ -36,4 +36,5 @@ data class TudeeColors(
     val upperSmallCircleMoon: Color = Color(0xffE9EFFF),
     val onPrimaryCard : Color,
     val onPrimaryStroke : Color,
+    val spotColor : Color = Color(0x0A000000)
 )

@@ -71,6 +71,9 @@
     <string name="skip">Skip</string>
     <string name="Overview">Overview</string>
     <string name="successfully">Successfully.</string>
+    <string name="add_task_successfully">Add task successfully</string>
+    <string name="edit_task_successfully">Edit task successfully</string>
+    <string name="some_error_happened">Some error happened</string>
     <string name="Tadaa">Tadaa!.</string>
     <string name="Stay_working">Stay working.</string>
     <string name="Nothing_on_your_list">Nothing on your list....</string>
@@ -79,4 +82,7 @@
     <string name="task_progress">You\'ve completed %1$d out of %2$d, keep going!</string>
     <string name="encouragement_message">You\'re doing amazing!!!!&#10;Tudee is proud of you.</string>
     <string name="blaming_message">You just scrolling, not working.&#10;Tudee is watching. back to work!!!!</string>
+    <string name="delete_category">Delete Category</string>
+    <string name="no_task_today">No task here!.</string>
+    <string name="tap_to_add_task">Tap the + button to add your first one.</string>
 </resources>

@@ -64,6 +64,9 @@
     <string name="add_new_category">اضافة فئه جديده</string>
     <string name="upload">تحميل</string>
     <string name="successfully">تم بنجاح</string>
+    <string name="add_task_successfully">تم الإضافة بنجاح</string>
+    <string name="edit_task_successfully">تم التعديل بنجاح</string>
+    <string name="some_error_happened">هناك خطأ ما</string>
     <string name="Tadaa">تهانينا!</string>
     <string name="Stay_working">واصل العمل!</string>
     <string name="Nothing_on_your_list">ليس لديك مهام بعد</string>
@@ -73,4 +76,7 @@
     <string name="encouragement_message">انت رائع!&#10;تادي فخور بك</string>
     <string name="blaming_message">تادي يشاهدك! هيا الي العمل&#10;انت فقط تشاهد ليس هناك عمل!</string>
     <string name="Overview">نظره عامه</string>
+    <string name="delete_category">حذف الفئه</string>
+    <string name="no_task_today">لا توجد مهام.</string>
+    <string name="tap_to_add_task">اضغط على زر + لإضافة أول مهمة.</string>
 </resources>
