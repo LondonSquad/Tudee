@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.london.tudee.R
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
@@ -29,13 +30,14 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun EmptyTasksScreen(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier.width(330.dp),
-        contentAlignment = Alignment.Center
+        modifier = modifier.fillMaxWidth(),
+        contentAlignment = Alignment.CenterStart
     ) {
         Box(
             modifier = Modifier
+                .padding(start = 10.dp)
                 .height(160.dp)
-                .align(Alignment.CenterEnd)
+                .align(Alignment.CenterStart)
                 .background(color = Color.Transparent)
         ) {
             CircularContainer(
@@ -126,7 +128,7 @@ fun MessageBox(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .padding(end = 127.dp)
-            .width(203.dp)
+            .fillMaxWidth(.92f)
             .height(74.dp)
             .shadow(
                 elevation = 12.dp,
@@ -136,7 +138,7 @@ fun MessageBox(modifier: Modifier = Modifier) {
                     bottomStart = 16.dp,
                     bottomEnd = 2.dp,
                 ),
-                spotColor = Color(0x0A000000)
+                spotColor = TudeeTheme.colors.spotColor
             )
             .clip(
                 shape = RoundedCornerShape(
@@ -150,16 +152,18 @@ fun MessageBox(modifier: Modifier = Modifier) {
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
+                modifier = Modifier.padding(start = 12.dp, top = 8.dp, end = 12.dp),
                 text = stringResource(R.string.no_task_today),
                 style = TudeeTheme.typography.titleSmall,
-                color = TudeeTheme.colors.body,
-                modifier = Modifier.padding(start = 12.dp, top = 8.dp)
+                color = TudeeTheme.colors.title,
+                lineHeight = 20.sp
             )
             Text(
+                modifier = Modifier.padding(start = 12.dp, top = 4.dp, end = 8.dp, bottom = 8.dp),
                 text = stringResource(R.string.tap_to_add_task),
-                style = TudeeTheme.typography.labelSmall,
+                style = TudeeTheme.typography.bodySmall,
                 color = TudeeTheme.colors.hint,
-                modifier = Modifier.padding(start = 12.dp, top = 4.dp)
+                lineHeight = 17.sp
             )
         }
     }
