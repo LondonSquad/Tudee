@@ -12,6 +12,6 @@ import org.koin.dsl.module
 val serviceModule = module {
     single<Services<Category>> { CategoriesServicesImpl(get()) }
     single<Services<Task>> { TasksServicesImpl(get()) }
-    single<TaskService> { TasksServicesImpl(get()) }
     single<CategoryService> { CategoriesServicesImpl(get()) }
+    single<TaskService> { TasksServicesImpl(get()) }
 }

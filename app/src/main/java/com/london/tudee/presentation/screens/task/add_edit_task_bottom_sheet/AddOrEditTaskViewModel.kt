@@ -9,12 +9,16 @@ import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
+import com.london.tudee.presentation.utils.formatDate
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.format
 import java.util.Date
 
 
@@ -59,7 +63,7 @@ class AddOrEditTaskViewModel(
                         taskId = task.id,
                         title = task.title,
                         description = task.description,
-                        selectedDate = task.timeStamp.time,
+                        selectedDate = task.timeStamp.toEpochMilliseconds(),
                         selectedPriority = task.priority,
                         selectedCategory = category,
                         isEditMode = true,
@@ -156,8 +160,8 @@ class AddOrEditTaskViewModel(
                     taskStatus = TaskStatus.TODO,
                     priority = currentState.selectedPriority,
                     categoryId = currentState.selectedCategory?.id ?: 1,
-                    timeStamp = currentState.selectedDate?.let { Date(it) } ?: Date())
-
+                    timeStamp =  currentState.selectedDate?.let { Instant.fromEpochMilliseconds(it) } ?: Clock.System.now()
+                )
                 if (currentState.isEditMode) {
                     taskService.edit(task)
                 } else {

@@ -1,6 +1,6 @@
 package com.london.tudee.domain.entities
 
-import java.util.Date
+import kotlinx.datetime.Instant
 
 data class Task(
     val id: Int,
@@ -9,5 +9,5 @@ data class Task(
     val taskStatus: TaskStatus,
     val priority: Priority,
     val categoryId: Int,
-    val timeStamp: Date
+    val timeStamp: Instant
 )
