@@ -79,4 +79,6 @@
     <string name="task_progress">You\'ve completed %1$d out of %2$d, keep going!</string>
     <string name="encouragement_message">You\'re doing amazing!!!!&#10;Tudee is proud of you.</string>
     <string name="blaming_message">You just scrolling, not working.&#10;Tudee is watching. back to work!!!!</string>
+    <string name="no_task_today">No task here!.</string>
+    <string name="tap_to_add_task">Tap the + button to add your first one.</string>
 </resources>
