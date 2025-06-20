@@ -8,6 +8,11 @@ import com.london.tudee.presentation.screens.tasks.TasksScreenViewModel
 import com.london.tudee.presentation.screens.categories.CategoriesViewModel
 import com.london.tudee.presentation.screens.categories.CreateCategoryViewModel
 import com.london.tudee.presentation.screens.categories.EditCategoryScreenViewModel
+import com.london.tudee.presentation.screens.categories.crud.CreateCategoryScreenViewModel
+import com.london.tudee.presentation.screens.categories.crud.DeleteCategoryScreenViewModel
+import com.london.tudee.presentation.screens.onboarding.OnBoardingViewModel
+import com.london.tudee.presentation.screens.onboarding.OnboardingPreferences
+import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -20,4 +25,9 @@ val viewModelModule = module {
     viewModelOf(::CategoriesViewModel)
     viewModelOf(::CreateCategoryViewModel)
     viewModelOf(::EditCategoryScreenViewModel)
+    viewModelOf(::CreateCategoryScreenViewModel)
+    viewModelOf(::DeleteCategoryScreenViewModel)
+    viewModelOf(::OnBoardingViewModel)
+    viewModelOf(::AddOrEditTaskViewModel)
+    single { OnboardingPreferences(get()) }
 }
