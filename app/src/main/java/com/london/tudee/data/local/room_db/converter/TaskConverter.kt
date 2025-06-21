@@ -18,13 +18,4 @@ class Converters {
     @TypeConverter
     fun toStatus(value: String): TaskStatus = TaskStatus.valueOf(value)
 
-    @TypeConverter
-    fun fromColor(color: Color): Int {
-        return color.value.toLong().toInt()
-    }
-
-    @TypeConverter
-    fun toColor(colorInt: Int): Color {
-        return Color(colorInt)
-    }
 }

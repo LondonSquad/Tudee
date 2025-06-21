@@ -22,7 +22,7 @@ val databaseModule = module {
                     super.onCreate(db)
                     CoroutineScope(Dispatchers.IO).launch {
                         val dao = get<TudeeDatabase>().categoryDao()
-                        defaultCategory.forEach { category ->
+                        defaultCategory().forEach { category ->
                             dao.insert(category.convertToCategoryDto())
                         }
                     }

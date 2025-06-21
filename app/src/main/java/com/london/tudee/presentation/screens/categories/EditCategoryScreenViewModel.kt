@@ -33,25 +33,23 @@ class EditCategoryScreenViewModel(
 
     fun loadCategory(categoryId: Int) {
         _uiState.update { it.copy(isLoading = true, errorMessage = null) }
-        
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val category = categoryService.getById(categoryId)
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
-                        category = category,
-                        categoryName = category.name,
-                        categoryNameAr = category.arName,
-                        selectedColor = category.tint,
+                        category = category, categoryName = category.title,
+//                        categoryNameAr = category.arName,
+                        //   selectedColor = Color(category.tint),
                         isLoading = false
-                    ) 
+                    )
                 }
             } catch (e: Exception) {
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
-                        isLoading = false, 
-                        errorMessage = e.message ?: "Failed to load category"
-                    ) 
+                        isLoading = false, errorMessage = e.message ?: "Failed to load category"
+                    )
                 }
             }
         }
@@ -76,12 +74,12 @@ class EditCategoryScreenViewModel(
     fun saveCategory() {
         val currentState = _uiState.value
         val category = currentState.category
-        
+
         if (category == null) {
             _uiState.update { it.copy(errorMessage = "Category not loaded") }
             return
         }
-        
+
         if (currentState.categoryName.isBlank()) {
             _uiState.update { it.copy(errorMessage = "Category name is required") }
             return
@@ -92,27 +90,26 @@ class EditCategoryScreenViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val updatedCategory = category.copy(
-                    name = currentState.categoryName,
-                    arName = currentState.categoryNameAr.ifBlank { currentState.categoryName },
-                    tint = currentState.selectedColor
+                    title = currentState.categoryName,
+//                    arName = currentState.categoryNameAr.ifBlank { currentState.categoryName },
+                    //tint = currentState.selectedColor.value
                 )
 
                 categoryService.edit(updatedCategory)
-                
-                _uiState.update { 
+
+                _uiState.update {
                     it.copy(
-                        isLoading = false, 
+                        isLoading = false,
                         isSuccess = true,
                         errorMessage = null,
                         category = updatedCategory
-                    ) 
+                    )
                 }
             } catch (e: Exception) {
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
-                        isLoading = false, 
-                        errorMessage = e.message ?: "Failed to update category"
-                    ) 
+                        isLoading = false, errorMessage = e.message ?: "Failed to update category"
+                    )
                 }
             }
         }
@@ -121,7 +118,7 @@ class EditCategoryScreenViewModel(
     fun deleteCategory() {
         val currentState = _uiState.value
         val category = currentState.category
-        
+
         if (category == null) {
             _uiState.update { it.copy(errorMessage = "Category not loaded") }
             return
@@ -132,20 +129,17 @@ class EditCategoryScreenViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 categoryService.delete(category)
-                
-                _uiState.update { 
+
+                _uiState.update {
                     it.copy(
-                        isLoading = false, 
-                        isDeleted = true,
-                        errorMessage = null
-                    ) 
+                        isLoading = false, isDeleted = true, errorMessage = null
+                    )
                 }
             } catch (e: Exception) {
-                _uiState.update { 
+                _uiState.update {
                     it.copy(
-                        isLoading = false, 
-                        errorMessage = e.message ?: "Failed to delete category"
-                    ) 
+                        isLoading = false, errorMessage = e.message ?: "Failed to delete category"
+                    )
                 }
             }
         }

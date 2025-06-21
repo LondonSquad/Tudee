@@ -112,10 +112,12 @@ private fun DeleteCategoryScreenPreview() {
             modifier = Modifier,
             category = Category(
                 id = 1,
-                name = "Work",
-                arName = "العمل",
-                iconPath = "ic_work",
-                isDefault = true
+                title = "Work",
+                //arName = "العمل",
+                iconRes = "",
+                isDefault = true,
+                taskCount =0,
+             //   tint = TudeeTheme.colors.primary.value
             ),
             onDismiss = {}
         )

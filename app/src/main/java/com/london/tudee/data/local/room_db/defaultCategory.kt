@@ -1,130 +1,142 @@
 package com.london.tudee.data.local.room_db
 
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.Composable
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
+import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 
-val defaultCategory = listOf(
+fun defaultCategory() = listOf(
     Category(
-        id = 0, 
-        name = "Education",
-        iconRes = R.drawable.ic_education,
-        arName = "التعليم",
-        isDefault = true,
-        taskCount = 0,
-        tint = Color.Blue
+        id = 0, title = "Education",
+        iconRes = R.drawable.ic_education.toString(),
+        // arName = "التعليم",
+        isDefault = true, taskCount = 0,
+        //   tint = TudeeTheme.colors.purpleAccent.value.toLong()
     ), Category(
         id = 0,
-        name = "Shopping",
-        arName = "التسوق",
-        iconRes = R.drawable.ic_shopping,
+        title = "Shopping",
+        // arName = "التسوق",
+        iconRes = R.drawable.ic_shopping.toString(),
         isDefault = true,
         taskCount = 0,
-        tint = Color.Green
+        //  tint = TudeeTheme.colors.secondary.value.toLong()
     ), Category(
         id = 0,
-        name = "Medical",
-        arName = "الطب",
-        iconRes = R.drawable.ic_medical,
+        title = "Medical",
+        //arName = "الطب",
+        iconRes = R.drawable.ic_medical.toString(),
         isDefault = true,
         taskCount = 0,
-        tint = Color.Red
+        //tint = TudeeTheme.colors.primary.value.toLong()
     ), Category(
-        id = 0, 
-        name = "Gym",
-        iconRes = R.drawable.ic_gym,
-        arName = "التمرين",
-        isDefault = true,
-        taskCount = 0,
-        tint = Color.Magenta
+        id = 0, title = "Gym", iconRes = R.drawable.ic_gym.toString(),
+        // arName = "التمرين",
+        isDefault = true, taskCount = 0,
+        //tint = TudeeTheme.colors.primary.value.toLong()
     ), Category(
         id = 0,
-        name = "Entertainment",
-        arName = "الترفيه",
-        iconRes = R.drawable.ic_entertainment,
+        title = "Entertainment",
+        // arName = "الترفيه",
+        iconRes = R.drawable.ic_entertainment.toString(),
         isDefault = true,
         taskCount = 0,
-        tint = Color.Yellow
+        //tint = TudeeTheme.colors.yellowAccent.value.toLong()
     ), Category(
         id = 0,
-        name = "Cooking",
-        arName = "الطب",
-        iconRes = R.drawable.ic_cooking,
+        title = "Cooking",
+        // arName = "الطب",
+        iconRes = R.drawable.ic_cooking.toString(),
         isDefault = true,
         taskCount = 0,
-        tint = Color.Cyan
+        //   tint = TudeeTheme.colors.pinkAccent.value.toLong()
     ), Category(
         id = 0,
-        name = "Family & friend",
-        arName = "الأسرة والاصدقاء",
-        iconRes = R.drawable.ic_family,
+        title = "Family & friend",
+        // arName = "الأسرة والاصدقاء",
+        iconRes = R.drawable.ic_family.toString(),
         isDefault = true,
         taskCount = 0,
-        tint = Color.Gray
+        // tint = TudeeTheme.colors.secondary.value.toLong()
     ), Category(
         id = 0,
-        name = "Traveling",
-        arName = "السفر",
-        iconRes = R.drawable.ic_travel,
+        title = "Traveling",
+        // arName = "السفر",
+        iconRes = R.drawable.ic_travel.toString(),
         isDefault = true,
         taskCount = 0,
-        tint = Color.Blue
+        //tint = TudeeTheme.colors.yellowAccent.value.toLong()
     ), Category(
         id = 0,
-        name = "Agriculture",
-        arName = "الزراعة",
-        iconRes = R.drawable.ic_agriculture,
+        title = "Agriculture",
+        // arName = "الزراعة",
+        iconRes = R.drawable.ic_agriculture.toString(),
         isDefault = true,
         taskCount = 0,
-        tint = Color.Green
+        //tint = TudeeTheme.colors.greenAccent.value.toLong()
     ), Category(
         id = 0,
-        name = "Coding",
-        arName = "البرمجة",
-        iconRes = R.drawable.ic_coding,
+        title = "Coding",
+        //  arName = "البرمجة",
+        iconRes = R.drawable.ic_coding.toString(),
         isDefault = true,
         taskCount = 0,
-        tint = Color.Blue
+        //tint = TudeeTheme.colors.purpleAccent.value.toLong()
     ), Category(
         id = 0,
-        name = "Adoration",
-        arName = "الاعزاء",
-        iconRes = R.drawable.ic_adoration,
+        title = "Adoration",
+        //arName = "الاعزاء",
+        iconRes = R.drawable.ic_adoration.toString(),
         isDefault = true,
         taskCount = 0,
-        tint = Color.Red
+        //tint = TudeeTheme.colors.primary.value.toLong()
     ), Category(
         id = 0,
-        name = "Fixing bugs",
-        arName = "التصليح",
-        iconRes = R.drawable.ic_bug_fix,
+        title = "Fixing bugs",
+        //arName = "التصليح",
+        iconRes = R.drawable.ic_bug_fix.toString(),
         isDefault = true,
         taskCount = 0,
-        tint = Color.Magenta
+        // tint = TudeeTheme.colors.pinkAccent.value.toLong()
     ), Category(
         id = 0,
-        name = "Cleaning",
-        arName = "التنظيف",
-        iconRes = R.drawable.ic_cleaning,
+        title = "Cleaning",
+        //arName = "التنظيف",
+        iconRes = R.drawable.ic_cleaning.toString(),
         isDefault = true,
         taskCount = 0,
-        tint = Color.Green
+        // tint = TudeeTheme.colors.greenAccent.value.toLong()
     ), Category(
         id = 0,
-        name = "Work",
-        arName = "العمل",
-        iconRes = R.drawable.ic_work,
+        title = "Work",
+        //arName = "العمل",
+        iconRes = R.drawable.ic_work.toString(),
         isDefault = true,
         taskCount = 0,
-        tint = Color.Gray
+        // tint = TudeeTheme.colors.secondary.value.toLong()
     ), Category(
         id = 0,
-        name = "Budgeting",
-        arName = "الحسابات",
-        iconRes = R.drawable.ic_budgeting,
+        title = "Budgeting",
+        //arName = "الحسابات",
+        iconRes = R.drawable.ic_budgeting.toString(),
         isDefault = true,
         taskCount = 0,
-        tint = Color.Blue
+        // tint = TudeeTheme.colors.purpleAccent.value.toLong()
+    ), Category(
+        id = 0,
+        title = "Self-care",
+        //arName = "الحسابات",
+        iconRes = R.drawable.ic_self_care.toString(),
+        isDefault = true,
+        taskCount = 0,
+        //   tint = TudeeTheme.colors.yellowAccent.value.toLong()
+    ), Category(
+        id = 0,
+        title = "Event",
+        //arName = "الحسابات",
+        iconRes = R.drawable.ic_event.toString(),
+        isDefault = true,
+        taskCount = 0,
+        //tint = TudeeTheme.colors.pinkAccent.value.toLong()
     )
 )

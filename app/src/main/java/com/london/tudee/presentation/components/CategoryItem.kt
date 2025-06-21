@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
@@ -20,7 +21,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun CategoryItem(
     modifier: Modifier = Modifier,
-    @DrawableRes iconRes: Int,
+     iconRes: Painter,
     title: String,
     count: Int? = null,
     onClick: () -> Unit
@@ -42,7 +43,7 @@ fun CategoryItem(
                 .padding(23.dp)
         ) {
             Image(
-                painter = painterResource(id = iconRes),
+                painter = iconRes,
                 contentDescription = title,
                 modifier = Modifier.size(32.dp),
             )
@@ -90,21 +91,21 @@ fun CategoryItemPreview() {
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             CategoryItem(
-                iconRes = R.drawable.ic_entertainment,
+                iconRes = painterResource( R.drawable.ic_entertainment),
                 title = "Entertainment",
                 count = 33,
                 onClick = {}
             )
 
             CategoryItem(
-                iconRes = R.drawable.ic_event,
+                iconRes = painterResource(R.drawable.ic_event),
                 title = "Event",
                 count = 2,
                 onClick = {}
             )
 
             CategoryItem(
-                iconRes = R.drawable.ic_budgeting,
+                iconRes = painterResource(R.drawable.ic_budgeting),
                 title = "Budgeting",
                 count = 23,
                 onClick = {}
