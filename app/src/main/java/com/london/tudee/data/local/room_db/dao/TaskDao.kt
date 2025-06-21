@@ -23,6 +23,9 @@ interface TaskDao {
     @Query("SELECT * FROM TASK_TABLE WHERE taskStatus = :taskStatus")
     fun getByTaskStatus(taskStatus: TaskStatus): Flow<List<TaskDto>>
 
+    @Query("SELECT * FROM TASK_TABLE WHERE timeStamp = :time")
+    fun getTasksByTime(time: Long): Flow<List<TaskDto>>
+
     @Insert
     suspend fun insert(task: TaskDto)
 

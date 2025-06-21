@@ -46,4 +46,10 @@ class TasksServicesImpl(
             list.map { it.convertToTask() }
         }
     }
+
+    override suspend fun getTasksByTime(time: Long): Flow<List<Task>> {
+        return taskDao.getTasksByTime(time).map { list ->
+            list.map { it.convertToTask() }
+        }
+    }
 }

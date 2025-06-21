@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface TaskService : Services<Task> {
     suspend fun getByCategoryId(categoryId: Int): Flow<List<Task>>
     suspend fun getByTaskStatus(taskStatus: TaskStatus): Flow<List<Task>>
+    suspend fun getTasksByTime(time: Long): Flow<List<Task>>
 }
