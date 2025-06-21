@@ -60,12 +60,12 @@ class CreateCategoryViewModel(
             try {
                 val newCategory = Category(
                     id = 0, // Auto-generated
-                    name = currentState.categoryName,
-                    arName = currentState.categoryNameAr.ifBlank { currentState.categoryName },
-                    iconRes = R.drawable.ic_entertainment, // Default icon, could be customized
+                    title = currentState.categoryName,
+//                    arName = currentState.categoryNameAr.ifBlank { currentState.categoryName },
+                    iconRes = "ic_entertainment",
                     isDefault = false,
                     taskCount = 0,
-                    tint = currentState.selectedColor
+                    //tint = currentState.selectedColor.value.toLong()
                 )
 
                 categoryService.add(newCategory)

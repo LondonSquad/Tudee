@@ -18,9 +18,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.presentation.components.CategoryItem
@@ -65,21 +68,19 @@ fun CategoriesScreen(
                     modifier = Modifier.padding(16.dp)
                 )
             }
-            
+
             // Show loading indicator
             if (uiState.isLoading) {
                 Text(
-                    text = "Loading categories...",
-                    modifier = Modifier.padding(16.dp)
+                    text = "Loading categories...", modifier = Modifier.padding(16.dp)
                 )
             }
-            
+
             // Show empty state or categories
             if (!uiState.isLoading && uiState.errorMessage == null) {
                 if (categories.isEmpty()) {
                     Text(
-                        text = "No categories found",
-                        modifier = Modifier.padding(16.dp)
+                        text = "No categories found", modifier = Modifier.padding(16.dp)
                     )
                 } else {
                     LazyVerticalGrid(
@@ -91,12 +92,10 @@ fun CategoriesScreen(
                     ) {
                         items(categories) { category ->
                             CategoryItem(
-                                iconRes = category.iconRes,
-                                title = category.name,
-                                tint = category.tint,
+                                iconRes = rememberAsyncImagePainter(category.iconRes),
+                                title = category.title,
                                 count = category.taskCount,
-                                onClick = { onCategoryClick(category) }
-                            )
+                                onClick = { onCategoryClick(category) })
                         }
                     }
                 }
@@ -122,7 +121,6 @@ fun CategoriesScreenPreview() {
         CategoriesScreen(
             screenTitle = R.string.categories,
             onCategoryClick = {},
-            onAddCategoryClick = {}
-        )
+            onAddCategoryClick = {})
     }
 }

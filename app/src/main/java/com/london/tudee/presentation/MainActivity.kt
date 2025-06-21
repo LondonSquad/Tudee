@@ -42,12 +42,7 @@ class MainActivity : ComponentActivity() {
                 shouldShowOnboarding.let { showOnboarding ->
                     if (showOnboarding) {
                         OnBoardingHorizontalPager(
-                            onClickSkip = {
-                                onboardingViewModel.markOnboardingSeen()
-                                Log.d(
-                                    "test",
-                                    "onCreate: ${onboardingViewModel.shouldShowOnboarding.value}")
-                            }
+                            onClickSkip = {onboardingViewModel.markOnboardingSeen() }
                         )
                     } else HomeScreen()
                 }
