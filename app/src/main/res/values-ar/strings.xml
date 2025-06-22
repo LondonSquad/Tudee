@@ -79,4 +79,19 @@
     <string name="delete_category">حذف الفئه</string>
     <string name="no_task_today">لا توجد مهام.</string>
     <string name="tap_to_add_task">اضغط على زر + لإضافة أول مهمة.</string>
+    <string name="today">اليوم,</string>
+    <string name="Jan">يناير</string>
+    <string name="Feb">فبراير</string>
+    <string name="Mar">مارس</string>
+    <string name="Apr">ابريل</string>
+    <string name="May">مايو</string>
+    <string name="Jun">يونيو</string>
+    <string name="Jul">يوليو</string>
+    <string name="Aug">اغسطس</string>
+    <string name="Sep">سبتمبر</string>
+    <string name="Oct">اكتوبر</string>
+    <string name="Nov">نوفمبر</string>
+    <string name="Dec">ديسمبر</string>
+    <string name="Something_went_wrong_task_not_found_or_no_category_icon">هناك شيئ خطا لا توجد مهمه او صوره المجموعه</string>
+    <string name="Something_went_wrong_cant_update_task">هناك شيئ حطا لا يمكن تحديث المهمه</string>
 </resources>

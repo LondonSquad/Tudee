@@ -1,13 +1,13 @@
-package com.london.tudee.data.local.room_db
+package com.london.tudee.data.local.roomdb
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.london.tudee.data.local.room_db.converter.Converters
-import com.london.tudee.data.local.room_db.dao.CategoryDao
-import com.london.tudee.data.local.room_db.dao.TaskDao
-import com.london.tudee.data.local.room_db.dto.CategoryDto
-import com.london.tudee.data.local.room_db.dto.TaskDto
+import com.london.tudee.data.local.roomdb.converter.Converters
+import com.london.tudee.data.local.roomdb.dao.CategoryDao
+import com.london.tudee.data.local.roomdb.dao.TaskDao
+import com.london.tudee.data.local.roomdb.dto.CategoryDto
+import com.london.tudee.data.local.roomdb.dto.TaskDto
 
 @Database(entities = [TaskDto::class, CategoryDto::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)

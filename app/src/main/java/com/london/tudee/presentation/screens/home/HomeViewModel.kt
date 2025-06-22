@@ -1,5 +1,6 @@
 package com.london.tudee.presentation.screens.home
 
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.tudee.domain.entities.TaskStatus
@@ -21,13 +22,13 @@ class HomeViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
-        getAllTasks()
-        getDoneTasks()
-        getToDoTasks()
-        getInProgressTasks()
+        initializeAllTasks()
+        initializeDoneTasks()
+        initializeTodoTasks()
+        initializeInProgressTasks()
     }
 
-    private fun getAllTasks() {
+    private fun initializeAllTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getAll().catch { throwable ->
                 _uiState.update {
@@ -47,7 +48,7 @@ class HomeViewModel(
         }
     }
 
-    private fun getDoneTasks() {
+    private fun initializeDoneTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByTaskStatus(TaskStatus.DONE).catch { throwable ->
                 _uiState.update {
@@ -67,7 +68,7 @@ class HomeViewModel(
         }
     }
 
-    private fun getInProgressTasks() {
+    private fun initializeInProgressTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByTaskStatus(TaskStatus.IN_PROGRESS).catch { throwable ->
                 _uiState.update {
@@ -87,7 +88,7 @@ class HomeViewModel(
         }
     }
 
-    private fun getToDoTasks() {
+    private fun initializeTodoTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByTaskStatus(TaskStatus.TODO).catch { throwable ->
                 _uiState.update {
