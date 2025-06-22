@@ -1,6 +1,5 @@
 package com.london.tudee.data.local.room_db.dto
 
-import androidx.compose.ui.text.LinkAnnotation
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
