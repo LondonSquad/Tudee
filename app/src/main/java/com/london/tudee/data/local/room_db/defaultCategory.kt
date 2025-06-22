@@ -1,142 +1,158 @@
 package com.london.tudee.data.local.room_db
 
-import androidx.compose.runtime.Composable
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.util.Base64
+import androidx.appcompat.content.res.AppCompatResources
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
-import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import java.io.ByteArrayOutputStream
 
+fun convertDrawableToByteArray(context: Context, drawableResId: Int): String {
+    val drawable = AppCompatResources.getDrawable(context, drawableResId)
+        ?: throw IllegalArgumentException("Drawable resource ID $drawableResId could not be found.")
 
-fun defaultCategory() = listOf(
+    val bitmap = drawableToBitmap(drawable)
+    val outputStream = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+    val byteArray = outputStream.toByteArray()
+    return Base64.encodeToString(byteArray, Base64.DEFAULT)
+}
+
+private fun drawableToBitmap(drawable: Drawable): Bitmap {
+    if (drawable is BitmapDrawable) {
+        return drawable.bitmap
+    }
+    val width = drawable.intrinsicWidth.takeIf { it > 0 } ?: 100
+    val height = drawable.intrinsicHeight.takeIf { it > 0 } ?: 100
+    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    drawable.setBounds(0, 0, canvas.width, canvas.height)
+    drawable.draw(canvas)
+    return bitmap
+}
+
+fun defaultCategory(context: Context) = listOf(
     Category(
-        id = 0, title = "Education",
-        iconRes = R.drawable.ic_education.toString(),
-        // arName = "التعليم",
-        isDefault = true, taskCount = 0,
-        //   tint = TudeeTheme.colors.purpleAccent.value.toLong()
-    ), Category(
+        id = 0,
+        title = "Education",
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_education),
+        isDefault = true,
+        taskCount = 0
+    ),
+    Category(
         id = 0,
         title = "Shopping",
-        // arName = "التسوق",
-        iconRes = R.drawable.ic_shopping.toString(),
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_shopping),
         isDefault = true,
-        taskCount = 0,
-        //  tint = TudeeTheme.colors.secondary.value.toLong()
-    ), Category(
+        taskCount = 0
+    ),
+    Category(
         id = 0,
         title = "Medical",
-        //arName = "الطب",
-        iconRes = R.drawable.ic_medical.toString(),
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_medical),
         isDefault = true,
-        taskCount = 0,
-        //tint = TudeeTheme.colors.primary.value.toLong()
-    ), Category(
-        id = 0, title = "Gym", iconRes = R.drawable.ic_gym.toString(),
-        // arName = "التمرين",
-        isDefault = true, taskCount = 0,
-        //tint = TudeeTheme.colors.primary.value.toLong()
-    ), Category(
+        taskCount = 0
+    ),
+    Category(
+        id = 0,
+        title = "Gym",
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_gym),
+        isDefault = true,
+        taskCount = 0
+    ),
+    Category(
         id = 0,
         title = "Entertainment",
-        // arName = "الترفيه",
-        iconRes = R.drawable.ic_entertainment.toString(),
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_entertainment),
         isDefault = true,
-        taskCount = 0,
-        //tint = TudeeTheme.colors.yellowAccent.value.toLong()
-    ), Category(
+        taskCount = 0
+    ),
+    Category(
         id = 0,
         title = "Cooking",
-        // arName = "الطب",
-        iconRes = R.drawable.ic_cooking.toString(),
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_cooking),
         isDefault = true,
-        taskCount = 0,
-        //   tint = TudeeTheme.colors.pinkAccent.value.toLong()
-    ), Category(
+        taskCount = 0
+    ),
+    Category(
         id = 0,
         title = "Family & friend",
-        // arName = "الأسرة والاصدقاء",
-        iconRes = R.drawable.ic_family.toString(),
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_family),
         isDefault = true,
-        taskCount = 0,
-        // tint = TudeeTheme.colors.secondary.value.toLong()
-    ), Category(
+        taskCount = 0
+    ),
+    Category(
         id = 0,
         title = "Traveling",
-        // arName = "السفر",
-        iconRes = R.drawable.ic_travel.toString(),
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_travel),
         isDefault = true,
-        taskCount = 0,
-        //tint = TudeeTheme.colors.yellowAccent.value.toLong()
-    ), Category(
+        taskCount = 0
+    ),
+    Category(
         id = 0,
         title = "Agriculture",
-        // arName = "الزراعة",
-        iconRes = R.drawable.ic_agriculture.toString(),
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_agriculture),
         isDefault = true,
-        taskCount = 0,
-        //tint = TudeeTheme.colors.greenAccent.value.toLong()
-    ), Category(
+        taskCount = 0
+    ),
+    Category(
         id = 0,
         title = "Coding",
-        //  arName = "البرمجة",
-        iconRes = R.drawable.ic_coding.toString(),
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_coding),
         isDefault = true,
-        taskCount = 0,
-        //tint = TudeeTheme.colors.purpleAccent.value.toLong()
-    ), Category(
+        taskCount = 0
+    ),
+    Category(
         id = 0,
         title = "Adoration",
-        //arName = "الاعزاء",
-        iconRes = R.drawable.ic_adoration.toString(),
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_adoration),
         isDefault = true,
-        taskCount = 0,
-        //tint = TudeeTheme.colors.primary.value.toLong()
-    ), Category(
+        taskCount = 0
+    ),
+    Category(
         id = 0,
         title = "Fixing bugs",
-        //arName = "التصليح",
-        iconRes = R.drawable.ic_bug_fix.toString(),
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_bug_fix),
         isDefault = true,
-        taskCount = 0,
-        // tint = TudeeTheme.colors.pinkAccent.value.toLong()
-    ), Category(
+        taskCount = 0
+    ),
+    Category(
         id = 0,
         title = "Cleaning",
-        //arName = "التنظيف",
-        iconRes = R.drawable.ic_cleaning.toString(),
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_cleaning),
         isDefault = true,
-        taskCount = 0,
-        // tint = TudeeTheme.colors.greenAccent.value.toLong()
-    ), Category(
+        taskCount = 0
+    ),
+    Category(
         id = 0,
         title = "Work",
-        //arName = "العمل",
-        iconRes = R.drawable.ic_work.toString(),
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_work),
         isDefault = true,
-        taskCount = 0,
-        // tint = TudeeTheme.colors.secondary.value.toLong()
-    ), Category(
+        taskCount = 0
+    ),
+    Category(
         id = 0,
         title = "Budgeting",
-        //arName = "الحسابات",
-        iconRes = R.drawable.ic_budgeting.toString(),
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_budgeting),
         isDefault = true,
-        taskCount = 0,
-        // tint = TudeeTheme.colors.purpleAccent.value.toLong()
-    ), Category(
+        taskCount = 0
+    ),
+    Category(
         id = 0,
         title = "Self-care",
-        //arName = "الحسابات",
-        iconRes = R.drawable.ic_self_care.toString(),
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_self_care),
         isDefault = true,
-        taskCount = 0,
-        //   tint = TudeeTheme.colors.yellowAccent.value.toLong()
-    ), Category(
+        taskCount = 0
+    ),
+    Category(
         id = 0,
         title = "Event",
-        //arName = "الحسابات",
-        iconRes = R.drawable.ic_event.toString(),
+        iconRes = convertDrawableToByteArray(context, R.drawable.ic_event),
         isDefault = true,
-        taskCount = 0,
-        //tint = TudeeTheme.colors.pinkAccent.value.toLong()
+        taskCount = 0
     )
 )

@@ -62,7 +62,7 @@ class CreateCategoryViewModel(
                     id = 0, // Auto-generated
                     title = currentState.categoryName,
 //                    arName = currentState.categoryNameAr.ifBlank { currentState.categoryName },
-                    iconRes = "ic_entertainment",
+                    iconRes = "",
                     isDefault = false,
                     taskCount = 0,
                     //tint = currentState.selectedColor.value.toLong()

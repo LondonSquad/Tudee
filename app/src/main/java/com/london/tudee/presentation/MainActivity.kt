@@ -1,7 +1,6 @@
 package com.london.tudee.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -18,17 +17,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.home.HomeScreen
-import com.london.tudee.presentation.screens.onboarding.OnBoardingHorizontalPager
-import com.london.tudee.presentation.screens.onboarding.OnBoardingViewModel
-import org.koin.androidx.compose.koinViewModel
+import com.london.tudee.presentation.screens.categories.CategoriesScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,16 +30,17 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TudeeTheme {
-                val onboardingViewModel: OnBoardingViewModel = koinViewModel()
-                val shouldShowOnboarding by onboardingViewModel.shouldShowOnboarding.collectAsState()
-
-                shouldShowOnboarding.let { showOnboarding ->
-                    if (showOnboarding) {
-                        OnBoardingHorizontalPager(
-                            onClickSkip = {onboardingViewModel.markOnboardingSeen() }
-                        )
-                    } else HomeScreen()
-                }
+//                val onboardingViewModel: OnBoardingViewModel = koinViewModel()
+//                val shouldShowOnboarding by onboardingViewModel.shouldShowOnboarding.collectAsState()
+//
+//                shouldShowOnboarding.let { showOnboarding ->
+//                    if (showOnboarding) {
+//                        OnBoardingHorizontalPager(
+//                            onClickSkip = {onboardingViewModel.markOnboardingSeen() }
+//                        )
+//                    } else HomeScreen()
+//                }
+                CategoriesScreen(onCategoryClick = {}) { }
             }
         }
     }
