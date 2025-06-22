@@ -97,14 +97,6 @@ fun HomeScreenContent(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-//        TudeeFloatingActionButton(
-//            painter = painterResource(R.drawable.note_add),
-//            contentDescription = "Note icon",
-//            modifier = Modifier,
-//            onClick = {},
-//            isEnabled = true,
-//        )
-
         TopAPPBar()
 
         Column(
