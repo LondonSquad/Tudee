@@ -10,6 +10,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import java.io.ByteArrayOutputStream
+import androidx.core.graphics.createBitmap
 
 fun convertDrawableToByteArray(context: Context, drawableResId: Int): String {
     val drawable = AppCompatResources.getDrawable(context, drawableResId)
@@ -28,7 +29,7 @@ private fun drawableToBitmap(drawable: Drawable): Bitmap {
     }
     val width = drawable.intrinsicWidth.takeIf { it > 0 } ?: 100
     val height = drawable.intrinsicHeight.takeIf { it > 0 } ?: 100
-    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    val bitmap = createBitmap(width, height)
     val canvas = Canvas(bitmap)
     drawable.setBounds(0, 0, canvas.width, canvas.height)
     drawable.draw(canvas)
