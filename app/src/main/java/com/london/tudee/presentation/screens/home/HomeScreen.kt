@@ -64,6 +64,9 @@ fun HomeScreen(
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
         else -> HomeScreenContent(
             state = uiState,
+            onInProgressTasksArrowClicked = { },
+            onTodoTasksArrowClicked = { },
+            onDoneTasksArrowClicked = { },
         )
     }
 }
@@ -92,6 +95,9 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 @Composable
 fun HomeScreenContent(
     state: HomeUiState,
+    onInProgressTasksArrowClicked : (String) -> Unit,
+    onTodoTasksArrowClicked: (String) -> Unit,
+    onDoneTasksArrowClicked: (String) -> Unit
 ) {
     val context = LocalContext.current
     Column(
@@ -123,21 +129,21 @@ fun HomeScreenContent(
             } else {
                 InProgressSection(
                     inProgressTasks = state.inProgressTasks,
-                    onInProgressTasksArrowClicked = {}
+                    onInProgressTasksArrowClicked = onInProgressTasksArrowClicked
                 )
 
                 Spacer(Modifier.height(24.dp))
 
                 ToDoSection(
                     toDoTasks = state.toDoTasks,
-                    onTodoTasksArrowClicked = { }
+                    onTodoTasksArrowClicked = onTodoTasksArrowClicked
                 )
 
                 Spacer(Modifier.height(24.dp))
 
                 DoneSection(
                     doneTasks = state.doneTasks,
-                    onDoneTasksArrowClicked = {}
+                    onDoneTasksArrowClicked = onDoneTasksArrowClicked
                 )
             }
         }
