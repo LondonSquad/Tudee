@@ -2,6 +2,8 @@ package com.london.tudee.presentation.screens.task.task_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.london.tudee.domain.entities.Priority
+import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
@@ -11,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.Instant
 
 class TaskDetailsViewModel(
     private val taskService: TaskService, private val categoryService: CategoryService
@@ -21,10 +24,16 @@ class TaskDetailsViewModel(
 
     fun loadTask(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val task = taskService.getById(id)
-            val icon = categoryService.getIconResById(task.categoryId)
-            _uiState.update {
-                it.copy(task = task, categoryIcon = icon)
+            runCatching {
+                val task = taskService.getById(id)
+                val icon = categoryService.getIconResById(task.categoryId)
+                _uiState.update {
+                    it.copy(task = task, categoryIcon = icon)
+                }
+            }.isFailure.also {
+                if (it) _uiState.update {
+                    it.copy(errorMessages = "Something went wrong task not found or no category icon")
+                }
             }
         }
     }
@@ -39,12 +48,29 @@ class TaskDetailsViewModel(
             }
             val updatedTask = task.copy(taskStatus = newStatus)
             withContext(Dispatchers.IO) {
-                taskService.edit(updatedTask)
+                runCatching {
+                    taskService.edit(updatedTask)
+                }.isFailure.also {
+                    if (it) _uiState.update {
+                        it.copy(errorMessages = "Something went wrong cant update task")
+                    }
+                }
             }
             _uiState.update {
                 it.copy(task = updatedTask)
             }
+        }
+    }
 
+    fun hideBottomSheet() {
+        _uiState.update {
+            it.copy(isVisibleDetailsBottomSheet = false)
+        }
+    }
+
+    fun onEditClick() {
+        _uiState.update {
+            it.copy(isVisibleEditBottomSheet = true)
         }
     }
 
