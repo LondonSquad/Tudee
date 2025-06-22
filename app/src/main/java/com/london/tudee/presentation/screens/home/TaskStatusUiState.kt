@@ -16,7 +16,7 @@ data class TaskStatusUiState(
 fun getTaskStatus(
     allTasks: Int, doneTasks: Int, inProgressTasks: Int, toDoTasks: Int
 ): TaskStatusUiState {
-    when{
+    when {
         doneTasks == 0 && inProgressTasks == 0 && toDoTasks == 0 -> {
             return TaskStatusUiState(
                 title = stringResource(R.string.Nothing_on_your_list),
@@ -26,16 +26,16 @@ fun getTaskStatus(
             )
         }
 
-        doneTasks in 1..<allTasks ->  {
+        inProgressTasks > doneTasks && inProgressTasks > toDoTasks -> {
             return TaskStatusUiState(
                 title = stringResource(R.string.Stay_working),
-                subtitle = stringResource(R.string.task_progress),
+                subtitle = stringResource(R.string.task_progress, doneTasks, allTasks),
                 emoji = R.drawable.okay_status,
                 tudeePicture = R.drawable.tudee_warning
             )
         }
 
-        doneTasks > 0 && doneTasks == allTasks -> {
+        doneTasks > inProgressTasks && doneTasks > toDoTasks && doneTasks == allTasks -> {
             return TaskStatusUiState(
                 title = stringResource(R.string.Tadaa),
                 subtitle = stringResource(R.string.encouragement_message),

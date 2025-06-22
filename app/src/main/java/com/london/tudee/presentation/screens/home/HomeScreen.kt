@@ -2,6 +2,8 @@ package com.london.tudee.presentation.screens.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,17 +24,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -40,26 +43,30 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Task
+import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.presentation.components.HomeTopBar
 import com.london.tudee.presentation.components.StatusCard
 import com.london.tudee.presentation.components.TaskStatusSlider
-import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.components.date.DateBadge
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.tasks.EmptyTasksScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = koinViewModel()
+    viewModel: HomeViewModel = koinViewModel(),
+    onArrowClicked: (String) -> Unit,
 ) {
-
     val uiState by viewModel.uiState.collectAsState()
     when {
         uiState.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
-        else -> HomeScreenContent(uiState)
+        else -> HomeScreenContent(
+            state = uiState,
+            onArrowClicked
+        )
     }
 }
 
@@ -86,64 +93,66 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreenContent(
-    state: HomeUiState
+    state: HomeUiState,
+    onArrowClicked: (String) -> Unit
 ) {
-    Scaffold(
-        floatingActionButton = {
-            TudeeFloatingActionButton(
-                painter = painterResource(R.drawable.note_add),
-                contentDescription = "note icon",
-                onClick = { },
-                isEnabled = true
-            )
-        }
+    val context = LocalContext.current
+    Column(
+        modifier = Modifier.fillMaxSize()
     ) {
+        TopAPPBar()
+
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .weight(1f)
+                .background(TudeeTheme.colors.surface)
+                .verticalScroll(rememberScrollState())
         ) {
-            TopAPPBar()
 
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .background(TudeeTheme.colors.surface)
-                    .verticalScroll(rememberScrollState())
-            ) {
+            OverLayerBox(
+                numberOfAllTasks = state.allTasks.size,
+                numberOfDoneTasks = state.doneTasks.size,
+                numberOfInProgressTasks = state.inProgressTasks.size,
+                numberOfToDoTasks = state.toDoTasks.size,
+                dateOfToday = "${stringResource(R.string.today)} ${
+                    HomeScreenUtils.customDateFormatter(
+                        context
+                    )
+                }"
+            )
 
-                OverLayerBox(
-                    numberOfAllTasks = state.allTasks.size,
-                    numberOfDoneTasks = state.doneTasks.size,
-                    numberOfInProgressTasks = state.inProgressTasks.size,
-                    numberOfToDoTasks = state.toDoTasks.size,
-                    dateOfToday = "today, ${HomeScreenUtils.customDateFormatter()}"
-                )
-
+            if (state.allTasks.isEmpty()) {
+                EmptyTasksScreen()
+            } else {
                 InProgressSection(
-                    inProgressTasks = state.inProgressTasks
+                    inProgressTasks = state.inProgressTasks,
+                    onInProgressTasksArrowClicked = onArrowClicked
                 )
 
                 Spacer(Modifier.height(24.dp))
 
                 ToDoSection(
-                    toDoTasks = state.toDoTasks
+                    toDoTasks = state.toDoTasks,
+                    onTodoTasksArrowClicked = onArrowClicked
                 )
 
                 Spacer(Modifier.height(24.dp))
 
                 DoneSection(
-                    doneTasks = state.doneTasks
+                    doneTasks = state.doneTasks,
+                    onDoneTasksArrowClicked = onArrowClicked
                 )
             }
         }
     }
 }
 
+
 @Composable
 private fun TopAPPBar() {
     Box(
         modifier = Modifier
             .background(TudeeTheme.colors.primary)
-            .padding(horizontal = 16.dp)
             .padding(WindowInsets.statusBars.asPaddingValues())
             .height(72.dp)
             .fillMaxWidth(),
@@ -152,10 +161,11 @@ private fun TopAPPBar() {
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val isDark = remember { mutableStateOf(false) }
+            val systemDarkTheme = isSystemInDarkTheme()
+            var isDark by remember { mutableStateOf(systemDarkTheme) }
             HomeTopBar(
-                isDarkMode = isDark.value,
-                onCheckedChange = { isDark.value = it },
+                isDarkMode = isDark,
+                onCheckedChange = { isDark = it },
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -268,7 +278,8 @@ private fun OverLayerBox(
 
 @Composable
 private fun ToDoSection(
-    toDoTasks: List<Task>
+    toDoTasks: List<Task>,
+    onTodoTasksArrowClicked: (String) -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -290,12 +301,16 @@ private fun ToDoSection(
                     color = TudeeTheme.colors.surfaceHigh,
                     shape = TudeeTheme.shapes.circle,
                 )
+                .clip(shape = TudeeTheme.shapes.circle)
+                .clickable {
+                    onTodoTasksArrowClicked(TaskStatus.TODO.name)
+                }
                 .padding(vertical = 6.dp, horizontal = 8.dp),
             contentAlignment = Alignment.Center
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(2.dp)
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 Text(
                     text = "${toDoTasks.size}",
@@ -342,7 +357,8 @@ private fun ToDoSection(
 
 @Composable
 private fun InProgressSection(
-    inProgressTasks: List<Task>
+    inProgressTasks: List<Task>,
+    onInProgressTasksArrowClicked: (String) -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -364,13 +380,18 @@ private fun InProgressSection(
                     color = TudeeTheme.colors.surfaceHigh,
                     shape = TudeeTheme.shapes.circle,
                 )
+                .clip(shape = TudeeTheme.shapes.circle)
+                .clickable {
+                    onInProgressTasksArrowClicked(TaskStatus.IN_PROGRESS.name)
+                }
                 .padding(vertical = 6.dp, horizontal = 8.dp),
             contentAlignment = Alignment.Center
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
+
+                ) {
                 Text(
                     text = "${inProgressTasks.size}",
                     style = TudeeTheme.typography.labelSmall,
@@ -416,7 +437,8 @@ private fun InProgressSection(
 
 @Composable
 private fun DoneSection(
-    doneTasks: List<Task>
+    doneTasks: List<Task>,
+    onDoneTasksArrowClicked: (String) -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -438,12 +460,16 @@ private fun DoneSection(
                     color = TudeeTheme.colors.surfaceHigh,
                     shape = TudeeTheme.shapes.circle,
                 )
+                .clip(shape = TudeeTheme.shapes.circle)
+                .clickable {
+                    onDoneTasksArrowClicked(TaskStatus.DONE.name)
+                }
                 .padding(vertical = 6.dp, horizontal = 8.dp),
             contentAlignment = Alignment.Center
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(2.dp)
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 Text(
                     text = "${doneTasks.size}",
@@ -492,6 +518,8 @@ private fun DoneSection(
 @Composable
 fun PreviewHomeScreen() {
     TudeeTheme {
-        HomeScreen()
+        HomeScreen(
+            onArrowClicked = {}
+        )
     }
 }

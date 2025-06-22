@@ -44,7 +44,9 @@ class MainActivity : ComponentActivity() {
                         OnBoardingHorizontalPager(
                             onClickSkip = {onboardingViewModel.markOnboardingSeen() }
                         )
-                    } else HomeScreen()
+                    } else HomeScreen(
+                        onArrowClicked = { }
+                    )
                 }
             }
         }
