@@ -1,9 +1,7 @@
-package com.london.tudee.presentation.screens.task.task_details
+package com.london.tudee.presentation.screens.task.taskdetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.london.tudee.domain.entities.Priority
-import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
@@ -13,14 +11,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Instant
 
-class TaskDetailsViewModel(
+class TaskDetailsBottomSheetViewModel(
     private val taskService: TaskService, private val categoryService: CategoryService
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<TaskDetailsUiState>(TaskDetailsUiState())
-    val uiState: StateFlow<TaskDetailsUiState> = _uiState
+    private val _uiState = MutableStateFlow<TaskDetailsBottomSheetUiState>(TaskDetailsBottomSheetUiState())
+    val uiState: StateFlow<TaskDetailsBottomSheetUiState> = _uiState
 
     fun loadTask(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -64,13 +61,13 @@ class TaskDetailsViewModel(
 
     fun hideBottomSheet() {
         _uiState.update {
-            it.copy(isVisibleDetailsBottomSheet = false)
+            it.copy(isDetailsBottomSheetVisible = false)
         }
     }
 
     fun onEditClick() {
         _uiState.update {
-            it.copy(isVisibleEditBottomSheet = true)
+            it.copy(isEditBottomSheetVisible = true)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.task.task_details
+package com.london.tudee.presentation.screens.task.taskdetails
 
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Priority
@@ -6,7 +6,7 @@ import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import kotlinx.datetime.Instant
 
-data class TaskDetailsUiState(
+data class TaskDetailsBottomSheetUiState(
     val categoryIcon: Int= R.drawable.ic_education,
     val task:Task=Task(
         id = 1,
@@ -17,7 +17,7 @@ data class TaskDetailsUiState(
         categoryId = 6,
         timeStamp = Instant.parse("2023-09-20T00:00:00Z")
     ),
-    val isVisibleDetailsBottomSheet:Boolean=true,
-    val isVisibleEditBottomSheet:Boolean=false,
+    val isDetailsBottomSheetVisible:Boolean=true,
+    val isEditBottomSheetVisible:Boolean=false,
     val errorMessages: String?=null
 )

@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.task.task_details
+package com.london.tudee.presentation.screens.task.taskdetails
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -34,16 +34,16 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun TaskDetailsScreen(
+fun TaskDetailsBottomSheet(
     taskId: Int,
-    viewModel: TaskDetailsViewModel = koinViewModel(),
+    viewModel: TaskDetailsBottomSheetViewModel = koinViewModel(),
 ) {
 
     val taskDetailsUiState by viewModel.uiState.collectAsState()
     LaunchedEffect(Unit) {
         viewModel.loadTask(taskId)
     }
-    TaskDetailsScreenContent(
+    TaskDetailsBottomSheetContent(
         taskName = taskDetailsUiState.task.title,
         taskDescription = taskDetailsUiState.task.description,
         taskStatus = taskDetailsUiState.task.taskStatus,
@@ -52,10 +52,10 @@ fun TaskDetailsScreen(
         onEditClick = viewModel::onEditClick,
         onMoveClick = viewModel::onClickMove,
         onDismiss = viewModel::hideBottomSheet,
-        showBottomSheet = taskDetailsUiState.isVisibleDetailsBottomSheet
+        showBottomSheet = taskDetailsUiState.isDetailsBottomSheetVisible
     )
-    if (taskDetailsUiState.isVisibleEditBottomSheet) {
-        TaskDetailsScreenContent(
+    if (taskDetailsUiState.isEditBottomSheetVisible) {
+        TaskDetailsBottomSheetContent(
             taskName = "i'm in edit task screen",
             taskDescription = "i'm in edit task screen",
             taskStatus = taskDetailsUiState.task.taskStatus,
@@ -64,7 +64,7 @@ fun TaskDetailsScreen(
             onEditClick = viewModel::onEditClick,
             onMoveClick = viewModel::onClickMove,
             onDismiss = viewModel::hideBottomSheet,
-            showBottomSheet = taskDetailsUiState.isVisibleDetailsBottomSheet
+            showBottomSheet = taskDetailsUiState.isDetailsBottomSheetVisible
         ) //replace by edit task screen and sent task id
     }
     if (taskDetailsUiState.errorMessages != null) {
@@ -74,7 +74,7 @@ fun TaskDetailsScreen(
 }
 
 @Composable
-private fun TaskDetailsScreenContent(
+private fun TaskDetailsBottomSheetContent(
     taskName: String,
     taskDescription: String,
     taskStatus: TaskStatus,
@@ -258,7 +258,7 @@ private fun ActionsRow(
 @ThemePreviews
 @Composable
 private fun PreviewTaskDetail() {
-    TaskDetailsScreenContent(
+    TaskDetailsBottomSheetContent(
         taskName = "Task Name",
         taskDescription = "Task Description",
         taskStatus = TaskStatus.TODO,
