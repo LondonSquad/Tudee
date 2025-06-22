@@ -1,7 +1,8 @@
-package com.london.tudee.presentation.screens.task.task_details
+package com.london.tudee.presentation.screens.task.taskdetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.london.tudee.R
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
@@ -12,19 +13,25 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class TaskDetailsViewModel(
+class TaskDetailsBottomSheetViewModel(
     private val taskService: TaskService, private val categoryService: CategoryService
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<TaskDetailsUiState>(TaskDetailsUiState())
-    val uiState: StateFlow<TaskDetailsUiState> = _uiState
+    private val _uiState = MutableStateFlow(TaskDetailsBottomSheetUiState())
+    val uiState: StateFlow<TaskDetailsBottomSheetUiState> = _uiState
 
     fun loadTask(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val task = taskService.getById(id)
-            val icon = categoryService.getIconResById(task.categoryId)
-            _uiState.update {
-                it.copy(task = task, categoryIcon = icon)
+            runCatching {
+                val task = taskService.getById(id)
+                val icon = categoryService.getIconResById(task.categoryId)
+                _uiState.update {
+                    it.copy(task = task, categoryIcon = icon)
+                }
+            }.isFailure.also {
+                if (it) _uiState.update {state->
+                    state.copy(errorMessages = R.string.Something_went_wrong_task_not_found_or_no_category_icon.toString())
+                }
             }
         }
     }
@@ -39,12 +46,23 @@ class TaskDetailsViewModel(
             }
             val updatedTask = task.copy(taskStatus = newStatus)
             withContext(Dispatchers.IO) {
-                taskService.edit(updatedTask)
+                runCatching {
+                    taskService.edit(updatedTask)
+                }.isFailure.also {
+                    if (it) _uiState.update { state->
+                        state.copy(errorMessages = R.string.Something_went_wrong_cant_update_task.toString())
+                    }
+                }
             }
             _uiState.update {
                 it.copy(task = updatedTask)
             }
+        }
+    }
 
+    fun onEditClick() {
+        _uiState.update {
+            it.copy(isEditBottomSheetVisible = true)
         }
     }
 
