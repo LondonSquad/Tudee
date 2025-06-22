@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -64,8 +66,16 @@ fun TudeeBottomSheetScreen(
 
         AnimatedVisibility(
             visible = showBottomSheet,
-            enter = fadeIn(animationSpec = tween(300)),
-            exit = fadeOut(animationSpec = tween(300))
+            enter = slideInVertically(
+                animationSpec = tween(1000)
+            ){
+                -it
+            },
+            exit = slideOutVertically(
+                animationSpec = tween(1000)
+            ){
+                it
+            }
         ) {
             Box(
                 modifier = Modifier

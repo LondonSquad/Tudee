@@ -21,23 +21,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
+import com.london.tudee.presentation.base.BaseCreateTaskInteractions
 import com.london.tudee.presentation.components.CategoryItem
 import com.london.tudee.presentation.components.TudeeTextField
 import com.london.tudee.presentation.components.date.TudeeDatePicker
 import com.london.tudee.presentation.components.priority.PrioritySelector
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.mapper.CategoryMapper
-import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -46,12 +43,12 @@ import java.util.Locale
 fun AddOrEditTaskDetails(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
-    viewModel: AddOrEditTaskViewModel = koinViewModel(),
+    uiState: AddOrEditTaskUiState,
+    interactions: BaseCreateTaskInteractions,
     categories: List<Category> = emptyList()
 ) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val maxHeight = screenHeight * 0.75f
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(
         modifier = modifier
@@ -68,11 +65,11 @@ fun AddOrEditTaskDetails(
                 title = title,
                 uiState = uiState,
                 categories = categories.ifEmpty { uiState.categories },
-                onTitleValueChange = { viewModel.updateTitle(it) },
-                onDescriptionValueChange = { viewModel.updateDescription(it) },
-                onDateFieldClick = { viewModel.showDatePicker() },
-                onPrioritySelected = { viewModel.updateSelectedPriority(it) },
-                onCategorySelected = { viewModel.updateSelectedCategory(it) },
+                onTitleValueChange = { interactions.updateTitle(it) },
+                onDescriptionValueChange = { interactions.updateDescription(it) },
+                onDateFieldClick = { interactions.showDatePicker() },
+                onPrioritySelected = { interactions.updateSelectedPriority(it) },
+                onCategorySelected = { interactions.updateSelectedCategory(it) },
                 modifier = modifier.fillMaxWidth()
             )
         }
@@ -81,15 +78,16 @@ fun AddOrEditTaskDetails(
     if (uiState.showDatePicker) {
         TudeeDatePicker(
             onDateSelected = { date ->
-                viewModel.updateSelectedDate(date ?: System.currentTimeMillis())
-                viewModel.hideDatePicker()
+                interactions.updateSelectedDate(date ?: System.currentTimeMillis())
+                interactions.hideDatePicker()
             },
             onDismiss = {
-                viewModel.hideDatePicker()
+                interactions.hideDatePicker()
             }
         )
     }
 }
+
 @Composable
 private fun TaskDetailsContent(
     modifier: Modifier,
@@ -236,9 +234,9 @@ private fun CategoriesGrid(
                 rowCategories.forEach { category ->
                     CategoryItem(
                         modifier = Modifier.weight(1f),
-                        iconRes =  rememberAsyncImagePainter( category.iconRes),
+                        iconRes = rememberAsyncImagePainter(category.iconRes),
                         title = category.title //CategoryMapper.getCategoryDisplayName(category)
-                            ,
+                        ,
                         onClick = { onCategorySelected(category) }
                     )
 
@@ -287,49 +285,49 @@ private fun PreviewCategorySection() {
 private fun rememberSampleDomainCategories(): List<Category> {
     val primaryColor = TudeeTheme.colors.primary.value
     val secondaryColor = TudeeTheme.colors.secondary.value
-    
+
     return remember {
         listOf(
             Category(
                 id = 1,
                 title = "Education",
-               // arName = "التعليم",
+                // arName = "التعليم",
                 iconRes = "",
                 isDefault = true,
                 taskCount = 0,
-               // tint = primaryColor
+                // tint = primaryColor
             ),
             Category(
                 id = 2,
                 title = "Shopping",
-               // arName = "التسوق",
+                // arName = "التسوق",
                 iconRes = "",
                 isDefault = true,
                 taskCount = 0,
-               // tint = secondaryColor
+                // tint = secondaryColor
             ),
             Category(
                 id = 3,
                 title = "Medical",
-               // arName = "طبي",
+                // arName = "طبي",
                 iconRes = "",
                 isDefault = true,
                 taskCount = 0,
-               // tint =primaryColor
+                // tint =primaryColor
             ),
             Category(
                 id = 4,
                 title = "Gym",
-               // arName = "رياضة",
+                // arName = "رياضة",
                 iconRes = "",
                 isDefault = false,
                 taskCount = 0,
-             //   tint = primaryColor
+                //   tint = primaryColor
             ),
             Category(
                 id = 5,
                 title = "Entertainment",
-               // arName = "ترفيه",
+                // arName = "ترفيه",
                 iconRes = "",
                 isDefault = false,
                 taskCount = 0,
@@ -339,29 +337,29 @@ private fun rememberSampleDomainCategories(): List<Category> {
             Category(
                 id = 6,
                 title = "Cooking",
-               // arName = "طبخ",
+                // arName = "طبخ",
                 iconRes = "",
                 isDefault = false,
                 taskCount = 0,
-               // tint = primaryColor
+                // tint = primaryColor
             ),
             Category(
                 id = 7,
                 title = "Family & Friends",
-               // arName = "العائلة والأصدقاء",
+                // arName = "العائلة والأصدقاء",
                 iconRes = "",
                 isDefault = false,
                 taskCount = 0,
-               // tint = primaryColor
+                // tint = primaryColor
             ),
             Category(
                 id = 8,
                 title = "Traveling",
-               // arName = "سفر",
+                // arName = "سفر",
                 iconRes = "",
                 isDefault = false,
                 taskCount = 0,
-               // tint = primaryColor
+                // tint = primaryColor
             ),
             Category(
                 id = 9,
@@ -370,7 +368,7 @@ private fun rememberSampleDomainCategories(): List<Category> {
                 iconRes = "",
                 isDefault = false,
                 taskCount = 0,
-             //   tint = primaryColor
+                //   tint = primaryColor
             )
         )
     }

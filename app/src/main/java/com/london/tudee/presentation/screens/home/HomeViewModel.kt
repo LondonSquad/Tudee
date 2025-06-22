@@ -1,11 +1,11 @@
 package com.london.tudee.presentation.screens.home
 
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
+import com.london.tudee.presentation.base.BaseCreateTaskViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +16,9 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val taskService: TaskService,
     private val categoryService: CategoryService
-) : ViewModel() {
+) : BaseCreateTaskViewModel(
+    taskService, categoryService
+) {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()

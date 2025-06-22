@@ -1,6 +1,11 @@
 package com.london.tudee.presentation.screens.home
 
 import android.annotation.SuppressLint
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -26,6 +31,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,14 +50,19 @@ import androidx.compose.ui.zIndex
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
+import com.london.tudee.presentation.base.BaseCreateTaskInteractions
 import com.london.tudee.presentation.components.HomeTopBar
 import com.london.tudee.presentation.components.StatusCard
 import com.london.tudee.presentation.components.TaskStatusSlider
+import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.components.date.DateBadge
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskBottomSheet
+import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskUiState
 import com.london.tudee.presentation.screens.tasks.EmptyTasksScreen
+import org.jetbrains.annotations.TestOnly
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -60,12 +71,15 @@ fun HomeScreen(
     onArrowClicked: (String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val taskUiState by viewModel.taskUiState.collectAsState()
     when {
         uiState.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
         else -> HomeScreenContent(
             state = uiState,
-            onArrowClicked
+            interactions = viewModel,
+            onArrowClicked = { },
+            taskUiState = taskUiState,
         )
     }
 }
@@ -94,59 +108,88 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 @Composable
 fun HomeScreenContent(
     state: HomeUiState,
+    taskUiState: AddOrEditTaskUiState,
+    interactions: BaseCreateTaskInteractions,
     onArrowClicked: (String) -> Unit
 ) {
     val context = LocalContext.current
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        TopAPPBar()
+
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        TudeeFloatingActionButton(
+            painter = painterResource(R.drawable.note_add),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .zIndex(1f)
+                .padding(bottom = 84.dp, end = 12.dp),
+            contentDescription = "note icon",
+            onClick = {
+                interactions.showBottomSheet()
+            },
+            isEnabled = true,
+        )
 
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .background(TudeeTheme.colors.surface)
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.fillMaxSize()
         ) {
+            TopAPPBar()
 
-            OverLayerBox(
-                numberOfAllTasks = state.allTasks.size,
-                numberOfDoneTasks = state.doneTasks.size,
-                numberOfInProgressTasks = state.inProgressTasks.size,
-                numberOfToDoTasks = state.toDoTasks.size,
-                dateOfToday = "${stringResource(R.string.today)} ${
-                    HomeScreenUtils.customDateFormatter(
-                        context
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .background(TudeeTheme.colors.surface)
+                    .verticalScroll(rememberScrollState())
+            ) {
+
+                OverLayerBox(
+                    numberOfAllTasks = state.allTasks.size,
+                    numberOfDoneTasks = state.doneTasks.size,
+                    numberOfInProgressTasks = state.inProgressTasks.size,
+                    numberOfToDoTasks = state.toDoTasks.size,
+                    dateOfToday = "${stringResource(R.string.today)} ${
+                        HomeScreenUtils.customDateFormatter(
+                            context
+                        )
+                    }"
+                )
+
+                if (state.allTasks.isEmpty()) {
+                    EmptyTasksScreen()
+                } else {
+                    InProgressSection(
+                        inProgressTasks = state.inProgressTasks,
+                        onInProgressTasksArrowClicked = onArrowClicked
                     )
-                }"
-            )
 
-            if (state.allTasks.isEmpty()) {
-                EmptyTasksScreen()
-            } else {
-                InProgressSection(
-                    inProgressTasks = state.inProgressTasks,
-                    onInProgressTasksArrowClicked = onArrowClicked
-                )
+                    Spacer(Modifier.height(24.dp))
 
-                Spacer(Modifier.height(24.dp))
+                    ToDoSection(
+                        toDoTasks = state.toDoTasks,
+                        onTodoTasksArrowClicked = onArrowClicked
+                    )
 
-                ToDoSection(
-                    toDoTasks = state.toDoTasks,
-                    onTodoTasksArrowClicked = onArrowClicked
-                )
+                    Spacer(Modifier.height(24.dp))
 
-                Spacer(Modifier.height(24.dp))
-
-                DoneSection(
-                    doneTasks = state.doneTasks,
-                    onDoneTasksArrowClicked = onArrowClicked
-                )
+                    DoneSection(
+                        doneTasks = state.doneTasks,
+                        onDoneTasksArrowClicked = onArrowClicked
+                    )
+                }
             }
+        }
+
+        if (taskUiState.showBottomSheet) {
+            AddOrEditTaskBottomSheet(
+                modifier = Modifier,
+                title = R.string.add_new_task,
+                buttonText = R.string.add,
+                screenContent = { },
+                uiState = taskUiState,
+                interactions = interactions
+            )
         }
     }
 }
-
 
 @Composable
 private fun TopAPPBar() {

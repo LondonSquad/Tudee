@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.tudee.R
+import com.london.tudee.presentation.base.BaseCreateTaskInteractions
 import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScreen
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
@@ -33,22 +34,23 @@ fun AddOrEditTaskBottomSheet(
     @StringRes title: Int,
     @StringRes buttonText: Int,
     screenContent: @Composable () -> Unit,
-    viewModel: AddOrEditTaskViewModel = koinViewModel()
+    uiState: AddOrEditTaskUiState,
+    interactions: BaseCreateTaskInteractions
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Box(modifier = Modifier.fillMaxSize()) {
         TudeeBottomSheetScreen(
             showBottomSheet = uiState.showBottomSheet,
             onDismiss = {
-                viewModel.hideBottomSheet()
+                interactions.hideBottomSheet()
             },
             screenContent = { screenContent() },
             bottomSheetContent = {
                 AddOrEditTaskDetails(
                     modifier = modifier,
                     title = title,
-                    viewModel = viewModel,
+                    uiState = uiState,
+                    interactions = interactions,
                     categories = uiState.categories
                 )
             },
@@ -59,7 +61,7 @@ fun AddOrEditTaskBottomSheet(
                     isDisabled = !uiState.isFormValid || uiState.isLoading,
                     isLoading = uiState.isLoading,
                     onClick = {
-                        viewModel.saveTask()
+                        interactions.saveTask()
                         Log.d("AddOrEditTaskBottomSheet", "AddOrEditTaskBottomSheet: $uiState")
                     },
                 )
@@ -70,7 +72,7 @@ fun AddOrEditTaskBottomSheet(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.cancel),
                     onClick = {
-                        viewModel.hideBottomSheet()
+                        interactions.hideBottomSheet()
                     },
                 )
             }
@@ -93,6 +95,7 @@ fun AddOrEditTaskBottomSheet(
                             iconTint = TudeeTheme.colors.greenAccent
                         )
                     }
+
                     uiState.errorMessage != null -> {
                         SnackBar(
                             modifier = Modifier.offset(y = 56.dp),
@@ -106,20 +109,20 @@ fun AddOrEditTaskBottomSheet(
 
             LaunchedEffect(uiState.successMessage, uiState.errorMessage) {
                 delay(3000)
-                viewModel.clearMessages()
+                interactions.clearMessages()
             }
         }
     }
 }
-
-@ThemePreviews
-@Composable
-fun PreviewAddOrEditTaskBottomSheet() {
-    TudeeTheme {
-        AddOrEditTaskBottomSheet(
-            title = R.string.task_title,
-            buttonText = R.string.add,
-            screenContent = {}
-        )
-    }
-}
+//
+//@ThemePreviews
+//@Composable
+//fun PreviewAddOrEditTaskBottomSheet() {
+//    TudeeTheme {
+//        AddOrEditTaskBottomSheet(
+//            title = R.string.task_title,
+//            buttonText = R.string.add,
+//            screenContent = {}
+//        )
+//    }
+//}

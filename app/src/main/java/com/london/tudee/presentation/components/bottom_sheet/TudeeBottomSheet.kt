@@ -58,7 +58,6 @@ fun TudeeBottomSheet(
 ) {
     val configuration = LocalConfiguration.current
     val maxHeight = (configuration.screenHeightDp * 0.86).dp
-
     var offsetY by remember { mutableFloatStateOf(0f) }
     val dismissThreshold = 150f
 
@@ -72,11 +71,11 @@ fun TudeeBottomSheet(
         visible = visible,
         enter = slideInVertically(
             initialOffsetY = { it },
-            animationSpec = tween(300)
+            animationSpec = tween(1000)
         ),
         exit = slideOutVertically(
             targetOffsetY = { it },
-            animationSpec = tween(300)
+            animationSpec = tween(1000)
         )
     ) {
         Column(

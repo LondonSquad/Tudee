@@ -5,7 +5,8 @@
     <string name="task_details">تفاصيل المهمة</string>">
     <string name="back_arrow">الرجوع للخلف</string>
     <string name="filter_icon">تصفية</string>
-    <string name="tudee_greeting">Your cute Helper for Every Task</string>
+    <string name="tudee_greeting">مساعدك اللطيف لكل المهام</string>
+    <string name="tudee">تادي</string>
     <string name="In_Progress">قيد التنفيذ</string>
     <string name="Done">تم</string>
     <string name="To_Do">للقيام به</string>
