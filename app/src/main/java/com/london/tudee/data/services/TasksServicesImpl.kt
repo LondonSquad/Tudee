@@ -52,4 +52,13 @@ class TasksServicesImpl(
             list.map { it.convertToTask() }
         }
     }
+
+    override suspend fun getByTimeStampAndTaskStatus(
+        taskStatus: TaskStatus,
+        timeStamp: Long
+    ): Flow<List<Task>> {
+        return taskDao.getByTimeStampAndTaskStatus(taskStatus, timeStamp).map { list ->
+            list.map { it.convertToTask() }
+        }
+    }
 }

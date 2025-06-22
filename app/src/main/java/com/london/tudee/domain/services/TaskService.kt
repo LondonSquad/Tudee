@@ -8,4 +8,5 @@ interface TaskService : Services<Task> {
     suspend fun getByCategoryId(categoryId: Int): Flow<List<Task>>
     suspend fun getByTaskStatus(taskStatus: TaskStatus): Flow<List<Task>>
     suspend fun getTasksByDate(date: Long): Flow<List<Task>>
+    suspend fun getByTimeStampAndTaskStatus(taskStatus: TaskStatus, timeStamp: Long): Flow<List<Task>>
 }
