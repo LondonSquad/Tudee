@@ -1,4 +1,4 @@
-package com.london.tudee.data.local.room_db.converter
+package com.london.tudee.data.local.roomdb.converter
 
 import androidx.room.TypeConverter
 import com.london.tudee.domain.entities.Priority

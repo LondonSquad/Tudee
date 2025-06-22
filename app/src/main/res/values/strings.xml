@@ -85,4 +85,20 @@
     <string name="delete_category">Delete Category</string>
     <string name="no_task_today">No task here!.</string>
     <string name="tap_to_add_task">Tap the + button to add your first one.</string>
+    <string name="today">today,</string>
+    <string name="Jan">Jan</string>
+    <string name="Feb">Feb</string>
+    <string name="Mar">Mar</string>
+    <string name="Apr">Apr</string>
+    <string name="May">May</string>
+    <string name="Jun">Jun</string>
+    <string name="Jul">Jul</string>
+    <string name="Aug">Aug</string>
+    <string name="Sep">Sep</string>
+    <string name="Oct">Oct</string>
+    <string name="Nov">Nov</string>
+    <string name="Dec">Dec</string>
+    <string name="Something_went_wrong_task_not_found_or_no_category_icon">Something went wrong task not found or no category icon</string>
+    <string name="Something_went_wrong_cant_update_task">Something went wrong cant update task</string>
+
 </resources>

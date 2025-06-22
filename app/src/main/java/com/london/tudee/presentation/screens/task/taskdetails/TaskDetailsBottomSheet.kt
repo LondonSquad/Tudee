@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.task.task_details
+package com.london.tudee.presentation.screens.task.taskdetails
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,37 +32,35 @@ import com.london.tudee.presentation.components.priority.PriorityBadge
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import org.koin.androidx.compose.koinViewModel
-import androidx.compose.runtime.getValue
 
 @Composable
-fun TaskDetailsScreen(
+fun TaskDetailsBottomSheet(
     taskId: Int,
-    viewModel: TaskDetailsViewModel = koinViewModel(),
-    onEditClick: () -> Unit = {},
-    onDismiss: () -> Unit = {},
-    showBottomSheet: Boolean = false
+    viewModel: TaskDetailsBottomSheetViewModel = koinViewModel(),
+    onDismiss: () -> Unit = {}
 ) {
 
     val taskDetailsUiState by viewModel.uiState.collectAsState()
     LaunchedEffect(Unit) {
         viewModel.loadTask(taskId)
     }
-    TaskDetailsScreenContent(
+    TaskDetailsBottomSheetContent(
         taskName = taskDetailsUiState.task.title,
         taskDescription = taskDetailsUiState.task.description,
         taskStatus = taskDetailsUiState.task.taskStatus,
         taskPriority = taskDetailsUiState.task.priority,
         icon = taskDetailsUiState.categoryIcon,
-        onEditClick = onEditClick,
+        onEditClick = viewModel::onEditClick,
         onMoveClick = viewModel::onClickMove,
         onDismiss = onDismiss,
-        showBottomSheet = showBottomSheet
     )
-
+    if (taskDetailsUiState.isEditBottomSheetVisible) {
+        TODO()// edit bottom sheet should be here send task id to it
+    }
 }
 
 @Composable
-private fun TaskDetailsScreenContent(
+private fun TaskDetailsBottomSheetContent(
     taskName: String,
     taskDescription: String,
     taskStatus: TaskStatus,
@@ -70,7 +69,7 @@ private fun TaskDetailsScreenContent(
     onEditClick: () -> Unit = {},
     onMoveClick: () -> Unit = {},
     onDismiss: () -> Unit = {},
-    showBottomSheet: Boolean = false
+    showBottomSheet: Boolean = true
 ) {
     TudeeBottomSheetScreen(
         showBottomSheet = showBottomSheet,
@@ -245,7 +244,7 @@ private fun ActionsRow(
 @ThemePreviews
 @Composable
 private fun PreviewTaskDetail() {
-    TaskDetailsScreenContent(
+    TaskDetailsBottomSheetContent(
         taskName = "Task Name",
         taskDescription = "Task Description",
         taskStatus = TaskStatus.TODO,
