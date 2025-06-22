@@ -56,7 +56,10 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = koinViewModel()
+    viewModel: HomeViewModel = koinViewModel(),
+    onInProgressTasksArrowClicked: (String) -> Unit,
+    onTodoTasksArrowClicked: (String) -> Unit,
+    onDoneTasksArrowClicked: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     when {
@@ -64,9 +67,9 @@ fun HomeScreen(
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
         else -> HomeScreenContent(
             state = uiState,
-            onInProgressTasksArrowClicked = { },
-            onTodoTasksArrowClicked = { },
-            onDoneTasksArrowClicked = { },
+            onInProgressTasksArrowClicked = onInProgressTasksArrowClicked,
+            onTodoTasksArrowClicked = onTodoTasksArrowClicked,
+            onDoneTasksArrowClicked = onDoneTasksArrowClicked,
         )
     }
 }
@@ -521,6 +524,10 @@ private fun DoneSection(
 @Composable
 fun PreviewHomeScreen() {
     TudeeTheme {
-        HomeScreen()
+        HomeScreen(
+            onInProgressTasksArrowClicked = {},
+            onTodoTasksArrowClicked = {},
+            onDoneTasksArrowClicked = {}
+        )
     }
 }
