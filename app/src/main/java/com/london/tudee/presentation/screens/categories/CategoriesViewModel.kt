@@ -15,7 +15,8 @@ import kotlinx.coroutines.launch
 data class CategoriesUiState(
     val categories: List<Category> = emptyList(),
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val showBottomSheet: Boolean = false
 )
 
 class CategoriesViewModel(
@@ -42,26 +43,22 @@ class CategoriesViewModel(
 
     private fun getCategories() {
         _uiState.update { it.copy(isLoading = true, errorMessage = null) }
-        
+
         viewModelScope.launch(Dispatchers.IO) {
-            categoryService.getAll()
-                .catch { throwable ->
+            categoryService.getAll().catch { throwable ->
                     Log.e("CategoriesViewModel", "Error loading categories", throwable)
-                    _uiState.update { 
+                    _uiState.update {
                         it.copy(
-                            isLoading = false, 
-                            errorMessage = throwable.message ?: "Failed to load categories"
-                        ) 
-                    }
-                }
-                .collect { categories ->
-                    Log.d("CategoriesViewModel", "Loaded ${categories.size} categories")
-                    _uiState.update { 
-                        it.copy(
-                            categories = categories,
                             isLoading = false,
-                            errorMessage = null
-                        ) 
+                            errorMessage = throwable.message ?: "Failed to load categories"
+                        )
+                    }
+                }.collect { categories ->
+                    Log.d("CategoriesViewModel", "Loaded ${categories.size} categories")
+                    _uiState.update {
+                        it.copy(
+                            categories = categories, isLoading = false, errorMessage = null
+                        )
                     }
                 }
         }
@@ -74,5 +71,8 @@ class CategoriesViewModel(
     fun clearError() {
         _uiState.update { it.copy(errorMessage = null) }
     }
-}
 
+    fun setShowBottomSheet(show: Boolean) {
+        _uiState.update { it.copy(showBottomSheet = show) }
+    }
+}

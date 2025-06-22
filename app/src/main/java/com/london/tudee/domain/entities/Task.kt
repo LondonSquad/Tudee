@@ -1,13 +1,14 @@
 package com.london.tudee.domain.entities
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
 data class Task(
-    val id: Int,
+    val id: Int = 0,
     val title: String,
     val description: String,
     val taskStatus: TaskStatus,
     val priority: Priority,
     val categoryId: Int,
-    val timeStamp: Instant
+    val timeStamp: Instant = Clock.System.now()
 )
