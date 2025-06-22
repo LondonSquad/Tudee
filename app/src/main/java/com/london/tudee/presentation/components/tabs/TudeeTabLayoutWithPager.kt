@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,7 +47,6 @@ fun TudeeTabLayout(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TudeeTabLayoutWithPager(
     modifier: Modifier = Modifier,
@@ -55,9 +55,10 @@ fun TudeeTabLayoutWithPager(
         TabItem(text = R.string.To_Do, number = 8),
         TabItem(text = R.string.Done, number = 5)
     ),
+    pagerState: PagerState = rememberPagerState { tabs.size },
     content: @Composable (page: Int) -> Unit
 ) {
-    val pagerState = rememberPagerState { tabs.size }
+
     val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = modifier) {

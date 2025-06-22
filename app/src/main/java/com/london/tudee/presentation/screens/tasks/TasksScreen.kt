@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,7 +47,9 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun TasksScreen(
     modifier: Modifier = Modifier,
-    viewModel: TasksScreenViewModel = koinViewModel()
+    viewModel: TasksScreenViewModel = koinViewModel(),
+    pagerState: PagerState = rememberPagerState { 3 }
+
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
@@ -82,7 +86,8 @@ fun TasksScreen(
                     TabItem(text = R.string.To_Do, number = uiState.toDoTasks.size),
                     TabItem(text = R.string.Done, number = uiState.doneTasks.size),
 
-                    )
+                    ),
+                pagerState = pagerState,
             ) { page ->
                 val tasks = when (page) {
                     0 -> uiState.inProgressTasks

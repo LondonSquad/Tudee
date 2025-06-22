@@ -1,5 +1,3 @@
-@file:JvmName("TaskDetailsScreenKt")
-
 package com.london.tudee.presentation.screens.task.view_tasks
 
 import androidx.compose.foundation.background
@@ -11,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -32,23 +32,31 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.task.view_tasks.EditTaskDetailsScreen.NUMBER_OF_PREDEFINED_CATEGORIES
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun EditTaskDetails(
+fun CategoryDetails(
+    categoryId: Int,
     viewModel: EditTaskViewModel = koinViewModel(),
+    pagerState: PagerState = rememberPagerState { 3 },
+    onBackClick: () -> Unit,
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
     when {
         uiState.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
-        else -> EditTaskDetailsContent(state = uiState)
+        else -> EditTaskDetailsContent(
+            state = uiState,
+            pagerState = pagerState,
+            categoryId = categoryId
+        )
     }
 }
 
 @Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
+private fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(modifier) {
         Text(
             text = "Loading...",
@@ -58,7 +66,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ErrorScreen(modifier: Modifier = Modifier) {
+private fun ErrorScreen(modifier: Modifier = Modifier) {
     Box(modifier) {
         Text(
             text = "There was an unexpected error",
@@ -69,59 +77,25 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 
 
 @Composable
-fun EditTaskDetailsContent(
+private fun EditTaskDetailsContent(
     state: EditTaskDetailsState,
+    pagerState: PagerState,
+    categoryId: Int
 ) {
     Column(
         modifier = Modifier
             .background(TudeeTheme.colors.surface)
     ) {
 
-        TopAPPBar()
+        TopAPPBar(categoryId = categoryId)
 
-        TudeeTabLayoutWithPager(
-            tabs = listOf(
-                TabItem(text = R.string.In_Progress, number = state.inProgressTasks.size),
-                TabItem(text = R.string.To_Do, number = state.toDoTasks.size),
-                TabItem(
-                    text = R.string.Done, number = state.doneTasks.size
-                ),
+        TudeeTabWithPager(state = state, pagerState = pagerState)
 
-                ),
-        )
-        { page ->
-            val tasks = when (page) {
-                0 -> state.inProgressTasks
-                1 -> state.toDoTasks
-                else -> state.doneTasks
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(TudeeTheme.colors.surface)
-            ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                ) {
-                    items(tasks.size) { index ->
-                        TaskItem(
-                            modifier = Modifier,
-                            isSelected = true,
-                            task = state.allTasks[index],
-                            hasDate = true
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
-                }
-            }
-        }
     }
 }
 
 @Composable
-private fun TopAPPBar() {
+private fun TopAPPBar(categoryId: Int) {
     TopAppBar(
         title = R.string.coding,
         onBackClick = {},
@@ -142,11 +116,14 @@ private fun TopAPPBar() {
                         TudeeTheme.shapes.circle
                     )
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.back_arrow),
-                    contentDescription = stringResource(R.string.back_arrow),
-                    tint = TudeeTheme.colors.body
-                )
+                if (categoryId >= NUMBER_OF_PREDEFINED_CATEGORIES) {
+                    Icon(
+                        painter = painterResource(R.drawable.back_arrow),
+                        contentDescription = stringResource(R.string.back_arrow),
+                        tint = TudeeTheme.colors.body
+                    )
+                }
+
             }
         },
         actions = {
@@ -174,11 +151,57 @@ private fun TopAPPBar() {
     )
 }
 
+@Composable
+private fun TudeeTabWithPager(
+    state: EditTaskDetailsState,
+    pagerState: PagerState,
+) {
+    TudeeTabLayoutWithPager(
+        tabs = listOf(
+            TabItem(text = R.string.In_Progress, number = state.inProgressTasks.size),
+            TabItem(text = R.string.To_Do, number = state.toDoTasks.size),
+            TabItem(text = R.string.Done, number = state.doneTasks.size)
+        ),
+        pagerState = pagerState
+    ) { page ->
+        val tasks = when (page) {
+            0 -> state.inProgressTasks
+            1 -> state.toDoTasks
+            else -> state.doneTasks
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(TudeeTheme.colors.surface)
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                items(tasks.size) { index ->
+                    TaskItem(
+                        modifier = Modifier,
+                        isSelected = true,
+                        task = state.allTasks[index],
+                        hasDate = true
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            }
+        }
+    }
+}
+
+private object EditTaskDetailsScreen {
+    const val NUMBER_OF_PREDEFINED_CATEGORIES = 15
+}
+
 @ThemePreviews
 @Composable
 private fun TudeeTaskPreview() {
     TudeeTheme {
-        EditTaskDetails()
+        CategoryDetails(categoryId = 1, onBackClick = {})
     }
 }
 
