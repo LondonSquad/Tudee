@@ -1,4 +1,4 @@
-package com.london.tudee.data.local.room_db
+package com.london.tudee.data.local.roomdb
 
 import android.content.Context
 import android.graphics.Bitmap
