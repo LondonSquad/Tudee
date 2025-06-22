@@ -57,9 +57,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
-    onInProgressTasksArrowClicked: (String) -> Unit,
-    onTodoTasksArrowClicked: (String) -> Unit,
-    onDoneTasksArrowClicked: (String) -> Unit
+    onArrowClicked: (String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     when {
@@ -67,9 +65,7 @@ fun HomeScreen(
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
         else -> HomeScreenContent(
             state = uiState,
-            onInProgressTasksArrowClicked = onInProgressTasksArrowClicked,
-            onTodoTasksArrowClicked = onTodoTasksArrowClicked,
-            onDoneTasksArrowClicked = onDoneTasksArrowClicked,
+            onArrowClicked
         )
     }
 }
@@ -98,9 +94,7 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 @Composable
 fun HomeScreenContent(
     state: HomeUiState,
-    onInProgressTasksArrowClicked : (String) -> Unit,
-    onTodoTasksArrowClicked: (String) -> Unit,
-    onDoneTasksArrowClicked: (String) -> Unit
+    onArrowClicked: (String) -> Unit
 ) {
     val context = LocalContext.current
     Column(
@@ -132,21 +126,21 @@ fun HomeScreenContent(
             } else {
                 InProgressSection(
                     inProgressTasks = state.inProgressTasks,
-                    onInProgressTasksArrowClicked = onInProgressTasksArrowClicked
+                    onInProgressTasksArrowClicked = onArrowClicked
                 )
 
                 Spacer(Modifier.height(24.dp))
 
                 ToDoSection(
                     toDoTasks = state.toDoTasks,
-                    onTodoTasksArrowClicked = onTodoTasksArrowClicked
+                    onTodoTasksArrowClicked = onArrowClicked
                 )
 
                 Spacer(Modifier.height(24.dp))
 
                 DoneSection(
                     doneTasks = state.doneTasks,
-                    onDoneTasksArrowClicked = onDoneTasksArrowClicked
+                    onDoneTasksArrowClicked = onArrowClicked
                 )
             }
         }
@@ -525,9 +519,7 @@ private fun DoneSection(
 fun PreviewHomeScreen() {
     TudeeTheme {
         HomeScreen(
-            onInProgressTasksArrowClicked = {},
-            onTodoTasksArrowClicked = {},
-            onDoneTasksArrowClicked = {}
+            onArrowClicked = {}
         )
     }
 }
