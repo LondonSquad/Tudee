@@ -118,7 +118,7 @@ private fun CreateCategoryContent(
                         id = 1,
                         title = categoryName,
 //                        arName = categoryName,
-                        iconRes ="",
+                        iconRes = "",
                         isDefault = false,
                       //  tint = primaryColor.value,
                         taskCount = 0

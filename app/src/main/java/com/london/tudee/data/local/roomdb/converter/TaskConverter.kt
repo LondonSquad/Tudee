@@ -16,5 +16,4 @@ class Converters {
 
     @TypeConverter
     fun toStatus(value: String): TaskStatus = TaskStatus.valueOf(value)
-
 }

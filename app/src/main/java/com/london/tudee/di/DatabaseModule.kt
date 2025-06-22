@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
-const val DATABASE_NAME = "TudeeDataBase"
+const val DATABASE_NAME = "TudeeDatabase"
 
 val databaseModule = module {
     single {
@@ -22,7 +22,7 @@ val databaseModule = module {
                     super.onCreate(db)
                     CoroutineScope(Dispatchers.IO).launch {
                         val dao = get<TudeeDatabase>().categoryDao()
-                        defaultCategory().forEach { category ->
+                        defaultCategory(androidContext()).forEach { category ->
                             dao.insert(category.convertToCategoryDto())
                         }
                     }
