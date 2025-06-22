@@ -64,11 +64,7 @@ fun HomeScreen(
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
         else -> HomeScreenContent(
             state = uiState,
-            onInProgressTasksArrowClicked = { },
-            onTodoTasksArrowClicked = { },
-            onDoneTasksArrowClicked = { },
         )
-
     }
 }
 
@@ -96,14 +92,19 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 @Composable
 fun HomeScreenContent(
     state: HomeUiState,
-    onInProgressTasksArrowClicked: (String) -> Unit,
-    onTodoTasksArrowClicked: (String) -> Unit,
-    onDoneTasksArrowClicked: (String) -> Unit,
 ) {
     val context = LocalContext.current
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
+//        TudeeFloatingActionButton(
+//            painter = painterResource(R.drawable.note_add),
+//            contentDescription = "Note icon",
+//            modifier = Modifier,
+//            onClick = {},
+//            isEnabled = true,
+//        )
+
         TopAPPBar()
 
         Column(
@@ -118,7 +119,11 @@ fun HomeScreenContent(
                 numberOfDoneTasks = state.doneTasks.size,
                 numberOfInProgressTasks = state.inProgressTasks.size,
                 numberOfToDoTasks = state.toDoTasks.size,
-                dateOfToday = "${stringResource(R.string.today)} ${HomeScreenUtils.customDateFormatter(context)}"
+                dateOfToday = "${stringResource(R.string.today)} ${
+                    HomeScreenUtils.customDateFormatter(
+                        context
+                    )
+                }"
             )
 
             if (state.allTasks.isEmpty()) {
@@ -126,21 +131,21 @@ fun HomeScreenContent(
             } else {
                 InProgressSection(
                     inProgressTasks = state.inProgressTasks,
-                    onInProgressTasksArrowClicked = onInProgressTasksArrowClicked
+                    onInProgressTasksArrowClicked = {}
                 )
 
                 Spacer(Modifier.height(24.dp))
 
                 ToDoSection(
                     toDoTasks = state.toDoTasks,
-                    onTodoTasksArrowClicked = onTodoTasksArrowClicked
+                    onTodoTasksArrowClicked = { }
                 )
 
                 Spacer(Modifier.height(24.dp))
 
                 DoneSection(
                     doneTasks = state.doneTasks,
-                    onDoneTasksArrowClicked = onDoneTasksArrowClicked
+                    onDoneTasksArrowClicked = {}
                 )
             }
         }
