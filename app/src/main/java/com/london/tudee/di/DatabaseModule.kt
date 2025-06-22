@@ -3,8 +3,8 @@ package com.london.tudee.di
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.london.tudee.data.local.room_db.TudeeDatabase
-import com.london.tudee.data.local.room_db.defaultCategory
+import com.london.tudee.data.local.roomdb.TudeeDatabase
+import com.london.tudee.data.local.roomdb.defaultCategory
 import com.london.tudee.data.mappers.convertToCategoryDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
