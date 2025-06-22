@@ -77,52 +77,5 @@ fun AddOrEditTaskBottomSheet(
                 )
             }
         )
-
-        if (uiState.successMessage != null || uiState.errorMessage != null) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.TopCenter
-            ) {
-                when {
-                    uiState.successMessage != null -> {
-                        SnackBar(
-                            modifier = Modifier.offset(y = 56.dp),
-                            message = if (uiState.isEditMode)
-                                R.string.edit_task_successfully
-                            else
-                                R.string.add_task_successfully,
-                            iconPainter = painterResource(id = R.drawable.snack_bar_container),
-                            iconTint = TudeeTheme.colors.greenAccent
-                        )
-                    }
-
-                    uiState.errorMessage != null -> {
-                        SnackBar(
-                            modifier = Modifier.offset(y = 56.dp),
-                            message = R.string.some_error_happened,
-                            iconPainter = painterResource(id = R.drawable.snack_bar_error),
-                            iconTint = TudeeTheme.colors.errorVariant,
-                        )
-                    }
-                }
-            }
-
-            LaunchedEffect(uiState.successMessage, uiState.errorMessage) {
-                delay(3000)
-                interactions.clearMessages()
-            }
-        }
     }
 }
-//
-//@ThemePreviews
-//@Composable
-//fun PreviewAddOrEditTaskBottomSheet() {
-//    TudeeTheme {
-//        AddOrEditTaskBottomSheet(
-//            title = R.string.task_title,
-//            buttonText = R.string.add,
-//            screenContent = {}
-//        )
-//    }
-//}

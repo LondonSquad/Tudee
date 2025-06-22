@@ -1,11 +1,6 @@
 package com.london.tudee.presentation.screens.home
 
 import android.annotation.SuppressLint
-import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -20,6 +15,7 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
@@ -52,6 +48,7 @@ import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.presentation.base.BaseCreateTaskInteractions
 import com.london.tudee.presentation.components.HomeTopBar
+import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.StatusCard
 import com.london.tudee.presentation.components.TaskStatusSlider
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
@@ -62,7 +59,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskBottomSheet
 import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskUiState
 import com.london.tudee.presentation.screens.tasks.EmptyTasksScreen
-import org.jetbrains.annotations.TestOnly
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -120,7 +117,7 @@ fun HomeScreenContent(
             painter = painterResource(R.drawable.note_add),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .zIndex(1f)
+                .zIndex(if (taskUiState.showBottomSheet) 0f else 1f)
                 .padding(bottom = 84.dp, end = 12.dp),
             contentDescription = "note icon",
             onClick = {
@@ -180,13 +177,48 @@ fun HomeScreenContent(
 
         if (taskUiState.showBottomSheet) {
             AddOrEditTaskBottomSheet(
-                modifier = Modifier,
+                modifier = Modifier.zIndex(1f),
                 title = R.string.add_new_task,
                 buttonText = R.string.add,
                 screenContent = { },
                 uiState = taskUiState,
                 interactions = interactions
             )
+        }
+
+
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            when {
+                taskUiState.successMessage != null -> {
+                    SnackBar(
+                        modifier = Modifier.offset(y = 56.dp),
+                        message = if (taskUiState.isEditMode)
+                            R.string.edit_task_successfully
+                        else
+                            R.string.add_task_successfully,
+                        iconPainter = painterResource(id = R.drawable.snack_bar_container),
+                        iconTint = TudeeTheme.colors.greenAccent
+                    )
+                }
+
+                taskUiState.errorMessage != null -> {
+                    SnackBar(
+                        modifier = Modifier.offset(y = 56.dp),
+                        message = R.string.some_error_happened,
+                        iconPainter = painterResource(id = R.drawable.snack_bar_error),
+                        iconTint = TudeeTheme.colors.errorVariant,
+                    )
+                }
+            }
+
+
+            LaunchedEffect(taskUiState.successMessage, taskUiState.errorMessage) {
+                delay(3000)
+                interactions.clearMessages()
+            }
         }
     }
 }

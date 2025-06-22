@@ -25,6 +25,28 @@ abstract class BaseCreateTaskViewModel(
     private val _taskUiState = MutableStateFlow(AddOrEditTaskUiState())
     val taskUiState = _taskUiState.asStateFlow()
 
+    init {
+        loadCategories()
+    }
+
+    final override fun loadCategories() {
+        viewModelScope.launch {
+            try {
+                categoryService.getAll().collect { categories ->
+                    _taskUiState.update { currentState ->
+                        currentState.copy(
+                            categories = categories,
+                            selectedCategory = currentState.selectedCategory
+                        )
+                    }
+                    validateForm()
+                }
+            } catch (_: Exception) {
+                _taskUiState.update { it.copy(errorMessage = R.string.some_error_happened) }
+            }
+        }
+    }
+
     override fun updateTitle(title: String) {
         _taskUiState.update { it.copy(title = title) }
         validateForm()
@@ -129,6 +151,8 @@ abstract class BaseCreateTaskViewModel(
                 }
             }
         }
+
+        clearMessages()
     }
 
     override fun validateForm() {
