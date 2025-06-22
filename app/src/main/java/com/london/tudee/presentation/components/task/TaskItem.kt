@@ -1,6 +1,5 @@
 package com.london.tudee.presentation.components.task
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,21 +19,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.Task
+import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.presentation.components.date.DateBadge
 import com.london.tudee.presentation.components.priority.PriorityBadge
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.domain.entities.TaskStatus
+import com.london.tudee.presentation.utils.converterStringToBitmap
 import com.london.tudee.presentation.utils.formatDate
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
 
@@ -43,7 +42,8 @@ fun TaskItem(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
     task: Task,
-    hasDate: Boolean
+    hasDate: Boolean,
+    iconResId: String = ""
 ) {
 
     Card(
@@ -60,7 +60,7 @@ fun TaskItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            TaskItemIconSection(task.categoryId)
+            TaskItemIconSection(iconResId)
             Spacer(modifier = Modifier.width(8.dp))
             TaskItemTopBar(
                 priority = task.priority,
@@ -78,12 +78,12 @@ fun TaskItem(
 }
 
 @Composable
-private fun TaskItemIconSection(@DrawableRes iconResId: Int) {
+private fun TaskItemIconSection(iconResId: String) {
     Box(
         modifier = Modifier.size(56.dp), contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = iconResId),
+            painter = rememberAsyncImagePainter(converterStringToBitmap(iconResId)),
             contentDescription = "Category Icon",
         )
     }

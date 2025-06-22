@@ -17,7 +17,7 @@ interface CategoryDao {
     fun getById(id: Int): CategoryDto
 
     @Query("SELECT iconRes FROM CATEGORY_TABLE WHERE id = :id")
-    fun getIconResById(id: Int): Int
+    fun getIconResById(id: Int): String
 
     @Insert
     suspend fun insert(category: CategoryDto)

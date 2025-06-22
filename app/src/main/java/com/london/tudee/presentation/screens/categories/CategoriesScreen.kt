@@ -111,7 +111,7 @@ fun CategoriesScreenContent(
                     ) {
                         items(categories) { category ->
                             CategoryItem(
-                                iconRes = rememberAsyncImagePainter(converterStringToBitmap(category.iconRes)),
+                                iconRes = category.iconRes,
                                 title = category.title,
                                 count = category.taskCount,
                                 onClick = { onCategoryClick(category.id) })
