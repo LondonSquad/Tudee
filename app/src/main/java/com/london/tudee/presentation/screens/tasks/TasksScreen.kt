@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -33,6 +34,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
+import com.london.tudee.domain.entities.Task
+import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.components.date.DateItem
 import com.london.tudee.presentation.components.date.TudeeDatePicker
 import com.london.tudee.presentation.components.tabs.TabItem
@@ -40,100 +43,152 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.SwipeToDeleteTask
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskBottomSheet
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TasksScreen(
-    modifier: Modifier = Modifier,
+    initialTabIndex: Int = 0,
     viewModel: TasksScreenViewModel = koinViewModel()
 ) {
-
     val uiState by viewModel.uiState.collectAsState()
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(TudeeTheme.colors.surface)
-    ) {
-        var showDatePicker by remember { mutableStateOf(false) }
-        var selectedDate by remember { mutableStateOf<Long?>(null) }
 
-        TasksTopAPPBar(
-            modifier = Modifier
-                .background(color = TudeeTheme.colors.surfaceHigh)
-        )
+    TasksContent(
+        initialTabIndex = initialTabIndex,
+        inProgressTasksCount = uiState.inProgressTasks.size,
+        toDoTasksCount = uiState.toDoTasks.size,
+        doneTasksCount = uiState.doneTasks.size,
+        inProgressTasks = uiState.inProgressTasks,
+        toDoTasks = uiState.toDoTasks,
+        doneTasks = uiState.doneTasks,
+    )
+
+}
+
+@Composable
+fun TasksContent(
+    initialTabIndex: Int,
+    inProgressTasksCount: Int,
+    toDoTasksCount: Int,
+    doneTasksCount: Int,
+    inProgressTasks: List<Task>,
+    toDoTasks: List<Task>,
+    doneTasks: List<Task>,
+
+    ) {
+
+    var showDatePicker by remember { mutableStateOf(false) }
+    var selectedDate by remember { mutableStateOf<Long?>(null) }
+    var showBottomSheet by remember { mutableStateOf(false) }
+
+    Scaffold(
+        floatingActionButton = {
+            TudeeFloatingActionButton(
+                painter = painterResource(R.drawable.note_add),
+                isEnabled = true,
+                contentDescription = "Add Task",
+                onClick = {
+                    showBottomSheet = true
+                }
+            )
+        },
+        containerColor = TudeeTheme.colors.surface,
+    ) { paddingValues ->
+
         Column(
             modifier = Modifier
-                .background(TudeeTheme.colors.surface)
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
-            DateSection(
-                modifier = Modifier.background(
-                    color = TudeeTheme.colors.surfaceHigh,
-                ),
-                month = currentMonth,
-                year = currentYear,
-                onClickLeft = {},
-                onClickRight = {},
-                onClickDate = { showDatePicker = true },
-                dates = fakeDates
-            )
-            TudeeTabLayoutWithPager(
-                tabs = listOf(
-                    TabItem(text = R.string.In_Progress, number = uiState.inProgressTasks.size),
-                    TabItem(text = R.string.To_Do, number = uiState.toDoTasks.size),
-                    TabItem(text = R.string.Done, number = uiState.doneTasks.size),
 
-                    )
-            ) { page ->
-                val tasks = when (page) {
-                    0 -> uiState.inProgressTasks
-                    1 -> uiState.toDoTasks
-                    2 -> uiState.doneTasks
-                    else -> emptyList()
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(TudeeTheme.colors.surface)
-                ) {
-                    if (tasks.isEmpty()) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(top = 121.dp),
-                            contentAlignment = Alignment.TopCenter
-                        ) {
-                            EmptyTasksScreen()
-                        }
-                    } else {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 16.dp, vertical = 8.dp)
-                        ) {
-                            items(tasks.size) { index ->
-                                SwipeToDeleteTask(
-                                    modifier = Modifier,
-                                    task = tasks[index],
-                                    onDeleteClick = {}
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
+            TasksTopAPPBar(
+                modifier = Modifier
+                    .background(color = TudeeTheme.colors.surfaceHigh)
+            )
+
+            Column(
+                modifier = Modifier
+                    .background(TudeeTheme.colors.surface)
+            ) {
+                DateSection(
+                    modifier = Modifier.background(
+                        color = TudeeTheme.colors.surfaceHigh,
+                    ),
+                    month = currentMonth,
+                    year = currentYear,
+                    onClickLeft = {},
+                    onClickRight = {},
+                    onClickDate = { showDatePicker = true },
+                    dates = fakeDates
+                )
+                TudeeTabLayoutWithPager(
+                    initialTabIndex = initialTabIndex,
+                    tabs = listOf(
+                        TabItem(text = R.string.In_Progress, number = inProgressTasksCount),
+                        TabItem(text = R.string.To_Do, number = toDoTasksCount),
+                        TabItem(text = R.string.Done, number = doneTasksCount),
+
+                        ),
+                    tasksList = listOf(inProgressTasks, toDoTasks, doneTasks)
+                ) { page, tasks ->
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(TudeeTheme.colors.surface)
+                    ) {
+                        if (tasks.isEmpty()) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(top = 121.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                EmptyTasksScreen()
+                            }
+                        } else {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                            ) {
+                                items(tasks.size) { index ->
+                                    SwipeToDeleteTask(
+                                        modifier = Modifier,
+                                        task = tasks[index],
+                                        onDeleteClick = {}
+                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                }
                             }
                         }
                     }
-                }
 
-                if (showDatePicker) {
-                    TudeeDatePicker(
-                        onDateSelected = { date ->
-                            selectedDate = date
-                            showDatePicker = false
-                        },
-                        onDismiss = { showDatePicker = false }
-                    )
+                    if (showDatePicker) {
+                        TudeeDatePicker(
+                            onDateSelected = { date ->
+                                selectedDate = date
+                                showDatePicker = false
+                            },
+                            onDismiss = { showDatePicker = false }
+                        )
+                    }
+
+                    if (showBottomSheet) {
+                        AddOrEditTaskBottomSheet(
+                            modifier = TODO(),
+                            title = TODO(),
+                            buttonText = TODO(),
+                            screenContent = TODO(),
+                            viewModel = TODO()
+                        )
+                    }
                 }
             }
         }
+
     }
+
 }
 
 @Composable
