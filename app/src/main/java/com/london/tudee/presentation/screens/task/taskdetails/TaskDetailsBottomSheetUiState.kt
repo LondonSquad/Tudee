@@ -17,7 +17,6 @@ data class TaskDetailsBottomSheetUiState(
         categoryId = 6,
         timeStamp = Instant.parse("2023-09-20T00:00:00Z")
     ),
-    val isDetailsBottomSheetVisible:Boolean=true,
     val isEditBottomSheetVisible:Boolean=false,
     val errorMessages: String?=null
 )

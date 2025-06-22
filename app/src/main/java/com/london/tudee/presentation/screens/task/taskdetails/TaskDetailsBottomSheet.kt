@@ -37,6 +37,7 @@ import org.koin.androidx.compose.koinViewModel
 fun TaskDetailsBottomSheet(
     taskId: Int,
     viewModel: TaskDetailsBottomSheetViewModel = koinViewModel(),
+    onDismiss: () -> Unit = {}
 ) {
 
     val taskDetailsUiState by viewModel.uiState.collectAsState()
@@ -51,26 +52,11 @@ fun TaskDetailsBottomSheet(
         icon = taskDetailsUiState.categoryIcon,
         onEditClick = viewModel::onEditClick,
         onMoveClick = viewModel::onClickMove,
-        onDismiss = viewModel::hideBottomSheet,
-        showBottomSheet = taskDetailsUiState.isDetailsBottomSheetVisible
+        onDismiss = onDismiss,
     )
     if (taskDetailsUiState.isEditBottomSheetVisible) {
-        TaskDetailsBottomSheetContent(
-            taskName = "i'm in edit task screen",
-            taskDescription = "i'm in edit task screen",
-            taskStatus = taskDetailsUiState.task.taskStatus,
-            taskPriority = taskDetailsUiState.task.priority,
-            icon = taskDetailsUiState.categoryIcon,
-            onEditClick = viewModel::onEditClick,
-            onMoveClick = viewModel::onClickMove,
-            onDismiss = viewModel::hideBottomSheet,
-            showBottomSheet = taskDetailsUiState.isDetailsBottomSheetVisible
-        ) //replace by edit task screen and sent task id
+        TODO()// edit bottom sheet should be here send task id to it
     }
-    if (taskDetailsUiState.errorMessages != null) {
-        //show error screen
-    }
-
 }
 
 @Composable
@@ -83,7 +69,7 @@ private fun TaskDetailsBottomSheetContent(
     onEditClick: () -> Unit = {},
     onMoveClick: () -> Unit = {},
     onDismiss: () -> Unit = {},
-    showBottomSheet: Boolean = false
+    showBottomSheet: Boolean = true
 ) {
     TudeeBottomSheetScreen(
         showBottomSheet = showBottomSheet,

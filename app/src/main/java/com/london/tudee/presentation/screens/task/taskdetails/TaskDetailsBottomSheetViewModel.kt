@@ -2,6 +2,7 @@ package com.london.tudee.presentation.screens.task.taskdetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.london.tudee.R
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
@@ -16,7 +17,7 @@ class TaskDetailsBottomSheetViewModel(
     private val taskService: TaskService, private val categoryService: CategoryService
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<TaskDetailsBottomSheetUiState>(TaskDetailsBottomSheetUiState())
+    private val _uiState = MutableStateFlow(TaskDetailsBottomSheetUiState())
     val uiState: StateFlow<TaskDetailsBottomSheetUiState> = _uiState
 
     fun loadTask(id: Int) {
@@ -28,8 +29,8 @@ class TaskDetailsBottomSheetViewModel(
                     it.copy(task = task, categoryIcon = icon)
                 }
             }.isFailure.also {
-                if (it) _uiState.update {
-                    it.copy(errorMessages = "Something went wrong task not found or no category icon")
+                if (it) _uiState.update {state->
+                    state.copy(errorMessages = R.string.Something_went_wrong_task_not_found_or_no_category_icon.toString())
                 }
             }
         }
@@ -48,20 +49,14 @@ class TaskDetailsBottomSheetViewModel(
                 runCatching {
                     taskService.edit(updatedTask)
                 }.isFailure.also {
-                    if (it) _uiState.update {
-                        it.copy(errorMessages = "Something went wrong cant update task")
+                    if (it) _uiState.update { state->
+                        state.copy(errorMessages = R.string.Something_went_wrong_cant_update_task.toString())
                     }
                 }
             }
             _uiState.update {
                 it.copy(task = updatedTask)
             }
-        }
-    }
-
-    fun hideBottomSheet() {
-        _uiState.update {
-            it.copy(isDetailsBottomSheetVisible = false)
         }
     }
 
