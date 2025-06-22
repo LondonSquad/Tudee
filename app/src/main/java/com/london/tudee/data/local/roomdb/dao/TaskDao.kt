@@ -1,11 +1,11 @@
-package com.london.tudee.data.local.room_db.dao
+package com.london.tudee.data.local.roomdb.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.london.tudee.data.local.room_db.dto.TaskDto
+import com.london.tudee.data.local.roomdb.dto.TaskDto
 import com.london.tudee.domain.entities.TaskStatus
 import kotlinx.coroutines.flow.Flow
 
@@ -24,7 +24,7 @@ interface TaskDao {
     fun getByTaskStatus(taskStatus: TaskStatus): Flow<List<TaskDto>>
 
     @Query("SELECT * FROM TASK_TABLE WHERE timeStamp = :time")
-    fun getTasksByTime(time: Long): Flow<List<TaskDto>>
+    fun getTasksByDate(time: Long): Flow<List<TaskDto>>
 
     @Insert
     suspend fun insert(task: TaskDto)

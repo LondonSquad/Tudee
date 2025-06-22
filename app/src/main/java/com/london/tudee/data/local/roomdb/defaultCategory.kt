@@ -1,9 +1,7 @@
-package com.london.tudee.data.local.room_db
+package com.london.tudee.data.local.roomdb
 
-import androidx.compose.runtime.Composable
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
-import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 
 fun defaultCategory() = listOf(

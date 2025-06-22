@@ -1,6 +1,5 @@
-package com.london.tudee.data.local.room_db.converter
+package com.london.tudee.data.local.roomdb.converter
 
-import androidx.compose.ui.graphics.Color
 import androidx.room.TypeConverter
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.TaskStatus

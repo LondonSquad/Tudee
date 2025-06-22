@@ -1,6 +1,6 @@
 package com.london.tudee.data.services
 
-import com.london.tudee.data.local.room_db.dao.CategoryDao
+import com.london.tudee.data.local.roomdb.dao.CategoryDao
 import com.london.tudee.data.mappers.convertToCategory
 import com.london.tudee.data.mappers.convertToCategoryDto
 import com.london.tudee.domain.entities.Category
