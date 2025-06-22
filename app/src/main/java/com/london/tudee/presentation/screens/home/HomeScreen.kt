@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -99,6 +100,7 @@ fun HomeScreenContent(
     onTodoTasksArrowClicked: (String) -> Unit,
     onDoneTasksArrowClicked: (String) -> Unit,
 ) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -116,7 +118,7 @@ fun HomeScreenContent(
                 numberOfDoneTasks = state.doneTasks.size,
                 numberOfInProgressTasks = state.inProgressTasks.size,
                 numberOfToDoTasks = state.toDoTasks.size,
-                dateOfToday = "today, ${HomeScreenUtils.customDateFormatter()}"
+                dateOfToday = "${stringResource(R.string.today)} ${HomeScreenUtils.customDateFormatter(context)}"
             )
 
             if (state.allTasks.isEmpty()) {
