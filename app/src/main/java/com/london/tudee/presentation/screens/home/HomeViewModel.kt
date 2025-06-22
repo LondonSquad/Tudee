@@ -42,7 +42,7 @@ class HomeViewModel(
                         isLoading = false,
                         errMessage = null,
                         allTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconResById(it.categoryId))
+                            it.copy(categoryId = (it.categoryId))
                         },
                     )
                 }
@@ -62,7 +62,7 @@ class HomeViewModel(
                         isLoading = false,
                         errMessage = null,
                         doneTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconResById(it.categoryId))
+                            it.copy(categoryId = (it.categoryId))
                         },
                     )
                 }
@@ -82,7 +82,7 @@ class HomeViewModel(
                         isLoading = false,
                         errMessage = null,
                         inProgressTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconResById(it.categoryId))
+                            it.copy(categoryId = (it.categoryId))
                         }
                     )
                 }
@@ -102,7 +102,7 @@ class HomeViewModel(
                         isLoading = false,
                         errMessage = null,
                         toDoTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconResById(it.categoryId))
+                            it.copy(categoryId = (it.categoryId))
                         }
                     )
                 }

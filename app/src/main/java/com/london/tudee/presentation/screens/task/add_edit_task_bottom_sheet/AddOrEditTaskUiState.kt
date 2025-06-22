@@ -11,6 +11,7 @@ data class AddOrEditTaskUiState(
     val selectedDate: Long? = null,
     val selectedPriority: Priority = Priority.LOW,
     val selectedCategory: Category? = null,
+    val categoryIcons: List<String> = listOf(),
     val categories: List<Category> = emptyList(),
     val showBottomSheet: Boolean = false,
     val showDatePicker: Boolean = false,

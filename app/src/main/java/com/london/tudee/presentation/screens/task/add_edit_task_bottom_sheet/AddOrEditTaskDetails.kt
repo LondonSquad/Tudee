@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -35,6 +37,7 @@ import com.london.tudee.presentation.components.date.TudeeDatePicker
 import com.london.tudee.presentation.components.priority.PrioritySelector
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.utils.converterStringToBitmap
 import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -222,12 +225,16 @@ private fun CategoriesGrid(
     selectedCategory: Category?,
     onCategorySelected: (Category) -> Unit
 ) {
+    // Memoize the chunked categories to prevent recalculation
+    val chunkedCategories = remember(categories) {
+        categories.chunked(3)
+    }
+
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        categories.chunked(3).forEach { rowCategories ->
+        chunkedCategories.forEach { rowCategories ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -235,9 +242,9 @@ private fun CategoriesGrid(
                 rowCategories.forEach { category ->
                     CategoryItem(
                         modifier = Modifier.weight(1f),
-                        iconRes = rememberAsyncImagePainter(category.iconRes),
-                        title = category.title //CategoryMapper.getCategoryDisplayName(category)
-                        ,
+                        iconRes = category.iconRes,
+                        title = category.title,
+                        isSelected = selectedCategory?.id == category.id,
                         onClick = { onCategorySelected(category) }
                     )
 
@@ -246,6 +253,7 @@ private fun CategoriesGrid(
                     }
                 }
 
+                // Fill empty spaces
                 val emptySpaces = 3 - rowCategories.size
                 if (emptySpaces > 0) {
                     repeat(emptySpaces) {

@@ -43,7 +43,6 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.SwipeToDeleteTask
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskBottomSheet
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -171,16 +170,6 @@ fun TasksContent(
                                 showDatePicker = false
                             },
                             onDismiss = { showDatePicker = false }
-                        )
-                    }
-
-                    if (showBottomSheet) {
-                        AddOrEditTaskBottomSheet(
-                            modifier = TODO(),
-                            title = TODO(),
-                            buttonText = TODO(),
-                            screenContent = TODO(),
-                            viewModel = TODO()
                         )
                     }
                 }

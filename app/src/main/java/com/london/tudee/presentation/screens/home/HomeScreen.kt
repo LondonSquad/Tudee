@@ -47,16 +47,15 @@ import com.london.tudee.R
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.presentation.base.BaseCreateTaskInteractions
-import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.presentation.components.HomeTopBar
 import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.StatusCard
 import com.london.tudee.presentation.components.TaskStatusSlider
+import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.components.date.DateBadge
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.tasks.EmptyTasksScreen
 import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskBottomSheet
 import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskUiState
 import com.london.tudee.presentation.screens.tasks.EmptyTasksScreen
@@ -156,21 +155,24 @@ fun HomeScreenContent(
                 } else {
                     InProgressSection(
                         inProgressTasks = state.inProgressTasks,
-                        onInProgressTasksArrowClicked = onArrowClicked
+                        onInProgressTasksArrowClicked = onArrowClicked,
+                        categoryIcons = taskUiState.categoryIcons
                     )
 
                     Spacer(Modifier.height(24.dp))
 
                     ToDoSection(
                         toDoTasks = state.toDoTasks,
-                        onTodoTasksArrowClicked = onArrowClicked
+                        onTodoTasksArrowClicked = onArrowClicked,
+                        categoryIcons = taskUiState.categoryIcons
                     )
 
                     Spacer(Modifier.height(24.dp))
 
                     DoneSection(
                         doneTasks = state.doneTasks,
-                        onDoneTasksArrowClicked = onArrowClicked
+                        onDoneTasksArrowClicked = onArrowClicked,
+                        categoryIcons = taskUiState.categoryIcons
                     )
                 }
             }
@@ -351,7 +353,8 @@ private fun OverLayerBox(
 @Composable
 private fun ToDoSection(
     toDoTasks: List<Task>,
-    onTodoTasksArrowClicked: (String) -> Unit
+    onTodoTasksArrowClicked: (String) -> Unit,
+    categoryIcons: List<String>
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -422,6 +425,7 @@ private fun ToDoSection(
                 isSelected = true,
                 task = toDoTasks[it],
                 hasDate = false,
+                iconResId = categoryIcons[it]
             )
         }
     }
@@ -430,7 +434,8 @@ private fun ToDoSection(
 @Composable
 private fun InProgressSection(
     inProgressTasks: List<Task>,
-    onInProgressTasksArrowClicked: (String) -> Unit
+    onInProgressTasksArrowClicked: (String) -> Unit,
+    categoryIcons: List<String>
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -501,7 +506,8 @@ private fun InProgressSection(
                     .height(111.dp),
                 isSelected = true,
                 task = inProgressTasks[it],
-                hasDate = false
+                hasDate = false,
+                iconResId = categoryIcons[it]
             )
         }
     }
@@ -510,7 +516,8 @@ private fun InProgressSection(
 @Composable
 private fun DoneSection(
     doneTasks: List<Task>,
-    onDoneTasksArrowClicked: (String) -> Unit
+    onDoneTasksArrowClicked: (String) -> Unit,
+    categoryIcons: List<String>
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -580,7 +587,8 @@ private fun DoneSection(
                     .height(111.dp),
                 isSelected = true,
                 task = doneTasks[it],
-                hasDate = false
+                hasDate = false,
+                iconResId = categoryIcons[it]
             )
         }
     }

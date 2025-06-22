@@ -36,7 +36,8 @@ abstract class BaseCreateTaskViewModel(
                     _taskUiState.update { currentState ->
                         currentState.copy(
                             categories = categories,
-                            selectedCategory = currentState.selectedCategory
+                            selectedCategory = currentState.selectedCategory,
+                            categoryIcons = categories.map { it.iconRes }
                         )
                     }
                     validateForm()
