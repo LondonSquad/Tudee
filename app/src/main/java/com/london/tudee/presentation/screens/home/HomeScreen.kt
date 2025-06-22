@@ -175,17 +175,14 @@ fun HomeScreenContent(
             }
         }
 
-        if (taskUiState.showBottomSheet) {
-            AddOrEditTaskBottomSheet(
-                modifier = Modifier.zIndex(1f),
-                title = R.string.add_new_task,
-                buttonText = R.string.add,
-                screenContent = { },
-                uiState = taskUiState,
-                interactions = interactions
-            )
-        }
-
+        AddOrEditTaskBottomSheet(
+            modifier = Modifier.zIndex(1f),
+            title = R.string.add_new_task,
+            buttonText = R.string.add,
+            screenContent = { },
+            uiState = taskUiState,
+            interactions = interactions
+        )
 
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -213,7 +210,6 @@ fun HomeScreenContent(
                     )
                 }
             }
-
 
             LaunchedEffect(taskUiState.successMessage, taskUiState.errorMessage) {
                 delay(3000)

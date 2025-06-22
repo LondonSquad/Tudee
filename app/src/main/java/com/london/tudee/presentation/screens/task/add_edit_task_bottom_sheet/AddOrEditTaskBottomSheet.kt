@@ -2,6 +2,10 @@ package com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet
 
 import android.util.Log
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,44 +42,58 @@ fun AddOrEditTaskBottomSheet(
     interactions: BaseCreateTaskInteractions
 ) {
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        TudeeBottomSheetScreen(
-            showBottomSheet = uiState.showBottomSheet,
-            onDismiss = {
-                interactions.hideBottomSheet()
-            },
-            screenContent = { screenContent() },
-            bottomSheetContent = {
-                AddOrEditTaskDetails(
-                    modifier = modifier,
-                    title = title,
-                    uiState = uiState,
-                    interactions = interactions,
-                    categories = uiState.categories
-                )
-            },
-            bottomSheetActions = {
-                TudeePrimaryButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(buttonText),
-                    isDisabled = !uiState.isFormValid || uiState.isLoading,
-                    isLoading = uiState.isLoading,
-                    onClick = {
-                        interactions.saveTask()
-                        Log.d("AddOrEditTaskBottomSheet", "AddOrEditTaskBottomSheet: $uiState")
-                    },
-                )
+    AnimatedVisibility(
+        visible = uiState.showBottomSheet,
+        enter = slideInVertically(
+            animationSpec = tween(300)
+        ) {
+            it
+        },
+        exit = slideOutVertically(
+            animationSpec = tween(300)
+        ) {
+            it
+        }
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            TudeeBottomSheetScreen(
+                showBottomSheet = uiState.showBottomSheet,
+                onDismiss = {
+                    interactions.hideBottomSheet()
+                },
+                screenContent = { screenContent() },
+                bottomSheetContent = {
+                    AddOrEditTaskDetails(
+                        modifier = modifier,
+                        title = title,
+                        uiState = uiState,
+                        interactions = interactions,
+                        categories = uiState.categories
+                    )
+                },
+                bottomSheetActions = {
+                    TudeePrimaryButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(buttonText),
+                        isDisabled = !uiState.isFormValid || uiState.isLoading,
+                        isLoading = uiState.isLoading,
+                        onClick = {
+                            interactions.saveTask()
+                            Log.d("AddOrEditTaskBottomSheet", "AddOrEditTaskBottomSheet: $uiState")
+                        },
+                    )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
-                TudeeSecondaryButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.cancel),
-                    onClick = {
-                        interactions.hideBottomSheet()
-                    },
-                )
-            }
-        )
+                    TudeeSecondaryButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.cancel),
+                        onClick = {
+                            interactions.hideBottomSheet()
+                        },
+                    )
+                }
+            )
+        }
     }
 }

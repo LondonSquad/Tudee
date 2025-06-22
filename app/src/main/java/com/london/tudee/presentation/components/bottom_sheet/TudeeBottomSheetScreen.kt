@@ -64,50 +64,37 @@ fun TudeeBottomSheetScreen(
     ) {
         screenContent()
 
-        AnimatedVisibility(
-            visible = showBottomSheet,
-            enter = slideInVertically(
-                animationSpec = tween(1000)
-            ){
-                -it
-            },
-            exit = slideOutVertically(
-                animationSpec = tween(1000)
-            ){
-                it
-            }
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.5f))
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ) {
-                        onDismiss()
-                    }
-            )
-        }
-
         Box(
             modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            TudeeBottomSheet(
-                visible = showBottomSheet,
-                onDismiss = onDismiss,
-                modifier = Modifier.clickable(
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+                .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null
-                ) {},
-                content = bottomSheetContent,
-                actions = bottomSheetActions,
-                showActions = showActions
-            )
-        }
+                ) {
+                    onDismiss()
+                }
+        )
     }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        TudeeBottomSheet(
+            visible = showBottomSheet,
+            onDismiss = onDismiss,
+            modifier = Modifier.clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) {},
+            content = bottomSheetContent,
+            actions = bottomSheetActions,
+            showActions = showActions
+        )
+    }
+
 }
 
 @ThemePreviews
