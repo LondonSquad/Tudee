@@ -35,7 +35,7 @@ class CategoriesServicesImpl(
         return categoryDao.getById(id).convertToCategory()
     }
 
-    override fun getIconResById(id: Int): Int {
+    override fun getIconResById(id: Int): String {
         return categoryDao.getIconResById(id)
     }
 }

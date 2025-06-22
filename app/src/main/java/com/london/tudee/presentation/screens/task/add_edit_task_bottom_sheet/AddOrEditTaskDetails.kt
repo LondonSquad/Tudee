@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -24,17 +26,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
+import com.london.tudee.presentation.base.BaseCreateTaskInteractions
 import com.london.tudee.presentation.components.CategoryItem
 import com.london.tudee.presentation.components.TudeeTextField
 import com.london.tudee.presentation.components.date.TudeeDatePicker
 import com.london.tudee.presentation.components.priority.PrioritySelector
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.utils.converterStringToBitmap
 import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -44,12 +47,12 @@ import java.util.Locale
 fun AddOrEditTaskDetails(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
-    viewModel: AddOrEditTaskViewModel = koinViewModel(),
+    uiState: AddOrEditTaskUiState,
+    interactions: BaseCreateTaskInteractions,
     categories: List<Category> = emptyList()
 ) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val maxHeight = screenHeight * 0.75f
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(
         modifier = modifier
@@ -66,11 +69,11 @@ fun AddOrEditTaskDetails(
                 title = title,
                 uiState = uiState,
                 categories = categories.ifEmpty { uiState.categories },
-                onTitleValueChange = { viewModel.updateTitle(it) },
-                onDescriptionValueChange = { viewModel.updateDescription(it) },
-                onDateFieldClick = { viewModel.showDatePicker() },
-                onPrioritySelected = { viewModel.updateSelectedPriority(it) },
-                onCategorySelected = { viewModel.updateSelectedCategory(it) },
+                onTitleValueChange = { interactions.updateTitle(it) },
+                onDescriptionValueChange = { interactions.updateDescription(it) },
+                onDateFieldClick = { interactions.showDatePicker() },
+                onPrioritySelected = { interactions.updateSelectedPriority(it) },
+                onCategorySelected = { interactions.updateSelectedCategory(it) },
                 modifier = modifier.fillMaxWidth()
             )
         }
@@ -79,15 +82,16 @@ fun AddOrEditTaskDetails(
     if (uiState.showDatePicker) {
         TudeeDatePicker(
             onDateSelected = { date ->
-                viewModel.updateSelectedDate(date ?: System.currentTimeMillis())
-                viewModel.hideDatePicker()
+                interactions.updateSelectedDate(date ?: System.currentTimeMillis())
+                interactions.hideDatePicker()
             },
             onDismiss = {
-                viewModel.hideDatePicker()
+                interactions.hideDatePicker()
             }
         )
     }
 }
+
 @Composable
 private fun TaskDetailsContent(
     modifier: Modifier,
@@ -221,12 +225,16 @@ private fun CategoriesGrid(
     selectedCategory: Category?,
     onCategorySelected: (Category) -> Unit
 ) {
+    // Memoize the chunked categories to prevent recalculation
+    val chunkedCategories = remember(categories) {
+        categories.chunked(3)
+    }
+
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        categories.chunked(3).forEach { rowCategories ->
+        chunkedCategories.forEach { rowCategories ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -234,9 +242,9 @@ private fun CategoriesGrid(
                 rowCategories.forEach { category ->
                     CategoryItem(
                         modifier = Modifier.weight(1f),
-                        iconRes =  rememberAsyncImagePainter( category.iconRes),
-                        title = category.title //CategoryMapper.getCategoryDisplayName(category)
-                            ,
+                        iconRes = category.iconRes,
+                        title = category.title,
+                        isSelected = selectedCategory?.id == category.id,
                         onClick = { onCategorySelected(category) }
                     )
 
@@ -245,6 +253,7 @@ private fun CategoriesGrid(
                     }
                 }
 
+                // Fill empty spaces
                 val emptySpaces = 3 - rowCategories.size
                 if (emptySpaces > 0) {
                     repeat(emptySpaces) {
@@ -285,13 +294,13 @@ private fun PreviewCategorySection() {
 private fun rememberSampleDomainCategories(): List<Category> {
     val primaryColor = TudeeTheme.colors.primary.value
     val secondaryColor = TudeeTheme.colors.secondary.value
-    
+
     return remember {
         listOf(
             Category(
                 id = 1,
                 title = "Education",
-               // arName = "التعليم",
+                // arName = "التعليم",
                 iconRes = "",
                 isDefault = true,
                 taskCount = 0,

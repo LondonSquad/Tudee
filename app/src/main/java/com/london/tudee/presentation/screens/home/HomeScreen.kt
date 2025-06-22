@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
@@ -26,6 +27,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,14 +46,20 @@ import androidx.compose.ui.zIndex
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
+import com.london.tudee.presentation.base.BaseCreateTaskInteractions
 import com.london.tudee.presentation.components.HomeTopBar
+import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.StatusCard
 import com.london.tudee.presentation.components.TaskStatusSlider
+import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.components.date.DateBadge
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskBottomSheet
+import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskUiState
 import com.london.tudee.presentation.screens.tasks.EmptyTasksScreen
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -60,12 +68,15 @@ fun HomeScreen(
     onArrowClicked: (String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val taskUiState by viewModel.taskUiState.collectAsState()
     when {
         uiState.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
         else -> HomeScreenContent(
             state = uiState,
-            onArrowClicked
+            interactions = viewModel,
+            onArrowClicked = { },
+            taskUiState = taskUiState,
         )
     }
 }
@@ -94,59 +105,122 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 @Composable
 fun HomeScreenContent(
     state: HomeUiState,
+    taskUiState: AddOrEditTaskUiState,
+    interactions: BaseCreateTaskInteractions,
     onArrowClicked: (String) -> Unit
 ) {
     val context = LocalContext.current
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        TopAPPBar()
+
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        TudeeFloatingActionButton(
+            painter = painterResource(R.drawable.note_add),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .zIndex(if (taskUiState.showBottomSheet) 0f else 1f)
+                .padding(bottom = 84.dp, end = 12.dp),
+            contentDescription = "note icon",
+            onClick = {
+                interactions.showBottomSheet()
+            },
+            isEnabled = true,
+        )
 
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .background(TudeeTheme.colors.surface)
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.fillMaxSize()
         ) {
+            TopAPPBar()
 
-            OverLayerBox(
-                numberOfAllTasks = state.allTasks.size,
-                numberOfDoneTasks = state.doneTasks.size,
-                numberOfInProgressTasks = state.inProgressTasks.size,
-                numberOfToDoTasks = state.toDoTasks.size,
-                dateOfToday = "${stringResource(R.string.today)} ${
-                    HomeScreenUtils.customDateFormatter(
-                        context
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .background(TudeeTheme.colors.surface)
+                    .verticalScroll(rememberScrollState())
+            ) {
+
+                OverLayerBox(
+                    numberOfAllTasks = state.allTasks.size,
+                    numberOfDoneTasks = state.doneTasks.size,
+                    numberOfInProgressTasks = state.inProgressTasks.size,
+                    numberOfToDoTasks = state.toDoTasks.size,
+                    dateOfToday = "${stringResource(R.string.today)} ${
+                        HomeScreenUtils.customDateFormatter(
+                            context
+                        )
+                    }"
+                )
+
+                if (state.allTasks.isEmpty()) {
+                    EmptyTasksScreen()
+                } else {
+                    InProgressSection(
+                        inProgressTasks = state.inProgressTasks,
+                        onInProgressTasksArrowClicked = onArrowClicked,
+                        categoryIcons = taskUiState.categoryIcons
                     )
-                }"
-            )
 
-            if (state.allTasks.isEmpty()) {
-                EmptyTasksScreen()
-            } else {
-                InProgressSection(
-                    inProgressTasks = state.inProgressTasks,
-                    onInProgressTasksArrowClicked = onArrowClicked
-                )
+                    Spacer(Modifier.height(24.dp))
 
-                Spacer(Modifier.height(24.dp))
+                    ToDoSection(
+                        toDoTasks = state.toDoTasks,
+                        onTodoTasksArrowClicked = onArrowClicked,
+                        categoryIcons = taskUiState.categoryIcons
+                    )
 
-                ToDoSection(
-                    toDoTasks = state.toDoTasks,
-                    onTodoTasksArrowClicked = onArrowClicked
-                )
+                    Spacer(Modifier.height(24.dp))
 
-                Spacer(Modifier.height(24.dp))
+                    DoneSection(
+                        doneTasks = state.doneTasks,
+                        onDoneTasksArrowClicked = onArrowClicked,
+                        categoryIcons = taskUiState.categoryIcons
+                    )
+                }
+            }
+        }
 
-                DoneSection(
-                    doneTasks = state.doneTasks,
-                    onDoneTasksArrowClicked = onArrowClicked
-                )
+        AddOrEditTaskBottomSheet(
+            modifier = Modifier.zIndex(1f),
+            title = R.string.add_new_task,
+            buttonText = R.string.add,
+            screenContent = { },
+            uiState = taskUiState,
+            interactions = interactions
+        )
+
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            when {
+                taskUiState.successMessage != null -> {
+                    SnackBar(
+                        modifier = Modifier.offset(y = 56.dp),
+                        message = if (taskUiState.isEditMode)
+                            R.string.edit_task_successfully
+                        else
+                            R.string.add_task_successfully,
+                        iconPainter = painterResource(id = R.drawable.snack_bar_container),
+                        iconTint = TudeeTheme.colors.greenAccent
+                    )
+                }
+
+                taskUiState.errorMessage != null -> {
+                    SnackBar(
+                        modifier = Modifier.offset(y = 56.dp),
+                        message = R.string.some_error_happened,
+                        iconPainter = painterResource(id = R.drawable.snack_bar_error),
+                        iconTint = TudeeTheme.colors.errorVariant,
+                    )
+                }
+            }
+
+            LaunchedEffect(taskUiState.successMessage, taskUiState.errorMessage) {
+                delay(3000)
+                interactions.clearMessages()
             }
         }
     }
 }
-
 
 @Composable
 private fun TopAPPBar() {
@@ -279,7 +353,8 @@ private fun OverLayerBox(
 @Composable
 private fun ToDoSection(
     toDoTasks: List<Task>,
-    onTodoTasksArrowClicked: (String) -> Unit
+    onTodoTasksArrowClicked: (String) -> Unit,
+    categoryIcons: List<String>
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -350,6 +425,7 @@ private fun ToDoSection(
                 isSelected = true,
                 task = toDoTasks[it],
                 hasDate = false,
+                iconResId = categoryIcons[it]
             )
         }
     }
@@ -358,7 +434,8 @@ private fun ToDoSection(
 @Composable
 private fun InProgressSection(
     inProgressTasks: List<Task>,
-    onInProgressTasksArrowClicked: (String) -> Unit
+    onInProgressTasksArrowClicked: (String) -> Unit,
+    categoryIcons: List<String>
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -429,7 +506,8 @@ private fun InProgressSection(
                     .height(111.dp),
                 isSelected = true,
                 task = inProgressTasks[it],
-                hasDate = false
+                hasDate = false,
+                iconResId = categoryIcons[it]
             )
         }
     }
@@ -438,7 +516,8 @@ private fun InProgressSection(
 @Composable
 private fun DoneSection(
     doneTasks: List<Task>,
-    onDoneTasksArrowClicked: (String) -> Unit
+    onDoneTasksArrowClicked: (String) -> Unit,
+    categoryIcons: List<String>
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -508,7 +587,8 @@ private fun DoneSection(
                     .height(111.dp),
                 isSelected = true,
                 task = doneTasks[it],
-                hasDate = false
+                hasDate = false,
+                iconResId = categoryIcons[it]
             )
         }
     }
