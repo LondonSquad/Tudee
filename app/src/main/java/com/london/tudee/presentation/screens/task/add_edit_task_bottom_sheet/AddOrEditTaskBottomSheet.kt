@@ -2,6 +2,7 @@ package com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet
 
 import android.util.Log
 import androidx.annotation.StringRes
+import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,37 +31,35 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun AddOrEditTaskBottomSheet(
     modifier: Modifier = Modifier,
-    @StringRes title: Int,
-    @StringRes buttonText: Int,
-    screenContent: @Composable () -> Unit,
-    viewModel: AddOrEditTaskViewModel = koinViewModel()
+    taskId: Int? = null,
+    uiState: AddOrEditTaskUiState,
+    interaction: AddOrEditInteraction
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Box(modifier = Modifier.fillMaxSize()) {
         TudeeBottomSheetScreen(
             showBottomSheet = uiState.showBottomSheet,
             onDismiss = {
-                viewModel.hideBottomSheet()
+                interaction.hideBottomSheet()
             },
-            screenContent = { screenContent() },
+            screenContent = { },
             bottomSheetContent = {
                 AddOrEditTaskDetails(
                     modifier = modifier,
-                    title = title,
-                    viewModel = viewModel,
-                    categories = uiState.categories
+                    title = if(taskId != null) R.string.edit_task else R.string.add_new_task,
+                    interaction = interaction,
+                    categories = uiState.categories,
+                    uiState = uiState
                 )
             },
             bottomSheetActions = {
                 TudeePrimaryButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(buttonText),
+                    text = if (taskId != null) stringResource(R.string.edit_task) else stringResource(R.string.add),
                     isDisabled = !uiState.isFormValid || uiState.isLoading,
                     isLoading = uiState.isLoading,
                     onClick = {
-                        viewModel.saveTask()
-                        Log.d("AddOrEditTaskBottomSheet", "AddOrEditTaskBottomSheet: $uiState")
+                        interaction.saveTask()
                     },
                 )
 
@@ -70,7 +69,7 @@ fun AddOrEditTaskBottomSheet(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.cancel),
                     onClick = {
-                        viewModel.hideBottomSheet()
+                        interaction.hideBottomSheet()
                     },
                 )
             }
@@ -106,20 +105,24 @@ fun AddOrEditTaskBottomSheet(
 
             LaunchedEffect(uiState.successMessage, uiState.errorMessage) {
                 delay(3000)
-                viewModel.clearMessages()
+                interaction.clearMessages()
             }
         }
     }
 }
 
-@ThemePreviews
-@Composable
-fun PreviewAddOrEditTaskBottomSheet() {
-    TudeeTheme {
-        AddOrEditTaskBottomSheet(
-            title = R.string.task_title,
-            buttonText = R.string.add,
-            screenContent = {}
-        )
-    }
-}
+//@ThemePreviews
+//@Composable
+//fun PreviewAddOrEditTaskBottomSheet() {
+//    TudeeTheme {
+//        AddOrEditTaskBottomSheet(
+//            title = R.string.task_title,
+//            buttonText = R.string.add,
+//            screenContent = {},
+//            uiState = AddOrEditTaskUiState(),
+//            interaction = object : AddOrEditInteraction {
+//
+//            }
+//        )
+//    }
+//}

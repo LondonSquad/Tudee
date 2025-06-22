@@ -44,12 +44,12 @@ import java.util.Locale
 fun AddOrEditTaskDetails(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
-    viewModel: AddOrEditTaskViewModel = koinViewModel(),
-    categories: List<Category> = emptyList()
+    uiState: AddOrEditTaskUiState,
+    categories: List<Category> = emptyList(),
+    interaction: AddOrEditInteraction,
 ) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val maxHeight = screenHeight * 0.75f
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(
         modifier = modifier
@@ -66,11 +66,11 @@ fun AddOrEditTaskDetails(
                 title = title,
                 uiState = uiState,
                 categories = categories.ifEmpty { uiState.categories },
-                onTitleValueChange = { viewModel.updateTitle(it) },
-                onDescriptionValueChange = { viewModel.updateDescription(it) },
-                onDateFieldClick = { viewModel.showDatePicker() },
-                onPrioritySelected = { viewModel.updateSelectedPriority(it) },
-                onCategorySelected = { viewModel.updateSelectedCategory(it) },
+                onTitleValueChange = { interaction.updateTitle(it) },
+                onDescriptionValueChange = { interaction.updateDescription(it) },
+                onDateFieldClick = { interaction.showDatePicker() },
+                onPrioritySelected = { interaction.updateSelectedPriority(it) },
+                onCategorySelected = { interaction.updateSelectedCategory(it) },
                 modifier = modifier.fillMaxWidth()
             )
         }
@@ -79,11 +79,11 @@ fun AddOrEditTaskDetails(
     if (uiState.showDatePicker) {
         TudeeDatePicker(
             onDateSelected = { date ->
-                viewModel.updateSelectedDate(date ?: System.currentTimeMillis())
-                viewModel.hideDatePicker()
+                interaction.updateSelectedDate(date ?: System.currentTimeMillis())
+                interaction.hideDatePicker()
             },
             onDismiss = {
-                viewModel.hideDatePicker()
+                interaction.hideDatePicker()
             }
         )
     }

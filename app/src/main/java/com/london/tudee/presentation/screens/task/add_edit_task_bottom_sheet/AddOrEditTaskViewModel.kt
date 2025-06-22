@@ -21,8 +21,9 @@ import kotlinx.datetime.Instant
 
 
 class AddOrEditTaskViewModel(
-    private val taskService: TaskService, private val categoryService: CategoryService
-) : ViewModel() {
+    private val taskService: TaskService,
+    private val categoryService: CategoryService
+) : ViewModel(), AddOrEditInteraction {
 
     private val _uiState = MutableStateFlow(AddOrEditTaskUiState())
     val uiState: StateFlow<AddOrEditTaskUiState> = _uiState.asStateFlow()
@@ -49,7 +50,7 @@ class AddOrEditTaskViewModel(
         }
     }
 
-    fun initializeForEdit(taskId: Int) {
+    override fun initializeForEdit(taskId: Int) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
@@ -80,43 +81,43 @@ class AddOrEditTaskViewModel(
         }
     }
 
-    fun updateTitle(title: String) {
+    override fun updateTitle(title: String) {
         _uiState.update { it.copy(title = title) }
         validateForm()
     }
 
-    fun updateDescription(description: String) {
+    override fun updateDescription(description: String) {
         _uiState.update { it.copy(description = description) }
     }
 
-    fun updateSelectedDate(date: Long) {
+    override fun updateSelectedDate(date: Long) {
         _uiState.update { it.copy(selectedDate = date) }
         validateForm()
     }
 
-    fun updateSelectedPriority(priority: Priority) {
+    override fun updateSelectedPriority(priority: Priority) {
         _uiState.update { it.copy(selectedPriority = priority) }
         validateForm()
     }
 
-    fun updateSelectedCategory(category: Category) {
+    override fun updateSelectedCategory(category: Category) {
         _uiState.update { it.copy(selectedCategory = category) }
         validateForm()
     }
 
-    fun showDatePicker() {
+    override fun showDatePicker() {
         _uiState.update { it.copy(showDatePicker = true) }
     }
 
-    fun hideDatePicker() {
+    override fun hideDatePicker() {
         _uiState.update { it.copy(showDatePicker = false) }
     }
 
-    fun showBottomSheet() {
+    override fun showBottomSheet() {
         _uiState.update { it.copy(showBottomSheet = true) }
     }
 
-    fun hideBottomSheet() {
+    override fun hideBottomSheet() {
         _uiState.update {
             it.copy(
                 showBottomSheet = false,
@@ -142,7 +143,7 @@ class AddOrEditTaskViewModel(
         }
     }
 
-    fun saveTask() {
+    override fun saveTask() {
         val currentState = _uiState.value
 
         if (!currentState.isFormValid) return
@@ -189,13 +190,13 @@ class AddOrEditTaskViewModel(
         _uiState.update { currentState ->
             currentState.copy(
                 isFormValid = currentState.title.isNotBlank()
-                        && currentState.selectedDate != null &&
-                        currentState.selectedCategory != null
+                        && currentState.selectedDate != null
+                        && currentState.selectedCategory != null
             )
         }
     }
 
-    fun clearMessages() {
+    override fun clearMessages() {
         _uiState.update {
             it.copy(
                 successMessage = null, errorMessage = null

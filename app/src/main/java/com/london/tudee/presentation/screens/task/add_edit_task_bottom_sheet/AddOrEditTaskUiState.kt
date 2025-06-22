@@ -6,6 +6,7 @@ import com.london.tudee.domain.entities.Priority
 
 
 data class AddOrEditTaskUiState(
+    val taskId: Int? = null,
     val title: String = "",
     val description: String = "",
     val selectedDate: Long? = null,
@@ -19,5 +20,4 @@ data class AddOrEditTaskUiState(
     @StringRes val successMessage: Int? = null,
     @StringRes val errorMessage: Int? = null,
     val isEditMode: Boolean = false,
-    val taskId: Int? = null
 )
