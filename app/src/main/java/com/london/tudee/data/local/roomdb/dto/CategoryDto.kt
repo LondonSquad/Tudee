@@ -8,8 +8,7 @@ data class CategoryDto(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String,
-    // val arName: String,
     val iconRes: String,
     val isDefault: Boolean,
-    val taskCount: Int,
+    val taskCount: Int
 )

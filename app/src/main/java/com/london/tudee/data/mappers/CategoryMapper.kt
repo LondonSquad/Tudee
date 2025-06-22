@@ -9,7 +9,7 @@ fun CategoryDto.convertToCategory(): Category {
         title = this.name,
         //arName = this.arName,
         isDefault = this.isDefault,
-        iconRes = this.iconRes.toString(),
+        iconRes = this.iconRes,
         taskCount = this.taskCount,
     )
 }
