@@ -20,9 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.london.tudee.R
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.categories.CategoriesScreen
+import com.london.tudee.presentation.screens.categories.crud.CreateCategoryScreen
+import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskDetails
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +43,7 @@ class MainActivity : ComponentActivity() {
 //                        )
 //                    } else HomeScreen()
 //                }
-                CategoriesScreen(onCategoryClick = {}) { }
+                CategoriesScreen(onCategoryClick = {})
             }
         }
     }
