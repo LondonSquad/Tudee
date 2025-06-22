@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.london.tudee.R
+import com.london.tudee.domain.entities.Task
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import kotlinx.coroutines.launch
@@ -50,14 +51,14 @@ fun TudeeTabLayout(
 @Composable
 fun TudeeTabLayoutWithPager(
     modifier: Modifier = Modifier,
-    tabs: List<TabItem> = listOf(
-        TabItem(text = R.string.In_Progress, number = 14),
-        TabItem(text = R.string.To_Do, number = 8),
-        TabItem(text = R.string.Done, number = 5)
-    ),
-    content: @Composable (page: Int) -> Unit
+    initialTabIndex: Int = 0,
+    tabs: List<TabItem>,
+    tasksList: List<List<Task>> = emptyList(),
+    content: @Composable (page: Int, tasks: List<Task>) -> Unit
 ) {
-    val pagerState = rememberPagerState { tabs.size }
+    val pagerState = rememberPagerState(
+        initialPage = initialTabIndex
+    ) { tabs.size }
     val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = modifier) {
@@ -73,7 +74,8 @@ fun TudeeTabLayoutWithPager(
             state = pagerState,
             modifier = Modifier.fillMaxWidth()
         ) { page ->
-            content(page)
+            val tasks = tasksList[page]
+            content(page, tasks)
         }
     }
 }
@@ -87,7 +89,13 @@ fun TabLayoutScreen(modifier: Modifier = Modifier) {
             .fillMaxSize()
             .background(TudeeTheme.colors.surface)
     ) {
-        TudeeTabLayoutWithPager { page ->
+        TudeeTabLayoutWithPager(
+            tabs = listOf(
+                TabItem(text = R.string.In_Progress, number = 14),
+                TabItem(text = R.string.To_Do, number = 8),
+                TabItem(text = R.string.Done, number = 5)
+            )
+        ) { page, emptyTasks ->
             // Content for each tab
             Box(
                 modifier = Modifier.fillMaxSize(), contentAlignment = Center

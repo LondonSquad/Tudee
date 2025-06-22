@@ -59,7 +59,8 @@ fun CreateCategoryScreen(
             CreateCategoryContent(
                 modifier = modifier, onDismiss = onDismiss
             )
-        })
+        }
+    )
 }
 
 @Composable
@@ -118,7 +119,7 @@ private fun CreateCategoryContent(
                         id = 1,
                         title = categoryName,
 //                        arName = categoryName,
-                        iconRes ="",
+                        iconRes = imageUri.toString(),
                         isDefault = false,
                       //  tint = primaryColor.value,
                         taskCount = 0

@@ -35,6 +35,7 @@ import com.london.tudee.presentation.components.date.TudeeDatePicker
 import com.london.tudee.presentation.components.priority.PrioritySelector
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -295,39 +296,39 @@ private fun rememberSampleDomainCategories(): List<Category> {
                 iconRes = "",
                 isDefault = true,
                 taskCount = 0,
-                // tint = primaryColor
+               // tint = primaryColor
             ),
             Category(
                 id = 2,
                 title = "Shopping",
-                // arName = "التسوق",
+               // arName = "التسوق",
                 iconRes = "",
                 isDefault = true,
                 taskCount = 0,
-                // tint = secondaryColor
+               // tint = secondaryColor
             ),
             Category(
                 id = 3,
                 title = "Medical",
-                // arName = "طبي",
+               // arName = "طبي",
                 iconRes = "",
                 isDefault = true,
                 taskCount = 0,
-                // tint =primaryColor
+               // tint =primaryColor
             ),
             Category(
                 id = 4,
                 title = "Gym",
-                // arName = "رياضة",
+               // arName = "رياضة",
                 iconRes = "",
                 isDefault = false,
                 taskCount = 0,
-                //   tint = primaryColor
+             //   tint = primaryColor
             ),
             Category(
                 id = 5,
                 title = "Entertainment",
-                // arName = "ترفيه",
+               // arName = "ترفيه",
                 iconRes = "",
                 isDefault = false,
                 taskCount = 0,
@@ -337,29 +338,29 @@ private fun rememberSampleDomainCategories(): List<Category> {
             Category(
                 id = 6,
                 title = "Cooking",
-                // arName = "طبخ",
+               // arName = "طبخ",
                 iconRes = "",
                 isDefault = false,
                 taskCount = 0,
-                // tint = primaryColor
+               // tint = primaryColor
             ),
             Category(
                 id = 7,
                 title = "Family & Friends",
-                // arName = "العائلة والأصدقاء",
+               // arName = "العائلة والأصدقاء",
                 iconRes = "",
                 isDefault = false,
                 taskCount = 0,
-                // tint = primaryColor
+               // tint = primaryColor
             ),
             Category(
                 id = 8,
                 title = "Traveling",
-                // arName = "سفر",
+               // arName = "سفر",
                 iconRes = "",
                 isDefault = false,
                 taskCount = 0,
-                // tint = primaryColor
+               // tint = primaryColor
             ),
             Category(
                 id = 9,
@@ -368,7 +369,7 @@ private fun rememberSampleDomainCategories(): List<Category> {
                 iconRes = "",
                 isDefault = false,
                 taskCount = 0,
-                //   tint = primaryColor
+             //   tint = primaryColor
             )
         )
     }

@@ -18,8 +18,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -30,17 +28,38 @@ import com.london.tudee.presentation.components.CategoryItem
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.categories.crud.CreateCategoryScreen
+import com.london.tudee.presentation.utils.converterStringToBitmap
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CategoriesScreen(
     @StringRes screenTitle: Int = R.string.categories,
     viewModel: CategoriesViewModel = koinViewModel(),
-    onCategoryClick: (Category) -> Unit,
-    onAddCategoryClick: () -> Unit
+    onCategoryClick: (Int) -> Unit
 ) {
     val categories by viewModel.categoryUiState.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
+
+    CategoriesScreenContent(
+        screenTitle = screenTitle,
+        uiState = uiState,
+        categories = categories,
+        onCategoryClick = onCategoryClick,
+        onAddCategoryClick = { viewModel.setShowBottomSheet(true) },
+        onDismissBottomSheet = { viewModel.setShowBottomSheet(false) })
+}
+
+@Composable
+fun CategoriesScreenContent(
+    screenTitle: Int,
+    uiState: CategoriesUiState,
+    categories: List<Category>,
+    onCategoryClick: (Int) -> Unit,
+    onAddCategoryClick: () -> Unit,
+    onDismissBottomSheet: () -> Unit
+) {
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -92,15 +111,16 @@ fun CategoriesScreen(
                     ) {
                         items(categories) { category ->
                             CategoryItem(
-                                iconRes = rememberAsyncImagePainter(category.iconRes),
+                                iconRes = rememberAsyncImagePainter(converterStringToBitmap(category.iconRes)),
                                 title = category.title,
                                 count = category.taskCount,
-                                onClick = { onCategoryClick(category) })
+                                onClick = { onCategoryClick(category.id) })
                         }
                     }
                 }
             }
         }
+        if (uiState.showBottomSheet) CreateCategoryScreen(onDismiss = onDismissBottomSheet)
 
         TudeeFloatingActionButton(
             modifier = Modifier
@@ -109,7 +129,7 @@ fun CategoriesScreen(
             painter = painterResource(id = R.drawable.ic_add_category_button),
             isEnabled = true,
             contentDescription = stringResource(R.string.fab_content_description),
-            onClick = onAddCategoryClick,
+            onClick = onAddCategoryClick
         )
     }
 }
@@ -121,6 +141,6 @@ fun CategoriesScreenPreview() {
         CategoriesScreen(
             screenTitle = R.string.categories,
             onCategoryClick = {},
-            onAddCategoryClick = {})
+        )
     }
 }

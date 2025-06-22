@@ -8,12 +8,3 @@ data class Category(
     val taskCount: Int,
   //  val tint: Long
 )
-
-//categoryName = category.title,
-//categoryId = category.id,
-//imageUri = if (category.imageUrl.startsWith("R.drawable.")) {
-//    val resourceId = category.imageUrl.toResDrawables()
-//    "android.resource://com.example.tudeeapp/$resourceId".toUri()
-//} else {
-//    category.imageUrl.toUri()
-//}
