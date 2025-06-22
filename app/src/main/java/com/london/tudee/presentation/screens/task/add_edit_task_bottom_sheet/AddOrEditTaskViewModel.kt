@@ -45,7 +45,7 @@ class AddOrEditTaskViewModel(
                     validateForm()
                 }
             } catch (_: Exception) {
-                _uiState.update { it.copy(errorMessage = R.string.some_error_happened) }
+                _uiState.update { it.copy(stateMessage = R.string.some_error_happened) }
             }
         }
     }
@@ -74,7 +74,7 @@ class AddOrEditTaskViewModel(
             } catch (_: Exception) {
                 _uiState.update {
                     it.copy(
-                        errorMessage = R.string.some_error_happened, isLoading = false
+                        stateMessage = R.string.some_error_happened, isLoading = false
                     )
                 }
             }
@@ -133,8 +133,7 @@ class AddOrEditTaskViewModel(
                     selectedDate = null,
                     selectedPriority = Priority.LOW,
                     selectedCategory = it.categories.firstOrNull(),
-                    successMessage = null,
-                    errorMessage = null,
+                    stateMessage = null,
                     isEditMode = false,
                     taskId = null
                 )
@@ -165,12 +164,13 @@ class AddOrEditTaskViewModel(
                     taskService.edit(task)
                 } else {
                     taskService.add(task)
+
                 }
 
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        successMessage = if (currentState.isEditMode) R.string.edit_task_successfully
+                        stateMessage = if (currentState.isEditMode) R.string.edit_task_successfully
                         else R.string.add_task_successfully,
                         showBottomSheet = false
                     )
@@ -179,7 +179,7 @@ class AddOrEditTaskViewModel(
             } catch (_: Exception) {
                 _uiState.update {
                     it.copy(
-                        isLoading = false, errorMessage = R.string.some_error_happened
+                        isLoading = false, stateMessage = R.string.some_error_happened
                     )
                 }
             }
@@ -199,7 +199,7 @@ class AddOrEditTaskViewModel(
     override fun clearMessages() {
         _uiState.update {
             it.copy(
-                successMessage = null, errorMessage = null
+                stateMessage = null
             )
         }
     }

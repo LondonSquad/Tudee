@@ -75,13 +75,13 @@ fun AddOrEditTaskBottomSheet(
             }
         )
 
-        if (uiState.successMessage != null || uiState.errorMessage != null) {
+        if (uiState.stateMessage != null) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.TopCenter
             ) {
                 when {
-                    uiState.successMessage != null -> {
+                    uiState.stateMessage != null -> {
                         SnackBar(
                             modifier = Modifier.offset(y = 56.dp),
                             message = if (uiState.isEditMode)
@@ -92,7 +92,7 @@ fun AddOrEditTaskBottomSheet(
                             iconTint = TudeeTheme.colors.greenAccent
                         )
                     }
-                    uiState.errorMessage != null -> {
+                    uiState.stateMessage != null -> {
                         SnackBar(
                             modifier = Modifier.offset(y = 56.dp),
                             message = R.string.some_error_happened,
@@ -103,7 +103,7 @@ fun AddOrEditTaskBottomSheet(
                 }
             }
 
-            LaunchedEffect(uiState.successMessage, uiState.errorMessage) {
+            LaunchedEffect(uiState.stateMessage) {
                 delay(3000)
                 interaction.clearMessages()
             }
