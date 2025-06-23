@@ -17,22 +17,29 @@ object DateFormatter {
     private val timeZone = TimeZone.currentSystemDefault()
 
     fun Long.toMonthShort(): String {
-        val dt = Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone)
-        return dt.month.name.take(3).lowercase().replaceFirstChar { it.uppercase() } //  Jun
+        val dateTime = Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone)
+        return dateTime.month.name.take(3).lowercase().replaceFirstChar { it.uppercase() } //  Jun
+    }
+
+    fun Long.toMonthNumber(timeZone: TimeZone = DateFormatter.timeZone): String {
+        val monthValue = Instant.fromEpochMilliseconds(this)
+            .toLocalDateTime(timeZone).month.value
+
+        return monthValue.toString().padStart(2, '0') // 03
     }
 
     fun Long.toYear(): String {
-        val dt = Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone)
-        return dt.year.toString() // 1999
+        val dateTime = Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone)
+        return dateTime.year.toString() // 1999
     }
 
     fun Long.toDayNumber(): String {
-        val dt = Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone)
-        return dt.dayOfMonth.toString().padStart(2, '0') // 25
+        val dateTime = Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone)
+        return dateTime.dayOfMonth.toString().padStart(2, '0') // 25
     }
 
     fun Long.toDayOfWeekShort(): String {
-        val dt = Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone)
-        return dt.dayOfWeek.name.take(3).lowercase().replaceFirstChar { it.uppercase() } //  Mon
+        val dateTime = Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone)
+        return dateTime.dayOfWeek.name.take(3).lowercase().replaceFirstChar { it.uppercase() } //  Mon
     }
 }

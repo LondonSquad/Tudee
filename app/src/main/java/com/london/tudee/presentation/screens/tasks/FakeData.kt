@@ -11,8 +11,8 @@ data class DateItemClass(
     val dayOfMonth: String, val dayOfWeek: String, var isSelected: Boolean
 )
 
-val currentYear = "2025"
-val currentMonth = "Jun"
+//val currentYear = "2025"
+//val currentMonth = "Jun"
 
 val fakeDates = mutableStateListOf(
     DateItemClass("17", "Mon", false),
