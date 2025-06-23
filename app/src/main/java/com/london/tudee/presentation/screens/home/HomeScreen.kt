@@ -1,6 +1,7 @@
 package com.london.tudee.presentation.screens.home
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -417,6 +418,7 @@ private fun ToDoSection(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        Log.d("MainActivity", "${categoryIcons.size}")
         items(toDoTasks.size) {
             TaskItem(
                 modifier = Modifier
@@ -425,7 +427,7 @@ private fun ToDoSection(
                 isSelected = true,
                 task = toDoTasks[it],
                 hasDate = false,
-                iconResId = categoryIcons[it]
+                iconResId = categoryIcons[toDoTasks[it].categoryId - 1]
             )
         }
     }
@@ -507,7 +509,7 @@ private fun InProgressSection(
                 isSelected = true,
                 task = inProgressTasks[it],
                 hasDate = false,
-                iconResId = categoryIcons[it]
+                iconResId = categoryIcons[inProgressTasks[it].categoryId-1]
             )
         }
     }
@@ -588,7 +590,7 @@ private fun DoneSection(
                 isSelected = true,
                 task = doneTasks[it],
                 hasDate = false,
-                iconResId = categoryIcons[it]
+                iconResId = categoryIcons[doneTasks[it].categoryId-1]
             )
         }
     }
