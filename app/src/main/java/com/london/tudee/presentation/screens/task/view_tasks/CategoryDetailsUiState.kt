@@ -13,7 +13,7 @@ data class CategoryDetailsState(
     val toDoTasks: List<Task> = listOf(),
     val category: Category = Category(
         id = 0,
-        title = "Default",
+        title = "xz",
         iconRes = "",
         isDefault = false,
         taskCount = 0

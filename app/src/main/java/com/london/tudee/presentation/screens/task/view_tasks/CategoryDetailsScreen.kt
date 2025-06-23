@@ -32,6 +32,7 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.task.view_tasks.CategoryDetailsScreen.NUMBER_OF_PREDEFINED_CATEGORIES
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -45,7 +46,11 @@ fun CategoryDetailsScreen(
     when {
         uiState.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
-        else -> CategoryDetailsContent(state = uiState, onBackClick = onBackClick)
+        else -> CategoryDetailsContent(
+            state = uiState,
+            onBackClick = onBackClick,
+            categoryId = categoryId
+        )
     }
 }
 
@@ -71,6 +76,7 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun CategoryDetailsContent(
+    categoryId: Int,
     state: CategoryDetailsState,
     onBackClick: () -> Unit
 ) {
@@ -81,38 +87,44 @@ fun CategoryDetailsContent(
 
         TopAPPBar(
             onBackClick = onBackClick,
-            state = state
+            state = state,
+            categoryId = categoryId
         )
 
-        TudeeTabLayoutWithPager(
-            tabs = listOf(
-                TabItem(text = R.string.In_Progress, number = state.inProgressTasks.size),
-                TabItem(text = R.string.To_Do, number = state.toDoTasks.size),
-                TabItem(text = R.string.Done, number = state.doneTasks.size),
-            ),
-            tasksList = listOf(state.inProgressTasks, state.toDoTasks, state.doneTasks)
-        )
-        { page, tasks ->
+        TuddeTabWithPager(state = state)
+    }
+}
 
-            Box(
+@Composable
+fun TuddeTabWithPager(state: CategoryDetailsState) {
+    TudeeTabLayoutWithPager(
+        tabs = listOf(
+            TabItem(text = R.string.In_Progress, number = state.inProgressTasks.size),
+            TabItem(text = R.string.To_Do, number = state.toDoTasks.size),
+            TabItem(text = R.string.Done, number = state.doneTasks.size),
+        ),
+        tasksList = listOf(state.inProgressTasks, state.toDoTasks, state.doneTasks)
+    )
+    { page, tasks ->
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(TudeeTheme.colors.surface)
+        ) {
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(TudeeTheme.colors.surface)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                ) {
-                    items(tasks.size) { index ->
-                        TaskItem(
-                            modifier = Modifier,
-                            isSelected = true,
-                            task = tasks[index],
-                            hasDate = true
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
+                items(tasks.size) { index ->
+                    TaskItem(
+                        modifier = Modifier,
+                        isSelected = true,
+                        task = tasks[index],
+                        hasDate = true
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }
@@ -120,7 +132,7 @@ fun CategoryDetailsContent(
 }
 
 @Composable
-private fun TopAPPBar(onBackClick: () -> Unit, state: CategoryDetailsState) {
+private fun TopAPPBar(onBackClick: () -> Unit, state: CategoryDetailsState, categoryId: Int) {
     TopAppBar(
         title = state.category.title,
         onBackClick = onBackClick,
@@ -141,11 +153,13 @@ private fun TopAPPBar(onBackClick: () -> Unit, state: CategoryDetailsState) {
                         TudeeTheme.shapes.circle
                     )
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.back_arrow),
-                    contentDescription = stringResource(R.string.back_arrow),
-                    tint = TudeeTheme.colors.body
-                )
+                if (categoryId > NUMBER_OF_PREDEFINED_CATEGORIES) {
+                    Icon(
+                        painter = painterResource(R.drawable.back_arrow),
+                        contentDescription = stringResource(R.string.back_arrow),
+                        tint = TudeeTheme.colors.body
+                    )
+                }
             }
         },
         actions = {
@@ -171,6 +185,11 @@ private fun TopAPPBar(onBackClick: () -> Unit, state: CategoryDetailsState) {
             }
         }
     )
+}
+
+
+private object CategoryDetailsScreen {
+    const val NUMBER_OF_PREDEFINED_CATEGORIES = 15
 }
 
 @ThemePreviews

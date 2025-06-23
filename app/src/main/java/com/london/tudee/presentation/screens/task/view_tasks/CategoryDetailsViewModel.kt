@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.tudee.domain.entities.Category
-import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
@@ -27,20 +26,16 @@ class CategoryDetailsViewModel(
         getDoneTasksByCategoryId(uiState.value.category.id)
         getToDoTasksByCategoryId(uiState.value.category.id)
         getInProgressTasksByCategoryId(uiState.value.category.id)
-        getCategoryNameById(uiState.value.category.id)
+        Log.d("ID", "ID ${uiState.value.category.id}")
+        getCategoryNameById(5) //for testing until nav completed
     }
 
     private fun getDoneTasksByCategoryId(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-//            taskService.add(
-//                Task(
-//                    id=0,
-//
-//                )
-//            )
             taskService.getByCategoryIdAndTaskStatus(
                 categoryId = categoryId,
-               taskStatus = TaskStatus.DONE).catch { throwable ->
+                taskStatus = TaskStatus.DONE
+            ).catch { throwable ->
                 _uiState.update {
                     it.copy(isLoading = false, errMessage = throwable.message)
                 }
@@ -62,7 +57,8 @@ class CategoryDetailsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
                 categoryId = categoryId,
-                taskStatus = TaskStatus.IN_PROGRESS).catch { throwable ->
+                taskStatus = TaskStatus.IN_PROGRESS
+            ).catch { throwable ->
                 _uiState.update {
                     it.copy(isLoading = false, errMessage = throwable.message)
                 }
@@ -84,7 +80,8 @@ class CategoryDetailsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
                 categoryId = categoryId,
-                taskStatus =TaskStatus.TODO).catch { throwable ->
+                taskStatus = TaskStatus.TODO
+            ).catch { throwable ->
                 _uiState.update {
                     it.copy(isLoading = false, errMessage = throwable.message)
                 }
@@ -104,20 +101,28 @@ class CategoryDetailsViewModel(
 
     private fun getCategoryNameById(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("CategoryDetailsViewModel", "Category name: $categoryId")
+            Log.d("CategoryDetailsViewModel", "Starting to fetch category: $categoryId")
 
-            categoryService.getById(categoryId).let { category ->
+            try {
+                val category = categoryService.getById(categoryId)
+                Log.d("CategoryDetailsViewModel", "Category fetched successfully: ${category.title}")
+
                 _uiState.update {
-                    Log.d("CategoryDetailsViewModel", "Category name: ${category.title}")
                     it.copy(
                         category = Category(
                             id = category.id,
-                            title = category.title,
                             isDefault = category.isDefault,
                             iconRes = category.iconRes,
-                            taskCount = category.taskCount
+                            taskCount = category.taskCount,
+                            title = category.title,
                         )
                     )
+                }
+            } catch (e: Exception) {
+                Log.e("CategoryDetailsViewModel", "Error fetching category $categoryId: ${e.message}", e)
+                // Handle error state
+                _uiState.update {
+                    it.copy(errMessage = "Category not found")
                 }
             }
         }
