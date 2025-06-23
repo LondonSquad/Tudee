@@ -69,14 +69,13 @@ dependencies {
 
     // coil
     implementation (libs.coil.compose)
-    
+
     // koin
     implementation (libs.koin.android)
     implementation (libs.koin.androidx.compose)
 
     implementation(libs.kotlinx.datetime)
 
-    implementation(libs.androidx.datastore.preferences)
     implementation(libs.remember.preference)
 }
 
