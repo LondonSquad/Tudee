@@ -28,7 +28,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun TopAppBar(
-    @StringRes title: Int,
+    title: String,
     onBackClick: () -> Unit,
     onClickAction: () -> Unit,
     modifier: Modifier = Modifier,
@@ -89,7 +89,7 @@ fun TopAppBar(
         navigationIcon(onBackClick)
         Spacer(modifier = Modifier.width(12.dp))
         Text(
-            text = stringResource(title),
+            text = title,
             style = TudeeTheme.typography.titleLarge,
             color = TudeeTheme.colors.title,
             modifier = Modifier.weight(1f)
@@ -104,7 +104,7 @@ fun TopAppBar(
 private fun TopAppBarPreview() {
     TudeeTheme {
         TopAppBar(
-            title = R.string.app_name,
+            title = stringResource(R.string.app_name),
             onBackClick = {},
             onClickAction = {}
         )

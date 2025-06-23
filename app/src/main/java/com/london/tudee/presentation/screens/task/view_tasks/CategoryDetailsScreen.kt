@@ -35,15 +35,17 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun EditTaskDetails(
-    viewModel: EditTaskViewModel = koinViewModel(),
+fun CategoryDetailsScreen(
+    categoryId: Int,
+    onBackClick: () -> Unit,
+    viewModel: CategoryDetailsViewModel = koinViewModel(),
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
     when {
         uiState.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
-        else -> EditTaskDetailsContent(state = uiState)
+        else -> CategoryDetailsContent(state = uiState, onBackClick = onBackClick)
     }
 }
 
@@ -68,22 +70,26 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun EditTaskDetailsContent(
-    state: EditTaskDetailsState,
+fun CategoryDetailsContent(
+    state: CategoryDetailsState,
+    onBackClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .background(TudeeTheme.colors.surface)
     ) {
 
-        TopAPPBar()
+        TopAPPBar(
+            onBackClick = onBackClick,
+            state = state
+        )
 
         TudeeTabLayoutWithPager(
             tabs = listOf(
                 TabItem(text = R.string.In_Progress, number = state.inProgressTasks.size),
                 TabItem(text = R.string.To_Do, number = state.toDoTasks.size),
                 TabItem(text = R.string.Done, number = state.doneTasks.size),
-                ),
+            ),
             tasksList = listOf(state.inProgressTasks, state.toDoTasks, state.doneTasks)
         )
         { page, tasks ->
@@ -114,10 +120,10 @@ fun EditTaskDetailsContent(
 }
 
 @Composable
-private fun TopAPPBar() {
+private fun TopAPPBar(onBackClick: () -> Unit, state: CategoryDetailsState) {
     TopAppBar(
-        title = R.string.coding,
-        onBackClick = {},
+        title = state.category.title,
+        onBackClick = onBackClick,
         onClickAction = {},
         modifier = Modifier,
         navigationIcon = {
@@ -171,7 +177,7 @@ private fun TopAPPBar() {
 @Composable
 private fun TudeeTaskPreview() {
     TudeeTheme {
-        EditTaskDetails()
+        CategoryDetailsScreen(categoryId = 1, onBackClick = {})
     }
 }
 
