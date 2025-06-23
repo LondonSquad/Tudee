@@ -100,4 +100,5 @@
     <string name="Dec">Dec</string>
     <string name="Something_went_wrong_task_not_found_or_no_category_icon">Something went wrong task not found or no category icon</string>
     <string name="Something_went_wrong_cant_update_task">Something went wrong cant update task</string>
+    <string name="tasks">Tasks</string>
 </resources>

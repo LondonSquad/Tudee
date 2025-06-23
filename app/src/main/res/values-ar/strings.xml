@@ -95,4 +95,5 @@
     <string name="Dec">ديسمبر</string>
     <string name="Something_went_wrong_task_not_found_or_no_category_icon">هناك شيئ خطا لا توجد مهمه او صوره المجموعه</string>
     <string name="Something_went_wrong_cant_update_task">هناك شيئ حطا لا يمكن تحديث المهمه</string>
+    <string name="tasks">المهام</string>
 </resources>
