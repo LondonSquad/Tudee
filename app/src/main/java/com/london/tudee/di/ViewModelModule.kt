@@ -3,7 +3,7 @@ package com.london.tudee.di
 import com.london.tudee.presentation.screens.home.HomeViewModel
 import com.london.tudee.presentation.screens.task.confirm_delete_task.ConfirmDeleteTaskViewModel
 import com.london.tudee.presentation.screens.task.taskdetails.TaskDetailsBottomSheetViewModel
-import com.london.tudee.presentation.screens.task.view_tasks.EditTaskViewModel
+import com.london.tudee.presentation.screens.task.view_tasks.CategoryDetailsViewModel
 import com.london.tudee.presentation.screens.tasks.TasksScreenViewModel
 import com.london.tudee.presentation.screens.categories.CategoriesViewModel
 import com.london.tudee.presentation.screens.categories.CreateCategoryViewModel
@@ -20,7 +20,7 @@ val viewModelModule = module {
     viewModelOf(::ConfirmDeleteTaskViewModel)
     viewModelOf(::TaskDetailsBottomSheetViewModel)
     viewModelOf(::HomeViewModel)
-    viewModelOf(::EditTaskViewModel)
+    viewModelOf(::CategoryDetailsViewModel)
     viewModelOf(::CategoriesViewModel)
     viewModelOf(::CreateCategoryViewModel)
     viewModelOf(::EditCategoryScreenViewModel)
