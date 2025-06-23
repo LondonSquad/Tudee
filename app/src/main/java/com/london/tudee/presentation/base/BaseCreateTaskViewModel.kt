@@ -22,6 +22,7 @@ abstract class BaseCreateTaskViewModel(
     private val taskService: TaskService,
     private val categoryService: CategoryService
 ) : ViewModel(), BaseCreateTaskInteractions {
+
     private val _taskUiState = MutableStateFlow(AddOrEditTaskUiState())
     val taskUiState = _taskUiState.asStateFlow()
 
@@ -37,13 +38,43 @@ abstract class BaseCreateTaskViewModel(
                         currentState.copy(
                             categories = categories,
                             selectedCategory = currentState.selectedCategory,
-                            categoryIcons = categories.map { it.iconRes }
-                        )
+                            categoryIcons = categories.map { it.iconRes })
                     }
                     validateForm()
                 }
             } catch (_: Exception) {
-                _taskUiState.update { it.copy(errorMessage = R.string.some_error_happened) }
+                _taskUiState.update { it.copy(stateMessage = R.string.some_error_happened) }
+            }
+        }
+    }
+
+    override fun initializeForEdit(taskId: Int) {
+        viewModelScope.launch {
+            _taskUiState.update { it.copy(isLoading = true) }
+            try {
+                val task = taskService.getById(taskId)
+                val category = categoryService.getById(task.categoryId)
+
+                _taskUiState.update { currentState ->
+                    currentState.copy(
+                        taskId = task.id,
+                        title = task.title,
+                        description = task.description,
+                        selectedDate = task.timeStamp.toEpochMilliseconds(),
+                        selectedPriority = task.priority,
+                        selectedCategory = category,
+                        isEditMode = true,
+                        isLoading = false,
+                        showBottomSheet = true
+                    )
+                }
+                validateForm()
+            } catch (_: Exception) {
+                _taskUiState.update {
+                    it.copy(
+                        stateMessage = R.string.some_error_happened, isLoading = false
+                    )
+                }
             }
         }
     }
@@ -100,8 +131,7 @@ abstract class BaseCreateTaskViewModel(
                     selectedDate = null,
                     selectedPriority = Priority.LOW,
                     selectedCategory = it.categories.firstOrNull(),
-                    successMessage = null,
-                    errorMessage = null,
+                    stateMessage = null,
                     isEditMode = false,
                     taskId = null
                 )
@@ -127,18 +157,20 @@ abstract class BaseCreateTaskViewModel(
                     priority = currentState.selectedPriority,
                     categoryId = currentState.selectedCategory?.id ?: 1,
                     timeStamp = currentState.selectedDate?.let { Instant.fromEpochMilliseconds(it) }
-                        ?: Clock.System.now()
-                )
+                        ?: Clock.System.now())
                 if (currentState.isEditMode) {
                     taskService.edit(task)
                 } else {
+                    currentState.selectedCategory?.let { category ->
+                        categoryService.edit(category.copy(taskCount = category.taskCount + 1))
+                    }
                     taskService.add(task)
                 }
 
                 _taskUiState.update {
                     it.copy(
                         isLoading = false,
-                        successMessage = if (currentState.isEditMode) R.string.edit_task_successfully
+                        stateMessage = if (currentState.isEditMode) R.string.edit_task_successfully
                         else R.string.add_task_successfully,
                         showBottomSheet = false
                     )
@@ -147,7 +179,7 @@ abstract class BaseCreateTaskViewModel(
             } catch (_: Exception) {
                 _taskUiState.update {
                     it.copy(
-                        isLoading = false, errorMessage = R.string.some_error_happened
+                        isLoading = false, stateMessage = R.string.some_error_happened
                     )
                 }
             }
@@ -160,8 +192,8 @@ abstract class BaseCreateTaskViewModel(
         _taskUiState.update { currentState ->
             currentState.copy(
                 isFormValid = currentState.title.isNotBlank()
-                        && currentState.selectedDate != null &&
-                        currentState.selectedCategory != null
+                        && currentState.selectedDate != null
+                        && currentState.selectedCategory != null
             )
         }
     }
@@ -169,7 +201,7 @@ abstract class BaseCreateTaskViewModel(
     override fun clearMessages() {
         _taskUiState.update {
             it.copy(
-                successMessage = null, errorMessage = null
+                stateMessage = null
             )
         }
     }

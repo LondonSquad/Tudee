@@ -17,4 +17,5 @@ interface BaseCreateTaskInteractions {
     fun saveTask()
     fun validateForm()
     fun clearMessages()
+    fun initializeForEdit(taskId: Int)
 }

@@ -1,6 +1,5 @@
 package com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -23,8 +22,6 @@ import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 @Composable
 fun AddOrEditTaskBottomSheet(
     modifier: Modifier = Modifier,
-    @StringRes title: Int,
-    @StringRes buttonText: Int,
     screenContent: @Composable () -> Unit,
     taskId: Int? = null,
     uiState: AddOrEditTaskUiState,

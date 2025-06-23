@@ -181,8 +181,6 @@ fun HomeScreenContent(
 
         AddOrEditTaskBottomSheet(
             modifier = Modifier.zIndex(1f),
-            title = R.string.add_new_task,
-            buttonText = R.string.add,
             screenContent = { },
             uiState = taskUiState,
             interactions = interactions
@@ -192,8 +190,8 @@ fun HomeScreenContent(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
         ) {
-            when {
-                taskUiState.successMessage != null -> {
+            when (taskUiState.stateMessage) {
+                R.string.add_task_successfully, R.string.edit_task_successfully -> {
                     SnackBar(
                         modifier = Modifier.offset(y = 56.dp),
                         message = if (taskUiState.isEditMode)
@@ -204,8 +202,7 @@ fun HomeScreenContent(
                         iconTint = TudeeTheme.colors.greenAccent
                     )
                 }
-
-                taskUiState.errorMessage != null -> {
+                R.string.some_error_happened -> {
                     SnackBar(
                         modifier = Modifier.offset(y = 56.dp),
                         message = R.string.some_error_happened,
@@ -215,7 +212,7 @@ fun HomeScreenContent(
                 }
             }
 
-            LaunchedEffect(taskUiState.successMessage, taskUiState.errorMessage) {
+            LaunchedEffect(taskUiState.stateMessage) {
                 delay(3000)
                 interactions.clearMessages()
             }
