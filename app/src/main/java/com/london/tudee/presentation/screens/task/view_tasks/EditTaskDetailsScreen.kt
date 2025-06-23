@@ -67,7 +67,6 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
     }
 }
 
-
 @Composable
 fun EditTaskDetailsContent(
     state: EditTaskDetailsState,
@@ -83,18 +82,12 @@ fun EditTaskDetailsContent(
             tabs = listOf(
                 TabItem(text = R.string.In_Progress, number = state.inProgressTasks.size),
                 TabItem(text = R.string.To_Do, number = state.toDoTasks.size),
-                TabItem(
-                    text = R.string.Done, number = state.doneTasks.size
+                TabItem(text = R.string.Done, number = state.doneTasks.size),
                 ),
-
-                ),
+            tasksList = listOf(state.inProgressTasks, state.toDoTasks, state.doneTasks)
         )
-        { page ->
-            val tasks = when (page) {
-                0 -> state.inProgressTasks
-                1 -> state.toDoTasks
-                else -> state.doneTasks
-            }
+        { page, tasks ->
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -109,7 +102,7 @@ fun EditTaskDetailsContent(
                         TaskItem(
                             modifier = Modifier,
                             isSelected = true,
-                            task = state.allTasks[index],
+                            task = tasks[index],
                             hasDate = true
                         )
                         Spacer(modifier = Modifier.height(8.dp))

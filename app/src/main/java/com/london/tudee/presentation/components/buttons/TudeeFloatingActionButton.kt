@@ -23,7 +23,7 @@ fun TudeeFloatingActionButton(
     modifier: Modifier = Modifier,
     painter: Painter,
     contentDescription: String,
-    onClick: () -> Unit = {},
+    onClick:  () -> Unit = {},
     isEnabled: Boolean,
 ){
     Box(
@@ -39,9 +39,9 @@ fun TudeeFloatingActionButton(
             )
             .size(64.dp)
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable(
-                onClick = onClick
-            ),
+            .clickable{
+                onClick()
+            },
         contentAlignment = Alignment.Center
     ) {
         Image(

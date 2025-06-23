@@ -1,11 +1,10 @@
 package com.london.tudee.data.services
 
-import com.london.tudee.data.local.room_db.dao.CategoryDao
+import com.london.tudee.data.local.roomdb.dao.CategoryDao
 import com.london.tudee.data.mappers.convertToCategory
 import com.london.tudee.data.mappers.convertToCategoryDto
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.services.CategoryService
-import com.london.tudee.domain.services.Services
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -27,8 +26,8 @@ class CategoriesServicesImpl(
     }
 
     override suspend fun getAll(): Flow<List<Category>> {
-        return categoryDao.getAll().map { list ->
-            list.map { it.convertToCategory() }
+        return categoryDao.getAll().map { categoryDtoList ->
+            categoryDtoList.map { categoryDto -> categoryDto.convertToCategory() }
         }
     }
 
@@ -36,7 +35,7 @@ class CategoriesServicesImpl(
         return categoryDao.getById(id).convertToCategory()
     }
 
-    override fun getIconPathById(id: Int): Int {
-        return categoryDao.getIconPathById(id)
+    override fun getIconResById(id: Int): String {
+        return categoryDao.getIconResById(id)
     }
 }

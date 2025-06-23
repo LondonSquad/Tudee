@@ -1,37 +1,36 @@
 package com.london.tudee.presentation.screens.home
 
-import androidx.lifecycle.ViewModel
+
 import androidx.lifecycle.viewModelScope
-import com.london.tudee.R
-import com.london.tudee.domain.entities.Priority
-import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
+import com.london.tudee.presentation.base.BaseCreateTaskViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Instant
 
 class HomeViewModel(
     private val taskService: TaskService,
     private val categoryService: CategoryService
-) : ViewModel() {
+) : BaseCreateTaskViewModel(
+    taskService, categoryService
+) {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
-        getAllTasks()
-        getDoneTasks()
-        getToDoTasks()
-        getInProgressTasks()
+        initializeAllTasks()
+        initializeDoneTasks()
+        initializeTodoTasks()
+        initializeInProgressTasks()
     }
 
-    private fun getAllTasks() {
+    private fun initializeAllTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getAll().catch { throwable ->
                 _uiState.update {
@@ -43,7 +42,7 @@ class HomeViewModel(
                         isLoading = false,
                         errMessage = null,
                         allTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconPathById(it.categoryId))
+                            it.copy(categoryId = (it.categoryId))
                         },
                     )
                 }
@@ -51,7 +50,7 @@ class HomeViewModel(
         }
     }
 
-    private fun getDoneTasks() {
+    private fun initializeDoneTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByTaskStatus(TaskStatus.DONE).catch { throwable ->
                 _uiState.update {
@@ -63,7 +62,7 @@ class HomeViewModel(
                         isLoading = false,
                         errMessage = null,
                         doneTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconPathById(it.categoryId))
+                            it.copy(categoryId = (it.categoryId))
                         },
                     )
                 }
@@ -71,7 +70,7 @@ class HomeViewModel(
         }
     }
 
-    private fun getInProgressTasks() {
+    private fun initializeInProgressTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByTaskStatus(TaskStatus.IN_PROGRESS).catch { throwable ->
                 _uiState.update {
@@ -83,7 +82,7 @@ class HomeViewModel(
                         isLoading = false,
                         errMessage = null,
                         inProgressTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconPathById(it.categoryId))
+                            it.copy(categoryId = (it.categoryId))
                         }
                     )
                 }
@@ -91,7 +90,7 @@ class HomeViewModel(
         }
     }
 
-    private fun getToDoTasks() {
+    private fun initializeTodoTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByTaskStatus(TaskStatus.TODO).catch { throwable ->
                 _uiState.update {
@@ -103,7 +102,7 @@ class HomeViewModel(
                         isLoading = false,
                         errMessage = null,
                         toDoTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconPathById(it.categoryId))
+                            it.copy(categoryId = (it.categoryId))
                         }
                     )
                 }

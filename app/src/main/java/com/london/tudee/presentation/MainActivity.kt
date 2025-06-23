@@ -1,7 +1,6 @@
 package com.london.tudee.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -42,14 +41,11 @@ class MainActivity : ComponentActivity() {
                 shouldShowOnboarding.let { showOnboarding ->
                     if (showOnboarding) {
                         OnBoardingHorizontalPager(
-                            onClickSkip = {
-                                onboardingViewModel.markOnboardingSeen()
-                                Log.d(
-                                    "test",
-                                    "onCreate: ${onboardingViewModel.shouldShowOnboarding.value}")
-                            }
+                            onClickSkip = {onboardingViewModel.markOnboardingSeen() }
                         )
-                    } else HomeScreen()
+                    } else HomeScreen(
+                        onArrowClicked = { }
+                    )
                 }
             }
         }

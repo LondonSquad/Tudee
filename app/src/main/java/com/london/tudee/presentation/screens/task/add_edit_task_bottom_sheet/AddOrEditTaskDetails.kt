@@ -24,18 +24,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
+import com.london.tudee.presentation.base.BaseCreateTaskInteractions
 import com.london.tudee.presentation.components.CategoryItem
 import com.london.tudee.presentation.components.TudeeTextField
 import com.london.tudee.presentation.components.date.TudeeDatePicker
 import com.london.tudee.presentation.components.priority.PrioritySelector
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.mapper.CategoryMapper
-import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -45,8 +43,8 @@ fun AddOrEditTaskDetails(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
     uiState: AddOrEditTaskUiState,
-    categories: List<Category> = emptyList(),
-    interaction: AddOrEditInteraction,
+    interactions: BaseCreateTaskInteractions,
+    categories: List<Category> = emptyList()
 ) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val maxHeight = screenHeight * 0.75f
@@ -66,11 +64,11 @@ fun AddOrEditTaskDetails(
                 title = title,
                 uiState = uiState,
                 categories = categories.ifEmpty { uiState.categories },
-                onTitleValueChange = { interaction.updateTitle(it) },
-                onDescriptionValueChange = { interaction.updateDescription(it) },
-                onDateFieldClick = { interaction.showDatePicker() },
-                onPrioritySelected = { interaction.updateSelectedPriority(it) },
-                onCategorySelected = { interaction.updateSelectedCategory(it) },
+                onTitleValueChange = { interactions.updateTitle(it) },
+                onDescriptionValueChange = { interactions.updateDescription(it) },
+                onDateFieldClick = { interactions.showDatePicker() },
+                onPrioritySelected = { interactions.updateSelectedPriority(it) },
+                onCategorySelected = { interactions.updateSelectedCategory(it) },
                 modifier = modifier.fillMaxWidth()
             )
         }
@@ -79,15 +77,16 @@ fun AddOrEditTaskDetails(
     if (uiState.showDatePicker) {
         TudeeDatePicker(
             onDateSelected = { date ->
-                interaction.updateSelectedDate(date ?: System.currentTimeMillis())
-                interaction.hideDatePicker()
+                interactions.updateSelectedDate(date ?: System.currentTimeMillis())
+                interactions.hideDatePicker()
             },
             onDismiss = {
-                interaction.hideDatePicker()
+                interactions.hideDatePicker()
             }
         )
     }
 }
+
 @Composable
 private fun TaskDetailsContent(
     modifier: Modifier,
@@ -221,12 +220,16 @@ private fun CategoriesGrid(
     selectedCategory: Category?,
     onCategorySelected: (Category) -> Unit
 ) {
+    // Memoize the chunked categories to prevent recalculation
+    val chunkedCategories = remember(categories) {
+        categories.chunked(3)
+    }
+
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        categories.chunked(3).forEach { rowCategories ->
+        chunkedCategories.forEach { rowCategories ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -234,9 +237,9 @@ private fun CategoriesGrid(
                 rowCategories.forEach { category ->
                     CategoryItem(
                         modifier = Modifier.weight(1f),
-                        iconRes = CategoryMapper.getIconResource(category),
-                        title = CategoryMapper.getCategoryDisplayName(category),
-                        isSelected = category == selectedCategory,
+                        iconRes = category.iconRes,
+                        title = category.title,
+                        isSelected = selectedCategory?.id == category.id,
                         onClick = { onCategorySelected(category) }
                     )
 
@@ -283,70 +286,92 @@ private fun PreviewCategorySection() {
 
 @Composable
 private fun rememberSampleDomainCategories(): List<Category> {
+    val primaryColor = TudeeTheme.colors.primary.value
+    val secondaryColor = TudeeTheme.colors.secondary.value
+
     return remember {
         listOf(
             Category(
                 id = 1,
-                name = "Education",
-                arName = "التعليم",
-                iconPath = "ic_education",
-                isDefault = true
+                title = "Education",
+                // arName = "التعليم",
+                iconRes = "",
+                isDefault = true,
+                taskCount = 0,
+               // tint = primaryColor
             ),
             Category(
                 id = 2,
-                name = "Shopping",
-                arName = "التسوق",
-                iconPath = "ic_shopping",
-                isDefault = true
+                title = "Shopping",
+               // arName = "التسوق",
+                iconRes = "",
+                isDefault = true,
+                taskCount = 0,
+               // tint = secondaryColor
             ),
             Category(
                 id = 3,
-                name = "Medical",
-                arName = "طبي",
-                iconPath = "ic_medical",
-                isDefault = true
+                title = "Medical",
+               // arName = "طبي",
+                iconRes = "",
+                isDefault = true,
+                taskCount = 0,
+               // tint =primaryColor
             ),
             Category(
                 id = 4,
-                name = "Gym",
-                arName = "رياضة",
-                iconPath = "ic_gym",
-                isDefault = false
+                title = "Gym",
+               // arName = "رياضة",
+                iconRes = "",
+                isDefault = false,
+                taskCount = 0,
+             //   tint = primaryColor
             ),
             Category(
                 id = 5,
-                name = "Entertainment",
-                arName = "ترفيه",
-                iconPath = "ic_entertainment",
-                isDefault = false
+                title = "Entertainment",
+               // arName = "ترفيه",
+                iconRes = "",
+                isDefault = false,
+                taskCount = 0,
+                //tint = primaryColor
+
             ),
             Category(
                 id = 6,
-                name = "Cooking",
-                arName = "طبخ",
-                iconPath = "ic_cooking",
-                isDefault = false
+                title = "Cooking",
+               // arName = "طبخ",
+                iconRes = "",
+                isDefault = false,
+                taskCount = 0,
+               // tint = primaryColor
             ),
             Category(
                 id = 7,
-                name = "Family & Friends",
-                arName = "العائلة والأصدقاء",
-                iconPath = "ic_family",
-                isDefault = false
+                title = "Family & Friends",
+               // arName = "العائلة والأصدقاء",
+                iconRes = "",
+                isDefault = false,
+                taskCount = 0,
+               // tint = primaryColor
             ),
             Category(
                 id = 8,
-                name = "Traveling",
-                arName = "سفر",
-                iconPath = "ic_travel",
-                isDefault = false
+                title = "Traveling",
+               // arName = "سفر",
+                iconRes = "",
+                isDefault = false,
+                taskCount = 0,
+               // tint = primaryColor
             ),
             Category(
                 id = 9,
-                name = "Agriculture",
-                arName = "زراعة",
-                iconPath = "ic_agriculture",
-                isDefault = false
+                title = "Agriculture",
+                //arName = "زراعة",
+                iconRes = "",
+                isDefault = false,
+                taskCount = 0,
+             //   tint = primaryColor
             )
         )
     }

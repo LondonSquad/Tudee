@@ -5,7 +5,8 @@
     <string name="task_details">تفاصيل المهمة</string>">
     <string name="back_arrow">الرجوع للخلف</string>
     <string name="filter_icon">تصفية</string>
-    <string name="tudee_greeting">Your cute Helper for Every Task</string>
+    <string name="tudee_greeting">مساعدك اللطيف لكل المهام</string>
+    <string name="tudee">تادي</string>
     <string name="In_Progress">قيد التنفيذ</string>
     <string name="Done">تم</string>
     <string name="To_Do">للقيام به</string>
@@ -76,6 +77,22 @@
     <string name="encouragement_message">انت رائع!&#10;تادي فخور بك</string>
     <string name="blaming_message">تادي يشاهدك! هيا الي العمل&#10;انت فقط تشاهد ليس هناك عمل!</string>
     <string name="Overview">نظره عامه</string>
+    <string name="delete_category">حذف الفئه</string>
     <string name="no_task_today">لا توجد مهام.</string>
     <string name="tap_to_add_task">اضغط على زر + لإضافة أول مهمة.</string>
+    <string name="today">اليوم,</string>
+    <string name="Jan">يناير</string>
+    <string name="Feb">فبراير</string>
+    <string name="Mar">مارس</string>
+    <string name="Apr">ابريل</string>
+    <string name="May">مايو</string>
+    <string name="Jun">يونيو</string>
+    <string name="Jul">يوليو</string>
+    <string name="Aug">اغسطس</string>
+    <string name="Sep">سبتمبر</string>
+    <string name="Oct">اكتوبر</string>
+    <string name="Nov">نوفمبر</string>
+    <string name="Dec">ديسمبر</string>
+    <string name="Something_went_wrong_task_not_found_or_no_category_icon">هناك شيئ خطا لا توجد مهمه او صوره المجموعه</string>
+    <string name="Something_went_wrong_cant_update_task">هناك شيئ حطا لا يمكن تحديث المهمه</string>
 </resources>
