@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemGesturesPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -15,6 +16,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.zIndex
+import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.presentation.components.buttons.TudeeTextButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
@@ -31,7 +34,6 @@ fun OnBoardingHorizontalPager(
     val coroutineScope = rememberCoroutineScope()
     val currentPage = viewModel.currentPage.collectAsState().value
 
-
     LaunchedEffect(pagerState.currentPage) {
         viewModel.onPageChanged(pagerState.currentPage)
     }
@@ -39,7 +41,9 @@ fun OnBoardingHorizontalPager(
     Box(modifier = Modifier.fillMaxSize()) {
         OnBoardingBackground()
 
-        AnimatedVisibility(visible = currentPage != OnBoardingContent.size - 1) {
+        AnimatedVisibility(
+            visible = currentPage != OnBoardingContent.size - 1, modifier = Modifier.zIndex(1f)
+        ) {
             TudeeTextButton(
                 onClick = {
                     onClickSkip()
@@ -47,7 +51,8 @@ fun OnBoardingHorizontalPager(
                 text = stringResource(R.string.skip),
                 modifier = Modifier
                     .align(Alignment.TopStart)
-                    .systemGesturesPadding(),
+                    .systemGesturesPadding()
+                    .padding(16.dp),
                 isLoading = false,
                 isDisabled = false,
             )
@@ -64,15 +69,13 @@ fun OnBoardingHorizontalPager(
                         onClickForward = {
                             viewModel.navigateNext(pagerState, coroutineScope)
                             if (pageIndex == OnBoardingContent.size - 1) onCompleted()
-                        }
-                    )
+                        })
                 }
             }
         }
 
         StepIndicatorBar(
-            currentPage,
-            modifier = Modifier
+            currentPage, modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .systemGesturesPadding()
         )

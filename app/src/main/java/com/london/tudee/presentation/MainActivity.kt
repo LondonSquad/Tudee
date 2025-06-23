@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.home.HomeScreen
+import com.london.tudee.presentation.screens.onboarding.OnBoardingRoot
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +13,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TudeeTheme {
-                HomeScreen(onArrowClicked = {})
+                OnBoardingRoot(
+                    onCompleted = {},
+                    onSkip ={}
+                )
             }
         }
     }
