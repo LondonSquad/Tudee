@@ -26,8 +26,8 @@ class CategoriesServicesImpl(
     }
 
     override suspend fun getAll(): Flow<List<Category>> {
-        return categoryDao.getAll().map { list ->
-            list.map { it.convertToCategory() }
+        return categoryDao.getAll().map { categoryDtoList ->
+            categoryDtoList.map { categoryDto -> categoryDto.convertToCategory() }
         }
     }
 
