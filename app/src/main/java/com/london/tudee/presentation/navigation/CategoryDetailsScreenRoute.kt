@@ -4,18 +4,18 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.london.tudee.presentation.screens.task.view_tasks.EditTaskDetails
+import com.london.tudee.presentation.screens.task.view_tasks.CategoryDetailsScreen
 
 
 fun NavGraphBuilder.categoryDetailsRoute(navController: NavController) {
     composable<Screen.CategoryDetails> { backStackEntry ->
         val entry = backStackEntry.toRoute<Screen.CategoryDetails>()
         val categoryId = entry.categoryId
-        EditTaskDetails(
-//            id = categoryId,
-//            onBackCliecked = {
-//                navController.popBackStack()
-//            }
+        CategoryDetailsScreen(
+            categoryId = categoryId,
+            onBackClick = {
+                navController.popBackStack()
+            }
         )
     }
 }

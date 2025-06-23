@@ -3,20 +3,20 @@ package com.london.tudee.presentation.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class Screen {
+sealed interface Screen {
     @Serializable
-    object Home : Screen()
+    object Home : Screen
 
     @Serializable
-    data class Tasks(val tabIndex: Int? = null) : Screen()
+    data class Tasks(val tabIndex: Int? = null) : Screen
 
     @Serializable
-    object Categories : Screen()
+    object Categories : Screen
 
     @Serializable
-    data class CategoryDetails(val categoryId: Int) : Screen()
+    data class CategoryDetails(val categoryId: Int) : Screen
 
     @Serializable
-    object Onboarding : Screen()
+    object Onboarding : Screen
 }
 
