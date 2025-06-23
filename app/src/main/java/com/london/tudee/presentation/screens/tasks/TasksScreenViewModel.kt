@@ -1,9 +1,7 @@
 package com.london.tudee.presentation.screens.tasks
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.london.tudee.R
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.TaskService
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +12,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock.System
 import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
@@ -149,18 +146,6 @@ class TasksScreenViewModel(
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
     }
 
-    // Ask How to impl this fun for translation
-    private fun getDayOfWeek(dayOfWeek: DayOfWeek, context: Context): String {
-        return when (dayOfWeek) {
-            DayOfWeek.SUNDAY -> context.getString(R.string.sun)
-            DayOfWeek.MONDAY -> context.getString(R.string.mon)
-            DayOfWeek.TUESDAY -> context.getString(R.string.tue)
-            DayOfWeek.WEDNESDAY -> context.getString(R.string.wed)
-            DayOfWeek.THURSDAY -> context.getString(R.string.thu)
-            DayOfWeek.FRIDAY -> context.getString(R.string.fri)
-            DayOfWeek.SATURDAY -> context.getString(R.string.sat)
-        }
-    }
 
     fun selectDayCard(indexOfSelectedDay: Int) {
         val days = _uiState.value.days.toMutableList()
