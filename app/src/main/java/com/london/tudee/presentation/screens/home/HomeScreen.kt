@@ -65,7 +65,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
-    onArrowClicked: (Int) -> Unit,
+    onArrowClicked: (String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val taskUiState by viewModel.taskUiState.collectAsState()
@@ -75,7 +75,7 @@ fun HomeScreen(
         else -> HomeScreenContent(
             state = uiState,
             interactions = viewModel,
-            onArrowClicked = onArrowClicked,
+            onArrowClicked = { },
             taskUiState = taskUiState,
         )
     }
@@ -107,7 +107,7 @@ fun HomeScreenContent(
     state: HomeUiState,
     taskUiState: AddOrEditTaskUiState,
     interactions: BaseCreateTaskInteractions,
-    onArrowClicked: (Int) -> Unit
+    onArrowClicked: (String) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -353,7 +353,7 @@ private fun OverLayerBox(
 @Composable
 private fun ToDoSection(
     toDoTasks: List<Task>,
-    onTodoTasksArrowClicked: (Int) -> Unit,
+    onTodoTasksArrowClicked: (String) -> Unit,
     categoryIcons: List<String>
 ) {
     Row(
@@ -378,7 +378,7 @@ private fun ToDoSection(
                 )
                 .clip(shape = TudeeTheme.shapes.circle)
                 .clickable {
-                    onTodoTasksArrowClicked(TaskStatus.TODO.index)
+                    onTodoTasksArrowClicked(TaskStatus.TODO.name)
                 }
                 .padding(vertical = 6.dp, horizontal = 8.dp),
             contentAlignment = Alignment.Center
@@ -434,7 +434,7 @@ private fun ToDoSection(
 @Composable
 private fun InProgressSection(
     inProgressTasks: List<Task>,
-    onInProgressTasksArrowClicked: (Int) -> Unit,
+    onInProgressTasksArrowClicked: (String) -> Unit,
     categoryIcons: List<String>
 ) {
     Row(
@@ -459,7 +459,7 @@ private fun InProgressSection(
                 )
                 .clip(shape = TudeeTheme.shapes.circle)
                 .clickable {
-                    onInProgressTasksArrowClicked(TaskStatus.IN_PROGRESS.index)
+                    onInProgressTasksArrowClicked(TaskStatus.IN_PROGRESS.name)
                 }
                 .padding(vertical = 6.dp, horizontal = 8.dp),
             contentAlignment = Alignment.Center
@@ -516,7 +516,7 @@ private fun InProgressSection(
 @Composable
 private fun DoneSection(
     doneTasks: List<Task>,
-    onDoneTasksArrowClicked: (Int) -> Unit,
+    onDoneTasksArrowClicked: (String) -> Unit,
     categoryIcons: List<String>
 ) {
     Row(
@@ -541,7 +541,7 @@ private fun DoneSection(
                 )
                 .clip(shape = TudeeTheme.shapes.circle)
                 .clickable {
-                    onDoneTasksArrowClicked(TaskStatus.DONE.index)
+                    onDoneTasksArrowClicked(TaskStatus.DONE.name)
                 }
                 .padding(vertical = 6.dp, horizontal = 8.dp),
             contentAlignment = Alignment.Center
