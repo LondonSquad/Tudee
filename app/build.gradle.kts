@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     id("com.google.devtools.ksp")
 }
 
@@ -68,15 +69,14 @@ dependencies {
 
     // coil
     implementation (libs.coil.compose)
-    
+
     // koin
     implementation (libs.koin.android)
     implementation (libs.koin.androidx.compose)
 
     implementation(libs.kotlinx.datetime)
 
-    implementation(libs.androidx.datastore.preferences)
-
+    implementation(libs.remember.preference)
 }
 
 tasks.register("installGitHooks") {

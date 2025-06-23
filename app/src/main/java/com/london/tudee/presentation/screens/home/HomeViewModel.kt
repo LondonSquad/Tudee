@@ -41,9 +41,7 @@ class HomeViewModel(
                     state.copy(
                         isLoading = false,
                         errMessage = null,
-                        allTasks = tasks.map {
-                            it.copy(categoryId = (it.categoryId))
-                        },
+                        allTasks = tasks,
                     )
                 }
             }
@@ -61,9 +59,7 @@ class HomeViewModel(
                     state.copy(
                         isLoading = false,
                         errMessage = null,
-                        doneTasks = tasks.map {
-                            it.copy(categoryId = (it.categoryId))
-                        },
+                        doneTasks = tasks,
                     )
                 }
             }
@@ -81,9 +77,7 @@ class HomeViewModel(
                     state.copy(
                         isLoading = false,
                         errMessage = null,
-                        inProgressTasks = tasks.map {
-                            it.copy(categoryId = (it.categoryId))
-                        }
+                        inProgressTasks = tasks
                     )
                 }
             }
@@ -101,9 +95,7 @@ class HomeViewModel(
                     state.copy(
                         isLoading = false,
                         errMessage = null,
-                        toDoTasks = tasks.map {
-                            it.copy(categoryId = (it.categoryId))
-                        }
+                        toDoTasks = tasks
                     )
                 }
             }
