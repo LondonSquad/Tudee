@@ -1,15 +1,17 @@
 package com.london.tudee.presentation.screens.tasks
 
 import com.london.tudee.domain.entities.Task
+import kotlinx.datetime.Clock
 
 data class FilterTasksUiState(
     val isLoading: Boolean = true,
     val errMessage: String? = null,
     val categoryId: Int? = null,
-    val currentDay: String? = null,
-    val currentDayOfWeek: String? = null,
-    val currentMonth: String? = null,
-    val currentYear: String? = null,
+    val currentMonth: String = "",
+    val currentYear: String = "",
+    val days: List<DaysOfMonth> = listOf(),
+    val selectedDays: List<Boolean> = listOf(),
+    var date: Long = Clock.System.now().toEpochMilliseconds(),
     val tasksCount: Int? = null,
     val allTasks: List<Task> = listOf(),
     val isDaySelected: Boolean? = null,
@@ -17,3 +19,14 @@ data class FilterTasksUiState(
     val inProgressTasks: List<Task> = listOf(),
     val toDoTasks: List<Task> = listOf(),
 )
+
+data class DaysOfMonth(
+    val dayOfMonth: String,
+    val dayOfWeek: String,
+    var isSelected: Boolean = false
+)
+
+enum class ArrowActions {
+    Next,
+    Previous
+}
