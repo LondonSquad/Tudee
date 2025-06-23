@@ -23,7 +23,8 @@ fun TudeeNegativeTextButton(
 ) {
     if (isDisabled.not()) {
         Row(
-            modifier = modifier.clickable(onClick = onClick),
+            modifier = modifier
+                .clickable(onClick = onClick),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
@@ -56,13 +57,12 @@ fun TudeeNegativeTextButton(
     }
 }
 
-
 @Composable
 @ThemePreviews
 private fun PreviewTudeeNegativeTextButton() {
     TudeeTheme {
         TudeeNegativeTextButton(
-            onClick = {}, text = "Cancel", isLoading = true
+            onClick = {}, text = "Cancel", isLoading = false
         )
     }
 }
