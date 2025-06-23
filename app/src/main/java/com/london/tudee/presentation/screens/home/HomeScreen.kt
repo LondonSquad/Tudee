@@ -357,6 +357,11 @@ private fun ToDoSection(
     onTodoTasksArrowClicked: (Int) -> Unit,
     categoryIcons: List<String>
 ) {
+
+    if (toDoTasks.isNotEmpty() && categoryIcons.isEmpty()) {
+        return
+    }
+
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -439,6 +444,11 @@ private fun InProgressSection(
     onInProgressTasksArrowClicked: (Int) -> Unit,
     categoryIcons: List<String>
 ) {
+
+    if (inProgressTasks.isNotEmpty() && categoryIcons.isEmpty()) {
+        return
+    }
+
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -521,6 +531,11 @@ private fun DoneSection(
     onDoneTasksArrowClicked: (Int) -> Unit,
     categoryIcons: List<String>
 ) {
+
+    if (doneTasks.isNotEmpty() && categoryIcons.isEmpty()) {
+        return
+    }
+
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
