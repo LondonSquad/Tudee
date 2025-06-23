@@ -44,10 +44,7 @@ class MainActivity : ComponentActivity() {
                         OnBoardingHorizontalPager(
                             onClickSkip = {onboardingViewModel.markOnboardingSeen() }
                         )
-                    } else CategoryDetailsScreen(
-                        categoryId = 5,
-                        onBackClick = {}
-                    )
+                    } else HomeScreen {  }
                 }
             }
         }

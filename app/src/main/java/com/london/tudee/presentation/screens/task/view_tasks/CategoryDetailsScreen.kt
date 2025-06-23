@@ -32,7 +32,6 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.task.view_tasks.CategoryDetailsScreen.NUMBER_OF_PREDEFINED_CATEGORIES
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -175,7 +174,7 @@ private fun TopAPPBar(onBackClick: () -> Unit, state: CategoryDetailsState, cate
                         TudeeTheme.shapes.circle
                     )
             ) {
-                if (categoryId > NUMBER_OF_PREDEFINED_CATEGORIES) {
+                if (!state.category.isDefault) {
                     Icon(
                         painter = painterResource(R.drawable.edit_icon),
                         contentDescription = "Edit Icon",
@@ -186,11 +185,6 @@ private fun TopAPPBar(onBackClick: () -> Unit, state: CategoryDetailsState, cate
             }
         }
     )
-}
-
-
-private object CategoryDetailsScreen {
-    const val NUMBER_OF_PREDEFINED_CATEGORIES = 15
 }
 
 @ThemePreviews

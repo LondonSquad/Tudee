@@ -101,11 +101,8 @@ class CategoryDetailsViewModel(
 
     private fun getCategoryNameById(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("CategoryDetailsViewModel", "Starting to fetch category: $categoryId")
-
             try {
                 val category = categoryService.getById(categoryId)
-                Log.d("CategoryDetailsViewModel", "Category fetched successfully: ${category.title}")
 
                 _uiState.update {
                     it.copy(
@@ -119,7 +116,11 @@ class CategoryDetailsViewModel(
                     )
                 }
             } catch (e: Exception) {
-                Log.e("CategoryDetailsViewModel", "Error fetching category $categoryId: ${e.message}", e)
+                Log.e(
+                    "CategoryDetailsViewModel",
+                    "Error fetching category $categoryId: ${e.message}",
+                    e
+                )
                 // Handle error state
                 _uiState.update {
                     it.copy(errMessage = "Category not found")
