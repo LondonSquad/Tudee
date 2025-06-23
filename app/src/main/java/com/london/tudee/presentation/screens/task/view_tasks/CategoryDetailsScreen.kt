@@ -91,12 +91,12 @@ fun CategoryDetailsContent(
             categoryId = categoryId
         )
 
-        TuddeTabWithPager(state = state)
+        TasksPagerSection(state = state)
     }
 }
 
 @Composable
-fun TuddeTabWithPager(state: CategoryDetailsState) {
+fun TasksPagerSection(state: CategoryDetailsState) {
     TudeeTabLayoutWithPager(
         tabs = listOf(
             TabItem(text = R.string.In_Progress, number = state.inProgressTasks.size),
@@ -153,13 +153,11 @@ private fun TopAPPBar(onBackClick: () -> Unit, state: CategoryDetailsState, cate
                         TudeeTheme.shapes.circle
                     )
             ) {
-                if (categoryId > NUMBER_OF_PREDEFINED_CATEGORIES) {
-                    Icon(
-                        painter = painterResource(R.drawable.back_arrow),
-                        contentDescription = stringResource(R.string.back_arrow),
-                        tint = TudeeTheme.colors.body
-                    )
-                }
+                Icon(
+                    painter = painterResource(R.drawable.back_arrow),
+                    contentDescription = stringResource(R.string.back_arrow),
+                    tint = TudeeTheme.colors.body
+                )
             }
         },
         actions = {
@@ -177,11 +175,14 @@ private fun TopAPPBar(onBackClick: () -> Unit, state: CategoryDetailsState, cate
                         TudeeTheme.shapes.circle
                     )
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.edit_icon),
-                    contentDescription = "Edit Icon",
-                    tint = TudeeTheme.colors.body
-                )
+                if (categoryId > NUMBER_OF_PREDEFINED_CATEGORIES) {
+                    Icon(
+                        painter = painterResource(R.drawable.edit_icon),
+                        contentDescription = "Edit Icon",
+                        tint = TudeeTheme.colors.body
+                    )
+                }
+
             }
         }
     )
