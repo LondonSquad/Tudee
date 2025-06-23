@@ -24,6 +24,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun OnBoardingHorizontalPager(
     onClickSkip: () -> Unit,
+    onCompleted: () -> Unit,
     viewModel: OnBoardingViewModel = koinViewModel()
 ) {
     val pagerState = rememberPagerState(pageCount = { OnBoardingContent.size })
@@ -41,7 +42,6 @@ fun OnBoardingHorizontalPager(
         AnimatedVisibility(visible = currentPage != OnBoardingContent.size - 1) {
             TudeeTextButton(
                 onClick = {
-                    viewModel.markOnboardingSeen()
                     onClickSkip()
                 },
                 text = stringResource(R.string.skip),
@@ -63,11 +63,7 @@ fun OnBoardingHorizontalPager(
                         modifier = Modifier.fillMaxHeight(0.9f),
                         onClickForward = {
                             viewModel.navigateNext(pagerState, coroutineScope)
-
-                            if (pageIndex == OnBoardingContent.size - 1) {
-                                viewModel.markOnboardingSeen()
-                                onClickSkip()
-                            }
+                            if (pageIndex == OnBoardingContent.size - 1) onCompleted()
                         }
                     )
                 }
@@ -87,6 +83,6 @@ fun OnBoardingHorizontalPager(
 @Composable
 fun PreviewOnboardingFlow() {
     TudeeTheme {
-        OnBoardingHorizontalPager(onClickSkip = {})
+        OnBoardingHorizontalPager(onClickSkip = {}, onCompleted = {})
     }
 }
