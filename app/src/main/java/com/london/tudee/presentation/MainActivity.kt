@@ -27,7 +27,6 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.home.HomeScreen
 import com.london.tudee.presentation.screens.onboarding.OnBoardingHorizontalPager
 import com.london.tudee.presentation.screens.onboarding.OnBoardingViewModel
-import com.london.tudee.presentation.screens.task.view_tasks.CategoryDetailsScreen
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
