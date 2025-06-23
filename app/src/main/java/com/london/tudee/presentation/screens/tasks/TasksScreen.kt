@@ -1,5 +1,6 @@
 package com.london.tudee.presentation.screens.tasks
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -25,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -32,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Task
@@ -43,41 +46,54 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.SwipeToDeleteTask
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.utils.DateFormatter.toMonthShort
+import com.london.tudee.presentation.utils.DateFormatter.toYear
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TasksScreen(
     initialTabIndex: Int = 0,
-    viewModel: TasksScreenViewModel = koinViewModel()
+    viewModel: TasksScreenViewModel = koinViewModel<TasksScreenViewModel>()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     TasksContent(
         initialTabIndex = initialTabIndex,
+        date = uiState.date,
         inProgressTasksCount = uiState.inProgressTasks.size,
         toDoTasksCount = uiState.toDoTasks.size,
         doneTasksCount = uiState.doneTasks.size,
         inProgressTasks = uiState.inProgressTasks,
         toDoTasks = uiState.toDoTasks,
         doneTasks = uiState.doneTasks,
+        days = uiState.days,
+        onClickLeft = { viewModel.getTargetDates(uiState.date, ArrowActions.Previous) },
+        onClickRight = { viewModel.getTargetDates(uiState.date, ArrowActions.Next) },
+        onDateChange = { viewModel.onDateChange(it) },
+        onDayClick = { viewModel::selectDayCard }
     )
-
 }
 
 @Composable
 fun TasksContent(
     initialTabIndex: Int,
+    date: Long,
     inProgressTasksCount: Int,
     toDoTasksCount: Int,
     doneTasksCount: Int,
     inProgressTasks: List<Task>,
     toDoTasks: List<Task>,
     doneTasks: List<Task>,
-
-    ) {
+    days: List<DaysOfMonth>,
+    onClickLeft: () -> Unit,
+    onClickRight: () -> Unit,
+    onDateChange: (Long?) -> Unit,
+    onDayClick: () -> Unit
+) {
 
     var showDatePicker by remember { mutableStateOf(false) }
-    var selectedDate by remember { mutableStateOf<Long?>(null) }
+    Log.e("TAG", "TasksContent: ${date.toMonthShort()}")
+    var selectedDate by remember { mutableLongStateOf(date) }
     var showBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -109,17 +125,21 @@ fun TasksContent(
                 modifier = Modifier
                     .background(TudeeTheme.colors.surface)
             ) {
+                Log.e("TAG", "Before: ${date.toMonthShort()}")
                 DateSection(
                     modifier = Modifier.background(
                         color = TudeeTheme.colors.surfaceHigh,
                     ),
-                    month = currentMonth,
-                    year = currentYear,
-                    onClickLeft = {},
-                    onClickRight = {},
+                    month = date.toMonthShort(),
+                    year = date.toYear(),
                     onClickDate = { showDatePicker = true },
-                    dates = fakeDates
+                    days = days,
+                    onClickLeft = onClickLeft,
+                    onClickRight = onClickRight,
+                    onClickDay = onDayClick
+
                 )
+                Log.e("TAG", "After: ${date.toMonthShort()}")
                 TudeeTabLayoutWithPager(
                     initialTabIndex = initialTabIndex,
                     tabs = listOf(
@@ -166,7 +186,7 @@ fun TasksContent(
                     if (showDatePicker) {
                         TudeeDatePicker(
                             onDateSelected = { date ->
-                                selectedDate = date
+                                onDateChange(date)
                                 showDatePicker = false
                             },
                             onDismiss = { showDatePicker = false }
@@ -197,7 +217,7 @@ private fun TasksTopAPPBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Tasks",
+                text = stringResource(R.string.tasks),
                 style = TudeeTheme.typography.titleLarge,
                 color = TudeeTheme.colors.title,
             )
@@ -211,13 +231,21 @@ fun DateSection(
     modifier: Modifier,
     month: String,
     year: String,
+    onClickDate: () -> Unit,
+    days: List<DaysOfMonth>,
     onClickLeft: () -> Unit,
     onClickRight: () -> Unit,
-    onClickDate: () -> Unit,
-    dates: MutableList<DateItemClass>
+    onClickDay: () -> Unit
 ) {
-    DateSelector(modifier, month, year, onClickLeft, onClickRight, onClickDate)
-    DayOfWeekSelector(modifier, dates)
+    DateSelector(
+        modifier,
+        month,
+        year,
+        onClickDate,
+        onClickLeft,
+        onClickRight
+    )
+    DaySelector(modifier, days, onClickDay)
 }
 
 @Composable
@@ -225,9 +253,9 @@ fun DateSelector(
     modifier: Modifier = Modifier,
     month: String,
     year: String,
+    onClickDate: () -> Unit,
     onClickLeft: () -> Unit,
-    onClickRight: () -> Unit,
-    onClickDate: () -> Unit
+    onClickRight: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -299,11 +327,11 @@ fun DateSelector(
 }
 
 @Composable
-fun DayOfWeekSelector(
+fun DaySelector(
     modifier: Modifier = Modifier,
-    dates: MutableList<DateItemClass>
+    days: List<DaysOfMonth>,
+    onClickDay: () -> Unit
 ) {
-    val datesTest = remember { dates }
     LazyRow(
         modifier = modifier
             .fillMaxWidth()
@@ -313,18 +341,13 @@ fun DayOfWeekSelector(
         userScrollEnabled = true
 
     ) {
-        items(dates.size) { index ->
+        items(days.size) { index ->
             DateItem(
-                dayOfMonth = datesTest[index].dayOfMonth,
-                dayOfWeek = datesTest[index].dayOfWeek,
-                isSelected = datesTest[index].isSelected,
-            ) {
-
-                datesTest.forEachIndexed { i, item ->
-                    datesTest[i] = item.copy(isSelected = false)
-                }
-                datesTest[index] = datesTest[index].copy(isSelected = true)
-            }
+                dayOfMonth = days[index].dayOfMonth,
+                dayOfWeek = days[index].dayOfWeek,
+                isSelected = days[index].isSelected,
+                onClick = onClickDay
+            )
         }
     }
 }
