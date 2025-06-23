@@ -26,6 +26,15 @@ interface TaskDao {
     @Query("SELECT * FROM TASK_TABLE WHERE timeStamp = :time")
     fun getTasksByDate(time: Long): Flow<List<TaskDto>>
 
+    @Query("SELECT * FROM TASK_TABLE WHERE taskStatus = :taskStatus AND timeStamp = :timeStamp")
+    fun getByTimeStampAndTaskStatus(taskStatus: TaskStatus, timeStamp: Long): Flow<List<TaskDto>>
+
+    @Query("SELECT * FROM TASK_TABLE WHERE categoryid = :categoryId AND taskStatus = :taskStatus")
+    fun getByCategoryIdAndTaskStatus(categoryId: Int, taskStatus: TaskStatus): Flow<List<TaskDto>>
+
+    @Query("SELECT * FROM TASK_TABLE WHERE (:timeStamp IS NULL OR timeStamp = :timeStamp) AND taskStatus = :taskStatus ")
+    fun getByDateAndTaskStatus(timeStamp: Long?, taskStatus: TaskStatus): Flow<List<TaskDto>>
+
     @Insert
     suspend fun insert(task: TaskDto)
 
