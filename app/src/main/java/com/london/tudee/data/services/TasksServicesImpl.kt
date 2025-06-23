@@ -26,8 +26,8 @@ class TasksServicesImpl(
     }
 
     override suspend fun getAll(): Flow<List<Task>> {
-        return taskDao.getAll().map { list ->
-            list.map { it.convertToTask() }
+        return taskDao.getAll().map { taskDtoList ->
+            taskDtoList.map { taskDto -> taskDto.convertToTask() }
         }
     }
 
@@ -36,20 +36,44 @@ class TasksServicesImpl(
     }
 
     override suspend fun getByCategoryId(categoryId: Int): Flow<List<Task>> {
-        return taskDao.getByCategoryId(categoryId).map { list ->
-            list.map { it.convertToTask() }
+        return taskDao.getByCategoryId(categoryId).map { taskDtoList ->
+            taskDtoList.map { taskDto -> taskDto.convertToTask() }
         }
     }
 
     override suspend fun getByTaskStatus(taskStatus: TaskStatus): Flow<List<Task>> {
-        return taskDao.getByTaskStatus(taskStatus).map { list ->
-            list.map { it.convertToTask() }
+        return taskDao.getByTaskStatus(taskStatus).map { taskDtoList ->
+            taskDtoList.map { taskDto -> taskDto.convertToTask() }
         }
     }
 
     override suspend fun getTasksByDate(date: Long): Flow<List<Task>> {
-        return taskDao.getTasksByDate(date).map { list ->
-            list.map { it.convertToTask() }
+        return taskDao.getTasksByDate(date).map { taskDtoList ->
+            taskDtoList.map { taskDto -> taskDto.convertToTask() }
+        }
+    }
+
+    override suspend fun getByTimeStampAndTaskStatus(
+        taskStatus: TaskStatus, timeStamp: Long
+    ): Flow<List<Task>> {
+        return taskDao.getByTimeStampAndTaskStatus(taskStatus, timeStamp).map { taskDtoList ->
+            taskDtoList.map { taskDto -> taskDto.convertToTask() }
+        }
+    }
+
+    override suspend fun getByCategoryIdAndTaskStatus(
+        categoryId: Int, taskStatus: TaskStatus
+    ): Flow<List<Task>> {
+        return taskDao.getByCategoryIdAndTaskStatus(categoryId, taskStatus).map { taskDtoList ->
+            taskDtoList.map { taskDto -> taskDto.convertToTask() }
+        }
+    }
+
+    override suspend fun getByDateAndTaskStatus(
+        timeStamp: Long?, taskStatus: TaskStatus
+    ): Flow<List<Task>> {
+        return taskDao.getByDateAndTaskStatus(timeStamp, taskStatus).map { taskDtoList ->
+            taskDtoList.map { taskDto -> taskDto.convertToTask() }
         }
     }
 }
