@@ -1,7 +1,6 @@
 package com.london.tudee.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -47,28 +46,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TudeeTheme {
-                val onboardingViewModel: OnBoardingViewModel = koinViewModel()
-                val shouldShowOnboarding by onboardingViewModel.shouldShowOnboarding.collectAsState()
-
-                shouldShowOnboarding.let { showOnboarding ->
-                    if (showOnboarding) {
-                        OnBoardingHorizontalPager(
-                            onClickSkip = {
-                                onboardingViewModel.markOnboardingSeen()
-                                Log.d(
-                                    "test",
-                                    "onCreate: ${onboardingViewModel.shouldShowOnboarding.value}")
-                            }
-                        )
-                    } else HomeScreen()
-                }
+                HomeScreen {}
             }
             SnackbarHandler()
+
         }
     }
 }
-
-
 @Composable
 fun SnackbarHandler() {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -112,60 +96,3 @@ fun SnackbarHandler() {
     )
 }
 
-
-
-@ThemePreviews
-@Composable
-fun PreviewTestScreen() {
-    TudeeTheme {
-        TestScreen()
-    }
-}
-
-@Composable
-fun TestScreen() {
-    //val isDark by remember { mutableStateOf(false) }
-    //  TudeeTheme (isDarkMode = isDark){}
-    TudeeTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(), color = TudeeTheme.colors.primary
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row {
-                    Text(
-                        text = "Hello from ",
-                        color = TudeeTheme.colors.title,
-                        style = TudeeTheme.typography.titleLarge
-                    )
-                    Text(
-                        text = "Tudee",
-                        color = TudeeTheme.colors.primaryVariant,
-                        style = TudeeTheme.typography.cherryBomb
-                    )
-                }
-
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    onClick = { /*isDark = !isDark*/ }, colors = ButtonDefaults.buttonColors(
-                        contentColor = TudeeTheme.colors.title,
-                        containerColor = TudeeTheme.colors.pinkAccent
-                    ), shape = TudeeTheme.shapes.medium
-                ) {
-                    Text(
-                        text = if (isSystemInDarkTheme()) "Switch to Light" else "Switch to Dark",
-                        color = TudeeTheme.colors.onPrimary,
-                        style = TudeeTheme.typography.labelSmall
-                    )
-                }
-            }
-        }
-    }
-}

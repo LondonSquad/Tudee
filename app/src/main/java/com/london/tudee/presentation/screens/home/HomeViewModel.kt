@@ -1,10 +1,11 @@
 package com.london.tudee.presentation.screens.home
 
-import androidx.lifecycle.ViewModel
+
 import androidx.lifecycle.viewModelScope
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
+import com.london.tudee.presentation.base.BaseCreateTaskViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,19 +16,21 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val taskService: TaskService,
     private val categoryService: CategoryService
-) : ViewModel() {
+) : BaseCreateTaskViewModel(
+    taskService, categoryService
+) {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
-        getAllTasks()
-        getDoneTasks()
-        getToDoTasks()
-        getInProgressTasks()
+        initializeAllTasks()
+        initializeDoneTasks()
+        initializeTodoTasks()
+        initializeInProgressTasks()
     }
 
-    private fun getAllTasks() {
+    private fun initializeAllTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getAll().catch { throwable ->
                 _uiState.update {
@@ -38,16 +41,14 @@ class HomeViewModel(
                     state.copy(
                         isLoading = false,
                         errMessage = null,
-                        allTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconResById(it.categoryId))
-                        },
+                        allTasks = tasks,
                     )
                 }
             }
         }
     }
 
-    private fun getDoneTasks() {
+    private fun initializeDoneTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByTaskStatus(TaskStatus.DONE).catch { throwable ->
                 _uiState.update {
@@ -58,16 +59,14 @@ class HomeViewModel(
                     state.copy(
                         isLoading = false,
                         errMessage = null,
-                        doneTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconResById(it.categoryId))
-                        },
+                        doneTasks = tasks,
                     )
                 }
             }
         }
     }
 
-    private fun getInProgressTasks() {
+    private fun initializeInProgressTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByTaskStatus(TaskStatus.IN_PROGRESS).catch { throwable ->
                 _uiState.update {
@@ -78,16 +77,14 @@ class HomeViewModel(
                     state.copy(
                         isLoading = false,
                         errMessage = null,
-                        inProgressTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconResById(it.categoryId))
-                        }
+                        inProgressTasks = tasks
                     )
                 }
             }
         }
     }
 
-    private fun getToDoTasks() {
+    private fun initializeTodoTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByTaskStatus(TaskStatus.TODO).catch { throwable ->
                 _uiState.update {
@@ -98,9 +95,7 @@ class HomeViewModel(
                     state.copy(
                         isLoading = false,
                         errMessage = null,
-                        toDoTasks = tasks.map {
-                            it.copy(categoryId = categoryService.getIconResById(it.categoryId))
-                        }
+                        toDoTasks = tasks
                     )
                 }
             }

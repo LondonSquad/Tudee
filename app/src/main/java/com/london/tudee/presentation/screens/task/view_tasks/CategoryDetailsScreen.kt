@@ -35,15 +35,21 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun EditTaskDetails(
-    viewModel: EditTaskViewModel = koinViewModel(),
+fun CategoryDetailsScreen(
+    categoryId: Int,
+    onBackClick: () -> Unit,
+    viewModel: CategoryDetailsViewModel = koinViewModel(),
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
     when {
         uiState.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
-        else -> EditTaskDetailsContent(state = uiState)
+        else -> CategoryDetailsContent(
+            state = uiState,
+            onBackClick = onBackClick,
+            categoryId = categoryId
+        )
     }
 }
 
@@ -67,53 +73,57 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
     }
 }
 
-
 @Composable
-fun EditTaskDetailsContent(
-    state: EditTaskDetailsState,
+fun CategoryDetailsContent(
+    categoryId: Int,
+    state: CategoryDetailsState,
+    onBackClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .background(TudeeTheme.colors.surface)
     ) {
 
-        TopAPPBar()
-
-        TudeeTabLayoutWithPager(
-            tabs = listOf(
-                TabItem(text = R.string.In_Progress, number = state.inProgressTasks.size),
-                TabItem(text = R.string.To_Do, number = state.toDoTasks.size),
-                TabItem(
-                    text = R.string.Done, number = state.doneTasks.size
-                ),
-
-                ),
+        TopAPPBar(
+            onBackClick = onBackClick,
+            state = state,
+            categoryId = categoryId
         )
-        { page ->
-            val tasks = when (page) {
-                0 -> state.inProgressTasks
-                1 -> state.toDoTasks
-                else -> state.doneTasks
-            }
-            Box(
+
+        TasksPagerSection(state = state)
+    }
+}
+
+@Composable
+fun TasksPagerSection(state: CategoryDetailsState) {
+    TudeeTabLayoutWithPager(
+        tabs = listOf(
+            TabItem(text = R.string.In_Progress, number = state.inProgressTasks.size),
+            TabItem(text = R.string.To_Do, number = state.toDoTasks.size),
+            TabItem(text = R.string.Done, number = state.doneTasks.size),
+        ),
+        tasksList = listOf(state.inProgressTasks, state.toDoTasks, state.doneTasks)
+    )
+    { page, tasks ->
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(TudeeTheme.colors.surface)
+        ) {
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(TudeeTheme.colors.surface)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                ) {
-                    items(tasks.size) { index ->
-                        TaskItem(
-                            modifier = Modifier,
-                            isSelected = true,
-                            task = state.allTasks[index],
-                            hasDate = true
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
+                items(tasks.size) { index ->
+                    TaskItem(
+                        modifier = Modifier,
+                        isSelected = true,
+                        task = tasks[index],
+                        hasDate = true
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }
@@ -121,10 +131,10 @@ fun EditTaskDetailsContent(
 }
 
 @Composable
-private fun TopAPPBar() {
+private fun TopAPPBar(onBackClick: () -> Unit, state: CategoryDetailsState, categoryId: Int) {
     TopAppBar(
-        title = R.string.coding,
-        onBackClick = {},
+        title = state.category.title,
+        onBackClick = onBackClick,
         onClickAction = {},
         modifier = Modifier,
         navigationIcon = {
@@ -164,11 +174,14 @@ private fun TopAPPBar() {
                         TudeeTheme.shapes.circle
                     )
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.edit_icon),
-                    contentDescription = "Edit Icon",
-                    tint = TudeeTheme.colors.body
-                )
+                if (!state.category.isDefault) {
+                    Icon(
+                        painter = painterResource(R.drawable.edit_icon),
+                        contentDescription = "Edit Icon",
+                        tint = TudeeTheme.colors.body
+                    )
+                }
+
             }
         }
     )
@@ -178,7 +191,7 @@ private fun TopAPPBar() {
 @Composable
 private fun TudeeTaskPreview() {
     TudeeTheme {
-        EditTaskDetails()
+        CategoryDetailsScreen(categoryId = 1, onBackClick = {})
     }
 }
 

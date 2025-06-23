@@ -77,7 +77,7 @@ private fun CategoryEditContent(
     viewModel: EditCategoryScreenViewModel = koinViewModel()
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    var categoryName by remember { mutableStateOf(category.name) }
+    var categoryName by remember { mutableStateOf(category.title) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
     Column(
@@ -138,11 +138,13 @@ private fun CategoryEditContent(
                 viewModel.editCategory(
                     category = Category(
                         id = category.id,
-                        name = categoryName,
-                        arName = categoryName,
+                        title = categoryName,
+                        //arName = categoryName,
                         //  iconPath = imageUri?.toString() ?: category.iconPath,
-                        iconPath = R.drawable.ic_work.toString(),
-                        isDefault = category.isDefault
+                        iconRes = "",
+                        isDefault = category.isDefault,
+                      //  tint = category.tint,
+                        taskCount = category.taskCount
                     )
                 )
 
@@ -243,10 +245,12 @@ private fun EditCategoryScreenPreview() {
             modifier = Modifier,
             category = Category(
                 id = 1,
-                name = "Work",
-                arName = "العمل",
-                iconPath = "ic_work",
-                isDefault = true
+                title = "Work",
+              //  arName = "العمل",
+                iconRes = "",
+                isDefault = true,
+                taskCount = 0,
+             //   tint = TudeeTheme.colors.primary.value
             ),
             onDismiss = {}
         )

@@ -21,23 +21,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.presentation.components.CategoryItem
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.categories.crud.CreateCategoryScreen
+import com.london.tudee.presentation.utils.converterStringToBitmap
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CategoriesScreen(
     @StringRes screenTitle: Int = R.string.categories,
     viewModel: CategoriesViewModel = koinViewModel(),
-    onCategoryClick: (Category) -> Unit,
-    onAddCategoryClick: () -> Unit
+    onCategoryClick: (Int) -> Unit
 ) {
     val categories by viewModel.categoryUiState.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
+
+    CategoriesScreenContent(
+        screenTitle = screenTitle,
+        uiState = uiState,
+        categories = categories,
+        onCategoryClick = onCategoryClick,
+        onAddCategoryClick = { viewModel.setShowBottomSheet(true) },
+        onDismissBottomSheet = { viewModel.setShowBottomSheet(false) })
+}
+
+@Composable
+fun CategoriesScreenContent(
+    screenTitle: Int,
+    uiState: CategoriesUiState,
+    categories: List<Category>,
+    onCategoryClick: (Int) -> Unit,
+    onAddCategoryClick: () -> Unit,
+    onDismissBottomSheet: () -> Unit
+) {
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -65,21 +87,19 @@ fun CategoriesScreen(
                     modifier = Modifier.padding(16.dp)
                 )
             }
-            
+
             // Show loading indicator
             if (uiState.isLoading) {
                 Text(
-                    text = "Loading categories...",
-                    modifier = Modifier.padding(16.dp)
+                    text = "Loading categories...", modifier = Modifier.padding(16.dp)
                 )
             }
-            
+
             // Show empty state or categories
             if (!uiState.isLoading && uiState.errorMessage == null) {
                 if (categories.isEmpty()) {
                     Text(
-                        text = "No categories found",
-                        modifier = Modifier.padding(16.dp)
+                        text = "No categories found", modifier = Modifier.padding(16.dp)
                     )
                 } else {
                     LazyVerticalGrid(
@@ -92,16 +112,15 @@ fun CategoriesScreen(
                         items(categories) { category ->
                             CategoryItem(
                                 iconRes = category.iconRes,
-                                title = category.name,
-                                tint = category.tint,
+                                title = category.title,
                                 count = category.taskCount,
-                                onClick = { onCategoryClick(category) }
-                            )
+                                onClick = { onCategoryClick(category.id) })
                         }
                     }
                 }
             }
         }
+        if (uiState.showBottomSheet) CreateCategoryScreen(onDismiss = onDismissBottomSheet)
 
         TudeeFloatingActionButton(
             modifier = Modifier
@@ -110,7 +129,7 @@ fun CategoriesScreen(
             painter = painterResource(id = R.drawable.ic_add_category_button),
             isEnabled = true,
             contentDescription = stringResource(R.string.fab_content_description),
-            onClick = onAddCategoryClick,
+            onClick = onAddCategoryClick
         )
     }
 }
@@ -122,7 +141,6 @@ fun CategoriesScreenPreview() {
         CategoriesScreen(
             screenTitle = R.string.categories,
             onCategoryClick = {},
-            onAddCategoryClick = {}
         )
     }
 }

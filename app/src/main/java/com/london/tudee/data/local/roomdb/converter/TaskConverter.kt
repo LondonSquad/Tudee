@@ -1,6 +1,5 @@
-package com.london.tudee.data.local.room_db.converter
+package com.london.tudee.data.local.roomdb.converter
 
-import androidx.compose.ui.graphics.Color
 import androidx.room.TypeConverter
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.TaskStatus
@@ -17,14 +16,4 @@ class Converters {
 
     @TypeConverter
     fun toStatus(value: String): TaskStatus = TaskStatus.valueOf(value)
-
-    @TypeConverter
-    fun fromColor(color: Color): Int {
-        return color.value.toLong().toInt()
-    }
-
-    @TypeConverter
-    fun toColor(colorInt: Int): Color {
-        return Color(colorInt)
-    }
 }

@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -28,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.london.tudee.R
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
@@ -62,42 +63,37 @@ fun TudeeBottomSheetScreen(
     ) {
         screenContent()
 
-        AnimatedVisibility(
-            visible = showBottomSheet,
-            enter = fadeIn(animationSpec = tween(300)),
-            exit = fadeOut(animationSpec = tween(300))
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.5f))
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ) {
-                        onDismiss()
-                    }
-            )
-        }
-
         Box(
             modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            TudeeBottomSheet(
-                visible = showBottomSheet,
-                onDismiss = onDismiss,
-                modifier = Modifier.clickable(
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+                .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null
-                ) {},
-                content = bottomSheetContent,
-                actions = bottomSheetActions,
-                showActions = showActions
-            )
-        }
+                ) {
+                    onDismiss()
+                }
+        )
     }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        TudeeBottomSheet(
+            visible = showBottomSheet,
+            onDismiss = onDismiss,
+            modifier = Modifier.clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) {},
+            content = bottomSheetContent,
+            actions = bottomSheetActions,
+            showActions = showActions
+        )
+    }
+
 }
 
 @ThemePreviews

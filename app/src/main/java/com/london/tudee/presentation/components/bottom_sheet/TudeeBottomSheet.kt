@@ -34,7 +34,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -56,8 +57,8 @@ fun TudeeBottomSheet(
     actions: @Composable ColumnScope.() -> Unit = {},
     showActions: Boolean = true
 ) {
-    val configuration = LocalConfiguration.current
-    val maxHeight = (configuration.screenHeightDp * 0.86).dp
+    val containerHeight = LocalWindowInfo.current.containerSize.height
+    val maxHeight = with(LocalDensity.current) { (containerHeight * 0.86f).toDp() }
 
     var offsetY by remember { mutableFloatStateOf(0f) }
     val dismissThreshold = 150f

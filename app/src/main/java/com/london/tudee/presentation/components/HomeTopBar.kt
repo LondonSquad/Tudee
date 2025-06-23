@@ -2,6 +2,7 @@ package com.london.tudee.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -57,7 +58,7 @@ fun HomeTopBar(
                 color = TudeeTheme.colors.caption
             )
         }
-        SwitchButton (
+        SwitchButton(
             isDarkMode = isDarkMode,
             onToggle = onCheckedChange
         )
@@ -68,6 +69,6 @@ fun HomeTopBar(
 @Composable
 private fun HomeTopBarPreview() {
     TudeeTheme {
-        HomeTopBar(isDarkMode = false, onCheckedChange = {})
+        HomeTopBar(isDarkMode = isSystemInDarkTheme(), onCheckedChange = {})
     }
 }

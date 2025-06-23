@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
@@ -33,9 +34,10 @@ fun TudeeSecondaryButton(
 ) {
     Row(
         modifier = modifier
+            .height(56.dp)
+            .clip(TudeeTheme.shapes.circle)
             .background(
                 color = Color.Transparent,
-                shape = TudeeTheme.shapes.circle
             )
             .border(
                 width = 1.dp,
@@ -46,7 +48,6 @@ fun TudeeSecondaryButton(
                 enabled = isEnabled,
                 onClick = onClick,
             )
-            .height(56.dp)
             .padding(vertical = 8.dp, horizontal = 24.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
@@ -25,30 +26,32 @@ fun TudeeFloatingActionButton(
     contentDescription: String,
     onClick: () -> Unit = {},
     isEnabled: Boolean,
-){
+) {
     Box(
         modifier = modifier
+            .size(64.dp)
+            .clip(TudeeTheme.shapes.circle)
             .background(
                 brush = Brush.verticalGradient(
                     colors = if (isEnabled) TudeeTheme.colors.primaryGradient else listOf(
                         TudeeTheme.colors.disabled,
                         TudeeTheme.colors.disabled
                     )
-                ),
-                shape = TudeeTheme.shapes.circle
+                )
             )
-            .size(64.dp)
-            .padding(horizontal = 16.dp, vertical = 8.dp)
             .clickable(
-                onClick = onClick
-            ),
+                enabled = isEnabled,
+            ) {
+                onClick()
+            }
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         contentAlignment = Alignment.Center
     ) {
         Image(
             modifier = Modifier,
             painter = painter,
             contentDescription = contentDescription,
-            colorFilter = if(isEnabled) {
+            colorFilter = if (isEnabled) {
                 ColorFilter.tint(TudeeTheme.colors.onPrimary)
             } else {
                 ColorFilter.tint(TudeeTheme.colors.stroke)

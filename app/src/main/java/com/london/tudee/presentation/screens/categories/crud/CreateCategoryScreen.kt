@@ -47,8 +47,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CreateCategoryScreen(
-    modifier: Modifier = Modifier,
-    onDismiss: () -> Unit
+    modifier: Modifier = Modifier, onDismiss: () -> Unit
 ) {
     TudeeBottomSheetScreen(
         showBottomSheet = true,
@@ -58,8 +57,7 @@ fun CreateCategoryScreen(
         bottomSheetActions = {},
         bottomSheetContent = {
             CreateCategoryContent(
-                modifier = modifier,
-                onDismiss = onDismiss
+                modifier = modifier, onDismiss = onDismiss
             )
         }
     )
@@ -74,10 +72,10 @@ private fun CreateCategoryContent(
 
     var categoryName by remember { mutableStateOf("Category Title") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val primaryColor = TudeeTheme.colors.primary
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
 
         Text(
@@ -119,10 +117,12 @@ private fun CreateCategoryContent(
                 viewModel.createCategory(
                     category = Category(
                         id = 1,
-                        name = categoryName,
-                        arName = categoryName,
-                        iconPath = R.drawable.ic_work.toString(),
-                        isDefault = false
+                        title = categoryName,
+//                        arName = categoryName,
+                        iconRes = imageUri.toString(),
+                        isDefault = false,
+                      //  tint = primaryColor.value,
+                        taskCount = 0
                     )
 
                 )
@@ -148,8 +148,7 @@ private fun CreateCategoryContent(
 
 @Composable
 private fun ImagePickerAddCategory(
-    modifier: Modifier = Modifier,
-    onImagePicked: (Uri?) -> Unit
+    modifier: Modifier = Modifier, onImagePicked: (Uri?) -> Unit
 ) {
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
@@ -169,8 +168,7 @@ private fun ImagePickerAddCategory(
             .clip(TudeeTheme.shapes.extraSmall)
             .drawBehind {
                 drawRect(
-                    color = RectBorderColor,
-                    style = Stroke(
+                    color = RectBorderColor, style = Stroke(
                         width = 1.dp.toPx(),
                         pathEffect = PathEffect.dashPathEffect(floatArrayOf(8f, 8f), 0f)
                     )
@@ -178,9 +176,7 @@ private fun ImagePickerAddCategory(
             }, contentAlignment = Alignment.Center
     ) {
         Box(
-            modifier = modifier
-                .size(112.dp),
-            contentAlignment = Alignment.Center
+            modifier = modifier.size(112.dp), contentAlignment = Alignment.Center
         ) {
             if (imageUri != null) {
                 Image(
@@ -203,8 +199,7 @@ private fun ImagePickerAddCategory(
                     .background(TudeeTheme.colors.surfaceHigh)
                     .clickable {
                         imagePickerLauncher.launch("image/*")
-                    },
-                contentAlignment = Alignment.Center
+                    }, contentAlignment = Alignment.Center
             ) {
                 Icon(
                     painter = painterResource(R.drawable.pencil_edit_01),
@@ -246,8 +241,6 @@ private fun ImagePickerAddCategory(
 private fun CreateCategoryPreview() {
     TudeeTheme {
         CreateCategoryScreen(
-            modifier = Modifier,
-            onDismiss = {}
-        )
+            modifier = Modifier, onDismiss = {})
     }
 }
