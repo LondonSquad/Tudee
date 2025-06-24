@@ -17,12 +17,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +45,10 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.SwipeToDeleteTask
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.task.confirm_delete_task.ConfirmDeleteTaskScreen
+import com.london.tudee.presentation.components.SnackBar
 import org.koin.androidx.compose.koinViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun TasksScreen(
@@ -51,6 +56,9 @@ fun TasksScreen(
     viewModel: TasksScreenViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    var showDeleteSheet by remember { mutableStateOf(false) }
+    var selectedTaskId by remember { mutableStateOf<Int?>(null) }
+    var showDeleteSnackBar by remember { mutableStateOf(false) }
 
     TasksContent(
         initialTabIndex = initialTabIndex,
@@ -60,8 +68,37 @@ fun TasksScreen(
         inProgressTasks = uiState.inProgressTasks,
         toDoTasks = uiState.toDoTasks,
         doneTasks = uiState.doneTasks,
+        onDeleteTask = { task ->
+            selectedTaskId = task.id
+            viewModel.showDeleteDialog(task.id)
+        }
     )
 
+    ConfirmDeleteTaskScreen(
+        viewModel = viewModel,
+        onTaskDeleted = {
+            showDeleteSheet = false
+            selectedTaskId = null
+            showDeleteSnackBar = true
+            viewModel.getDoneTasks()
+            viewModel.getToDoTasks()
+            viewModel.getInProgressTasks()
+        }
+    )
+
+    if (showDeleteSnackBar) {
+        SnackBar(
+            modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars)
+                .padding(top = 16.dp),
+            message = R.string.delete_task_success,
+            iconPainter = painterResource(id = R.drawable.snack_bar_container),
+            iconTint = TudeeTheme.colors.greenAccent
+        )
+        LaunchedEffect(showDeleteSnackBar) {
+            delay(3000)
+            showDeleteSnackBar = false
+        }
+    }
 }
 
 @Composable
@@ -73,9 +110,8 @@ fun TasksContent(
     inProgressTasks: List<Task>,
     toDoTasks: List<Task>,
     doneTasks: List<Task>,
-
-    ) {
-
+    onDeleteTask: (Task) -> Unit
+) {
     var showDatePicker by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf<Long?>(null) }
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -155,7 +191,7 @@ fun TasksContent(
                                     SwipeToDeleteTask(
                                         modifier = Modifier,
                                         task = tasks[index],
-                                        onDeleteClick = {}
+                                        onDeleteClick = { onDeleteTask(tasks[index]) }
                                     )
                                     Spacer(modifier = Modifier.height(8.dp))
                                 }

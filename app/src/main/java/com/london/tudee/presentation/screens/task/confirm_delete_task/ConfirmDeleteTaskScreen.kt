@@ -25,19 +25,20 @@ import com.london.tudee.presentation.components.buttons.TudeeNegativeButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.tasks.TasksScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun ConfirmDeleteTaskScreen(
-    viewModel: ConfirmDeleteTaskViewModel = koinViewModel(),
+    viewModel: TasksScreenViewModel = koinViewModel(),
     onTaskDeleted: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     TudeeBottomSheetScreen(
-        showBottomSheet = uiState.isVisible,
-        onDismiss = { viewModel.dismissDialog() },
+        showBottomSheet = uiState.isDeleteDialogVisible,
+        onDismiss = { viewModel.dismissDeleteDialog() },
         screenContent = {},
         bottomSheetContent = {
             ConfirmDeleteBottomSheetContent()
@@ -48,7 +49,7 @@ fun ConfirmDeleteTaskScreen(
                     viewModel.deleteTask(onSuccess = onTaskDeleted)
                 },
                 onCancel = {
-                    viewModel.dismissDialog()
+                    viewModel.dismissDeleteDialog()
                 }
             )
         }
