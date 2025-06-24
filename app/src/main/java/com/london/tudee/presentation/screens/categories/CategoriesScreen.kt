@@ -25,7 +25,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.presentation.components.CategoryItem
@@ -33,7 +32,6 @@ import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButto
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.categories.crud.CreateCategoryScreen
-import com.london.tudee.presentation.utils.converterStringToBitmap
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -68,6 +66,7 @@ fun CategoriesScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .background(TudeeTheme.colors.surface)
+            .padding(bottom = 84.dp)
     ) {
         Column {
             Box(
@@ -131,7 +130,7 @@ fun CategoriesScreenContent(
             painter = painterResource(id = R.drawable.ic_add_category_button),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .zIndex(if(uiState.showBottomSheet) 1f else 0f)
+                .zIndex(if (uiState.showBottomSheet) 1f else 0f)
                 .padding(bottom = 84.dp, end = 12.dp),
             contentDescription = "note icon",
             onClick = onAddCategoryClick,

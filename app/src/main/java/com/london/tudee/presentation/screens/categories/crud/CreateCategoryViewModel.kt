@@ -19,7 +19,6 @@ class CreateCategoryScreenViewModel(
     fun createCategory(
         category: Category
     ) {
-        _uiState.value = _uiState.value.copy(isLoading = true)
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
             try {

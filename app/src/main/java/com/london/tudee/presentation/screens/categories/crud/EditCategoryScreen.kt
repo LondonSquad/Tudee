@@ -45,6 +45,7 @@ import com.london.tudee.presentation.design_system.color.RectBorderColor
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import org.koin.androidx.compose.koinViewModel
+import androidx.core.net.toUri
 
 
 @Composable
@@ -127,7 +128,9 @@ private fun CategoryEditContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        ImagePickerEditCategory { uri ->
+        ImagePickerEditCategory(
+            currentImageUri = category.iconRes
+        ) { uri ->
             imageUri = uri
         }
 
@@ -140,8 +143,7 @@ private fun CategoryEditContent(
                         id = category.id,
                         title = categoryName,
                         //arName = categoryName,
-                        //  iconPath = imageUri?.toString() ?: category.iconPath,
-                        iconRes = "",
+                        iconRes = imageUri?.toString() ?: category.iconRes,
                         isDefault = category.isDefault,
                       //  tint = category.tint,
                         taskCount = category.taskCount
@@ -170,6 +172,7 @@ private fun CategoryEditContent(
 @Composable
 private fun ImagePickerEditCategory(
     modifier: Modifier = Modifier,
+    currentImageUri: String? = null,
     onImagePicked: (Uri?) -> Unit
 ) {
 
@@ -203,9 +206,10 @@ private fun ImagePickerEditCategory(
                 .size(112.dp),
             contentAlignment = Alignment.Center
         ) {
-            if (imageUri != null) {
+            val displayImageUri = imageUri ?: currentImageUri?.toUri()
+            if (displayImageUri != null) {
                 Image(
-                    painter = rememberAsyncImagePainter(imageUri),
+                    painter = rememberAsyncImagePainter(displayImageUri),
                     contentDescription = "Selected Image",
                     modifier = Modifier
                         .matchParentSize()
@@ -216,22 +220,47 @@ private fun ImagePickerEditCategory(
 
         }
 
-        Box(
-            modifier = Modifier
-                .size(34.dp)
-                .clip(shape = TudeeTheme.shapes.extraSmall)
-                .background(TudeeTheme.colors.surfaceHigh)
-                .clickable {
-                    imagePickerLauncher.launch("image/*")
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.pencil_edit_01),
-                contentDescription = "Pick Image",
-                tint = TudeeTheme.colors.secondary,
-                modifier = Modifier.padding(6.dp)
-            )
+        val displayImageUri = imageUri ?: currentImageUri?.toUri()
+        if (displayImageUri != null) {
+            Box(
+                modifier = Modifier
+                    .size(34.dp)
+                    .clip(shape = TudeeTheme.shapes.extraSmall)
+                    .background(TudeeTheme.colors.surfaceHigh)
+                    .clickable {
+                        imagePickerLauncher.launch("image/*")
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.pencil_edit_01),
+                    contentDescription = "Pick Image",
+                    tint = TudeeTheme.colors.secondary,
+                    modifier = Modifier.padding(6.dp)
+                )
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable {
+                        imagePickerLauncher.launch("image/*")
+                    },
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_add_image),
+                    contentDescription = "Pick Image",
+                    tint = TudeeTheme.colors.hint,
+                )
+                Text(
+                    text = stringResource(R.string.upload),
+                    style = TudeeTheme.typography.labelMedium,
+                    color = TudeeTheme.colors.hint,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
         }
     }
 
