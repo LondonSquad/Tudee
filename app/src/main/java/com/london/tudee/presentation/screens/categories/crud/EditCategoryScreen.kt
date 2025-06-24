@@ -182,10 +182,8 @@ private fun CategoryEditContent(
                     category = Category(
                         id = category.id,
                         title = categoryName,
-                        //arName = categoryName,
                         iconRes = base64Image,
                         isDefault = category.isDefault,
-                        //  tint = category.tint,
                         taskCount = category.taskCount
                     )
                 )

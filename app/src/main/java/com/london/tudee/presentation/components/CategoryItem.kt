@@ -34,7 +34,7 @@ fun CategoryItem(
     title: String,
     taskCount: Int = 0,
     categoryId: Int = 0,
-    isSelected: Boolean = false, // Add selection state
+    isSelected: Boolean = false,
     onClick: () -> Unit
 ) {
     val bitmap = remember(iconRes) {
