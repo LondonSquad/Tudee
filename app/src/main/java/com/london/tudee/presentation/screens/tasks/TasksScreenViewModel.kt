@@ -38,7 +38,7 @@ class TasksScreenViewModel(
                     state.copy(
                         isLoading = false,
                         errMessage = null,
-                        doneTasks = tasks.map { it.copy(categoryId = it.categoryId) }
+                        doneTasks = tasks
                     )
                 }
             }
@@ -56,7 +56,7 @@ class TasksScreenViewModel(
                     state.copy(
                         isLoading = false,
                         errMessage = null,
-                        inProgressTasks = tasks.map { it.copy(categoryId = it.categoryId) }
+                        inProgressTasks = tasks
                     )
                 }
             }
@@ -74,20 +74,23 @@ class TasksScreenViewModel(
                     state.copy(
                         isLoading = false,
                         errMessage = null,
-                        toDoTasks = tasks.map { it.copy(categoryId = it.categoryId) }
+                        toDoTasks = tasks
                     )
                 }
             }
         }
     }
 
-    // ConfirmDeleteTask logic now merged here
     fun showDeleteDialog(taskId: Int) {
-        _uiState.update { it.copy(taskId = taskId, isDeleteDialogVisible = true) }
+        _uiState.update {
+            it.copy(selectedTaskId = taskId, isDeleteDialogVisible = true)
+        }
     }
 
     fun dismissDeleteDialog() {
-        _uiState.update { it.copy(isDeleteDialogVisible = false) }
+        _uiState.update {
+            it.copy(selectedTaskId = null, isDeleteDialogVisible = false)
+        }
     }
 
     fun deleteTask(
@@ -95,19 +98,17 @@ class TasksScreenViewModel(
         onError: (Throwable) -> Unit = {}
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val taskId = uiState.value.taskId
-            if (taskId != null) {
+            val selectedTaskId = uiState.value.selectedTaskId
+            if (selectedTaskId != null) {
                 try {
-                    val task = taskService.getById(taskId)
+                    val task = taskService.getById(selectedTaskId)
                     taskService.delete(task)
+                    onSuccess()
+                    dismissDeleteDialog()
+                    getDoneTasks()
+                    getToDoTasks()
+                    getInProgressTasks()
 
-                    withContext(Dispatchers.Main) {
-                        onSuccess()
-                        dismissDeleteDialog()
-                        getDoneTasks()
-                        getToDoTasks()
-                        getInProgressTasks()
-                    }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         onError(e)
