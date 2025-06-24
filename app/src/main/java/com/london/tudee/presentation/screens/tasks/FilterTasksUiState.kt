@@ -1,5 +1,6 @@
 package com.london.tudee.presentation.screens.tasks
 
+import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Task
 import kotlinx.datetime.Clock
 
@@ -19,7 +20,9 @@ data class FilterTasksUiState(
     val toDoTasks: List<Task> = listOf(),
     val dayItemIndex: Int = 0,
     val selectedTaskId: Int? = null,
-    val isDeleteDialogVisible: Boolean = false
+    val isDeleteDialogVisible: Boolean = false,
+    val categoryIcons: List<String> = listOf(),
+    val categories: List<Category> = emptyList()
 )
 
 data class DaysOfMonth(
