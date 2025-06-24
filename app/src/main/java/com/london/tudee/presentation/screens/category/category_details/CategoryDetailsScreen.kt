@@ -1,6 +1,6 @@
 @file:JvmName("TaskDetailsScreenKt")
 
-package com.london.tudee.presentation.screens.task.view_tasks
+package com.london.tudee.presentation.screens.category.category_details
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -36,8 +36,8 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.categories.crud.DeleteCategoryScreen
-import com.london.tudee.presentation.screens.categories.crud.EditCategoryScreen
+import com.london.tudee.presentation.screens.category.delete_category.DeleteCategoryScreen
+import com.london.tudee.presentation.screens.category.edit_category.EditCategoryScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

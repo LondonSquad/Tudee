@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.categories.crud
+package com.london.tudee.presentation.screens.category.edit_category
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,22 +8,25 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class CreateCategoryScreenViewModel(
+
+class EditCategoryScreenViewModel(
     private val categoryService: CategoryService
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(CreateCategoryUiState())
+    private val _uiState = MutableStateFlow(EditCategoryUiState())
     val uiState = _uiState.asStateFlow()
 
 
-    fun createCategory(
+    fun editCategory(
         category: Category
     ) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
+
+
             try {
-                categoryService.add(category)
-                _uiState.value = _uiState.value.copy(isDeleted = true, isLoading = false)
+                categoryService.edit(category)
+                _uiState.value = _uiState.value.copy(isEdited = true, isLoading = false)
 
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
@@ -34,11 +37,12 @@ class CreateCategoryScreenViewModel(
         }
     }
 
+
 }
 
 
-data class CreateCategoryUiState(
+data class EditCategoryUiState(
     val isLoading: Boolean = false,
-    val isDeleted: Boolean = false,
-    val errorMessage: String? = null
+    val isEdited: Boolean = false,
+    val errorMessage: String? = null,
 )

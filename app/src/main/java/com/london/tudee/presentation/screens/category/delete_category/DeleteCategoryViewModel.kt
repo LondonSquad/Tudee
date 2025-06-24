@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.categories.crud
+package com.london.tudee.presentation.screens.category.delete_category
 
 
 import androidx.lifecycle.ViewModel

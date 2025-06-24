@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.task.view_tasks
+package com.london.tudee.presentation.screens.category.category_details
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -7,8 +7,8 @@ import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
-import com.london.tudee.presentation.screens.categories.crud.DeleteCategoryUiState
-import com.london.tudee.presentation.screens.categories.crud.EditCategoryUiState
+import com.london.tudee.presentation.screens.category.delete_category.DeleteCategoryUiState
+import com.london.tudee.presentation.screens.category.edit_category.EditCategoryUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
