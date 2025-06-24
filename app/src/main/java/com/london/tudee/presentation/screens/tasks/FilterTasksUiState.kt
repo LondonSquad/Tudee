@@ -16,4 +16,6 @@ data class FilterTasksUiState(
     val doneTasks: List<Task> = listOf(),
     val inProgressTasks: List<Task> = listOf(),
     val toDoTasks: List<Task> = listOf(),
+    val taskId: Int? = null,
+    val isDeleteDialogVisible: Boolean = false
 )
