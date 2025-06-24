@@ -25,10 +25,8 @@ class CategoryDetailsViewModel(
     val uiState = _uiState.asStateFlow()
 
     private val _editState = MutableStateFlow(EditCategoryUiState())
-    val editState = _editState.asStateFlow()
 
     private val _deleteState = MutableStateFlow(DeleteCategoryUiState())
-    val deleteState = _deleteState.asStateFlow()
 
     fun initializeWithCategoryId(categoryId: Int) {
         getDoneTasksByCategoryId(categoryId)
@@ -169,6 +167,17 @@ class CategoryDetailsViewModel(
                     errorMessage = e.message
                 )
             }
+        }
+    }
+
+    override fun refreshAfterChange() {
+        val categoryId = _uiState.value.category.id
+        initializeWithCategoryId(categoryId)
+    }
+
+    override fun onCategoryDeleted() {
+        _uiState.update {
+            it.copy(categoryDeleted = true)
         }
     }
 

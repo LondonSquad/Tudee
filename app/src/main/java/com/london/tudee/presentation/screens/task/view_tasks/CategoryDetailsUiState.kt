@@ -11,6 +11,7 @@ data class CategoryDetailsUiState(
     val doneTasks: List<Task> = listOf(),
     val inProgressTasks: List<Task> = listOf(),
     val toDoTasks: List<Task> = listOf(),
+    val categoryDeleted: Boolean = false,
     val isEditBottomSheetVisible:Boolean = false,
     val isDeleteBottomSheetVisible:Boolean = false,
     val category: Category = Category(

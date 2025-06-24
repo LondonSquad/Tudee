@@ -13,4 +13,6 @@ interface CategoryDetailsInteractions {
     fun hideDeleteBottomSheet()
     fun editCategory(category: Category)
     fun deleteCategory(category: Category)
+    fun refreshAfterChange()
+    fun onCategoryDeleted()
 }

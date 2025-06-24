@@ -36,8 +36,8 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.categories.crud.DeleteCategoryScreen
 import com.london.tudee.presentation.screens.categories.crud.EditCategoryScreen
-import com.london.tudee.presentation.screens.categories.crud.EditCategoryUiState
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -52,14 +52,20 @@ fun CategoryDetailsScreen(
     }
     val state by viewModel.uiState.collectAsState()
 
-    val editState by viewModel.editState.collectAsState()
+
+    LaunchedEffect(state.categoryDeleted) {
+        if (state.categoryDeleted) {
+            onBackClick()
+        }
+    }
+
     when {
         state.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
         state.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
         else -> CategoryDetailsContent(
             state = state,
             onBackClick = onBackClick,
-            editState = editState,
+//            editState = state,
             interactions = viewModel
         )
     }
@@ -88,7 +94,7 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 @Composable
 fun CategoryDetailsContent(
     state: CategoryDetailsUiState,
-    editState: EditCategoryUiState,
+//    editState: EditCategoryUiState,
     onBackClick: () -> Unit,
     interactions: CategoryDetailsInteractions
 ) {
@@ -112,9 +118,27 @@ fun CategoryDetailsContent(
         if (state.isEditBottomSheetVisible) {
             EditCategoryScreen(
                 category = state.category,
-                onDismiss = interactions::hideEditBottomSheet,
-                state = state,
-                interactions = interactions
+                onDismiss = {
+                    interactions.hideEditBottomSheet()
+                    interactions.refreshAfterChange()
+                },
+                onDeleteClick = {
+                    interactions.hideEditBottomSheet()
+                    interactions.showDeleteBottomSheet()
+                }
+//                state = state,
+//                interactions = interactions
+            )
+        }
+
+        if (state.isDeleteBottomSheetVisible) {
+            DeleteCategoryScreen(
+                category = state.category,
+                onDismiss = { interactions.hideDeleteBottomSheet() },
+                onCategoryDeleted = {
+                    interactions.hideDeleteBottomSheet()
+                    interactions.onCategoryDeleted()
+                }
             )
         }
     }
@@ -130,7 +154,7 @@ fun TasksPagerSection(state: CategoryDetailsUiState) {
         ),
         tasksList = listOf(state.inProgressTasks, state.toDoTasks, state.doneTasks)
     )
-    { page, tasks ->
+    { _, tasks ->
 
         Box(
             modifier = Modifier

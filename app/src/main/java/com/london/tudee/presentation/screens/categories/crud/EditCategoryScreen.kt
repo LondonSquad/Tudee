@@ -1,18 +1,11 @@
 package com.london.tudee.presentation.screens.categories.crud
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
-import android.util.Base64
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,19 +42,20 @@ import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScr
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.color.RectBorderColor
+import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.task.view_tasks.CategoryDetailsInteractions
-import com.london.tudee.presentation.screens.task.view_tasks.CategoryDetailsUiState
-import java.io.ByteArrayOutputStream
+import com.london.tudee.presentation.utils.base64ToBitmap
+import com.london.tudee.presentation.utils.uriToBase64
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun EditCategoryScreen(
     modifier: Modifier = Modifier,
     category: Category,
-    onDismiss: () -> Unit,
-    state: CategoryDetailsUiState,
-    interactions: CategoryDetailsInteractions,
+    onDeleteClick: () -> Unit,
+    onDismiss: () -> Unit
 ) {
+
     TudeeBottomSheetScreen(
         showBottomSheet = true,
         modifier = modifier,
@@ -73,8 +67,7 @@ fun EditCategoryScreen(
                 modifier = modifier,
                 category = category,
                 onDismiss = onDismiss,
-                state = state,
-                interactions = interactions
+                onDeleteClick = onDeleteClick
             )
         }
     )
@@ -85,11 +78,11 @@ private fun EditCategoryContent(
     modifier: Modifier = Modifier,
     category: Category,
     onDismiss: () -> Unit,
-    state: CategoryDetailsUiState,
-    interactions: CategoryDetailsInteractions
+    onDeleteClick: () -> Unit,
+    viewModel: EditCategoryScreenViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
-    val interactionSource = remember { MutableInteractionSource() }
+//    val interactionSource = remember { MutableInteractionSource() }
     var categoryName by remember { mutableStateOf(category.title) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
@@ -112,19 +105,11 @@ private fun EditCategoryContent(
                 style = TudeeTheme.typography.labelLarge,
                 color = TudeeTheme.colors.error,
                 modifier = Modifier.clickable(
-                    interactionSource = interactionSource,
-                    indication = null,
-                    onClick = {
-                        interactions.hideEditBottomSheet()
-                        interactions.showDeleteBottomSheet()
-                    },
+//                    interactionSource = interactionSource,
+//                    indication = null,
+                    onClick = onDeleteClick,
                 )
             )
-            if (state.isDeleteBottomSheetVisible) {
-                DeleteCategoryScreen(category = category) {
-                    onDismiss()
-                }
-            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -161,7 +146,7 @@ private fun EditCategoryContent(
                     title = categoryName,
                     iconRes = base64Image
                 )
-                interactions.editCategory(updatedCategory)
+                viewModel.editCategory(updatedCategory)
                 onDismiss()
             },
             text = stringResource(R.string.save),
@@ -294,54 +279,21 @@ private fun ImagePickerEditCategory(
 
 }
 
-// Helper function to convert URI to Base64
-private fun uriToBase64(context: Context, uri: Uri): String? {
-    return try {
-        val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
-        } else {
-            @Suppress("DEPRECATION")
-            MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
-        }
-
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-        val byteArray = byteArrayOutputStream.toByteArray()
-        Base64.encodeToString(byteArray, Base64.DEFAULT)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
+@ThemePreviews
+@Composable
+private fun EditCategoryScreenPreview() {
+    TudeeTheme {
+        EditCategoryScreen(
+            modifier = Modifier,
+            category = Category(
+                id = 1,
+                title = "Work",
+                iconRes = "",
+                isDefault = true,
+                taskCount = 0,
+            ),
+            onDismiss = {},
+            onDeleteClick = {}
+        )
     }
 }
-
-// Helper function to convert Base64 string to Bitmap
-private fun base64ToBitmap(base64String: String): Bitmap? {
-    return try {
-        if (base64String.isBlank()) return null
-        val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
-        android.graphics.BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
-}
-
-//@ThemePreviews
-//@Composable
-//private fun EditCategoryScreenPreview() {
-//    TudeeTheme {
-//        EditCategoryScreen(
-//            modifier = Modifier,
-//            category = Category(
-//                id = 1,
-//                title = "Work",
-//                iconRes = "",
-//                isDefault = true,
-//                taskCount = 0,
-//            ),
-//            onDismiss = {},
-//            state = state,
-//            interactions = CategoryDetailsInteractions()
-//        )
-//    }
-//}
