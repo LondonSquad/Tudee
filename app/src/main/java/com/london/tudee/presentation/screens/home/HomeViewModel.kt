@@ -190,39 +190,39 @@ class HomeViewModel(
     override fun initializeForEdit(taskId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             _taskUiState.update { it.copy(isLoading = true) }
-            try {
+
+            runCatching {
                 val task = taskService.getById(taskId)
                 val category = categoryService.getById(task.categoryId)
 
-                withContext(Dispatchers.Main) {
-                    _taskUiState.update { currentState ->
-                        currentState.copy(
-                            taskId = task.id,
-                            title = task.title,
-                            description = task.description,
-                            selectedDate = task.timeStamp.toEpochMilliseconds(),
-                            selectedPriority = task.priority,
-                            selectedCategory = category,
-                            isEditMode = true,
-                            isLoading = false,
-                            showBottomSheet = true
-                        )
-                    }
-                    validateForm()
+                _taskUiState.update { currentState ->
+                    currentState.copy(
+                        taskId = task.id,
+                        title = task.title,
+                        description = task.description,
+                        selectedDate = task.timeStamp.toEpochMilliseconds(),
+                        selectedPriority = task.priority,
+                        selectedCategory = category,
+                        isEditMode = true,
+                        isLoading = false,
+                        showBottomSheet = true,
+                        stateMessage = null
+                    )
                 }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    _taskUiState.update {
-                        it.copy(
-                            stateMessage = R.string.some_error_happened,
-                            isLoading = false,
-                            showBottomSheet = false
-                        )
-                    }
+                validateForm()
+
+            }.onFailure {
+                _taskUiState.update {
+                    it.copy(
+                        stateMessage = R.string.some_error_happened,
+                        isLoading = false,
+                        showBottomSheet = false
+                    )
                 }
             }
         }
     }
+
 
     override fun updateTitle(title: String) {
         _taskUiState.update { it.copy(title = title) }
