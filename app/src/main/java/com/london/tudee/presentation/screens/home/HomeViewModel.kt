@@ -1,6 +1,5 @@
 package com.london.tudee.presentation.screens.home
 
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.tudee.R
@@ -10,13 +9,15 @@ import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
+import com.london.tudee.presentation.base.HomeInteractions
+import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskUiState
+import com.london.tudee.presentation.screens.task.taskdetails.TaskDetailsBottomSheetUiState
 import com.london.tudee.presentation.base.BaseCreateTaskInteractions
 import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
@@ -26,12 +27,13 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class HomeViewModel(
     private val taskService: TaskService, private val categoryService: CategoryService
-) : ViewModel(), BaseCreateTaskInteractions {
-    private val _taskUiState = MutableStateFlow(AddOrEditTaskUiState())
-    val taskUiState = _taskUiState.asStateFlow()
+) : ViewModel(), HomeInteractions {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
+
+    private val _taskUiState = MutableStateFlow(AddOrEditTaskUiState())
+    val taskUiState = _taskUiState.asStateFlow()
 
     init {
         loadCategories()
@@ -43,17 +45,19 @@ class HomeViewModel(
 
     private fun initializeAllTasks() {
         viewModelScope.launch(Dispatchers.IO) {
-            taskService.getAll().catch { throwable ->
-                _uiState.update {
-                    it.copy(isLoading = false, errMessage = throwable.message)
+            runCatching {
+                taskService.getAll().collect { tasks ->
+                    _uiState.update { state ->
+                        state.copy(
+                            isLoading = false,
+                            errMessage = null,
+                            allTasks = tasks,
+                        )
+                    }
                 }
-            }.collect { tasks ->
-                _uiState.update { state ->
-                    state.copy(
-                        isLoading = false,
-                        errMessage = null,
-                        allTasks = tasks,
-                    )
+            }.onFailure {
+                _uiState.update {
+                    it.copy(isLoading = false, errMessage = "Some error happened")
                 }
             }
         }
@@ -61,17 +65,19 @@ class HomeViewModel(
 
     private fun initializeDoneTasks() {
         viewModelScope.launch(Dispatchers.IO) {
-            taskService.getByTaskStatus(TaskStatus.DONE).catch { throwable ->
-                _uiState.update {
-                    it.copy(isLoading = false, errMessage = throwable.message)
+            runCatching {
+                taskService.getByTaskStatus(TaskStatus.DONE).collect { tasks ->
+                    _uiState.update { state ->
+                        state.copy(
+                            isLoading = false,
+                            errMessage = null,
+                            doneTasks = tasks,
+                        )
+                    }
                 }
-            }.collect { tasks ->
-                _uiState.update { state ->
-                    state.copy(
-                        isLoading = false,
-                        errMessage = null,
-                        doneTasks = tasks,
-                    )
+            }.onFailure {
+                _uiState.update {
+                    it.copy(isLoading = false, errMessage = "Some error happened")
                 }
             }
         }
@@ -79,15 +85,19 @@ class HomeViewModel(
 
     private fun initializeInProgressTasks() {
         viewModelScope.launch(Dispatchers.IO) {
-            taskService.getByTaskStatus(TaskStatus.IN_PROGRESS).catch { throwable ->
-                _uiState.update {
-                    it.copy(isLoading = false, errMessage = throwable.message)
+            runCatching {
+                taskService.getByTaskStatus(TaskStatus.IN_PROGRESS).collect { tasks ->
+                    _uiState.update { state ->
+                        state.copy(
+                            isLoading = false,
+                            errMessage = null,
+                            inProgressTasks = tasks
+                        )
+                    }
                 }
-            }.collect { tasks ->
-                _uiState.update { state ->
-                    state.copy(
-                        isLoading = false, errMessage = null, inProgressTasks = tasks
-                    )
+            }.onFailure {
+                _uiState.update {
+                    it.copy(isLoading = false, errMessage = "Some error happened")
                 }
             }
         }
@@ -95,38 +105,140 @@ class HomeViewModel(
 
     private fun initializeTodoTasks() {
         viewModelScope.launch(Dispatchers.IO) {
-            taskService.getByTaskStatus(TaskStatus.TODO).catch { throwable ->
-                _uiState.update {
-                    it.copy(isLoading = false, errMessage = throwable.message)
+            runCatching {
+                taskService.getByTaskStatus(TaskStatus.TODO).collect { tasks ->
+                    _uiState.update { state ->
+                        state.copy(
+                            isLoading = false,
+                            errMessage = null,
+                            toDoTasks = tasks
+                        )
+                    }
                 }
-            }.collect { tasks ->
-                _uiState.update { state ->
-                    state.copy(
-                        isLoading = false, errMessage = null, toDoTasks = tasks
+            }.onFailure {
+                _uiState.update {
+                    it.copy(isLoading = false, errMessage = "Some error happened")
+                }
+            }
+        }
+    }
+
+    override fun loadTask(task: Task) {
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching {
+                val icon = categoryService.getIconResById(task.categoryId)
+                _uiState.update {
+                    it.copy(
+                        taskDetailBottomSheetUiState = it.taskDetailBottomSheetUiState.copy(
+                            task = task, categoryIcon = icon
+                        )
+                    )
+                }
+            }.isFailure.also {
+                if (it) _uiState.update { state ->
+                    state.copy(errMessage = R.string.Something_went_wrong_task_not_found_or_no_category_icon.toString())
+                }
+            }
+        }
+    }
+
+    override fun onClickMove() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val task = uiState.value.taskDetailBottomSheetUiState.task
+            var icon = ""
+            val newStatus = when (task.taskStatus) {
+                TaskStatus.TODO -> TaskStatus.IN_PROGRESS
+                TaskStatus.IN_PROGRESS -> TaskStatus.DONE
+                TaskStatus.DONE -> return@launch
+            }
+            val updatedTask = task.copy(taskStatus = newStatus)
+            runCatching {
+                taskService.edit(updatedTask)
+                icon = categoryService.getIconResById(task.categoryId)
+            }.isFailure.also {
+                if (it) _uiState.update { state ->
+                    state.copy(errMessage = R.string.Something_went_wrong_cant_update_task.toString())
+                }
+            }
+            _uiState.update {
+                it.copy(
+                    taskDetailBottomSheetUiState = TaskDetailsBottomSheetUiState(
+                        task = updatedTask, categoryIcon = icon
+                    )
+                )
+            }
+        }
+    }
+
+    override fun showTaskDetailsBottomSheet() {
+        _uiState.update {
+            it.copy(isTaskDetailsBottomSheetVisible = true)
+        }
+    }
+
+    override fun hideTaskDetailsBottomSheet() {
+        _uiState.update {
+            it.copy(isTaskDetailsBottomSheetVisible = false)
+        }
+    }
+
+    override fun loadCategories() {
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching {
+                categoryService.getAll().collect { categories ->
+                    _taskUiState.update { currentState ->
+                        currentState.copy(
+                            categories = categories,
+                            selectedCategory = currentState.selectedCategory,
+                            categoryIcons = categories.map { it.iconRes }
+                        )
+                    }
+                    validateForm()
+                }
+            }.onFailure {
+                _taskUiState.update {
+                    it.copy(stateMessage = R.string.some_error_happened)
+                }
+            }
+        }
+    }
+
+    override fun initializeForEdit(taskId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _taskUiState.update { it.copy(isLoading = true) }
+
+            runCatching {
+                val task = taskService.getById(taskId)
+                val category = categoryService.getById(task.categoryId)
+
+                _taskUiState.update { currentState ->
+                    currentState.copy(
+                        taskId = task.id,
+                        title = task.title,
+                        description = task.description,
+                        selectedDate = task.timeStamp.toEpochMilliseconds(),
+                        selectedPriority = task.priority,
+                        selectedCategory = category,
+                        isEditMode = true,
+                        isLoading = false,
+                        showBottomSheet = true,
+                        stateMessage = null
+                    )
+                }
+                validateForm()
+
+            }.onFailure {
+                _taskUiState.update {
+                    it.copy(
+                        stateMessage = R.string.some_error_happened,
+                        isLoading = false,
+                        showBottomSheet = false
                     )
                 }
             }
         }
     }
 
-
-    override fun loadCategories() {
-        viewModelScope.launch {
-            try {
-                categoryService.getAll().collect { categories ->
-                    _taskUiState.update { currentState ->
-                        currentState.copy(
-                            categories = categories,
-                            selectedCategory = currentState.selectedCategory,
-                            categoryIcons = categories.map { it.iconRes })
-                    }
-                    validateForm()
-                }
-            } catch (_: Exception) {
-                _taskUiState.update { it.copy(errorMessage = R.string.some_error_happened) }
-            }
-        }
-    }
 
     override fun updateTitle(title: String) {
         _taskUiState.update { it.copy(title = title) }
@@ -180,8 +292,7 @@ class HomeViewModel(
                     selectedDate = null,
                     selectedPriority = Priority.LOW,
                     selectedCategory = it.categories.firstOrNull(),
-                    successMessage = null,
-                    errorMessage = null,
+                    stateMessage = null,
                     isEditMode = false,
                     taskId = null
                 )
@@ -192,53 +303,73 @@ class HomeViewModel(
 
     override fun saveTask() {
         val currentState = _taskUiState.value
-
         if (!currentState.isFormValid) return
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _taskUiState.update { it.copy(isLoading = true) }
 
-            try {
-                val task = Task(
-                    id = currentState.taskId ?: 0,
-                    title = currentState.title.trim(),
-                    description = currentState.description.trim(),
-                    taskStatus = TaskStatus.TODO,
-                    priority = currentState.selectedPriority,
-                    categoryId = currentState.selectedCategory?.id ?: 1,
-                    timeStamp = currentState.selectedDate?.let { Instant.fromEpochMilliseconds(it) }
-                        ?: Clock.System.now())
+            runCatching {
+                val task = if (currentState.isEditMode) {
+                    val originalTask = uiState.value.taskDetailBottomSheetUiState.task
+                    Task(
+                        id = currentState.taskId ?: 0,
+                        title = currentState.title.trim(),
+                        description = currentState.description.trim(),
+                        taskStatus = originalTask.taskStatus,
+                        priority = currentState.selectedPriority,
+                        categoryId = currentState.selectedCategory?.id ?: 1,
+                        timeStamp = currentState.selectedDate?.let { Instant.fromEpochMilliseconds(it) }
+                            ?: Clock.System.now()
+                    )
+                } else {
+                    Task(
+                        id = 0,
+                        title = currentState.title.trim(),
+                        description = currentState.description.trim(),
+                        taskStatus = TaskStatus.TODO,
+                        priority = currentState.selectedPriority,
+                        categoryId = currentState.selectedCategory?.id ?: 1,
+                        timeStamp = currentState.selectedDate?.let { Instant.fromEpochMilliseconds(it) }
+                            ?: Clock.System.now()
+                    )
+                }
+
                 if (currentState.isEditMode) {
                     taskService.edit(task)
                 } else {
+                    currentState.selectedCategory?.let { category ->
+                        categoryService.edit(category.copy(taskCount = category.taskCount + 1))
+                    }
                     taskService.add(task)
                 }
 
                 _taskUiState.update {
                     it.copy(
                         isLoading = false,
-                        successMessage = if (currentState.isEditMode) R.string.edit_task_successfully
+                        stateMessage = if (currentState.isEditMode) R.string.edit_task_successfully
                         else R.string.add_task_successfully,
                         showBottomSheet = false
                     )
                 }
 
-            } catch (_: Exception) {
+            }.onFailure {
                 _taskUiState.update {
                     it.copy(
-                        isLoading = false, errorMessage = R.string.some_error_happened
+                        isLoading = false,
+                        stateMessage = R.string.some_error_happened
                     )
                 }
             }
         }
-
-        clearMessages()
     }
+
 
     override fun validateForm() {
         _taskUiState.update { currentState ->
             currentState.copy(
-                isFormValid = currentState.title.isNotBlank() && currentState.selectedDate != null && currentState.selectedCategory != null
+                isFormValid = currentState.title.isNotBlank()
+                        && currentState.selectedDate != null
+                        && currentState.selectedCategory != null
             )
         }
     }
@@ -246,8 +377,9 @@ class HomeViewModel(
     override fun clearMessages() {
         _taskUiState.update {
             it.copy(
-                successMessage = null, errorMessage = null
+                stateMessage = null
             )
         }
     }
+
 }

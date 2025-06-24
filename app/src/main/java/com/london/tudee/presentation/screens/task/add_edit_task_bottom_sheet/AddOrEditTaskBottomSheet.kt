@@ -1,7 +1,5 @@
 package com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet
 
-import android.util.Log
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -16,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
-import com.london.tudee.presentation.base.BaseCreateTaskInteractions
+import com.london.tudee.presentation.base.HomeInteractions
 import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScreen
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
@@ -24,11 +22,9 @@ import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 @Composable
 fun AddOrEditTaskBottomSheet(
     modifier: Modifier = Modifier,
-    @StringRes title: Int,
-    @StringRes buttonText: Int,
     screenContent: @Composable () -> Unit,
     uiState: AddOrEditTaskUiState,
-    interactions: BaseCreateTaskInteractions
+    interactions: HomeInteractions
 ) {
 
     AnimatedVisibility(
@@ -54,7 +50,7 @@ fun AddOrEditTaskBottomSheet(
                 bottomSheetContent = {
                     AddOrEditTaskDetails(
                         modifier = modifier,
-                        title = title,
+                        title = if (uiState.isEditMode) R.string.edit_task else R.string.add_new_task,
                         uiState = uiState,
                         interactions = interactions,
                         categories = uiState.categories
@@ -63,12 +59,13 @@ fun AddOrEditTaskBottomSheet(
                 bottomSheetActions = {
                     TudeePrimaryButton(
                         modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(buttonText),
+                        text = if (uiState.isEditMode) stringResource(R.string.edit_task) else stringResource(
+                            R.string.add
+                        ),
                         isDisabled = !uiState.isFormValid || uiState.isLoading,
                         isLoading = uiState.isLoading,
                         onClick = {
                             interactions.saveTask()
-                            Log.d("AddOrEditTaskBottomSheet", "AddOrEditTaskBottomSheet: $uiState")
                         },
                     )
 

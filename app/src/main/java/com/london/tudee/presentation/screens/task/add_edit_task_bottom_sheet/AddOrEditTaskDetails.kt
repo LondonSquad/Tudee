@@ -1,5 +1,6 @@
 package com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet
 
+import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,8 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -26,29 +25,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
-import com.london.tudee.presentation.base.BaseCreateTaskInteractions
+import com.london.tudee.presentation.base.HomeInteractions
 import com.london.tudee.presentation.components.CategoryItem
 import com.london.tudee.presentation.components.TudeeTextField
 import com.london.tudee.presentation.components.date.TudeeDatePicker
 import com.london.tudee.presentation.components.priority.PrioritySelector
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.utils.converterStringToBitmap
-import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun AddOrEditTaskDetails(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
     uiState: AddOrEditTaskUiState,
-    interactions: BaseCreateTaskInteractions,
+    interactions: HomeInteractions,
     categories: List<Category> = emptyList()
 ) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
@@ -225,7 +222,6 @@ private fun CategoriesGrid(
     selectedCategory: Category?,
     onCategorySelected: (Category) -> Unit
 ) {
-    // Memoize the chunked categories to prevent recalculation
     val chunkedCategories = remember(categories) {
         categories.chunked(3)
     }
@@ -253,7 +249,6 @@ private fun CategoriesGrid(
                     }
                 }
 
-                // Fill empty spaces
                 val emptySpaces = 3 - rowCategories.size
                 if (emptySpaces > 0) {
                     repeat(emptySpaces) {
@@ -279,106 +274,95 @@ private fun PreviewCategorySection() {
                 .padding(16.dp)
         ) {
             var selectedCategory by remember { mutableStateOf<Category?>(null) }
-            val sampleCategories = rememberSampleDomainCategories()
 
             CategorySection(
-                categories = sampleCategories,
+                categories = listOf(
+                    Category(
+                        id = 1,
+                        title = "Education",
+                        // arName = "التعليم",
+                        iconRes = "",
+                        isDefault = true,
+                        taskCount = 0,
+                        // tint = primaryColor
+                    ),
+                    Category(
+                        id = 2,
+                        title = "Shopping",
+                        // arName = "التسوق",
+                        iconRes = "",
+                        isDefault = true,
+                        taskCount = 0,
+                        // tint = secondaryColor
+                    ),
+                    Category(
+                        id = 3,
+                        title = "Medical",
+                        // arName = "طبي",
+                        iconRes = "",
+                        isDefault = true,
+                        taskCount = 0,
+                        // tint =primaryColor
+                    ),
+                    Category(
+                        id = 4,
+                        title = "Gym",
+                        // arName = "رياضة",
+                        iconRes = "",
+                        isDefault = false,
+                        taskCount = 0,
+                        //   tint = primaryColor
+                    ),
+                    Category(
+                        id = 5,
+                        title = "Entertainment",
+                        // arName = "ترفيه",
+                        iconRes = "",
+                        isDefault = false,
+                        taskCount = 0,
+                        //tint = primaryColor
+
+                    ),
+                    Category(
+                        id = 6,
+                        title = "Cooking",
+                        // arName = "طبخ",
+                        iconRes = "",
+                        isDefault = false,
+                        taskCount = 0,
+                        // tint = primaryColor
+                    ),
+                    Category(
+                        id = 7,
+                        title = "Family & Friends",
+                        // arName = "العائلة والأصدقاء",
+                        iconRes = "",
+                        isDefault = false,
+                        taskCount = 0,
+                        // tint = primaryColor
+                    ),
+                    Category(
+                        id = 8,
+                        title = "Traveling",
+                        // arName = "سفر",
+                        iconRes = "",
+                        isDefault = false,
+                        taskCount = 0,
+                        // tint = primaryColor
+                    ),
+                    Category(
+                        id = 9,
+                        title = "Agriculture",
+                        //arName = "زراعة",
+                        iconRes = "",
+                        isDefault = false,
+                        taskCount = 0,
+                        //   tint = primaryColor
+                    )
+                ),
                 selectedCategory = selectedCategory,
                 onCategorySelected = { selectedCategory = it }
             )
         }
-    }
-}
-
-@Composable
-private fun rememberSampleDomainCategories(): List<Category> {
-    val primaryColor = TudeeTheme.colors.primary.value
-    val secondaryColor = TudeeTheme.colors.secondary.value
-
-    return remember {
-        listOf(
-            Category(
-                id = 1,
-                title = "Education",
-                // arName = "التعليم",
-                iconRes = "",
-                isDefault = true,
-                taskCount = 0,
-               // tint = primaryColor
-            ),
-            Category(
-                id = 2,
-                title = "Shopping",
-               // arName = "التسوق",
-                iconRes = "",
-                isDefault = true,
-                taskCount = 0,
-               // tint = secondaryColor
-            ),
-            Category(
-                id = 3,
-                title = "Medical",
-               // arName = "طبي",
-                iconRes = "",
-                isDefault = true,
-                taskCount = 0,
-               // tint =primaryColor
-            ),
-            Category(
-                id = 4,
-                title = "Gym",
-               // arName = "رياضة",
-                iconRes = "",
-                isDefault = false,
-                taskCount = 0,
-             //   tint = primaryColor
-            ),
-            Category(
-                id = 5,
-                title = "Entertainment",
-               // arName = "ترفيه",
-                iconRes = "",
-                isDefault = false,
-                taskCount = 0,
-                //tint = primaryColor
-
-            ),
-            Category(
-                id = 6,
-                title = "Cooking",
-               // arName = "طبخ",
-                iconRes = "",
-                isDefault = false,
-                taskCount = 0,
-               // tint = primaryColor
-            ),
-            Category(
-                id = 7,
-                title = "Family & Friends",
-               // arName = "العائلة والأصدقاء",
-                iconRes = "",
-                isDefault = false,
-                taskCount = 0,
-               // tint = primaryColor
-            ),
-            Category(
-                id = 8,
-                title = "Traveling",
-               // arName = "سفر",
-                iconRes = "",
-                isDefault = false,
-                taskCount = 0,
-               // tint = primaryColor
-            ),
-            Category(
-                id = 9,
-                title = "Agriculture",
-                //arName = "زراعة",
-                iconRes = "",
-                isDefault = false,
-                taskCount = 0,
-             //   tint = primaryColor
-            )
-        )
     }
 }

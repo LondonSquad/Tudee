@@ -19,10 +19,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.navigation.Screen
@@ -36,7 +34,6 @@ fun TudeeBottomNavigationBar(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-  //  val currentScreen = navBackStackEntry?.toRoute<Screen.Home>()
 
     NavigationBar(
         modifier = modifier,
@@ -45,12 +42,18 @@ fun TudeeBottomNavigationBar(
         windowInsets = WindowInsets(0)
     ) {
         items.forEach { item ->
-            val isSelected = item.route == currentRoute
+            val isSelected = when (item.screen) {
+                is Screen.Home -> currentRoute?.contains("Screen.Home") == true
+                is Screen.Tasks -> currentRoute?.contains("Screen.Tasks") == true
+                is Screen.Categories -> currentRoute?.contains("Screen.Categories") == true
+                else -> false
+            }
+
             NavigationBarItem(
                 selected = isSelected,
                 onClick = {
                     if (!isSelected) {
-                        navController.navigate(item.route) {
+                        navController.navigate(item.screen) {
                             launchSingleTop = true
                             popUpTo(navController.graph.startDestinationId) { saveState = true }
                             restoreState = true
@@ -82,7 +85,8 @@ fun TudeeBottomNavigationBar(
                             tint = TudeeTheme.colors.hint
                         )
                     }
-                }, colors = NavigationBarItemDefaults.colors(
+                },
+                colors = NavigationBarItemDefaults.colors(
                     indicatorColor = Color.Transparent
                 )
             )
