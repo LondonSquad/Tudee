@@ -2,6 +2,7 @@ package com.london.tudee.presentation
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -28,7 +29,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         val isOnboardingShown = appPreferencesService.hasOnboardingBeenShown
-        val isDarkMode = appPreferencesService.isDarkModeEnabled
+        val isDarkMode by appPreferencesService.isDarkModeEnabled
 
         setContent {
             TudeeTheme(isDarkMode = isDarkMode) {

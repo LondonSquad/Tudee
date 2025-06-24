@@ -25,7 +25,7 @@ import kotlinx.datetime.Instant
 class HomeViewModel(
     private val taskService: TaskService,
     private val categoryService: CategoryService,
-    private val appPreferences: AppPreferencesService
+    private val appPreferences: AppPreferencesService,
 ) : ViewModel(), HomeInteractions {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -36,6 +36,7 @@ class HomeViewModel(
 
     init {
         loadCategories()
+        initializeState()
         initializeAllTasks()
         initializeDoneTasks()
         initializeTodoTasks()
@@ -184,8 +185,8 @@ class HomeViewModel(
     override fun onThemeSwitched(isDarkMode: Boolean) {
         viewModelScope.launch {
             runCatching { appPreferences.setDarkModeEnabled(isDarkMode) }
-            .onSuccess { _uiState.update { it.copy(isDarkMode = isDarkMode) } }
-            .onFailure { _uiState.update { it.copy(errMessage = it.errMessage) } }
+                .onSuccess { _uiState.update { it.copy(isDarkMode = isDarkMode) } }
+                .onFailure { _uiState.update { it.copy(errMessage = it.errMessage) } }
         }
     }
 
@@ -397,4 +398,7 @@ class HomeViewModel(
         }
     }
 
+    private fun initializeState() = _uiState.update {
+        it.copy(isDarkMode = appPreferences.isDarkModeEnabled.value)
+    }
 }
