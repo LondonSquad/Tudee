@@ -40,5 +40,5 @@ class DatabaseModule {
     fun provideCategoryDao(database: TudeeDatabase) = database.categoryDao()
 
     @Single
-    fun provideRecipeDao(database: TudeeDatabase) = database.taskDao()
+    fun provideTaskDao(database: TudeeDatabase) = database.taskDao()
 }

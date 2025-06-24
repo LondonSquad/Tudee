@@ -72,7 +72,6 @@ dependencies {
 
     // koin
     implementation(libs.koin.android)
-    implementation(libs.koin.androidx.compose)
 
     implementation(libs.kotlinx.datetime)
 
