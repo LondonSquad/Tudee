@@ -64,7 +64,7 @@ private fun uriToBase64(context: Context, uri: Uri): String? {
             @Suppress("DEPRECATION")
             MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
         }
-        
+
         val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
         val byteArray = byteArrayOutputStream.toByteArray()
@@ -178,10 +178,7 @@ private fun CategoryEditContent(
                         taskCount = category.taskCount
                     )
                 )
-
-                if (viewModel.uiState.value.isDeleted) {
-                    onDismiss()
-                }
+                onDismiss()
             },
             text = stringResource(R.string.save),
             modifier = Modifier.fillMaxWidth()

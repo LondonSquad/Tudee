@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 class CategoryDetailsViewModel(
     private val taskService: TaskService,
     private val categoryService: CategoryService,
-) : ViewModel() {
+) : ViewModel(), CategoryDetailsInteractions {
 
     private val _uiState = MutableStateFlow(CategoryDetailsState())
     val uiState = _uiState.asStateFlow()
@@ -30,7 +30,7 @@ class CategoryDetailsViewModel(
         getCategoryNameById(categoryId)
     }
 
-    private fun getDoneTasksByCategoryId(categoryId: Int) {
+    override fun getDoneTasksByCategoryId(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
                 categoryId = categoryId,
@@ -53,7 +53,7 @@ class CategoryDetailsViewModel(
         }
     }
 
-    private fun getInProgressTasksByCategoryId(categoryId: Int) {
+    override fun getInProgressTasksByCategoryId(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
                 categoryId = categoryId,
@@ -76,7 +76,7 @@ class CategoryDetailsViewModel(
         }
     }
 
-    private fun getToDoTasksByCategoryId(categoryId: Int) {
+    override fun getToDoTasksByCategoryId(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
                 categoryId = categoryId,
@@ -99,7 +99,7 @@ class CategoryDetailsViewModel(
         }
     }
 
-    private fun getCategoryNameById(categoryId: Int) {
+    override fun getCategoryNameById(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val category = categoryService.getById(categoryId)
@@ -127,5 +127,21 @@ class CategoryDetailsViewModel(
                 }
             }
         }
+    }
+
+    override fun showEditBottomSheet() {
+        _uiState.update { it.copy(isEditBottomSheetVisible = true) }
+    }
+
+    override fun hideEditBottomSheet() {
+        _uiState.update { it.copy(isEditBottomSheetVisible = false) }
+    }
+
+    override fun hideDeleteBottomSheet() {
+        _uiState.update { it.copy(isDeleteBottomSheetVisible = false) }
+    }
+
+    override fun showDeleteBottomSheet() {
+        _uiState.update { it.copy(isDeleteBottomSheetVisible = true) }
     }
 }

@@ -58,7 +58,8 @@ fun CategoryDetailsScreen(
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
         else -> CategoryDetailsContent(
             state = uiState,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            viewModel
         )
     }
 }
@@ -86,10 +87,10 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 @Composable
 fun CategoryDetailsContent(
     state: CategoryDetailsState,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    interactions: CategoryDetailsInteractions
 ) {
-    var showEditScreen by remember { mutableStateOf(false) }
-    
+
     Box {
         Column(
             modifier = Modifier
@@ -100,16 +101,16 @@ fun CategoryDetailsContent(
             TopAPPBar(
                 onBackClick = onBackClick,
                 state = state,
-                onEditClick = { showEditScreen = true }
+                onEditClick = interactions::showEditBottomSheet
             )
 
             TasksPagerSection(state = state)
         }
-        
-        if (showEditScreen) {
+
+        if (state.isEditBottomSheetVisible) {
             EditCategoryScreen(
                 category = state.category,
-                onDismiss = { showEditScreen = false }
+                onDismiss = interactions::hideEditBottomSheet
             )
         }
     }
