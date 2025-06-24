@@ -35,6 +35,7 @@ class TasksScreenViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
+        loadCategories()
         addTestTask()
         getTargetDates(date = _uiState.value.date, arrowAction = ArrowActions.None)
         getDoneTasks()
@@ -46,13 +47,14 @@ class TasksScreenViewModel(
     //region get tasks
     private fun addTestTask() {
         viewModelScope.launch(Dispatchers.IO) {
+            val categoryId = uiState.value.categories.firstOrNull()?.id ?: 1
             taskService.add(
                 Task(
                     title = "33333333333",
                     description = "kimo",
                     taskStatus = TaskStatus.DONE,
                     priority = Priority.MEDIUM,
-                    categoryId = 1,
+                    categoryId = categoryId,
                 )
             )
         }
@@ -215,7 +217,6 @@ class TasksScreenViewModel(
         }
     }
 
-
     fun showDeleteDialog(taskId: Int?) {
         _uiState.update {
             it.copy(selectedTaskId = taskId, isDeleteDialogVisible = true)
@@ -252,6 +253,25 @@ class TasksScreenViewModel(
             } else {
                 withContext(Dispatchers.Main) {
                     dismissDeleteDialog()
+                }
+            }
+        }
+    }
+
+    fun loadCategories() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                categoryService.getAll().collect { categories ->
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            categories = categories,
+                            categoryIcons = categories.map { it.iconRes }
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(errMessage = e.message)
                 }
             }
         }
