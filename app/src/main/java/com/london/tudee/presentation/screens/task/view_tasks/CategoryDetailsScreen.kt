@@ -21,6 +21,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -36,6 +39,7 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.categories.crud.EditCategoryScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -84,19 +88,30 @@ fun CategoryDetailsContent(
     state: CategoryDetailsState,
     onBackClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .background(TudeeTheme.colors.surface)
-            .padding(WindowInsets.statusBars.asPaddingValues())
-    ) {
+    var showEditScreen by remember { mutableStateOf(false) }
+    
+    Box {
+        Column(
+            modifier = Modifier
+                .background(TudeeTheme.colors.surface)
+                .padding(WindowInsets.statusBars.asPaddingValues())
+        ) {
 
-        TopAPPBar(
-            onBackClick = onBackClick,
-            state = state,
-            onEditClick = { }
-        )
+            TopAPPBar(
+                onBackClick = onBackClick,
+                state = state,
+                onEditClick = { showEditScreen = true }
+            )
 
-        TasksPagerSection(state = state)
+            TasksPagerSection(state = state)
+        }
+        
+        if (showEditScreen) {
+            EditCategoryScreen(
+                category = state.category,
+                onDismiss = { showEditScreen = false }
+            )
+        }
     }
 }
 
