@@ -57,7 +57,6 @@ fun TasksScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var showDeleteSheet by remember { mutableStateOf(false) }
-    var selectedTaskId by remember { mutableStateOf<Int?>(null) }
     var showDeleteSnackBar by remember { mutableStateOf(false) }
 
     TasksContent(
@@ -69,7 +68,6 @@ fun TasksScreen(
         toDoTasks = uiState.toDoTasks,
         doneTasks = uiState.doneTasks,
         onDeleteTask = { task ->
-            selectedTaskId = task.id
             viewModel.showDeleteDialog(task.id)
         }
     )
@@ -78,7 +76,6 @@ fun TasksScreen(
         viewModel = viewModel,
         onTaskDeleted = {
             showDeleteSheet = false
-            selectedTaskId = null
             showDeleteSnackBar = true
             viewModel.getDoneTasks()
             viewModel.getToDoTasks()
@@ -88,7 +85,8 @@ fun TasksScreen(
 
     if (showDeleteSnackBar) {
         SnackBar(
-            modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars)
+            modifier = Modifier
+                .windowInsetsPadding(WindowInsets.statusBars)
                 .padding(top = 16.dp),
             message = R.string.delete_task_success,
             iconPainter = painterResource(id = R.drawable.snack_bar_container),
@@ -211,9 +209,7 @@ fun TasksContent(
                 }
             }
         }
-
     }
-
 }
 
 @Composable
