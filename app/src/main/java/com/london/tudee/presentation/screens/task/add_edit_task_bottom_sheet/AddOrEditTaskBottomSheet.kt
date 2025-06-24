@@ -23,7 +23,6 @@ import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 fun AddOrEditTaskBottomSheet(
     modifier: Modifier = Modifier,
     screenContent: @Composable () -> Unit,
-    taskId: Int? = null,
     uiState: AddOrEditTaskUiState,
     interactions: HomeInteractions
 ) {
@@ -51,7 +50,7 @@ fun AddOrEditTaskBottomSheet(
                 bottomSheetContent = {
                     AddOrEditTaskDetails(
                         modifier = modifier,
-                        title = if(taskId != null) R.string.edit_task else R.string.add_new_task,
+                        title = if (uiState.isEditMode) R.string.edit_task else R.string.add_new_task,
                         uiState = uiState,
                         interactions = interactions,
                         categories = uiState.categories
@@ -60,7 +59,9 @@ fun AddOrEditTaskBottomSheet(
                 bottomSheetActions = {
                     TudeePrimaryButton(
                         modifier = Modifier.fillMaxWidth(),
-                        text =  if (taskId != null) stringResource(R.string.edit_task) else stringResource(R.string.add),
+                        text = if (uiState.isEditMode) stringResource(R.string.edit_task) else stringResource(
+                            R.string.add
+                        ),
                         isDisabled = !uiState.isFormValid || uiState.isLoading,
                         isLoading = uiState.isLoading,
                         onClick = {

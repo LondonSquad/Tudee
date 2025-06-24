@@ -1,5 +1,6 @@
 package com.london.tudee.presentation.screens.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.tudee.R
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
@@ -186,31 +188,37 @@ class HomeViewModel(
     }
 
     override fun initializeForEdit(taskId: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _taskUiState.update { it.copy(isLoading = true) }
             try {
                 val task = taskService.getById(taskId)
                 val category = categoryService.getById(task.categoryId)
 
-                _taskUiState.update { currentState ->
-                    currentState.copy(
-                        taskId = task.id,
-                        title = task.title,
-                        description = task.description,
-                        selectedDate = task.timeStamp.toEpochMilliseconds(),
-                        selectedPriority = task.priority,
-                        selectedCategory = category,
-                        isEditMode = true,
-                        isLoading = false,
-                        showBottomSheet = true
-                    )
+                withContext(Dispatchers.Main) {
+                    _taskUiState.update { currentState ->
+                        currentState.copy(
+                            taskId = task.id,
+                            title = task.title,
+                            description = task.description,
+                            selectedDate = task.timeStamp.toEpochMilliseconds(),
+                            selectedPriority = task.priority,
+                            selectedCategory = category,
+                            isEditMode = true,
+                            isLoading = false,
+                            showBottomSheet = true
+                        )
+                    }
+                    validateForm()
                 }
-                validateForm()
-            } catch (_: Exception) {
-                _taskUiState.update {
-                    it.copy(
-                        stateMessage = R.string.some_error_happened, isLoading = false
-                    )
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _taskUiState.update {
+                        it.copy(
+                            stateMessage = R.string.some_error_happened,
+                            isLoading = false,
+                            showBottomSheet = false
+                        )
+                    }
                 }
             }
         }
@@ -286,15 +294,41 @@ class HomeViewModel(
             _taskUiState.update { it.copy(isLoading = true) }
 
             try {
-                val task = Task(
-                    id = currentState.taskId ?: 0,
-                    title = currentState.title.trim(),
-                    description = currentState.description.trim(),
-                    taskStatus = TaskStatus.TODO,
-                    priority = currentState.selectedPriority,
-                    categoryId = currentState.selectedCategory?.id ?: 1,
-                    timeStamp = currentState.selectedDate?.let { Instant.fromEpochMilliseconds(it) }
-                        ?: Clock.System.now())
+                val task = if (currentState.isEditMode) {
+                    // For editing, preserve the original task status and other fields
+                    val originalTask = uiState.value.taskDetailBottomSheetUiState.task
+                    Task(
+                        id = currentState.taskId ?: 0,
+                        title = currentState.title.trim(),
+                        description = currentState.description.trim(),
+                        taskStatus = originalTask.taskStatus, // Preserve original status
+                        priority = currentState.selectedPriority,
+                        categoryId = currentState.selectedCategory?.id ?: 1,
+                        timeStamp = currentState.selectedDate?.let {
+                            Instant.fromEpochMilliseconds(
+                                it
+                            )
+                        }
+                            ?: Clock.System.now()
+                    )
+                } else {
+                    // For new tasks, use TODO status
+                    Task(
+                        id = 0,
+                        title = currentState.title.trim(),
+                        description = currentState.description.trim(),
+                        taskStatus = TaskStatus.TODO,
+                        priority = currentState.selectedPriority,
+                        categoryId = currentState.selectedCategory?.id ?: 1,
+                        timeStamp = currentState.selectedDate?.let {
+                            Instant.fromEpochMilliseconds(
+                                it
+                            )
+                        }
+                            ?: Clock.System.now()
+                    )
+                }
+
                 if (currentState.isEditMode) {
                     taskService.edit(task)
                 } else {
@@ -316,13 +350,12 @@ class HomeViewModel(
             } catch (_: Exception) {
                 _taskUiState.update {
                     it.copy(
-                        isLoading = false, stateMessage = R.string.some_error_happened
+                        isLoading = false,
+                        stateMessage = R.string.some_error_happened
                     )
                 }
             }
         }
-
-        clearMessages()
     }
 
     override fun validateForm() {
