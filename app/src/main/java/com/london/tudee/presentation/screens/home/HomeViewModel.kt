@@ -399,6 +399,6 @@ class HomeViewModel(
     }
 
     private fun initializeState() = _uiState.update {
-        it.copy(isDarkMode = appPreferences.isDarkModeEnabled.value)
+        it.copy(isDarkMode = appPreferences.isDarkModeEnabled.value == true)
     }
 }

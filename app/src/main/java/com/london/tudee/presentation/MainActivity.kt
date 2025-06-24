@@ -6,8 +6,11 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
@@ -19,10 +22,12 @@ import com.london.tudee.presentation.components.bottom_navigation_bar.TudeeBotto
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.navigation.Screen
 import com.london.tudee.presentation.navigation.tudeeNavGraph
+import com.london.tudee.presentation.utils.RememberedEffect
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
     private val appPreferencesService: AppPreferencesService by inject()
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +37,14 @@ class MainActivity : ComponentActivity() {
         val isDarkMode by appPreferencesService.isDarkModeEnabled
 
         setContent {
-            TudeeTheme(isDarkMode = isDarkMode) {
+            val isSystemDarkMode = isSystemInDarkTheme()
+
+            RememberedEffect(Unit) {
+                if (isDarkMode == null)
+                    appPreferencesService.setDarkModeEnabled(isSystemDarkMode)
+            }
+
+            TudeeTheme(isDarkMode = isDarkMode ?: isSystemDarkMode) {
                 val navController = rememberNavController()
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = currentBackStackEntry?.destination?.route

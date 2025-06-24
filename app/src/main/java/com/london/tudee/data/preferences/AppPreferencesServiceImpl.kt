@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.edit
+import com.london.tudee.data.preferences.AppPreferencesServiceImpl.PreferencesKeys.DARK_MODE_ENABLED
 import com.london.tudee.domain.services.AppPreferencesService
 
 class AppPreferencesServiceImpl(
@@ -15,12 +16,19 @@ class AppPreferencesServiceImpl(
     override val hasOnboardingBeenShown: Boolean =
         preferences.getBoolean(PreferencesKeys.HAS_ONBOARDING_BEEN_SHOWN, false)
 
-    override val isDarkModeEnabled: MutableState<Boolean> = mutableStateOf(
-        preferences.getBoolean(
-            PreferencesKeys.DARK_MODE_ENABLED,
-            false
-        )
+    override val isDarkModeEnabled: MutableState<Boolean?> = mutableStateOf(
+        getDefaultIsDarkModeValue()
     )
+
+    private fun getDefaultIsDarkModeValue(): Boolean? {
+        return if (preferences.contains(DARK_MODE_ENABLED))
+            preferences.getBoolean(
+                /* key = */ PreferencesKeys.DARK_MODE_ENABLED,
+                /* defValue = */ false
+            )
+        else
+            null
+    }
 
     override fun setOnboardingShown() {
         preferences.edit { putBoolean(PreferencesKeys.HAS_ONBOARDING_BEEN_SHOWN, true) }
