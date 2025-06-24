@@ -66,7 +66,6 @@ fun CategoriesScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .background(TudeeTheme.colors.surface)
-            .padding(bottom = 84.dp)
     ) {
         Column {
             Box(
