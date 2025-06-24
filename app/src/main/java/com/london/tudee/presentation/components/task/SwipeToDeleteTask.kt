@@ -1,5 +1,10 @@
 package com.london.tudee.presentation.components.task
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,41 +39,56 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import kotlinx.datetime.Clock
 import kotlin.math.roundToInt
 
+
 @Composable
 fun SwipeToDeleteTask(
     modifier: Modifier = Modifier,
     task: Task,
     onDeleteClick: () -> Unit
 ) {
-    var offsetX by remember { mutableFloatStateOf(0f) }
+    var rawOffsetX by remember { mutableFloatStateOf(0f) }
     val swipeThreshold = 200f
+
+    val animatedOffsetX by animateFloatAsState(
+        targetValue = rawOffsetX,
+        animationSpec = tween(durationMillis = 300),
+        label = "SwipeAnimation"
+    )
 
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(111.dp)
     ) {
-        if (offsetX < 0) {
-            DeleteBackground(onDeleteClick = onDeleteClick)
+        AnimatedVisibility(
+            visible = animatedOffsetX < 0f,
+            enter = fadeIn(animationSpec = tween(300)),
+            exit = fadeOut(animationSpec = tween(300))
+        ) {
+            DeleteBackground(onDeleteClick = {
+                rawOffsetX = 0f
+                onDeleteClick()
+            })
         }
 
         TaskItem(
             task = task,
             modifier = Modifier
-                .offset { IntOffset(offsetX.roundToInt(), 0) }
+                .offset { IntOffset(animatedOffsetX.roundToInt(), 0) }
                 .pointerInput(Unit) {
                     detectHorizontalDragGestures(
                         onDragEnd = {
-                            offsetX = if (offsetX <= -swipeThreshold) -swipeThreshold else 0f
+                            rawOffsetX = if (rawOffsetX <= -swipeThreshold) -swipeThreshold else 0f
                         }
                     ) { _, dragAmount ->
-                        offsetX = (offsetX + dragAmount).coerceIn(-swipeThreshold, 0f)
+                        rawOffsetX = (rawOffsetX + dragAmount).coerceIn(-swipeThreshold, 0f)
                     }
                 },
             hasDate = true
         )
     }
 }
+
 
 @Composable
 private fun DeleteBackground(onDeleteClick: () -> Unit) {
