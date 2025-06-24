@@ -9,7 +9,6 @@ import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
 import com.london.tudee.presentation.screens.tasks.TasksScreenUtils.getDayRangeMillis
 import com.london.tudee.presentation.screens.tasks.TasksScreenUtils.lengthOfMonth
-import com.london.tudee.presentation.utils.DateFormatter.toYear
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -59,7 +58,7 @@ class TasksScreenViewModel(
         }
     }
 
-    private fun getDoneTasks() {
+    fun getDoneTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             val targetDate = Instant.fromEpochMilliseconds(_uiState.value.date)
                 .toLocalDateTime(TimeZone.currentSystemDefault()).date
@@ -85,7 +84,7 @@ class TasksScreenViewModel(
         }
     }
 
-    private fun getInProgressTasks() {
+    fun getInProgressTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             val targetDate = Instant.fromEpochMilliseconds(_uiState.value.date)
                 .toLocalDateTime(TimeZone.currentSystemDefault()).date
@@ -112,7 +111,7 @@ class TasksScreenViewModel(
         }
     }
 
-    private fun getToDoTasks() {
+    fun getToDoTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             val targetDate = Instant.fromEpochMilliseconds(_uiState.value.date)
                 .toLocalDateTime(TimeZone.currentSystemDefault()).date
@@ -166,7 +165,8 @@ class TasksScreenViewModel(
             }
             currentState.copy(
                 days = daysOfMonth,
-                date = targetDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+                date = targetDate.atStartOfDayIn(TimeZone.currentSystemDefault())
+                    .toEpochMilliseconds()
             )
         }
     }
@@ -202,16 +202,21 @@ class TasksScreenViewModel(
             val dayLocalDate = LocalDate(targetLocalDate.year, targetLocalDate.month, dayOfMonth)
             day.copy(
                 isSelected = (dayLocalDate == targetLocalDate),
-                date = dayLocalDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+                date = dayLocalDate.atStartOfDayIn(TimeZone.currentSystemDefault())
+                    .toEpochMilliseconds()
             )
         }
         _uiState.update {
-            it.copy(days = updatedDays, date = datePickerDate, dayItemIndex = targetLocalDate.dayOfMonth -1)
+            it.copy(
+                days = updatedDays,
+                date = datePickerDate,
+                dayItemIndex = targetLocalDate.dayOfMonth - 1
+            )
         }
     }
 
 
-    fun showDeleteDialog(taskId: Int) {
+    fun showDeleteDialog(taskId: Int?) {
         _uiState.update {
             it.copy(selectedTaskId = taskId, isDeleteDialogVisible = true)
         }
@@ -250,5 +255,5 @@ class TasksScreenViewModel(
                 }
             }
         }
-    }}
+    }
 }

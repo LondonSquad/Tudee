@@ -39,6 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Task
+import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.components.date.DateItem
 import com.london.tudee.presentation.components.date.TudeeDatePicker
@@ -47,13 +48,12 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.SwipeToDeleteTask
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.task.confirm_delete_task.ConfirmDeleteTaskScreen
 import com.london.tudee.presentation.utils.DateFormatter.toMonthShort
 import com.london.tudee.presentation.utils.DateFormatter.toYear
-import kotlinx.coroutines.launch
-import com.london.tudee.presentation.screens.task.confirm_delete_task.ConfirmDeleteTaskScreen
-import com.london.tudee.presentation.components.SnackBar
-import org.koin.androidx.compose.koinViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TasksScreen(
@@ -78,7 +78,7 @@ fun TasksScreen(
         onClickRight = { viewModel.getTargetDates(uiState.date, ArrowActions.Next) },
         onDateSelected = { viewModel.onDateSelected(it) },
         onDayClick = { viewModel.onDayCardSelected(it) },
-        onDeleteTask = { viewModel.showDeleteDialog(task.id) }
+        onDeleteTask = { viewModel.showDeleteDialog(uiState.selectedTaskId) }
     )
     ConfirmDeleteTaskScreen(
         viewModel = viewModel,
