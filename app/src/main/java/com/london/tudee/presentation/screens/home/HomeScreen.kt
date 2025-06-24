@@ -193,7 +193,9 @@ fun HomeScreenContent(
             onDismiss = interactions::hideTaskDetailsBottomSheet,
             onMoveClick = interactions::onClickMove,
             onEditClick = {
-                //show edit task bottom sheet
+                interactions.hideTaskDetailsBottomSheet()
+                val taskId = state.taskDetailBottomSheetUiState.task.id
+                interactions.initializeForEdit(taskId)
             })
 
         AddOrEditTaskBottomSheet(
