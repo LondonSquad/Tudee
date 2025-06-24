@@ -29,6 +29,7 @@ import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.presentation.components.date.DateBadge
+import com.london.tudee.presentation.components.date.DateBadgeStyleValues
 import com.london.tudee.presentation.components.priority.PriorityBadge
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
@@ -104,21 +105,25 @@ private fun TaskItemTopBar(
     ) {
         if (!date.isNullOrEmpty()) {
             DateBadge(
-                modifier = Modifier.height(28.dp),
-                shape = TudeeTheme.shapes.circle,
-                colors = CardDefaults.cardColors(containerColor = TudeeTheme.colors.surface),
+                modifier = Modifier
+                    .height(28.dp)
+                    .align(Alignment.CenterVertically),
                 dateText = "12-03-2025",
-                iconSize = 12.dp,
-                textSize = 13.sp,
-                textStyle = TudeeTheme.typography.labelSmall,
-                lineHeight = 16.sp,
-                iconColor = TudeeTheme.colors.body,
-                textColor = TudeeTheme.colors.body,
-                contentPadding = PaddingValues(vertical = 6.dp, horizontal = 8.dp),
-                isVisible = hasDate
+                isVisible = hasDate,
+                dateBadgeStyle = DateBadgeStyleValues(
+                    shape = TudeeTheme.shapes.circle,
+                    colors = CardDefaults.cardColors(containerColor = TudeeTheme.colors.surface),
+                    iconSize = 12.dp,
+                    iconColor = TudeeTheme.colors.body,
+                    textStyle = TudeeTheme.typography.labelSmall.copy(
+                        fontSize = 13.sp,
+                        lineHeight = 16.sp,
+                        color = TudeeTheme.colors.body
+                    ),
+                    contentPadding = PaddingValues(horizontal = 8.dp)
+                )
             )
         }
-
         PriorityBadge(priority = priority, isSelected = isSelected)
     }
 }
@@ -187,7 +192,7 @@ fun PreviewTaskItemMedium() {
                 categoryId = R.drawable.ic_education,
                 title = "Organize Study Desk",
                 description = "Review cell structure and functions for tomorrow...",
-                timeStamp =  Instant.parse("2023-09-20T00:00:00Z"),
+                timeStamp = Instant.parse("2023-09-20T00:00:00Z"),
                 taskStatus = TaskStatus.TODO
             ),
             hasDate = true
