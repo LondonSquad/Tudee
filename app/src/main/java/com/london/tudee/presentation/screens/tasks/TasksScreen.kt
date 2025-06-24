@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,8 +47,10 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.SwipeToDeleteTask
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.utils.DateFormatter.toDayNumber
 import com.london.tudee.presentation.utils.DateFormatter.toMonthShort
 import com.london.tudee.presentation.utils.DateFormatter.toYear
+import com.london.tudee.presentation.utils.formatDate
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -70,7 +73,7 @@ fun TasksScreen(
         onClickLeft = { viewModel.getTargetDates(uiState.date, ArrowActions.Previous) },
         onClickRight = { viewModel.getTargetDates(uiState.date, ArrowActions.Next) },
         onDateChange = { viewModel.onDateChange(it) },
-        onDayClick = { viewModel::selectDayCard }
+        onDayClick = { viewModel.selectDayCard(it)}
     )
 }
 
@@ -88,7 +91,7 @@ fun TasksContent(
     onClickLeft: () -> Unit,
     onClickRight: () -> Unit,
     onDateChange: (Long?) -> Unit,
-    onDayClick: () -> Unit
+    onDayClick: (index: Int) -> Unit
 ) {
 
     var showDatePicker by remember { mutableStateOf(false) }
@@ -136,8 +139,7 @@ fun TasksContent(
                     days = days,
                     onClickLeft = onClickLeft,
                     onClickRight = onClickRight,
-                    onClickDay = onDayClick
-
+                    onClickDay = onDayClick,
                 )
                 Log.e("TAG", "After: ${date.toMonthShort()}")
                 TudeeTabLayoutWithPager(
@@ -235,7 +237,7 @@ fun DateSection(
     days: List<DaysOfMonth>,
     onClickLeft: () -> Unit,
     onClickRight: () -> Unit,
-    onClickDay: () -> Unit
+    onClickDay: (index: Int) -> Unit
 ) {
     DateSelector(
         modifier,
@@ -330,7 +332,7 @@ fun DateSelector(
 fun DaySelector(
     modifier: Modifier = Modifier,
     days: List<DaysOfMonth>,
-    onClickDay: () -> Unit
+    onClickDay: (index: Int) -> Unit
 ) {
     LazyRow(
         modifier = modifier
@@ -346,7 +348,11 @@ fun DaySelector(
                 dayOfMonth = days[index].dayOfMonth,
                 dayOfWeek = days[index].dayOfWeek,
                 isSelected = days[index].isSelected,
-                onClick = onClickDay
+                onClick = {
+                    onClickDay(index)
+                    Log.d("test", "DaySelector: ${(formatDate(days[index].date))}")
+
+                }
             )
         }
     }

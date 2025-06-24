@@ -18,15 +18,18 @@ data class FilterTasksUiState(
     val doneTasks: List<Task> = listOf(),
     val inProgressTasks: List<Task> = listOf(),
     val toDoTasks: List<Task> = listOf(),
+    val dayItemIndex: Int = 0
 )
 
 data class DaysOfMonth(
     val dayOfMonth: String,
     val dayOfWeek: String,
-    var isSelected: Boolean = false
+    var isSelected: Boolean = false,
+    var date: Long = 0L
 )
 
 enum class ArrowActions {
     Next,
-    Previous
+    Previous,
+    None
 }
