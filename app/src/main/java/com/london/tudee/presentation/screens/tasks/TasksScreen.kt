@@ -38,6 +38,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
+import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
@@ -74,6 +75,7 @@ fun TasksScreen(
         toDoTasks = uiState.toDoTasks,
         doneTasks = uiState.doneTasks,
         days = uiState.days,
+        categories = uiState.categories,
         onClickLeft = { viewModel.getTargetDates(uiState.date, ArrowActions.Previous) },
         onClickRight = { viewModel.getTargetDates(uiState.date, ArrowActions.Next) },
         onDateSelected = { viewModel.onDateSelected(it) },
@@ -118,6 +120,7 @@ fun TasksContent(
     toDoTasks: List<Task>,
     doneTasks: List<Task>,
     days: List<DaysOfMonth>,
+    categories: List<Category>,
     onClickLeft: () -> Unit,
     onClickRight: () -> Unit,
     onDateSelected: (Long) -> Unit,
@@ -191,10 +194,13 @@ fun TasksContent(
                                     .padding(horizontal = 16.dp, vertical = 8.dp)
                             ) {
                                 items(tasks.size) { index ->
+                                    val task = tasks[index]
+                                    val iconResId = categories.find { it.id == task.categoryId }?.iconRes ?: ""
                                     SwipeToDeleteTask(
                                         modifier = Modifier,
-                                        task = tasks[index],
-                                        onDeleteClick = { onDeleteTask(tasks[index]) }
+                                        task = task,
+                                        iconResId = iconResId,
+                                        onDeleteClick = { onDeleteTask(task) }
                                     )
                                     Spacer(modifier = Modifier.height(8.dp))
                                 }
