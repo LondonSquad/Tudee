@@ -10,10 +10,12 @@ import com.london.tudee.presentation.screens.categories.EditCategoryScreenViewMo
 import com.london.tudee.presentation.screens.categories.crud.CreateCategoryScreenViewModel
 import com.london.tudee.presentation.screens.categories.crud.DeleteCategoryScreenViewModel
 import com.london.tudee.presentation.screens.onboarding.OnBoardingViewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val viewModelModule = module {
+    viewModel { OnBoardingViewModel(get()) }
     viewModelOf(::TasksScreenViewModel)
     viewModelOf(::ConfirmDeleteTaskViewModel)
     viewModelOf(::HomeViewModel)
@@ -23,5 +25,5 @@ val viewModelModule = module {
     viewModelOf(::EditCategoryScreenViewModel)
     viewModelOf(::CreateCategoryScreenViewModel)
     viewModelOf(::DeleteCategoryScreenViewModel)
-    viewModelOf(::OnBoardingViewModel)
+
 }

@@ -59,6 +59,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.core)
+
     //Navigation compose
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.room.runtime)

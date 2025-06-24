@@ -68,7 +68,10 @@ fun OnBoardingHorizontalPager(
                         modifier = Modifier.fillMaxHeight(0.9f),
                         onClickForward = {
                             viewModel.navigateNext(pagerState, coroutineScope)
-                            if (pageIndex == OnBoardingContent.size - 1) onCompleted()
+                            if (pageIndex == OnBoardingContent.size - 1) {
+                                viewModel.onboardingFinished()
+                                onCompleted()
+                            }
                         })
                 }
             }

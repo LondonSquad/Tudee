@@ -17,6 +17,7 @@ import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.height
@@ -45,9 +46,10 @@ import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import dev.burnoo.compose.rememberpreference.rememberBooleanPreference
 
 @Composable
-fun SwitchButton(
+fun ThemeSwitcher(
     isDarkMode: Boolean,
     onToggle: (Boolean) -> Unit
 ) {
@@ -79,7 +81,7 @@ fun SwitchButton(
                 enabled = true,
                 role = Role.Switch,
                 indication = LocalIndication.current,
-                onValueChange = { onToggle(it) }
+                onValueChange = onToggle
             )
     ) {
         DownGrayCloud(isDarkMode)
@@ -442,8 +444,8 @@ private fun BoxScope.SmallInMoon(isDarkMood: Boolean) {
 private fun PreviewSwitchButton() {
     var isDarkMood by remember { mutableStateOf(false) }
     TudeeTheme {
-        SwitchButton(
-            isDarkMode = isDarkMood,
+        ThemeSwitcher(
+            isDarkMode = false,
             onToggle = { isDarkMood = !isDarkMood }
         )
     }
