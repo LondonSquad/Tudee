@@ -3,11 +3,13 @@ package com.london.tudee.presentation.screens.task.confirm_delete_task
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.tudee.domain.services.TaskService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class ConfirmDeleteTaskViewModel(
@@ -33,12 +35,17 @@ class ConfirmDeleteTaskViewModel(
             val taskId = _uiState.value.taskId
             if (taskId != null) {
                 try {
-                    val task = taskService.getById(taskId)
-                    taskService.delete(task)
+                    withContext(Dispatchers.IO) {
+                        val task = taskService.getById(taskId)
+                        taskService.delete(task)
+                    }
                     onSuccess()
+                    dismissDialog()
                 } catch (e: Exception) {
                     onError(e)
                 }
+            } else {
+                dismissDialog()
             }
         }
     }
