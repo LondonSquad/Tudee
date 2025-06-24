@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.map
 val Context.appPreferencesDataStore: DataStore<Preferences> by preferencesDataStore(name = "app_preferences")
 
 class AppPreferencesServiceImpl(
-    private val dataStore: DataStore<Preferences> // Koin will provide this
+    private val dataStore: DataStore<Preferences>
 ) : AppPreferencesService {
 
     private object PreferencesKeys {
