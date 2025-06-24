@@ -2,6 +2,7 @@ package com.london.tudee.presentation.base
 
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
+import com.london.tudee.domain.entities.Task
 
 interface BaseCreateTaskInteractions {
     fun loadCategories()
@@ -17,5 +18,9 @@ interface BaseCreateTaskInteractions {
     fun saveTask()
     fun validateForm()
     fun clearMessages()
+    fun loadTask(task: Task)
+    fun onClickMove()
+    fun showTaskDetailsBottomSheet()
+    fun hideTaskDetailsBottomSheet()
     fun initializeForEdit(taskId: Int)
 }

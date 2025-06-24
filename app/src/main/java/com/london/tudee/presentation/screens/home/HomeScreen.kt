@@ -59,6 +59,7 @@ import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskBottomSheet
 import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskUiState
+import com.london.tudee.presentation.screens.task.taskdetails.TaskDetailsBottomSheet
 import com.london.tudee.presentation.screens.tasks.EmptyTasksScreen
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
@@ -86,8 +87,7 @@ fun HomeScreen(
 fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(modifier) {
         Text(
-            text = "Loading...",
-            modifier = Modifier.align(Alignment.Center)
+            text = stringResource(R.string.loading), modifier = Modifier.align(Alignment.Center)
         )
     }
 }
@@ -96,7 +96,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 fun ErrorScreen(modifier: Modifier = Modifier) {
     Box(modifier) {
         Text(
-            text = "There was an unexpected error",
+            text = stringResource(R.string.there_was_an_unexpected_error),
             modifier = Modifier.align(Alignment.Center)
         )
     }
@@ -118,7 +118,7 @@ fun HomeScreenContent(
             painter = painterResource(R.drawable.note_add),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .zIndex(if (taskUiState.showBottomSheet) 0f else 1f)
+                .zIndex(if (taskUiState.showBottomSheet || state.isTaskDetailsBottomSheetVisible) 0f else 1f)
                 .padding(bottom = 84.dp, end = 12.dp),
             contentDescription = "note icon",
             onClick = {
@@ -157,7 +157,9 @@ fun HomeScreenContent(
                     InProgressSection(
                         inProgressTasks = state.inProgressTasks,
                         onInProgressTasksArrowClicked = onArrowClicked,
-                        categoryIcons = taskUiState.categoryIcons
+                        categoryIcons = taskUiState.categoryIcons,
+                        onTaskClicked = interactions::showTaskDetailsBottomSheet,
+                        loadTask = interactions::loadTask
                     )
 
                     Spacer(Modifier.height(24.dp))
@@ -165,7 +167,9 @@ fun HomeScreenContent(
                     ToDoSection(
                         toDoTasks = state.toDoTasks,
                         onTodoTasksArrowClicked = onArrowClicked,
-                        categoryIcons = taskUiState.categoryIcons
+                        categoryIcons = taskUiState.categoryIcons,
+                        onTaskClicked = interactions::showTaskDetailsBottomSheet,
+                        loadTask = interactions::loadTask
                     )
 
                     Spacer(Modifier.height(24.dp))
@@ -173,11 +177,22 @@ fun HomeScreenContent(
                     DoneSection(
                         doneTasks = state.doneTasks,
                         onDoneTasksArrowClicked = onArrowClicked,
-                        categoryIcons = taskUiState.categoryIcons
+                        categoryIcons = taskUiState.categoryIcons,
+                        onTaskClicked = interactions::showTaskDetailsBottomSheet,
+                        loadTask = interactions::loadTask
                     )
                 }
             }
         }
+
+        TaskDetailsBottomSheet(
+            state.taskDetailBottomSheetUiState,
+            showBottomSheet = state.isTaskDetailsBottomSheetVisible,
+            onDismiss = interactions::hideTaskDetailsBottomSheet,
+            onMoveClick = interactions::onClickMove,
+            onEditClick = {
+                //show edit task bottom sheet
+            })
 
         AddOrEditTaskBottomSheet(
             modifier = Modifier.zIndex(1f),
@@ -187,17 +202,14 @@ fun HomeScreenContent(
         )
 
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.TopCenter
+            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter
         ) {
             when (taskUiState.stateMessage) {
                 R.string.add_task_successfully, R.string.edit_task_successfully -> {
                     SnackBar(
                         modifier = Modifier.offset(y = 56.dp),
-                        message = if (taskUiState.isEditMode)
-                            R.string.edit_task_successfully
-                        else
-                            R.string.add_task_successfully,
+                        message = if (taskUiState.isEditMode) R.string.edit_task_successfully
+                        else R.string.add_task_successfully,
                         iconPainter = painterResource(id = R.drawable.snack_bar_container),
                         iconTint = TudeeTheme.colors.greenAccent
                     )
@@ -230,8 +242,7 @@ private fun TopAPPBar() {
             .fillMaxWidth(),
     ) {
         Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically
         ) {
             val systemDarkTheme = isSystemInDarkTheme()
             var isDark by remember { mutableStateOf(systemDarkTheme) }
@@ -294,14 +305,12 @@ private fun OverLayerBox(
             )
 
             TaskStatusSlider(
-                note = null,
-                taskStatusUiState = getTaskStatus(
+                note = null, taskStatusUiState = getTaskStatus(
                     allTasks = numberOfAllTasks,
                     doneTasks = numberOfDoneTasks,
                     inProgressTasks = numberOfInProgressTasks,
                     toDoTasks = numberOfToDoTasks
-                ),
-                modifier = Modifier.padding(start = 6.dp)
+                ), modifier = Modifier.padding(start = 6.dp)
             )
 
             Text(
@@ -352,8 +361,15 @@ private fun OverLayerBox(
 private fun ToDoSection(
     toDoTasks: List<Task>,
     onTodoTasksArrowClicked: (Int) -> Unit,
-    categoryIcons: List<String>
+    categoryIcons: List<String>,
+    onTaskClicked: () -> Unit,
+    loadTask: (Task) -> Unit
 ) {
+
+    if (toDoTasks.isNotEmpty() && categoryIcons.isEmpty()) {
+        return
+    }
+
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -378,9 +394,7 @@ private fun ToDoSection(
                 .clickable {
                     onTodoTasksArrowClicked(TaskStatus.TODO.index)
                 }
-                .padding(vertical = 6.dp, horizontal = 8.dp),
-            contentAlignment = Alignment.Center
-        ) {
+                .padding(vertical = 6.dp, horizontal = 8.dp), contentAlignment = Alignment.Center) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(2.dp),
@@ -420,7 +434,11 @@ private fun ToDoSection(
             TaskItem(
                 modifier = Modifier
                     .width(320.dp)
-                    .height(111.dp),
+                    .height(111.dp)
+                    .clickable {
+                        loadTask(toDoTasks[it])
+                        onTaskClicked()
+                    },
                 isSelected = true,
                 task = toDoTasks[it],
                 hasDate = false,
@@ -434,8 +452,15 @@ private fun ToDoSection(
 private fun InProgressSection(
     inProgressTasks: List<Task>,
     onInProgressTasksArrowClicked: (Int) -> Unit,
-    categoryIcons: List<String>
+    categoryIcons: List<String>,
+    onTaskClicked: () -> Unit,
+    loadTask: (Task) -> Unit
 ) {
+
+    if (inProgressTasks.isNotEmpty() && categoryIcons.isEmpty()) {
+        return
+    }
+
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -460,9 +485,7 @@ private fun InProgressSection(
                 .clickable {
                     onInProgressTasksArrowClicked(TaskStatus.IN_PROGRESS.index)
                 }
-                .padding(vertical = 6.dp, horizontal = 8.dp),
-            contentAlignment = Alignment.Center
-        ) {
+                .padding(vertical = 6.dp, horizontal = 8.dp), contentAlignment = Alignment.Center) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(2.dp),
@@ -502,11 +525,15 @@ private fun InProgressSection(
             TaskItem(
                 modifier = Modifier
                     .width(320.dp)
-                    .height(111.dp),
+                    .height(111.dp)
+                    .clickable {
+                        loadTask(inProgressTasks[it])
+                        onTaskClicked()
+                    },
                 isSelected = true,
                 task = inProgressTasks[it],
                 hasDate = false,
-                iconResId = categoryIcons[inProgressTasks[it].categoryId-1]
+                iconResId = categoryIcons[inProgressTasks[it].categoryId - 1]
             )
         }
     }
@@ -516,8 +543,15 @@ private fun InProgressSection(
 private fun DoneSection(
     doneTasks: List<Task>,
     onDoneTasksArrowClicked: (Int) -> Unit,
-    categoryIcons: List<String>
+    categoryIcons: List<String>,
+    onTaskClicked: () -> Unit,
+    loadTask: (Task) -> Unit
 ) {
+
+    if (doneTasks.isNotEmpty() && categoryIcons.isEmpty()) {
+        return
+    }
+
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -542,9 +576,7 @@ private fun DoneSection(
                 .clickable {
                     onDoneTasksArrowClicked(TaskStatus.DONE.index)
                 }
-                .padding(vertical = 6.dp, horizontal = 8.dp),
-            contentAlignment = Alignment.Center
-        ) {
+                .padding(vertical = 6.dp, horizontal = 8.dp), contentAlignment = Alignment.Center) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(2.dp),
@@ -583,11 +615,15 @@ private fun DoneSection(
             TaskItem(
                 modifier = Modifier
                     .width(320.dp)
-                    .height(111.dp),
+                    .height(111.dp)
+                    .clickable {
+                        loadTask(doneTasks[it])
+                        onTaskClicked()
+                    },
                 isSelected = true,
                 task = doneTasks[it],
                 hasDate = false,
-                iconResId = categoryIcons[doneTasks[it].categoryId-1]
+                iconResId = categoryIcons[doneTasks[it].categoryId - 1]
             )
         }
     }
@@ -598,7 +634,6 @@ private fun DoneSection(
 fun PreviewHomeScreen() {
     TudeeTheme {
         HomeScreen(
-            onArrowClicked = {}
-        )
+            onArrowClicked = {})
     }
 }
