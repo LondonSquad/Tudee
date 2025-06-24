@@ -83,7 +83,6 @@ fun CategoriesScreenContent(
                 )
             }
 
-            // Show error message if there's an error
             uiState.errorMessage?.let { error ->
                 Text(
                     text = "Error: $error",
@@ -117,7 +116,8 @@ fun CategoriesScreenContent(
                             CategoryItem(
                                 iconRes = category.iconRes,
                                 title = category.title,
-                                count = category.taskCount,
+                                taskCount = category.taskCount,
+                                categoryId = category.id,
                                 onClick = { onCategoryClick(category.id) })
                         }
                     }

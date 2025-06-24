@@ -26,8 +26,8 @@ class CategoryDetailsViewModel(
         getDoneTasksByCategoryId(categoryId)
         getToDoTasksByCategoryId(categoryId)
         getInProgressTasksByCategoryId(categoryId)
-        Log.d("ID", "ID $categoryId")
         getCategoryNameById(categoryId)
+
     }
 
     override fun getDoneTasksByCategoryId(categoryId: Int) {

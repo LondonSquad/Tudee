@@ -80,7 +80,7 @@ private fun uriToBase64(context: Context, uri: Uri): String? {
             @Suppress("DEPRECATION")
             MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
         }
-        
+
         val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
         val byteArray = byteArrayOutputStream.toByteArray()
@@ -147,17 +147,14 @@ private fun CreateCategoryContent(
                     category = Category(
                         id = 1,
                         title = categoryName,
-//                        arName = categoryName,
                         iconRes = base64Image,
                         isDefault = false,
-                      //  tint = primaryColor.value,
                         taskCount = 0
                     )
 
                 )
-                if (viewModel.uiState.value.isDeleted) {
-                    onDismiss()
-                }
+
+                onDismiss()
 
             },
             isDisabled = categoryName.isBlank() || imageUri == null,

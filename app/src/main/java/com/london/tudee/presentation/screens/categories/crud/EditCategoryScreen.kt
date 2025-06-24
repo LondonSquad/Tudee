@@ -42,7 +42,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import java.io.ByteArrayOutputStream
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.presentation.components.TudeeTextField
@@ -53,7 +52,7 @@ import com.london.tudee.presentation.design_system.color.RectBorderColor
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import org.koin.androidx.compose.koinViewModel
-import androidx.core.net.toUri
+import java.io.ByteArrayOutputStream
 
 // Helper function to convert URI to Base64
 private fun uriToBase64(context: Context, uri: Uri): String? {
@@ -69,6 +68,18 @@ private fun uriToBase64(context: Context, uri: Uri): String? {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
         val byteArray = byteArrayOutputStream.toByteArray()
         Base64.encodeToString(byteArray, Base64.DEFAULT)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
+
+// Helper function to convert Base64 string to Bitmap
+private fun base64ToBitmap(base64String: String): Bitmap? {
+    return try {
+        if (base64String.isBlank()) return null
+        val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+        android.graphics.BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
     } catch (e: Exception) {
         e.printStackTrace()
         null
@@ -174,7 +185,7 @@ private fun CategoryEditContent(
                         //arName = categoryName,
                         iconRes = base64Image,
                         isDefault = category.isDefault,
-                      //  tint = category.tint,
+                        //  tint = category.tint,
                         taskCount = category.taskCount
                     )
                 )
@@ -232,22 +243,40 @@ private fun ImagePickerEditCategory(
                 .size(112.dp),
             contentAlignment = Alignment.Center
         ) {
-            val displayImageUri = imageUri ?: currentImageUri?.toUri()
-            if (displayImageUri != null) {
-                Image(
-                    painter = rememberAsyncImagePainter(displayImageUri),
-                    contentDescription = "Selected Image",
-                    modifier = Modifier
-                        .matchParentSize()
-                        .clip(TudeeTheme.shapes.extraSmall),
-                    contentScale = ContentScale.Crop
-                )
-            }
+            // Display new selected image or existing Base64 image
+            when {
+                imageUri != null -> {
+                    // Show newly selected image
+                    Image(
+                        painter = rememberAsyncImagePainter(imageUri),
+                        contentDescription = "Selected Image",
+                        modifier = Modifier
+                            .matchParentSize()
+                            .clip(TudeeTheme.shapes.extraSmall),
+                        contentScale = ContentScale.Crop
+                    )
+                }
 
+                !currentImageUri.isNullOrBlank() -> {
+                    // Show existing Base64 image
+                    val bitmap = base64ToBitmap(currentImageUri)
+                    if (bitmap != null) {
+                        Image(
+                            painter = rememberAsyncImagePainter(bitmap),
+                            contentDescription = "Current Image",
+                            modifier = Modifier
+                                .matchParentSize()
+                                .clip(TudeeTheme.shapes.extraSmall),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                }
+            }
         }
 
-        val displayImageUri = imageUri ?: currentImageUri?.toUri()
-        if (displayImageUri != null) {
+        // Show edit button if image exists, otherwise show upload area
+        val hasImage = imageUri != null || !currentImageUri.isNullOrBlank()
+        if (hasImage) {
             Box(
                 modifier = Modifier
                     .size(34.dp)
@@ -260,7 +289,7 @@ private fun ImagePickerEditCategory(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.pencil_edit_01),
-                    contentDescription = "Pick Image",
+                    contentDescription = "Edit Image",
                     tint = TudeeTheme.colors.secondary,
                     modifier = Modifier.padding(6.dp)
                 )
@@ -277,7 +306,7 @@ private fun ImagePickerEditCategory(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_add_image),
-                    contentDescription = "Pick Image",
+                    contentDescription = "Add Image",
                     tint = TudeeTheme.colors.hint,
                 )
                 Text(
@@ -301,11 +330,11 @@ private fun EditCategoryScreenPreview() {
             category = Category(
                 id = 1,
                 title = "Work",
-              //  arName = "العمل",
+                //  arName = "العمل",
                 iconRes = "",
                 isDefault = true,
                 taskCount = 0,
-             //   tint = TudeeTheme.colors.primary.value
+                //   tint = TudeeTheme.colors.primary.value
             ),
             onDismiss = {}
         )
