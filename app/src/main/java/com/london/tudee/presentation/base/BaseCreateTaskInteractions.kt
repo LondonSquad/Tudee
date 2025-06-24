@@ -22,4 +22,5 @@ interface BaseCreateTaskInteractions {
     fun onClickMove()
     fun showTaskDetailsBottomSheet()
     fun hideTaskDetailsBottomSheet()
+    fun initializeForEdit(taskId: Int)
 }
