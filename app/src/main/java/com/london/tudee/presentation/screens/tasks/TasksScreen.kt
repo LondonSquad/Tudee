@@ -19,8 +19,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -54,7 +56,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun TasksScreen(
     initialTabIndex: Int = 0,
-    viewModel: TasksScreenViewModel = koinViewModel<TasksScreenViewModel>()
+    viewModel: TasksScreenViewModel = koinViewModel<TasksScreenViewModel>(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -89,32 +91,41 @@ fun TasksContent(
     onClickLeft: () -> Unit,
     onClickRight: () -> Unit,
     onDateSelected: (Long) -> Unit,
-    onDayClick: (index: Int) -> Unit
+    onDayClick: (index: Int) -> Unit,
 ) {
 
     var showDatePicker by remember { mutableStateOf(false) }
     var showBottomSheet by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(TudeeTheme.colors.surface)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-
+    Scaffold(
+        containerColor = TudeeTheme.colors.surface,
+        topBar = {
             TasksTopBar(
                 modifier = Modifier
                     .background(color = TudeeTheme.colors.surfaceHigh)
             )
+        },
+        floatingActionButton = {
+            TudeeFloatingActionButton(
+                painter = painterResource(R.drawable.note_add),
+                modifier = Modifier.padding(bottom = 84.dp, end = 12.dp),
+                contentDescription = "note icon",
+                onClick = {},
+                isEnabled = true,
+            )
+        }
+    ) { innerPadding ->
+        TudeeTabLayoutWithPager(
+            modifier = Modifier.padding(innerPadding),
+            initialTabIndex = initialTabIndex,
+            tabs = listOf(
+                TabItem(text = R.string.In_Progress, number = inProgressTasksCount),
+                TabItem(text = R.string.To_Do, number = toDoTasksCount),
+                TabItem(text = R.string.Done, number = doneTasksCount),
 
-            Column(
-                modifier = Modifier
-                    .background(TudeeTheme.colors.surface)
-            ) {
-
+                ),
+            tasksList = listOf(inProgressTasks, toDoTasks, doneTasks),
+            headerContent = {
                 DateSection(
                     modifier = Modifier.background(color = TudeeTheme.colors.surfaceHigh),
                     month = date.toMonthShort(),
@@ -125,85 +136,48 @@ fun TasksContent(
                     onClickRight = onClickRight,
                     onClickDay = onDayClick,
                 )
+            }
+        ) { page, tasks ->
+            if (tasks.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 121.dp),
+                    contentAlignment = Alignment.TopCenter
+                ) { EmptyTasksScreen() }
+                return@TudeeTabLayoutWithPager
+            }
 
-                TudeeTabLayoutWithPager(
-                    initialTabIndex = initialTabIndex,
-                    tabs = listOf(
-                        TabItem(text = R.string.In_Progress, number = inProgressTasksCount),
-                        TabItem(text = R.string.To_Do, number = toDoTasksCount),
-                        TabItem(text = R.string.Done, number = doneTasksCount),
-
-                        ),
-                    tasksList = listOf(inProgressTasks, toDoTasks, doneTasks)
-                ) { page, tasks ->
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(TudeeTheme.colors.surface)
-                    ) {
-                        if (tasks.isEmpty()) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(top = 121.dp),
-                                contentAlignment = Alignment.TopCenter
-                            ) {
-                                EmptyTasksScreen()
-                            }
-                        } else {
-                            LazyColumn(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                            ) {
-                                items(tasks.size) { index ->
-                                    SwipeToDeleteTask(
-                                        modifier = Modifier,
-                                        task = tasks[index],
-                                        onDeleteClick = {}
-                                    )
-                                    Spacer(modifier = Modifier.height(8.dp))
-                                }
-                            }
-                        }
-                    }
-
-                    if (showDatePicker) {
-                        TudeeDatePicker(
-                            onDateSelected = { date ->
-                                date?.let {
-                                    onDateSelected(it)
-                                }
-                                showDatePicker = false
-                            },
-                            onDismiss = { showDatePicker = false }
-                        )
-                    }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+               items(items = tasks) { item ->
+                    SwipeToDeleteTask(
+                        modifier = Modifier,
+                        task = item,
+                        onDeleteClick = {}
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-        ) {
-            TudeeFloatingActionButton(
-                painter = painterResource(R.drawable.note_add),
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(bottom = 84.dp, end = 12.dp),
-                contentDescription = "note icon",
-                onClick = {},
-                isEnabled = true,
-            )
-        }
     }
+
+    if (showDatePicker)
+        TudeeDatePicker(
+            onDateSelected = { date ->
+                date?.let { onDateSelected(it) }
+                showDatePicker = false
+            },
+            onDismiss = { showDatePicker = false }
+        )
 }
 
 @Composable
 private fun TasksTopBar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
@@ -236,7 +210,7 @@ fun DateSection(
     days: List<DaysOfMonth>,
     onClickLeft: () -> Unit,
     onClickRight: () -> Unit,
-    onClickDay: (index: Int) -> Unit
+    onClickDay: (index: Int) -> Unit,
 ) {
     DateSelector(
         modifier,
@@ -256,7 +230,7 @@ fun DateSelector(
     year: String,
     onClickDate: () -> Unit,
     onClickLeft: () -> Unit,
-    onClickRight: () -> Unit
+    onClickRight: () -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -331,7 +305,7 @@ fun DateSelector(
 fun DaySelector(
     modifier: Modifier = Modifier,
     days: List<DaysOfMonth>,
-    onClickDay: (index: Int) -> Unit
+    onClickDay: (index: Int) -> Unit,
 ) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
