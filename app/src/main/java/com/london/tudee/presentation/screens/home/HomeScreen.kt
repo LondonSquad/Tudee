@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -54,6 +55,7 @@ import com.london.tudee.presentation.components.StatusCard
 import com.london.tudee.presentation.components.TaskStatusSlider
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.components.date.DateBadge
+import com.london.tudee.presentation.components.date.DateBadgeStyleValues
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
@@ -289,18 +291,21 @@ private fun OverLayerBox(
             DateBadge(
                 modifier = Modifier
                     .padding(top = 8.dp)
-                    .height(17.dp)
+                    .fillMaxHeight()
                     .align(Alignment.CenterHorizontally),
-                shape = RectangleShape,
-                colors = CardDefaults.cardColors(containerColor = TudeeTheme.colors.surfaceHigh),
                 dateText = dateOfToday,
-                iconSize = 16.dp,
-                textSize = 14.sp,
-                textStyle = TudeeTheme.typography.labelMedium,
-                lineHeight = 16.sp,
-                iconColor = TudeeTheme.colors.body,
-                textColor = TudeeTheme.colors.body,
-                contentPadding = PaddingValues(vertical = 0.dp),
+                dateBadgeStyle = DateBadgeStyleValues(
+                    shape = RectangleShape,
+                    colors = CardDefaults.cardColors(containerColor = TudeeTheme.colors.surfaceHigh),
+                    iconSize = 16.dp,
+                    iconColor = TudeeTheme.colors.body,
+                    iconTextSpacing = 8.dp,
+                    textStyle = TudeeTheme.typography.labelMedium.copy(
+                        fontSize = 14.sp,
+                        lineHeight = 17.sp,
+                        color = TudeeTheme.colors.body
+                    )
+                ),
                 isVisible = true
             )
 
