@@ -14,18 +14,37 @@ import com.london.tudee.presentation.screens.onboarding.OnBoardingViewModel
 import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
+import androidx.lifecycle.ViewModel
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
+import org.koin.core.definition.Definition
+import org.koin.core.definition.KoinDefinition
+import org.koin.core.module.dsl.viewModel as fixedViewModel
+import org.koin.core.qualifier.Qualifier
 
-val viewModelModule = module {
-    viewModelOf(::TasksScreenViewModel)
-    viewModelOf(::ConfirmDeleteTaskViewModel)
-    viewModelOf(::TaskDetailsBottomSheetViewModel)
-    viewModelOf(::HomeViewModel)
-    viewModelOf(::CategoryDetailsViewModel)
-    viewModelOf(::CategoriesViewModel)
-    viewModelOf(::CreateCategoryViewModel)
-    viewModelOf(::EditCategoryScreenViewModel)
-    viewModelOf(::CreateCategoryScreenViewModel)
-    viewModelOf(::DeleteCategoryScreenViewModel)
-    viewModelOf(::OnBoardingViewModel)
-    viewModelOf(::AddOrEditTaskViewModel)
-}
+@Module
+@ComponentScan("com.london.tudee")
+class KoinModule
+
+
+//
+//val viewModelModule = module {
+//    viewModelOf(::AddOrEditTaskViewModel)
+//    viewModelOf(::TasksScreenViewModel)
+//    viewModelOf(::ConfirmDeleteTaskViewModel)
+//    viewModelOf(::TaskDetailsBottomSheetViewModel)
+//    viewModelOf(::HomeViewModel)
+//    viewModelOf(::CategoryDetailsViewModel)
+//    viewModelOf(::CategoriesViewModel)
+//    viewModelOf(::CreateCategoryViewModel)
+//    viewModelOf(::EditCategoryScreenViewModel)
+//    viewModelOf(::CreateCategoryScreenViewModel)
+//    viewModelOf(::DeleteCategoryScreenViewModel)
+//    viewModelOf(::OnBoardingViewModel)
+//}
+//
+//
+//inline fun <reified T : ViewModel> Module.viewModel(
+//    qualifier: Qualifier? = null,
+//    noinline definition: Definition<T>
+//): KoinDefinition<T> = fixedViewModel(qualifier = qualifier, definition = definition)

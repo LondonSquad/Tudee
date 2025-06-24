@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 
 data class CreateCategoryUiState(
     val categoryName: String = "",
@@ -22,7 +23,7 @@ data class CreateCategoryUiState(
     val errorMessage: String? = null,
     val isSuccess: Boolean = false
 )
-
+@KoinViewModel
 class CreateCategoryViewModel(
     private val categoryService: CategoryService
 ) : ViewModel() {

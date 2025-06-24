@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.android.annotation.KoinViewModel
+
+@KoinViewModel
 
 class TaskDetailsBottomSheetViewModel(
     private val taskService: TaskService, private val categoryService: CategoryService

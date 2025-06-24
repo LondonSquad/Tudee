@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 
 data class EditCategoryUiState(
     val category: Category? = null,
@@ -23,7 +24,7 @@ data class EditCategoryUiState(
     val isSuccess: Boolean = false,
     val isDeleted: Boolean = false
 )
-
+@KoinViewModel
 class EditCategoryScreenViewModel(
     private val categoryService: CategoryService
 ) : ViewModel() {

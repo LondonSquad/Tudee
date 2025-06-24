@@ -34,7 +34,7 @@ import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.categories.crud.CreateCategoryScreen
 import com.london.tudee.presentation.utils.converterStringToBitmap
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CategoriesScreen(
@@ -131,7 +131,7 @@ fun CategoriesScreenContent(
             painter = painterResource(id = R.drawable.ic_add_category_button),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .zIndex(if(uiState.showBottomSheet) 1f else 0f)
+                .zIndex(if (uiState.showBottomSheet) 1f else 0f)
                 .padding(bottom = 84.dp, end = 12.dp),
             contentDescription = "note icon",
             onClick = onAddCategoryClick,

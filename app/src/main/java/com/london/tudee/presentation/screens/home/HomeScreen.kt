@@ -61,7 +61,8 @@ import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.Add
 import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskUiState
 import com.london.tudee.presentation.screens.tasks.EmptyTasksScreen
 import kotlinx.coroutines.delay
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
+
 
 @Composable
 fun HomeScreen(

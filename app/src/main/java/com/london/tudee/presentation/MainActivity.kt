@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.navigation.Screen
 import com.london.tudee.presentation.navigation.tudeeNavGraph
-import com.london.tudee.presentation.screens.categories.CategoriesScreen
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -26,7 +25,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TudeeTheme {
-                CategoriesScreen(onCategoryClick = {})
+               // CategoriesScreen(onCategoryClick = {})
                 val navController = rememberNavController()
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = currentBackStackEntry?.destination?.route

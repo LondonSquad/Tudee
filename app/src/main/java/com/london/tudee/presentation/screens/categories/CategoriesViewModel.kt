@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 
 data class CategoriesUiState(
     val categories: List<Category> = emptyList(),
@@ -19,6 +20,7 @@ data class CategoriesUiState(
     val showBottomSheet: Boolean = false
 )
 
+@KoinViewModel
 class CategoriesViewModel(
     private val categoryService: CategoryService
 ) : ViewModel() {
