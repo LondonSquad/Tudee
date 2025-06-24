@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class HomeViewModel(
     private val taskService: TaskService, private val categoryService: CategoryService
@@ -107,8 +106,7 @@ class HomeViewModel(
                 _uiState.update {
                     it.copy(
                         taskDetailBottomSheetUiState = it.taskDetailBottomSheetUiState.copy(
-                            task = task,
-                            categoryIcon = icon
+                            task = task, categoryIcon = icon
                         )
                     )
                 }
@@ -121,7 +119,7 @@ class HomeViewModel(
     }
 
     override fun onClickMove() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val task = uiState.value.taskDetailBottomSheetUiState.task
             var icon = ""
             val newStatus = when (task.taskStatus) {
@@ -130,21 +128,18 @@ class HomeViewModel(
                 TaskStatus.DONE -> return@launch
             }
             val updatedTask = task.copy(taskStatus = newStatus)
-            withContext(Dispatchers.IO) {
-                runCatching {
-                    taskService.edit(updatedTask)
-                    icon = categoryService.getIconResById(task.categoryId)
-                }.isFailure.also {
-                    if (it) _uiState.update { state ->
-                        state.copy(errMessage = R.string.Something_went_wrong_cant_update_task.toString())
-                    }
+            runCatching {
+                taskService.edit(updatedTask)
+                icon = categoryService.getIconResById(task.categoryId)
+            }.isFailure.also {
+                if (it) _uiState.update { state ->
+                    state.copy(errMessage = R.string.Something_went_wrong_cant_update_task.toString())
                 }
             }
             _uiState.update {
                 it.copy(
                     taskDetailBottomSheetUiState = TaskDetailsBottomSheetUiState(
-                        task = updatedTask,
-                        categoryIcon = icon
+                        task = updatedTask, categoryIcon = icon
                     )
                 )
             }

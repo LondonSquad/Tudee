@@ -87,7 +87,7 @@ fun HomeScreen(
 fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(modifier) {
         Text(
-            text = "Loading...", modifier = Modifier.align(Alignment.Center)
+            text = stringResource(R.string.loading), modifier = Modifier.align(Alignment.Center)
         )
     }
 }
@@ -96,7 +96,8 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 fun ErrorScreen(modifier: Modifier = Modifier) {
     Box(modifier) {
         Text(
-            text = "There was an unexpected error", modifier = Modifier.align(Alignment.Center)
+            text = stringResource(R.string.there_was_an_unexpected_error),
+            modifier = Modifier.align(Alignment.Center)
         )
     }
 }
@@ -190,9 +191,8 @@ fun HomeScreenContent(
             onDismiss = interactions::hideTaskDetailsBottomSheet,
             onMoveClick = interactions::onClickMove,
             onEditClick = {
-                TODO()//show edit task bottom sheet
-            }
-        )
+                //show edit task bottom sheet
+            })
 
         AddOrEditTaskBottomSheet(
             modifier = Modifier.zIndex(1f),
@@ -365,8 +365,8 @@ private fun ToDoSection(
     toDoTasks: List<Task>,
     onTodoTasksArrowClicked: (Int) -> Unit,
     categoryIcons: List<String>,
-    onTaskClicked: () -> Unit = {},
-    loadTask: (Task) -> Unit = {}
+    onTaskClicked: () -> Unit,
+    loadTask: (Task) -> Unit
 ) {
 
     if (toDoTasks.isNotEmpty() && categoryIcons.isEmpty()) {
@@ -456,8 +456,8 @@ private fun InProgressSection(
     inProgressTasks: List<Task>,
     onInProgressTasksArrowClicked: (Int) -> Unit,
     categoryIcons: List<String>,
-    onTaskClicked: () -> Unit = {},
-    loadTask: (Task) -> Unit = {}
+    onTaskClicked: () -> Unit,
+    loadTask: (Task) -> Unit
 ) {
 
     if (inProgressTasks.isNotEmpty() && categoryIcons.isEmpty()) {
@@ -547,8 +547,8 @@ private fun DoneSection(
     doneTasks: List<Task>,
     onDoneTasksArrowClicked: (Int) -> Unit,
     categoryIcons: List<String>,
-    onTaskClicked: () -> Unit = {},
-    loadTask: (Task) -> Unit = {}
+    onTaskClicked: () -> Unit,
+    loadTask: (Task) -> Unit
 ) {
 
     if (doneTasks.isNotEmpty() && categoryIcons.isEmpty()) {
