@@ -48,7 +48,7 @@ import androidx.compose.ui.zIndex
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
-import com.london.tudee.presentation.base.BaseCreateTaskInteractions
+import com.london.tudee.presentation.base.HomeInteractions
 import com.london.tudee.presentation.components.HomeTopBar
 import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.StatusCard
@@ -109,7 +109,7 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 fun HomeScreenContent(
     state: HomeUiState,
     taskUiState: AddOrEditTaskUiState,
-    interactions: BaseCreateTaskInteractions,
+    interactions: HomeInteractions,
     onArrowClicked: (Int) -> Unit
 ) {
     val context = LocalContext.current
@@ -121,7 +121,7 @@ fun HomeScreenContent(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .zIndex(if (taskUiState.showBottomSheet || state.isTaskDetailsBottomSheetVisible) 0f else 1f)
-                .padding(bottom = 84.dp, end = 12.dp),
+                .padding(bottom = 10.dp, end = 12.dp),
             contentDescription = "note icon",
             onClick = {
                 interactions.showBottomSheet()

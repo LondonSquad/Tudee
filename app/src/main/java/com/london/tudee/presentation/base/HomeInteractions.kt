@@ -4,7 +4,7 @@ import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.Task
 
-interface BaseCreateTaskInteractions {
+interface HomeInteractions {
     fun loadCategories()
     fun updateTitle(title: String)
     fun updateDescription(description: String)
