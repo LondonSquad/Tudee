@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -44,14 +45,16 @@ fun CategoryDetailsScreen(
     viewModel: CategoryDetailsViewModel = koinViewModel(),
 ) {
 
+    LaunchedEffect(categoryId) {
+        viewModel.initializeWithCategoryId(categoryId)
+    }
     val uiState by viewModel.uiState.collectAsState()
     when {
         uiState.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
         else -> CategoryDetailsContent(
             state = uiState,
-            onBackClick = onBackClick,
-            categoryId = categoryId
+            onBackClick = onBackClick
         )
     }
 }
@@ -78,7 +81,6 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun CategoryDetailsContent(
-    categoryId: Int,
     state: CategoryDetailsState,
     onBackClick: () -> Unit
 ) {
@@ -91,7 +93,7 @@ fun CategoryDetailsContent(
         TopAPPBar(
             onBackClick = onBackClick,
             state = state,
-            categoryId = categoryId
+            onEditClick = { }
         )
 
         TasksPagerSection(state = state)
@@ -135,7 +137,11 @@ fun TasksPagerSection(state: CategoryDetailsState) {
 }
 
 @Composable
-private fun TopAPPBar(onBackClick: () -> Unit, state: CategoryDetailsState, categoryId: Int) {
+private fun TopAPPBar(
+    onBackClick: () -> Unit,
+    state: CategoryDetailsState,
+    onEditClick: () -> Unit = {}
+) {
     TopAppBar(
         title = state.category.title,
         onBackClick = onBackClick,
@@ -164,28 +170,27 @@ private fun TopAPPBar(onBackClick: () -> Unit, state: CategoryDetailsState, cate
             }
         },
         actions = {
-            IconButton(
-                onClick = it,
-                modifier = Modifier
-                    .then(
-                        if (LocalLayoutDirection.current == LayoutDirection.Rtl)
-                            Modifier.rotate(180f)
-                        else Modifier
-                    )
-                    .border(
-                        1.dp,
-                        TudeeTheme.colors.stroke,
-                        TudeeTheme.shapes.circle
-                    )
-            ) {
-                if (!state.category.isDefault) {
+            if (!state.category.isDefault) {
+                IconButton(
+                    onClick = onEditClick,
+                    modifier = Modifier
+                        .then(
+                            if (LocalLayoutDirection.current == LayoutDirection.Rtl)
+                                Modifier.rotate(180f)
+                            else Modifier
+                        )
+                        .border(
+                            1.dp,
+                            TudeeTheme.colors.stroke,
+                            TudeeTheme.shapes.circle
+                        )
+                ) {
                     Icon(
                         painter = painterResource(R.drawable.edit_icon),
                         contentDescription = "Edit Icon",
                         tint = TudeeTheme.colors.body
                     )
                 }
-
             }
         }
     )

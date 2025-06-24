@@ -22,12 +22,12 @@ class CategoryDetailsViewModel(
     private val _uiState = MutableStateFlow(CategoryDetailsState())
     val uiState = _uiState.asStateFlow()
 
-    init {
-        getDoneTasksByCategoryId(uiState.value.category.id)
-        getToDoTasksByCategoryId(uiState.value.category.id)
-        getInProgressTasksByCategoryId(uiState.value.category.id)
-        Log.d("ID", "ID ${uiState.value.category.id}")
-        getCategoryNameById(5) //for testing until nav completed
+    fun initializeWithCategoryId(categoryId: Int) {
+        getDoneTasksByCategoryId(categoryId)
+        getToDoTasksByCategoryId(categoryId)
+        getInProgressTasksByCategoryId(categoryId)
+        Log.d("ID", "ID $categoryId")
+        getCategoryNameById(categoryId)
     }
 
     private fun getDoneTasksByCategoryId(categoryId: Int) {

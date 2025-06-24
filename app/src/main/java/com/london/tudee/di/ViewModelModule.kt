@@ -7,7 +7,7 @@ import com.london.tudee.presentation.screens.task.view_tasks.CategoryDetailsView
 import com.london.tudee.presentation.screens.tasks.TasksScreenViewModel
 import com.london.tudee.presentation.screens.categories.CategoriesViewModel
 import com.london.tudee.presentation.screens.categories.CreateCategoryViewModel
-import com.london.tudee.presentation.screens.categories.EditCategoryScreenViewModel
+import com.london.tudee.presentation.screens.categories.crud.EditCategoryScreenViewModel
 import com.london.tudee.presentation.screens.categories.crud.CreateCategoryScreenViewModel
 import com.london.tudee.presentation.screens.categories.crud.DeleteCategoryScreenViewModel
 import com.london.tudee.presentation.screens.onboarding.OnBoardingViewModel
