@@ -44,6 +44,7 @@ import kotlin.math.roundToInt
 fun SwipeToDeleteTask(
     modifier: Modifier = Modifier,
     task: Task,
+    iconResId: String,
     onDeleteClick: () -> Unit
 ) {
     var rawOffsetX by remember { mutableFloatStateOf(0f) }
@@ -84,11 +85,11 @@ fun SwipeToDeleteTask(
                         rawOffsetX = (rawOffsetX + dragAmount).coerceIn(-swipeThreshold, 0f)
                     }
                 },
-            hasDate = true
+            hasDate = true,
+            iconResId = iconResId
         )
     }
 }
-
 
 @Composable
 private fun DeleteBackground(onDeleteClick: () -> Unit) {
@@ -132,7 +133,8 @@ fun SwipeToDeleteTaskPreview() {
                 categoryId = 1,
                 taskStatus = TaskStatus.TODO
             ),
-            onDeleteClick = {}
+            onDeleteClick = {},
+            iconResId = ""
         )
     }
 }
