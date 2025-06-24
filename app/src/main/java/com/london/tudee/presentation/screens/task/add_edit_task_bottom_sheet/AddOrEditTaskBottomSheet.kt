@@ -1,7 +1,5 @@
 package com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet
 
-import android.util.Log
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -24,9 +22,8 @@ import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 @Composable
 fun AddOrEditTaskBottomSheet(
     modifier: Modifier = Modifier,
-    @StringRes title: Int,
-    @StringRes buttonText: Int,
     screenContent: @Composable () -> Unit,
+    taskId: Int? = null,
     uiState: AddOrEditTaskUiState,
     interactions: BaseCreateTaskInteractions
 ) {
@@ -54,7 +51,7 @@ fun AddOrEditTaskBottomSheet(
                 bottomSheetContent = {
                     AddOrEditTaskDetails(
                         modifier = modifier,
-                        title = title,
+                        title = if(taskId != null) R.string.edit_task else R.string.add_new_task,
                         uiState = uiState,
                         interactions = interactions,
                         categories = uiState.categories
@@ -63,12 +60,11 @@ fun AddOrEditTaskBottomSheet(
                 bottomSheetActions = {
                     TudeePrimaryButton(
                         modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(buttonText),
+                        text =  if (taskId != null) stringResource(R.string.edit_task) else stringResource(R.string.add),
                         isDisabled = !uiState.isFormValid || uiState.isLoading,
                         isLoading = uiState.isLoading,
                         onClick = {
                             interactions.saveTask()
-                            Log.d("AddOrEditTaskBottomSheet", "AddOrEditTaskBottomSheet: $uiState")
                         },
                     )
 

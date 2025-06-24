@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -21,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
@@ -70,7 +74,8 @@ fun CategoriesScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(TudeeTheme.colors.surfaceHigh)
-                    .padding(horizontal = 16.dp, vertical = 20.dp)
+                    .padding(horizontal = 16.dp)
+                    .padding(WindowInsets.statusBars.asPaddingValues())
             ) {
                 Text(
                     text = stringResource(screenTitle),
@@ -123,13 +128,14 @@ fun CategoriesScreenContent(
         if (uiState.showBottomSheet) CreateCategoryScreen(onDismiss = onDismissBottomSheet)
 
         TudeeFloatingActionButton(
+            painter = painterResource(id = R.drawable.ic_add_category_button),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(12.dp),
-            painter = painterResource(id = R.drawable.ic_add_category_button),
+                .zIndex(if(uiState.showBottomSheet) 1f else 0f)
+                .padding(bottom = 84.dp, end = 12.dp),
+            contentDescription = "note icon",
+            onClick = onAddCategoryClick,
             isEnabled = true,
-            contentDescription = stringResource(R.string.fab_content_description),
-            onClick = onAddCategoryClick
         )
     }
 }

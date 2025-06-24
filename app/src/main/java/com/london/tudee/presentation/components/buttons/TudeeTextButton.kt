@@ -1,5 +1,6 @@
 package com.london.tudee.presentation.components.buttons
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
@@ -24,7 +26,12 @@ fun TudeeTextButton(
 
     if (isDisabled.not()) {
         Row(
-            modifier = modifier.clickable(onClick = onClick),
+            modifier = modifier
+                .clip(TudeeTheme.shapes.circle)
+                .clickable(
+                    onClick = onClick,
+                    enabled = isLoading.not()
+                ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
