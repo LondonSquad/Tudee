@@ -13,17 +13,17 @@ class DeleteCategoryScreenViewModel(
     private val categoryService: CategoryService
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(DeleteCategoryUiState())
-    val uiState = _uiState.asStateFlow()
+    private val _deleteState = MutableStateFlow(DeleteCategoryUiState())
+    val deleteState = _deleteState.asStateFlow()
 
     fun deleteCategory(category: Category) {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true)
+            _deleteState.value = _deleteState.value.copy(isLoading = true)
             try {
                 categoryService.delete(category)
-                _uiState.value = _uiState.value.copy(isDeleted = true, isLoading = false)
+                _deleteState.value = _deleteState.value.copy(isDeleted = true, isLoading = false)
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
+                _deleteState.value = _deleteState.value.copy(
                     isLoading = false,
                     errorMessage = e.message
                 )

@@ -21,9 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -40,6 +37,7 @@ import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.categories.crud.EditCategoryScreen
+import com.london.tudee.presentation.screens.categories.crud.EditCategoryUiState
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -52,14 +50,17 @@ fun CategoryDetailsScreen(
     LaunchedEffect(categoryId) {
         viewModel.initializeWithCategoryId(categoryId)
     }
-    val uiState by viewModel.uiState.collectAsState()
+    val state by viewModel.uiState.collectAsState()
+
+    val editState by viewModel.editState.collectAsState()
     when {
-        uiState.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
-        uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
+        state.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
+        state.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
         else -> CategoryDetailsContent(
-            state = uiState,
+            state = state,
             onBackClick = onBackClick,
-            viewModel
+            editState = editState,
+            interactions = viewModel
         )
     }
 }
@@ -86,7 +87,8 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun CategoryDetailsContent(
-    state: CategoryDetailsState,
+    state: CategoryDetailsUiState,
+    editState: EditCategoryUiState,
     onBackClick: () -> Unit,
     interactions: CategoryDetailsInteractions
 ) {
@@ -110,14 +112,16 @@ fun CategoryDetailsContent(
         if (state.isEditBottomSheetVisible) {
             EditCategoryScreen(
                 category = state.category,
-                onDismiss = interactions::hideEditBottomSheet
+                onDismiss = interactions::hideEditBottomSheet,
+                state = state,
+                interactions = interactions
             )
         }
     }
 }
 
 @Composable
-fun TasksPagerSection(state: CategoryDetailsState) {
+fun TasksPagerSection(state: CategoryDetailsUiState) {
     TudeeTabLayoutWithPager(
         tabs = listOf(
             TabItem(text = R.string.In_Progress, number = state.inProgressTasks.size),
@@ -155,7 +159,7 @@ fun TasksPagerSection(state: CategoryDetailsState) {
 @Composable
 private fun TopAPPBar(
     onBackClick: () -> Unit,
-    state: CategoryDetailsState,
+    state: CategoryDetailsUiState,
     onEditClick: () -> Unit = {}
 ) {
     TopAppBar(

@@ -7,6 +7,8 @@ import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
+import com.london.tudee.presentation.screens.categories.crud.DeleteCategoryUiState
+import com.london.tudee.presentation.screens.categories.crud.EditCategoryUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,8 +21,14 @@ class CategoryDetailsViewModel(
     private val categoryService: CategoryService,
 ) : ViewModel(), CategoryDetailsInteractions {
 
-    private val _uiState = MutableStateFlow(CategoryDetailsState())
+    private val _uiState = MutableStateFlow(CategoryDetailsUiState())
     val uiState = _uiState.asStateFlow()
+
+    private val _editState = MutableStateFlow(EditCategoryUiState())
+    val editState = _editState.asStateFlow()
+
+    private val _deleteState = MutableStateFlow(DeleteCategoryUiState())
+    val deleteState = _deleteState.asStateFlow()
 
     fun initializeWithCategoryId(categoryId: Int) {
         getDoneTasksByCategoryId(categoryId)
@@ -125,6 +133,41 @@ class CategoryDetailsViewModel(
                 _uiState.update {
                     it.copy(errMessage = "Category not found")
                 }
+            }
+        }
+    }
+
+    override fun editCategory(
+        category: Category
+    ) {
+        viewModelScope.launch {
+            _editState.value = _editState.value.copy(isLoading = true)
+
+
+            try {
+                categoryService.edit(category)
+                _editState.value = _editState.value.copy(isLoading = false)
+
+            } catch (e: Exception) {
+                _editState.value = _editState.value.copy(
+                    isLoading = false,
+                    errorMessage = e.message
+                )
+            }
+        }
+    }
+
+    override fun deleteCategory(category: Category) {
+        viewModelScope.launch {
+            _deleteState.value = _deleteState.value.copy(isLoading = true)
+            try {
+                categoryService.delete(category)
+                _deleteState.value = _deleteState.value.copy(isDeleted = true, isLoading = false)
+            } catch (e: Exception) {
+                _deleteState.value = _deleteState.value.copy(
+                    isLoading = false,
+                    errorMessage = e.message
+                )
             }
         }
     }

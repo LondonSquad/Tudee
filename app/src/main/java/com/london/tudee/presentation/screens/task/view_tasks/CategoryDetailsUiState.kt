@@ -4,7 +4,7 @@ import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Task
 
 
-data class CategoryDetailsState(
+data class CategoryDetailsUiState(
     val isLoading: Boolean = true,
     val errMessage: String? = null,
     val allTasks: List<Task> = listOf(),

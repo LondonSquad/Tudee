@@ -44,5 +44,5 @@ class EditCategoryScreenViewModel(
 data class EditCategoryUiState(
     val isLoading: Boolean = false,
     val isDeleted: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
 )

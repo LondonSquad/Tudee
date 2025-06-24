@@ -49,48 +49,18 @@ import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScr
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.color.RectBorderColor
-import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import org.koin.androidx.compose.koinViewModel
+import com.london.tudee.presentation.screens.task.view_tasks.CategoryDetailsInteractions
+import com.london.tudee.presentation.screens.task.view_tasks.CategoryDetailsUiState
 import java.io.ByteArrayOutputStream
-
-// Helper function to convert URI to Base64
-private fun uriToBase64(context: Context, uri: Uri): String? {
-    return try {
-        val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
-        } else {
-            @Suppress("DEPRECATION")
-            MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
-        }
-
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-        val byteArray = byteArrayOutputStream.toByteArray()
-        Base64.encodeToString(byteArray, Base64.DEFAULT)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
-}
-
-// Helper function to convert Base64 string to Bitmap
-private fun base64ToBitmap(base64String: String): Bitmap? {
-    return try {
-        if (base64String.isBlank()) return null
-        val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
-        android.graphics.BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
-}
 
 @Composable
 fun EditCategoryScreen(
     modifier: Modifier = Modifier,
     category: Category,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    state: CategoryDetailsUiState,
+    interactions: CategoryDetailsInteractions,
 ) {
     TudeeBottomSheetScreen(
         showBottomSheet = true,
@@ -99,21 +69,24 @@ fun EditCategoryScreen(
         screenContent = {},
         bottomSheetActions = {},
         bottomSheetContent = {
-            CategoryEditContent(
+            EditCategoryContent(
                 modifier = modifier,
                 category = category,
                 onDismiss = onDismiss,
+                state = state,
+                interactions = interactions
             )
         }
     )
 }
 
 @Composable
-private fun CategoryEditContent(
+private fun EditCategoryContent(
     modifier: Modifier = Modifier,
     category: Category,
     onDismiss: () -> Unit,
-    viewModel: EditCategoryScreenViewModel = koinViewModel()
+    state: CategoryDetailsUiState,
+    interactions: CategoryDetailsInteractions
 ) {
     val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -142,10 +115,16 @@ private fun CategoryEditContent(
                     interactionSource = interactionSource,
                     indication = null,
                     onClick = {
-                        // nav to delete category screen
+                        interactions.hideEditBottomSheet()
+                        interactions.showDeleteBottomSheet()
                     },
                 )
             )
+            if (state.isDeleteBottomSheetVisible) {
+                DeleteCategoryScreen(category = category) {
+                    onDismiss()
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -178,15 +157,11 @@ private fun CategoryEditContent(
         TudeePrimaryButton(
             onClick = {
                 val base64Image = imageUri?.let { uriToBase64(context, it) } ?: category.iconRes
-                viewModel.editCategory(
-                    category = Category(
-                        id = category.id,
-                        title = categoryName,
-                        iconRes = base64Image,
-                        isDefault = category.isDefault,
-                        taskCount = category.taskCount
-                    )
+                val updatedCategory = category.copy(
+                    title = categoryName,
+                    iconRes = base64Image
                 )
+                interactions.editCategory(updatedCategory)
                 onDismiss()
             },
             text = stringResource(R.string.save),
@@ -319,20 +294,54 @@ private fun ImagePickerEditCategory(
 
 }
 
-@ThemePreviews
-@Composable
-private fun EditCategoryScreenPreview() {
-    TudeeTheme {
-        EditCategoryScreen(
-            modifier = Modifier,
-            category = Category(
-                id = 1,
-                title = "Work",
-                iconRes = "",
-                isDefault = true,
-                taskCount = 0,
-            ),
-            onDismiss = {}
-        )
+// Helper function to convert URI to Base64
+private fun uriToBase64(context: Context, uri: Uri): String? {
+    return try {
+        val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
+        } else {
+            @Suppress("DEPRECATION")
+            MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+        }
+
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
+        Base64.encodeToString(byteArray, Base64.DEFAULT)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
     }
 }
+
+// Helper function to convert Base64 string to Bitmap
+private fun base64ToBitmap(base64String: String): Bitmap? {
+    return try {
+        if (base64String.isBlank()) return null
+        val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+        android.graphics.BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
+
+//@ThemePreviews
+//@Composable
+//private fun EditCategoryScreenPreview() {
+//    TudeeTheme {
+//        EditCategoryScreen(
+//            modifier = Modifier,
+//            category = Category(
+//                id = 1,
+//                title = "Work",
+//                iconRes = "",
+//                isDefault = true,
+//                taskCount = 0,
+//            ),
+//            onDismiss = {},
+//            state = state,
+//            interactions = CategoryDetailsInteractions()
+//        )
+//    }
+//}

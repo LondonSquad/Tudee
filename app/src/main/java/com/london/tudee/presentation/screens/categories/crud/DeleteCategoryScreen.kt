@@ -88,7 +88,7 @@ fun DeleteCategoryContent(
             text = stringResource(R.string.delete),
             onClick = {
                 viewModel.deleteCategory(category)
-                if (viewModel.uiState.value.isDeleted) {
+                if (viewModel.deleteState.value.isDeleted) {
                     onCancel()
                 }
             },
