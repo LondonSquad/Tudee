@@ -6,9 +6,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.london.tudee.data.local.roomdb.TudeeDatabase
 import com.london.tudee.data.local.roomdb.defaultCategory
 import com.london.tudee.data.mappers.convertToCategoryDto
+import com.london.tudee.data.preferences.appPreferencesDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -31,4 +33,6 @@ val databaseModule = module {
     }
     single { get<TudeeDatabase>().taskDao() }
     single { get<TudeeDatabase>().categoryDao() }
+    single { androidApplication().applicationContext.appPreferencesDataStore }
+
 }
