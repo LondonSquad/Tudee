@@ -13,7 +13,6 @@ data class FilterTasksUiState(
     val selectedDays: List<Boolean> = listOf(),
     var date: Long = Clock.System.now().toEpochMilliseconds(),
     val tasksCount: Int? = null,
-    val allTasks: List<Task> = listOf(),
     val isDaySelected: Boolean? = null,
     val doneTasks: List<Task> = listOf(),
     val inProgressTasks: List<Task> = listOf(),
