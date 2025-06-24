@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
-import com.london.tudee.presentation.base.BaseCreateTaskInteractions
+import com.london.tudee.presentation.base.HomeInteractions
 import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScreen
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
@@ -25,7 +25,7 @@ fun AddOrEditTaskBottomSheet(
     screenContent: @Composable () -> Unit,
     taskId: Int? = null,
     uiState: AddOrEditTaskUiState,
-    interactions: BaseCreateTaskInteractions
+    interactions: HomeInteractions
 ) {
 
     AnimatedVisibility(
