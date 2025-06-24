@@ -20,8 +20,8 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,11 +29,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Task
@@ -45,6 +47,9 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.SwipeToDeleteTask
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.utils.DateFormatter.toMonthShort
+import com.london.tudee.presentation.utils.DateFormatter.toYear
+import kotlinx.coroutines.launch
 import com.london.tudee.presentation.screens.task.confirm_delete_task.ConfirmDeleteTaskScreen
 import com.london.tudee.presentation.components.SnackBar
 import org.koin.androidx.compose.koinViewModel
@@ -53,7 +58,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun TasksScreen(
     initialTabIndex: Int = 0,
-    viewModel: TasksScreenViewModel = koinViewModel()
+    viewModel: TasksScreenViewModel = koinViewModel<TasksScreenViewModel>()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var showDeleteSheet by remember { mutableStateOf(false) }
@@ -61,17 +66,20 @@ fun TasksScreen(
 
     TasksContent(
         initialTabIndex = initialTabIndex,
+        date = uiState.date,
         inProgressTasksCount = uiState.inProgressTasks.size,
         toDoTasksCount = uiState.toDoTasks.size,
         doneTasksCount = uiState.doneTasks.size,
         inProgressTasks = uiState.inProgressTasks,
         toDoTasks = uiState.toDoTasks,
         doneTasks = uiState.doneTasks,
-        onDeleteTask = { task ->
-            viewModel.showDeleteDialog(task.id)
-        }
+        days = uiState.days,
+        onClickLeft = { viewModel.getTargetDates(uiState.date, ArrowActions.Previous) },
+        onClickRight = { viewModel.getTargetDates(uiState.date, ArrowActions.Next) },
+        onDateSelected = { viewModel.onDateSelected(it) },
+        onDayClick = { viewModel.onDayCardSelected(it) },
+        onDeleteTask = { viewModel.showDeleteDialog(task.id) }
     )
-
     ConfirmDeleteTaskScreen(
         viewModel = viewModel,
         onTaskDeleted = {
@@ -102,39 +110,35 @@ fun TasksScreen(
 @Composable
 fun TasksContent(
     initialTabIndex: Int,
+    date: Long,
     inProgressTasksCount: Int,
     toDoTasksCount: Int,
     doneTasksCount: Int,
     inProgressTasks: List<Task>,
     toDoTasks: List<Task>,
     doneTasks: List<Task>,
+    days: List<DaysOfMonth>,
+    onClickLeft: () -> Unit,
+    onClickRight: () -> Unit,
+    onDateSelected: (Long) -> Unit,
+    onDayClick: (index: Int) -> Unit,
     onDeleteTask: (Task) -> Unit
 ) {
+
     var showDatePicker by remember { mutableStateOf(false) }
-    var selectedDate by remember { mutableStateOf<Long?>(null) }
     var showBottomSheet by remember { mutableStateOf(false) }
 
-    Scaffold(
-        floatingActionButton = {
-            TudeeFloatingActionButton(
-                painter = painterResource(R.drawable.note_add),
-                isEnabled = true,
-                contentDescription = "Add Task",
-                onClick = {
-                    showBottomSheet = true
-                }
-            )
-        },
-        containerColor = TudeeTheme.colors.surface,
-    ) { paddingValues ->
-
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(TudeeTheme.colors.surface)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
         ) {
 
-            TasksTopAPPBar(
+            TasksTopBar(
                 modifier = Modifier
                     .background(color = TudeeTheme.colors.surfaceHigh)
             )
@@ -143,17 +147,18 @@ fun TasksContent(
                 modifier = Modifier
                     .background(TudeeTheme.colors.surface)
             ) {
+
                 DateSection(
-                    modifier = Modifier.background(
-                        color = TudeeTheme.colors.surfaceHigh,
-                    ),
-                    month = currentMonth,
-                    year = currentYear,
-                    onClickLeft = {},
-                    onClickRight = {},
+                    modifier = Modifier.background(color = TudeeTheme.colors.surfaceHigh),
+                    month = date.toMonthShort(),
+                    year = date.toYear(),
                     onClickDate = { showDatePicker = true },
-                    dates = fakeDates
+                    days = days,
+                    onClickLeft = onClickLeft,
+                    onClickRight = onClickRight,
+                    onClickDay = onDayClick,
                 )
+
                 TudeeTabLayoutWithPager(
                     initialTabIndex = initialTabIndex,
                     tabs = listOf(
@@ -175,7 +180,7 @@ fun TasksContent(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(top = 121.dp),
-                                contentAlignment = Alignment.Center
+                                contentAlignment = Alignment.TopCenter
                             ) {
                                 EmptyTasksScreen()
                             }
@@ -200,7 +205,9 @@ fun TasksContent(
                     if (showDatePicker) {
                         TudeeDatePicker(
                             onDateSelected = { date ->
-                                selectedDate = date
+                                date?.let {
+                                    onDateSelected(it)
+                                }
                                 showDatePicker = false
                             },
                             onDismiss = { showDatePicker = false }
@@ -209,11 +216,26 @@ fun TasksContent(
                 }
             }
         }
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        ) {
+            TudeeFloatingActionButton(
+                painter = painterResource(R.drawable.note_add),
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 84.dp, end = 12.dp),
+                contentDescription = "note icon",
+                onClick = {},
+                isEnabled = true,
+            )
+        }
     }
 }
 
 @Composable
-private fun TasksTopAPPBar(
+private fun TasksTopBar(
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -229,7 +251,7 @@ private fun TasksTopAPPBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Tasks",
+                text = stringResource(R.string.tasks),
                 style = TudeeTheme.typography.titleLarge,
                 color = TudeeTheme.colors.title,
             )
@@ -243,13 +265,21 @@ fun DateSection(
     modifier: Modifier,
     month: String,
     year: String,
+    onClickDate: () -> Unit,
+    days: List<DaysOfMonth>,
     onClickLeft: () -> Unit,
     onClickRight: () -> Unit,
-    onClickDate: () -> Unit,
-    dates: MutableList<DateItemClass>
+    onClickDay: (index: Int) -> Unit
 ) {
-    DateSelector(modifier, month, year, onClickLeft, onClickRight, onClickDate)
-    DayOfWeekSelector(modifier, dates)
+    DateSelector(
+        modifier,
+        month,
+        year,
+        onClickDate,
+        onClickLeft,
+        onClickRight
+    )
+    DaySelector(modifier, days, onClickDay)
 }
 
 @Composable
@@ -257,9 +287,9 @@ fun DateSelector(
     modifier: Modifier = Modifier,
     month: String,
     year: String,
+    onClickDate: () -> Unit,
     onClickLeft: () -> Unit,
-    onClickRight: () -> Unit,
-    onClickDate: () -> Unit
+    onClickRight: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -331,32 +361,38 @@ fun DateSelector(
 }
 
 @Composable
-fun DayOfWeekSelector(
+fun DaySelector(
     modifier: Modifier = Modifier,
-    dates: MutableList<DateItemClass>
+    days: List<DaysOfMonth>,
+    onClickDay: (index: Int) -> Unit
 ) {
-    val datesTest = remember { dates }
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(days) {
+        days.indexOfFirst { it.isSelected }.takeIf { it != -1 }?.let { selectedIndex ->
+            coroutineScope.launch {
+                listState.animateScrollToItem(selectedIndex)
+            }
+        }
+    }
     LazyRow(
         modifier = modifier
             .fillMaxWidth()
             .height(65.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(start = 16.dp),
-        userScrollEnabled = true
-
+        state = listState
     ) {
-        items(dates.size) { index ->
+        items(days.size) { index ->
             DateItem(
-                dayOfMonth = datesTest[index].dayOfMonth,
-                dayOfWeek = datesTest[index].dayOfWeek,
-                isSelected = datesTest[index].isSelected,
-            ) {
-
-                datesTest.forEachIndexed { i, item ->
-                    datesTest[i] = item.copy(isSelected = false)
+                dayOfMonth = days[index].dayOfMonth,
+                dayOfWeek = days[index].dayOfWeek,
+                isSelected = days[index].isSelected,
+                onClick = {
+                    onClickDay(index)
                 }
-                datesTest[index] = datesTest[index].copy(isSelected = true)
-            }
+            )
         }
     }
 }
