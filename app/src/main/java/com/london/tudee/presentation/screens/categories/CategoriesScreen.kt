@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.london.tudee.R
@@ -79,6 +80,8 @@ fun CategoriesScreenContent(
                     text = stringResource(screenTitle),
                     style = TudeeTheme.typography.headlineSmall,
                     color = TudeeTheme.colors.title,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
                 )
             }
 

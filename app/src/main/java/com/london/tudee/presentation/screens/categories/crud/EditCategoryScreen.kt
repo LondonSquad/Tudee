@@ -330,11 +330,9 @@ private fun EditCategoryScreenPreview() {
             category = Category(
                 id = 1,
                 title = "Work",
-                //  arName = "العمل",
                 iconRes = "",
                 isDefault = true,
                 taskCount = 0,
-                //   tint = TudeeTheme.colors.primary.value
             ),
             onDismiss = {}
         )
