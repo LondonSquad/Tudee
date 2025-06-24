@@ -1,6 +1,7 @@
 package com.london.tudee.presentation.screens.home
 
 import com.london.tudee.domain.entities.Task
+import com.london.tudee.presentation.screens.task.taskdetails.TaskDetailsBottomSheetUiState
 
 data class HomeUiState(
     val isLoading: Boolean = true,
@@ -9,4 +10,6 @@ data class HomeUiState(
     val doneTasks: List<Task> = listOf(),
     val inProgressTasks: List<Task> = listOf(),
     val toDoTasks: List<Task> = listOf(),
+    val taskDetailBottomSheetUiState: TaskDetailsBottomSheetUiState = TaskDetailsBottomSheetUiState(),
+    val isTaskDetailsBottomSheetVisible: Boolean = false
 )
