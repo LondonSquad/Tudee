@@ -80,7 +80,7 @@ fun TasksScreen(
         onClickRight = { viewModel.getTargetDates(uiState.date, ArrowActions.Next) },
         onDateSelected = { viewModel.onDateSelected(it) },
         onDayClick = { viewModel.onDayCardSelected(it) },
-        onDeleteTask = { viewModel.showDeleteDialog(uiState.selectedTaskId) }
+        onDeleteTask = { task -> viewModel.showDeleteDialog(task.id) }
     )
     ConfirmDeleteTaskScreen(
         viewModel = viewModel,
@@ -195,7 +195,8 @@ fun TasksContent(
                             ) {
                                 items(tasks.size) { index ->
                                     val task = tasks[index]
-                                    val iconResId = categories.find { it.id == task.categoryId }?.iconRes ?: ""
+                                    val iconResId =
+                                        categories.find { it.id == task.categoryId }?.iconRes ?: ""
                                     SwipeToDeleteTask(
                                         modifier = Modifier,
                                         task = task,
