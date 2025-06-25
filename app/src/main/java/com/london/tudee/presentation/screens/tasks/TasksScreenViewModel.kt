@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -31,10 +32,12 @@ class TasksScreenViewModel(
     private val taskService: TaskService,
     private val categoryService: CategoryService
 ) : ViewModel() {
+
     private val _uiState = MutableStateFlow(FilterTasksUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
+        loadCategories()
         addTestTask()
         getTargetDates(date = _uiState.value.date, arrowAction = ArrowActions.None)
         getDoneTasks()
@@ -46,19 +49,20 @@ class TasksScreenViewModel(
     //region get tasks
     private fun addTestTask() {
         viewModelScope.launch(Dispatchers.IO) {
+            val categoryId = uiState.value.categories.firstOrNull()?.id ?: 1
             taskService.add(
                 Task(
                     title = "33333333333",
                     description = "kimo",
                     taskStatus = TaskStatus.DONE,
                     priority = Priority.MEDIUM,
-                    categoryId = 1,
+                    categoryId = categoryId,
                 )
             )
         }
     }
 
-    private fun getDoneTasks() {
+    fun getDoneTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             val targetDate = Instant.fromEpochMilliseconds(_uiState.value.date)
                 .toLocalDateTime(TimeZone.currentSystemDefault()).date
@@ -84,7 +88,7 @@ class TasksScreenViewModel(
         }
     }
 
-    private fun getInProgressTasks() {
+    fun getInProgressTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             val targetDate = Instant.fromEpochMilliseconds(_uiState.value.date)
                 .toLocalDateTime(TimeZone.currentSystemDefault()).date
@@ -111,7 +115,7 @@ class TasksScreenViewModel(
         }
     }
 
-    private fun getToDoTasks() {
+    fun getToDoTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             val targetDate = Instant.fromEpochMilliseconds(_uiState.value.date)
                 .toLocalDateTime(TimeZone.currentSystemDefault()).date
@@ -165,7 +169,8 @@ class TasksScreenViewModel(
             }
             currentState.copy(
                 days = daysOfMonth,
-                date = targetDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+                date = targetDate.atStartOfDayIn(TimeZone.currentSystemDefault())
+                    .toEpochMilliseconds()
             )
         }
     }
@@ -201,11 +206,76 @@ class TasksScreenViewModel(
             val dayLocalDate = LocalDate(targetLocalDate.year, targetLocalDate.month, dayOfMonth)
             day.copy(
                 isSelected = (dayLocalDate == targetLocalDate),
-                date = dayLocalDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+                date = dayLocalDate.atStartOfDayIn(TimeZone.currentSystemDefault())
+                    .toEpochMilliseconds()
             )
         }
         _uiState.update {
-            it.copy(days = updatedDays, date = datePickerDate, dayItemIndex = targetLocalDate.dayOfMonth -1)
+            it.copy(
+                days = updatedDays,
+                date = datePickerDate,
+                dayItemIndex = targetLocalDate.dayOfMonth - 1
+            )
+        }
+    }
+
+    fun showDeleteDialog(taskId: Int?) {
+        _uiState.update {
+            it.copy(selectedTaskId = taskId, isDeleteDialogVisible = true)
+        }
+    }
+
+    fun dismissDeleteDialog() {
+        _uiState.update {
+            it.copy(selectedTaskId = null, isDeleteDialogVisible = false)
+        }
+    }
+
+    fun deleteTask(
+        onSuccess: () -> Unit,
+        onError: (Throwable) -> Unit = {}
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val selectedTaskId = uiState.value.selectedTaskId
+            if (selectedTaskId != null) {
+                try {
+                    val task = taskService.getById(selectedTaskId)
+                    taskService.delete(task)
+                    onSuccess()
+                    dismissDeleteDialog()
+                    getDoneTasks()
+                    getToDoTasks()
+                    getInProgressTasks()
+
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        onError(e)
+                    }
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    dismissDeleteDialog()
+                }
+            }
+        }
+    }
+
+    fun loadCategories() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                categoryService.getAll().collect { categories ->
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            categories = categories,
+                            categoryIcons = categories.map { it.iconRes }
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(errMessage = e.message)
+                }
+            }
         }
     }
 }

@@ -1,5 +1,10 @@
 package com.london.tudee.presentation.screens.tasks
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -37,7 +42,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
+import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Task
+import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.components.date.DateItem
 import com.london.tudee.presentation.components.date.TudeeDatePicker
@@ -46,8 +53,10 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.SwipeToDeleteTask
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.task.confirm_delete_task.ConfirmDeleteTaskScreen
 import com.london.tudee.presentation.utils.DateFormatter.toMonthShort
 import com.london.tudee.presentation.utils.DateFormatter.toYear
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -57,6 +66,8 @@ fun TasksScreen(
     viewModel: TasksScreenViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    var showDeleteSheet by remember { mutableStateOf(false) }
+    var showDeleteSnackBar by remember { mutableStateOf(false) }
 
     TasksContent(
         initialTabIndex = initialTabIndex,
@@ -68,11 +79,44 @@ fun TasksScreen(
         toDoTasks = uiState.toDoTasks,
         doneTasks = uiState.doneTasks,
         days = uiState.days,
+        categories = uiState.categories,
         onClickLeft = { viewModel.getTargetDates(uiState.date, ArrowActions.Previous) },
         onClickRight = { viewModel.getTargetDates(uiState.date, ArrowActions.Next) },
         onDateSelected = { viewModel.onDateSelected(it) },
-        onDayClick = { viewModel.onDayCardSelected(it) }
+        onDayClick = { viewModel.onDayCardSelected(it) },
+        onDeleteTask = { task -> viewModel.showDeleteDialog(task.id) }
     )
+    ConfirmDeleteTaskScreen(
+        viewModel = viewModel,
+        onTaskDeleted = {
+            showDeleteSheet = false
+            showDeleteSnackBar = true
+            viewModel.getDoneTasks()
+            viewModel.getToDoTasks()
+            viewModel.getInProgressTasks()
+        }
+    )
+
+    AnimatedVisibility(
+        visible = showDeleteSnackBar,
+        enter = fadeIn() + slideInVertically(initialOffsetY = { -100 }),
+        exit = fadeOut() + slideOutVertically(targetOffsetY = { -100 })
+    ) {
+        SnackBar(
+            modifier = Modifier
+                .padding(top = 16.dp),
+            message = R.string.delete_task_success,
+            iconPainter = painterResource(id = R.drawable.snack_bar_container),
+            iconTint = TudeeTheme.colors.greenAccent
+        )
+    }
+
+    LaunchedEffect(showDeleteSnackBar) {
+        if (showDeleteSnackBar) {
+            delay(3000)
+            showDeleteSnackBar = false
+        }
+    }
 }
 
 @Composable
@@ -86,10 +130,12 @@ fun TasksContent(
     toDoTasks: List<Task>,
     doneTasks: List<Task>,
     days: List<DaysOfMonth>,
+    categories: List<Category>,
     onClickLeft: () -> Unit,
     onClickRight: () -> Unit,
     onDateSelected: (Long) -> Unit,
-    onDayClick: (index: Int) -> Unit
+    onDayClick: (index: Int) -> Unit,
+    onDeleteTask: (Task) -> Unit
 ) {
 
     var showDatePicker by remember { mutableStateOf(false) }
@@ -158,10 +204,14 @@ fun TasksContent(
                                     .padding(horizontal = 16.dp, vertical = 8.dp)
                             ) {
                                 items(tasks.size) { index ->
+                                    val task = tasks[index]
+                                    val iconResId =
+                                        categories.find { it.id == task.categoryId }?.iconRes ?: ""
                                     SwipeToDeleteTask(
                                         modifier = Modifier,
-                                        task = tasks[index],
-                                        onDeleteClick = {}
+                                        task = task,
+                                        iconResId = iconResId,
+                                        onDeleteClick = { onDeleteTask(task) }
                                     )
                                     Spacer(modifier = Modifier.height(8.dp))
                                 }

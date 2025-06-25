@@ -17,10 +17,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.rememberScrollState
@@ -212,16 +212,21 @@ fun HomeScreenContent(
             when (taskUiState.stateMessage) {
                 R.string.add_task_successfully, R.string.edit_task_successfully -> {
                     SnackBar(
-                        modifier = Modifier.offset(y = 56.dp),
+                        modifier = Modifier
+                            .windowInsetsPadding(WindowInsets.statusBars)
+                            .padding(top = 16.dp),
                         message = if (taskUiState.isEditMode) R.string.edit_task_successfully
                         else R.string.add_task_successfully,
                         iconPainter = painterResource(id = R.drawable.snack_bar_container),
                         iconTint = TudeeTheme.colors.greenAccent
                     )
                 }
+
                 R.string.some_error_happened -> {
                     SnackBar(
-                        modifier = Modifier.offset(y = 56.dp),
+                        modifier = Modifier
+                            .windowInsetsPadding(WindowInsets.statusBars)
+                            .padding(top = 16.dp),
                         message = R.string.some_error_happened,
                         iconPainter = painterResource(id = R.drawable.snack_bar_error),
                         iconTint = TudeeTheme.colors.errorVariant,

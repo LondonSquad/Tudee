@@ -58,6 +58,7 @@
     <string name="category_event">Event</string>
     <string name="delete_task_title">Delete Task</string>
     <string name="delete_task_message">Are you sure to continue?</string>
+    <string name="delete_task_success">Deleted task successfully.</string>
     <string name="delete">Delete</string>
     <string name="edit_icon" translatable="false">Edit Icon</string>
     <string name="clear">Clear</string>
