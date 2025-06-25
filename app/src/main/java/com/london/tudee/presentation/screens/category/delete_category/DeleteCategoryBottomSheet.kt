@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.categories.crud
+package com.london.tudee.presentation.screens.category.delete_category
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -22,25 +25,29 @@ import com.london.tudee.presentation.components.buttons.TudeeNegativeButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun DeleteCategoryScreen(
     modifier: Modifier = Modifier,
     category: Category,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onCategoryDeleted: () -> Unit,
+    onDeleteError: () -> Unit = {},
 ) {
     TudeeBottomSheetScreen(
         showBottomSheet = true,
         modifier = modifier,
-        onDismiss = {},
+        onDismiss = onDismiss,
         screenContent = {},
         bottomSheetActions = {},
         bottomSheetContent = {
             DeleteCategoryContent(
                 modifier = modifier,
                 category = category,
-                onCancel = onDismiss
+                onCancel = onDismiss,
+                onCategoryDeleted = onCategoryDeleted,
+                onDeleteError = onDeleteError
             )
         }
     )
@@ -51,9 +58,18 @@ fun DeleteCategoryContent(
     category: Category,
     modifier: Modifier = Modifier,
     onCancel: () -> Unit,
+    onCategoryDeleted: () -> Unit,
+    onDeleteError: () -> Unit = {},
     viewModel: DeleteCategoryScreenViewModel = koinViewModel()
 ) {
+    val uiState by viewModel.deleteState.collectAsState()
 
+    LaunchedEffect(uiState.isDeleted, uiState.errorMessage) {
+        when {
+            uiState.isDeleted -> onCategoryDeleted()
+            uiState.errorMessage != null -> onDeleteError()
+        }
+    }
 
     Column(
         modifier = modifier
@@ -65,14 +81,18 @@ fun DeleteCategoryContent(
             color = TudeeTheme.colors.title,
             modifier = Modifier.align(Alignment.Start)
         )
+
         Spacer(modifier = Modifier.height(12.dp))
+
         Text(
             text = stringResource(R.string.delete_task_message),
             style = TudeeTheme.typography.bodyMedium,
             color = TudeeTheme.colors.body,
             modifier = Modifier.align(Alignment.Start)
         )
+
         Spacer(modifier = Modifier.height(12.dp))
+
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             Image(
                 painter = painterResource(R.drawable.tudee_delete),
@@ -83,12 +103,11 @@ fun DeleteCategoryContent(
 
         Spacer(modifier = Modifier.height(36.dp))
 
-
         TudeeNegativeButton(
             text = stringResource(R.string.delete),
             onClick = {
                 viewModel.deleteCategory(category)
-                if (viewModel.uiState.value.isDeleted) {
+                if (viewModel.deleteState.value.isDeleted) {
                     onCancel()
                 }
             },
@@ -113,13 +132,12 @@ private fun DeleteCategoryScreenPreview() {
             category = Category(
                 id = 1,
                 title = "Work",
-                //arName = "العمل",
                 iconRes = "",
                 isDefault = true,
                 taskCount =0,
-             //   tint = TudeeTheme.colors.primary.value
             ),
-            onDismiss = {}
+            onDismiss = {},
+            onCategoryDeleted = {}
         )
     }
 }

@@ -1,17 +1,24 @@
 package com.london.tudee.presentation.screens.onboarding
 
+import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.pager.PagerState
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.london.tudee.domain.services.AppPreferencesService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 
-
-class OnBoardingViewModel : ViewModel() {
+@KoinViewModel
+class OnBoardingViewModel(
+    private val appPreferencesService: AppPreferencesService
+) : ViewModel() {
 
     private val _currentPage = MutableStateFlow(0)
     val currentPage: StateFlow<Int> = _currentPage.asStateFlow()
@@ -30,6 +37,13 @@ class OnBoardingViewModel : ViewModel() {
                     animationSpec = tween(durationMillis = 750, easing = FastOutSlowInEasing)
                 )
             }
+        }
+    }
+
+    fun onboardingFinished() {
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching { appPreferencesService.setOnboardingShown() }
+            .onFailure { Log.e("OnboardingViewModel", "onboardingFinished: ", it) }
         }
     }
 }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,10 +16,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.rememberScrollState
@@ -32,9 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,7 +60,8 @@ import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.Add
 import com.london.tudee.presentation.screens.task.taskdetails.TaskDetailsBottomSheet
 import com.london.tudee.presentation.screens.tasks.EmptyTasksScreen
 import kotlinx.coroutines.delay
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
+
 
 @Composable
 fun HomeScreen(
@@ -78,6 +75,7 @@ fun HomeScreen(
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
         else -> HomeScreenContent(
             state = uiState,
+            viewmodel = viewModel,
             interactions = viewModel,
             onArrowClicked = onArrowClicked,
             taskUiState = taskUiState,
@@ -108,6 +106,7 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 @Composable
 fun HomeScreenContent(
     state: HomeUiState,
+    viewmodel: HomeViewModel,
     taskUiState: AddOrEditTaskUiState,
     interactions: HomeInteractions,
     onArrowClicked: (Int) -> Unit
@@ -121,7 +120,7 @@ fun HomeScreenContent(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .zIndex(if (taskUiState.showBottomSheet || state.isTaskDetailsBottomSheetVisible) 0f else 1f)
-                .padding(bottom = 10.dp, end = 12.dp),
+                .padding(bottom = 16.dp, end = 16.dp),
             contentDescription = "note icon",
             onClick = {
                 interactions.showBottomSheet()
@@ -132,7 +131,7 @@ fun HomeScreenContent(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            TopAPPBar()
+            TopAPPBar(viewmodel, state)
 
             Column(
                 modifier = Modifier
@@ -193,7 +192,9 @@ fun HomeScreenContent(
             onDismiss = interactions::hideTaskDetailsBottomSheet,
             onMoveClick = interactions::onClickMove,
             onEditClick = {
-                //show edit task bottom sheet
+                interactions.hideTaskDetailsBottomSheet()
+                val taskId = state.taskDetailBottomSheetUiState.task.id
+                interactions.initializeForEdit(taskId)
             })
 
         AddOrEditTaskBottomSheet(
@@ -209,16 +210,21 @@ fun HomeScreenContent(
             when (taskUiState.stateMessage) {
                 R.string.add_task_successfully, R.string.edit_task_successfully -> {
                     SnackBar(
-                        modifier = Modifier.offset(y = 56.dp),
+                        modifier = Modifier
+                            .windowInsetsPadding(WindowInsets.statusBars)
+                            .padding(top = 16.dp),
                         message = if (taskUiState.isEditMode) R.string.edit_task_successfully
                         else R.string.add_task_successfully,
                         iconPainter = painterResource(id = R.drawable.snack_bar_container),
                         iconTint = TudeeTheme.colors.greenAccent
                     )
                 }
+
                 R.string.some_error_happened -> {
                     SnackBar(
-                        modifier = Modifier.offset(y = 56.dp),
+                        modifier = Modifier
+                            .windowInsetsPadding(WindowInsets.statusBars)
+                            .padding(top = 16.dp),
                         message = R.string.some_error_happened,
                         iconPainter = painterResource(id = R.drawable.snack_bar_error),
                         iconTint = TudeeTheme.colors.errorVariant,
@@ -235,7 +241,7 @@ fun HomeScreenContent(
 }
 
 @Composable
-private fun TopAPPBar() {
+private fun TopAPPBar(viewmodel: HomeViewModel, state: HomeUiState) {
     Box(
         modifier = Modifier
             .background(TudeeTheme.colors.primary)
@@ -246,11 +252,10 @@ private fun TopAPPBar() {
         Row(
             modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically
         ) {
-            val systemDarkTheme = isSystemInDarkTheme()
-            var isDark by remember { mutableStateOf(systemDarkTheme) }
+            Log.d("HOMEBARSTATE", "${state.isDarkMode}")
             HomeTopBar(
-                isDarkMode = isDark,
-                onCheckedChange = { isDark = it },
+                isDarkMode = state.isDarkMode,
+                onThemeChanged = { viewmodel.onThemeSwitched(it) },
                 modifier = Modifier.fillMaxSize()
             )
         }

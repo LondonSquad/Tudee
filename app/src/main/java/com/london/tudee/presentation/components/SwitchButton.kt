@@ -47,7 +47,7 @@ import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
-fun SwitchButton(
+fun ThemeSwitcher(
     isDarkMode: Boolean,
     onToggle: (Boolean) -> Unit
 ) {
@@ -79,7 +79,7 @@ fun SwitchButton(
                 enabled = true,
                 role = Role.Switch,
                 indication = LocalIndication.current,
-                onValueChange = { onToggle(it) }
+                onValueChange = onToggle
             )
     ) {
         DownGrayCloud(isDarkMode)
@@ -442,8 +442,8 @@ private fun BoxScope.SmallInMoon(isDarkMood: Boolean) {
 private fun PreviewSwitchButton() {
     var isDarkMood by remember { mutableStateOf(false) }
     TudeeTheme {
-        SwitchButton(
-            isDarkMode = isDarkMood,
+        ThemeSwitcher(
+            isDarkMode = false,
             onToggle = { isDarkMood = !isDarkMood }
         )
     }

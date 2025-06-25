@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.london.tudee"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -59,6 +59,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.core)
+
     //Navigation compose
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.room.runtime)
@@ -71,8 +74,11 @@ dependencies {
     implementation (libs.coil.compose)
 
     // koin
-    implementation (libs.koin.android)
-    implementation (libs.koin.androidx.compose)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.annotations)  // Add this
+    ksp(libs.koin.ksp.compiler)           // Add this
+
 
     implementation(libs.kotlinx.datetime)
 

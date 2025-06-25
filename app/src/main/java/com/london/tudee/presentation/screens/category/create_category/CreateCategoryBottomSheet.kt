@@ -1,16 +1,20 @@
-package com.london.tudee.presentation.screens.categories.crud
+package com.london.tudee.presentation.screens.category.create_category
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import android.util.Base64
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,10 +35,12 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import java.io.ByteArrayOutputStream
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.presentation.components.TudeeTextField
@@ -44,71 +50,70 @@ import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.color.RectBorderColor
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun EditCategoryScreen(
-    modifier: Modifier = Modifier,
-    category: Category,
-    onDismiss: () -> Unit
+fun CreateCategoryScreen(
+    modifier: Modifier = Modifier, onDismiss: () -> Unit
 ) {
     TudeeBottomSheetScreen(
         showBottomSheet = true,
         modifier = modifier,
-        onDismiss = {},
+        onDismiss = onDismiss,
         screenContent = {},
         bottomSheetActions = {},
         bottomSheetContent = {
-            CategoryEditContent(
-                modifier = modifier,
-                category = category,
-                onDismiss = onDismiss,
+            CreateCategoryContent(
+                modifier = modifier, onDismiss = onDismiss
             )
         }
     )
 }
 
+// Helper function to convert URI to Base64
+private fun uriToBase64(context: Context, uri: Uri): String? {
+    return try {
+        val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
+        } else {
+            @Suppress("DEPRECATION")
+            MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+        }
+
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
+        Base64.encodeToString(byteArray, Base64.DEFAULT)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
+
 @Composable
-private fun CategoryEditContent(
-    modifier: Modifier = Modifier,
-    category: Category,
+private fun CreateCategoryContent(
+    modifier: Modifier,
     onDismiss: () -> Unit,
-    viewModel: EditCategoryScreenViewModel = koinViewModel()
+    viewModel: CreateCategoryScreenViewModel = koinViewModel()
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    var categoryName by remember { mutableStateOf(category.title) }
+    val context = LocalContext.current
+    var categoryName by remember { mutableStateOf("") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = stringResource(R.string.edit_category),
-                style = TudeeTheme.typography.titleLarge,
-                color = TudeeTheme.colors.title
-            )
-            Text(
-                text = stringResource(R.string.delete),
-                style = TudeeTheme.typography.labelLarge,
-                color = TudeeTheme.colors.error,
-                modifier = Modifier.clickable(
-                    interactionSource = interactionSource,
-                    indication = null,
-                    onClick = {
-                        // nav to delete category screen
-                    },
-                )
-            )
-        }
+
+        Text(
+            text = stringResource(R.string.add_new_category),
+            style = TudeeTheme.typography.titleLarge,
+            color = TudeeTheme.colors.title
+        )
+
 
         Spacer(modifier = Modifier.height(12.dp))
+
 
         TudeeTextField(
             icon = R.drawable.add_category_icon,
@@ -127,32 +132,32 @@ private fun CategoryEditContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        ImagePickerEditCategory { uri ->
+        ImagePickerAddCategory { uri ->
             imageUri = uri
         }
 
         Spacer(modifier = Modifier.height(36.dp))
 
+
         TudeePrimaryButton(
             onClick = {
-                viewModel.editCategory(
+                val base64Image = imageUri?.let { uriToBase64(context, it) } ?: ""
+                viewModel.createCategory(
                     category = Category(
-                        id = category.id,
+                        id = 1,
                         title = categoryName,
-                        //arName = categoryName,
-                        //  iconPath = imageUri?.toString() ?: category.iconPath,
-                        iconRes = "",
-                        isDefault = category.isDefault,
-                      //  tint = category.tint,
-                        taskCount = category.taskCount
+                        iconRes = base64Image,
+                        isDefault = false,
+                        taskCount = 0
                     )
+
                 )
 
-                if (viewModel.uiState.value.isDeleted) {
-                    onDismiss()
-                }
+                onDismiss()
+
             },
-            text = stringResource(R.string.save),
+            isDisabled = categoryName.isBlank() || imageUri == null,
+            text = stringResource(R.string.add),
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -166,11 +171,9 @@ private fun CategoryEditContent(
     }
 }
 
-
 @Composable
-private fun ImagePickerEditCategory(
-    modifier: Modifier = Modifier,
-    onImagePicked: (Uri?) -> Unit
+private fun ImagePickerAddCategory(
+    modifier: Modifier = Modifier, onImagePicked: (Uri?) -> Unit
 ) {
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
@@ -190,8 +193,7 @@ private fun ImagePickerEditCategory(
             .clip(TudeeTheme.shapes.extraSmall)
             .drawBehind {
                 drawRect(
-                    color = RectBorderColor,
-                    style = Stroke(
+                    color = RectBorderColor, style = Stroke(
                         width = 1.dp.toPx(),
                         pathEffect = PathEffect.dashPathEffect(floatArrayOf(8f, 8f), 0f)
                     )
@@ -199,9 +201,7 @@ private fun ImagePickerEditCategory(
             }, contentAlignment = Alignment.Center
     ) {
         Box(
-            modifier = modifier
-                .size(112.dp),
-            contentAlignment = Alignment.Center
+            modifier = modifier.size(112.dp), contentAlignment = Alignment.Center
         ) {
             if (imageUri != null) {
                 Image(
@@ -216,43 +216,56 @@ private fun ImagePickerEditCategory(
 
         }
 
-        Box(
-            modifier = Modifier
-                .size(34.dp)
-                .clip(shape = TudeeTheme.shapes.extraSmall)
-                .background(TudeeTheme.colors.surfaceHigh)
-                .clickable {
-                    imagePickerLauncher.launch("image/*")
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.pencil_edit_01),
-                contentDescription = "Pick Image",
-                tint = TudeeTheme.colors.secondary,
-                modifier = Modifier.padding(6.dp)
-            )
+        if (imageUri != null) {
+            Box(
+                modifier = Modifier
+                    .size(34.dp)
+                    .clip(shape = TudeeTheme.shapes.extraSmall)
+                    .background(TudeeTheme.colors.surfaceHigh)
+                    .clickable {
+                        imagePickerLauncher.launch("image/*")
+                    }, contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.pencil_edit_01),
+                    contentDescription = "Pick Image",
+                    tint = TudeeTheme.colors.secondary,
+                    modifier = Modifier.padding(6.dp)
+                )
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable {
+                        imagePickerLauncher.launch("image/*")
+                    },
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_add_image),
+                    contentDescription = "Pick Image",
+                    tint = TudeeTheme.colors.hint,
+                )
+                Text(
+                    text = stringResource(R.string.upload),
+                    style = TudeeTheme.typography.labelMedium,
+                    color = TudeeTheme.colors.hint,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
         }
+
     }
 
 }
 
 @ThemePreviews
 @Composable
-private fun EditCategoryScreenPreview() {
+private fun CreateCategoryPreview() {
     TudeeTheme {
-        EditCategoryScreen(
-            modifier = Modifier,
-            category = Category(
-                id = 1,
-                title = "Work",
-              //  arName = "العمل",
-                iconRes = "",
-                isDefault = true,
-                taskCount = 0,
-             //   tint = TudeeTheme.colors.primary.value
-            ),
-            onDismiss = {}
-        )
+        CreateCategoryScreen(
+            modifier = Modifier, onDismiss = {})
     }
 }
