@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,9 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -79,6 +75,7 @@ fun HomeScreen(
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
         else -> HomeScreenContent(
             state = uiState,
+            viewmodel = viewModel,
             interactions = viewModel,
             onArrowClicked = onArrowClicked,
             taskUiState = taskUiState,
@@ -109,6 +106,7 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 @Composable
 fun HomeScreenContent(
     state: HomeUiState,
+    viewmodel: HomeViewModel,
     taskUiState: AddOrEditTaskUiState,
     interactions: HomeInteractions,
     onArrowClicked: (Int) -> Unit
@@ -133,7 +131,7 @@ fun HomeScreenContent(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            TopAPPBar()
+            TopAPPBar(viewmodel, state)
 
             Column(
                 modifier = Modifier
@@ -243,7 +241,7 @@ fun HomeScreenContent(
 }
 
 @Composable
-private fun TopAPPBar() {
+private fun TopAPPBar(viewmodel: HomeViewModel, state: HomeUiState) {
     Box(
         modifier = Modifier
             .background(TudeeTheme.colors.primary)
@@ -254,11 +252,10 @@ private fun TopAPPBar() {
         Row(
             modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically
         ) {
-            val systemDarkTheme = isSystemInDarkTheme()
-            var isDark by remember { mutableStateOf(systemDarkTheme) }
+            Log.d("HOMEBARSTATE", "${state.isDarkMode}")
             HomeTopBar(
-                isDarkMode = isDark,
-                onCheckedChange = { isDark = it },
+                isDarkMode = state.isDarkMode,
+                onThemeChanged = { viewmodel.onThemeSwitched(it) },
                 modifier = Modifier.fillMaxSize()
             )
         }

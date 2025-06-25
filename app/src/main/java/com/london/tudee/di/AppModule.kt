@@ -10,12 +10,12 @@ import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
-
-@Module(includes = [DatabaseModule::class])
+@Module(includes = [DatabaseModule::class, PreferencesModule::class])
 @ComponentScan("com.london.tudee")
-class AppModule{
+class AppModule {
     @Single
     fun provideCategoryService(dao: CategoryDao): CategoryService = CategoriesServicesImpl(dao)
+
     @Single
     fun provideTaskService(dao: TaskDao): TaskService = TasksServicesImpl(dao)
 }

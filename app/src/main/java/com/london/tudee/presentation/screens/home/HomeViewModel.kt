@@ -7,6 +7,7 @@ import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
+import com.london.tudee.domain.services.AppPreferencesService
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
 import com.london.tudee.presentation.base.HomeInteractions
@@ -24,7 +25,9 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class HomeViewModel(
-    private val taskService: TaskService, private val categoryService: CategoryService
+    private val taskService: TaskService,
+    private val categoryService: CategoryService,
+    private val appPreferences: AppPreferencesService,
 ) : ViewModel(), HomeInteractions {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -35,6 +38,7 @@ class HomeViewModel(
 
     init {
         loadCategories()
+        initializeState()
         initializeAllTasks()
         initializeDoneTasks()
         initializeTodoTasks()
@@ -180,6 +184,14 @@ class HomeViewModel(
         }
     }
 
+    override fun onThemeSwitched(isDarkMode: Boolean) {
+        viewModelScope.launch {
+            runCatching { appPreferences.setDarkModeEnabled(isDarkMode) }
+                .onSuccess { _uiState.update { it.copy(isDarkMode = isDarkMode) } }
+                .onFailure { _uiState.update { it.copy(errMessage = it.errMessage) } }
+        }
+    }
+
     override fun loadCategories() {
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
@@ -316,7 +328,11 @@ class HomeViewModel(
                         taskStatus = originalTask.taskStatus,
                         priority = currentState.selectedPriority,
                         categoryId = currentState.selectedCategory?.id ?: 1,
-                        timeStamp = currentState.selectedDate?.let { Instant.fromEpochMilliseconds(it) }
+                        timeStamp = currentState.selectedDate?.let {
+                            Instant.fromEpochMilliseconds(
+                                it
+                            )
+                        }
                             ?: Clock.System.now()
                     )
                 } else {
@@ -327,7 +343,11 @@ class HomeViewModel(
                         taskStatus = TaskStatus.TODO,
                         priority = currentState.selectedPriority,
                         categoryId = currentState.selectedCategory?.id ?: 1,
-                        timeStamp = currentState.selectedDate?.let { Instant.fromEpochMilliseconds(it) }
+                        timeStamp = currentState.selectedDate?.let {
+                            Instant.fromEpochMilliseconds(
+                                it
+                            )
+                        }
                             ?: Clock.System.now()
                     )
                 }
@@ -380,4 +400,7 @@ class HomeViewModel(
         }
     }
 
+    private fun initializeState() = _uiState.update {
+        it.copy(isDarkMode = appPreferences.isDarkModeEnabled.value == true)
+    }
 }
