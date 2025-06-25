@@ -63,7 +63,7 @@ fun EditCategoryScreen(
     TudeeBottomSheetScreen(
         showBottomSheet = true,
         modifier = modifier,
-        onDismiss = {},
+        onDismiss = onDismiss,
         screenContent = {},
         bottomSheetActions = {},
         bottomSheetContent = {
