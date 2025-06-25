@@ -118,23 +118,30 @@ class TasksScreenViewModel(
     //endregion
 
     fun updateDateByAction(date: Long, arrowAction: ArrowActions) {
-        val currentDate = date.toLocalDate()
-        val selectedDate = _uiState.value.date.toLocalDate()
+        val currentLocalDate = date.toLocalDate()
+        val previouslySelectedDate = _uiState.value.date.toLocalDate()
+
         val targetDate = when (arrowAction) {
-            ArrowActions.Next -> currentDate.plus(DatePeriod(months = 1))
-            ArrowActions.Previous -> currentDate.minus(DatePeriod(months = 1))
-            ArrowActions.None -> currentDate
+            ArrowActions.Next -> currentLocalDate.plus(DatePeriod(months = 1))
+            ArrowActions.Previous -> currentLocalDate.minus(DatePeriod(months = 1))
+            ArrowActions.None -> currentLocalDate
         }
+
+        val dayToSelect = if (arrowAction == ArrowActions.None) {
+            previouslySelectedDate.dayOfMonth
+        } else {
+            minOf(previouslySelectedDate.dayOfMonth, targetDate.lengthOfMonth(targetDate.toLongDate()))
+        }
+        val newSelectedDate = LocalDate(targetDate.year, targetDate.month, dayToSelect)
 
         _uiState.update { currentState ->
             val daysOfMonth = (1..targetDate.lengthOfMonth(_uiState.value.date)).map { day ->
                 val dateForDay = LocalDate(targetDate.year, targetDate.month, day)
                 val dayOfWeek = dateForDay.toDayOfWeekShort()
-
                 DaysOfMonth(
                     dayOfMonth = day.toString(),
                     dayOfWeek = dayOfWeek,
-                    isSelected = dateForDay == selectedDate,
+                    isSelected = dateForDay == newSelectedDate,
                     date = dateForDay.toLongDate()
                 )
             }
@@ -143,16 +150,14 @@ class TasksScreenViewModel(
                 date = targetDate.toLongDate()
             )
         }
+        if (arrowAction != ArrowActions.None) {
+            onDateSelected(newSelectedDate.toLongDate())
+        }
     }
 
     fun onDaySelected(indexOfSelectedDay: Int) {
         val days = _uiState.value.days.toMutableList()
         val currentDate = _uiState.value.date.toLocalDate()
-
-        if (days[indexOfSelectedDay].isSelected) {
-            return
-        }
-
         days.forEach { it.isSelected = false }
         days[indexOfSelectedDay].isSelected = true
         val selectedDayOfMonth = days[indexOfSelectedDay].dayOfMonth.toInt()
