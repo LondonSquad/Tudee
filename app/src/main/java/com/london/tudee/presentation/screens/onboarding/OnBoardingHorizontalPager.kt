@@ -22,7 +22,7 @@ import com.london.tudee.R
 import com.london.tudee.presentation.components.buttons.TudeeTextButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun OnBoardingHorizontalPager(

@@ -1,11 +1,21 @@
 package com.london.tudee.data.local.roomdb.dto
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.TaskStatus
+import kotlinx.datetime.Clock
 
-@Entity(tableName = "TASK_TABLE")
+@Entity(
+    tableName = "TASK_TABLE", foreignKeys = [ForeignKey(
+        entity = CategoryDto::class,
+        parentColumns = ["id"],
+        childColumns = ["categoryId"],
+        onDelete = ForeignKey.CASCADE
+    )
+    ]
+)
 data class TaskDto(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val title: String,
@@ -13,5 +23,5 @@ data class TaskDto(
     val taskStatus: TaskStatus,
     val priority: Priority,
     val categoryId: Int,
-    val timeStamp: Long = System.currentTimeMillis(),
+    val timeStamp: Long = Clock.System.now().toEpochMilliseconds()
 )
