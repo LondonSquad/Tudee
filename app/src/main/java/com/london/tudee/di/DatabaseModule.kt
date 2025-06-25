@@ -1,5 +1,6 @@
 package com.london.tudee.di
 
+import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -9,33 +10,34 @@ import com.london.tudee.data.mappers.convertToCategoryDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.module
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Single
 
 const val DATABASE_NAME = "TudeeDatabase"
 
-val databaseModule = module {
-    single {
-        Room.databaseBuilder(androidContext(), TudeeDatabase::class.java, DATABASE_NAME)
+@Module
+class DatabaseModule {
+    @Single
+    fun provideDatabase(context: Context): TudeeDatabase {
+        return Room.databaseBuilder(context, TudeeDatabase::class.java, DATABASE_NAME)
             .addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
                     CoroutineScope(Dispatchers.IO).launch {
-                        val dao = get<TudeeDatabase>().categoryDao()
-                        defaultCategory(androidContext()).forEach { category ->
+                        val dao =
+                            Room.databaseBuilder(context, TudeeDatabase::class.java, DATABASE_NAME)
+                                .build().categoryDao()
+                        defaultCategory(context).forEach { category ->
                             dao.insert(category.convertToCategoryDto())
                         }
                     }
                 }
             }).build()
     }
-    single { get<TudeeDatabase>().taskDao() }
-    single { get<TudeeDatabase>().categoryDao() }
 
-    single {
-        androidContext().getSharedPreferences(
-            "app_preferences",
-            android.content.Context.MODE_PRIVATE
-        )
-    }
+    @Single
+    fun provideCategoryDao(database: TudeeDatabase) = database.categoryDao()
+
+    @Single
+    fun provideTaskDao(database: TudeeDatabase) = database.taskDao()
 }

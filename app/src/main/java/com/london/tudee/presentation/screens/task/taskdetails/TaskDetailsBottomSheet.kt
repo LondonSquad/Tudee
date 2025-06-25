@@ -1,9 +1,5 @@
 package com.london.tudee.presentation.screens.task.taskdetails
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -45,31 +41,26 @@ fun TaskDetailsBottomSheet(
     showBottomSheet: Boolean = true
 ) {
 
-    AnimatedVisibility(
-        visible = showBottomSheet,
-        enter = slideInVertically(animationSpec = tween(300), initialOffsetY = { it }),
-        exit = slideOutVertically(animationSpec = tween(300), targetOffsetY = { it })
-    ) {
-        TudeeBottomSheetScreen(
-            showBottomSheet = showBottomSheet,
-            onDismiss = onDismiss,
-            screenContent = {},
-            bottomSheetContent = {
-                TaskDetailsBottomSheetContent(
-                    taskName = uiState.task.title,
-                    taskDescription = uiState.task.description,
-                    taskStatus = uiState.task.taskStatus,
-                    taskPriority = uiState.task.priority,
-                    icon = uiState.categoryIcon,
-                    onEditClick = onEditClick,
-                    onMoveClick = onMoveClick,
-                    modifier = modifier
-                )
-            },
-            bottomSheetActions = {},
-            modifier = modifier
-        )
-    }
+    TudeeBottomSheetScreen(
+        showBottomSheet = showBottomSheet,
+        onDismiss = onDismiss,
+        screenContent = {},
+        bottomSheetContent = {
+            TaskDetailsBottomSheetContent(
+                taskName = uiState.task.title,
+                taskDescription = uiState.task.description,
+                taskStatus = uiState.task.taskStatus,
+                taskPriority = uiState.task.priority,
+                icon = uiState.categoryIcon,
+                onEditClick = onEditClick,
+                onMoveClick = onMoveClick,
+                modifier = modifier
+            )
+        },
+        bottomSheetActions = {},
+        modifier = modifier
+    )
+
 }
 
 @Composable

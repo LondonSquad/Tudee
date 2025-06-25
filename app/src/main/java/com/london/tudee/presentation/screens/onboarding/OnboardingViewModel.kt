@@ -13,8 +13,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 
-
+@KoinViewModel
 class OnBoardingViewModel(
     private val appPreferencesService: AppPreferencesService
 ) : ViewModel() {

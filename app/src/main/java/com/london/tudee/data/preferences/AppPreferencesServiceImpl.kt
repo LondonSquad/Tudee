@@ -7,7 +7,9 @@ import androidx.core.content.edit
 import com.london.tudee.data.preferences.AppPreferencesServiceImpl.PreferencesKeys.DARK_MODE_ENABLED
 import com.london.tudee.data.preferences.AppPreferencesServiceImpl.PreferencesKeys.HAS_ONBOARDING_BEEN_SHOWN
 import com.london.tudee.domain.services.AppPreferencesService
+import org.koin.core.annotation.Single
 
+@Single
 class AppPreferencesServiceImpl(
     private val preferences: SharedPreferences,
 ) : AppPreferencesService {

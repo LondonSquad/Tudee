@@ -1,5 +1,4 @@
-package com.london.tudee.presentation.screens.categories.crud
-
+package com.london.tudee.presentation.screens.category.edit_category
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,20 +7,28 @@ import com.london.tudee.domain.services.CategoryService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.koin.android.annotation.KoinViewModel
 
-class DeleteCategoryScreenViewModel(
+@KoinViewModel
+class EditCategoryScreenViewModel(
     private val categoryService: CategoryService
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(DeleteCategoryUiState())
+    private val _uiState = MutableStateFlow(EditCategoryUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun deleteCategory(category: Category) {
+
+    fun editCategory(
+        category: Category
+    ) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
+
+
             try {
-                categoryService.delete(category)
-                _uiState.value = _uiState.value.copy(isDeleted = true, isLoading = false)
+                categoryService.edit(category)
+                _uiState.value = _uiState.value.copy(isEdited = true, isLoading = false)
+
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
@@ -30,10 +37,13 @@ class DeleteCategoryScreenViewModel(
             }
         }
     }
+
+
 }
 
-data class DeleteCategoryUiState(
+
+data class EditCategoryUiState(
     val isLoading: Boolean = false,
-    val isDeleted: Boolean = false,
-    val errorMessage: String? = null
+    val isEdited: Boolean = false,
+    val errorMessage: String? = null,
 )
