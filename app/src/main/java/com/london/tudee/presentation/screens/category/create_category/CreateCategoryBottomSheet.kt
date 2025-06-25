@@ -98,9 +98,8 @@ private fun CreateCategoryContent(
     viewModel: CreateCategoryScreenViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
-    var categoryName by remember { mutableStateOf("Category Title") }
+    var categoryName by remember { mutableStateOf("") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
-    val primaryColor = TudeeTheme.colors.primary
 
     Column(
         modifier = modifier.fillMaxSize()
