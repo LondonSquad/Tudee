@@ -120,6 +120,8 @@ fun CategoriesScreenContent(
                                 title = category.title,
                                 taskCount = category.taskCount,
                                 categoryId = category.id,
+                                inCategorySection = true,
+                                isSelected = false,
                                 onClick = { onCategoryClick(category.id) })
                         }
                     }
