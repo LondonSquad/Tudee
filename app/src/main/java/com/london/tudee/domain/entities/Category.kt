@@ -6,5 +6,4 @@ data class Category(
     val iconRes: String,
     val isDefault: Boolean,
     val taskCount: Int,
-  //  val tint: Long
 )
