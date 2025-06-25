@@ -120,7 +120,7 @@ fun HomeScreenContent(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .zIndex(if (taskUiState.showBottomSheet || state.isTaskDetailsBottomSheetVisible) 0f else 1f)
-                .padding(bottom = 10.dp, end = 12.dp),
+                .padding(bottom = 16.dp, end = 16.dp),
             contentDescription = "note icon",
             onClick = {
                 interactions.showBottomSheet()

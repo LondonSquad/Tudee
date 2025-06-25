@@ -152,12 +152,12 @@ fun TasksContent(
         floatingActionButton = {
             TudeeFloatingActionButton(
                 painter = painterResource(R.drawable.note_add),
-                modifier = Modifier.padding(bottom = 10.dp, end = 12.dp),
                 contentDescription = "note icon",
                 onClick = {},
                 isEnabled = true,
             )
-        }
+        },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
     ) { innerPadding ->
         TudeeTabLayoutWithPager(
             modifier = Modifier.padding(innerPadding),
