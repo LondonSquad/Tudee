@@ -86,7 +86,8 @@ fun SwipeToDeleteTask(
                     }
                 },
             hasDate = true,
-            iconResId = iconResId
+            iconResId = iconResId,
+            isSelected = true
         )
     }
 }
