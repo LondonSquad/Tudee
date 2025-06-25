@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -59,8 +58,7 @@ fun TudeeBottomSheetScreen(
     showActions: Boolean = true
 ) {
     Box(
-        modifier = modifier
-            .fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         screenContent()
 
@@ -86,22 +84,18 @@ private fun TudeeBottomSheetContainer(
         updateTransition(targetState = showBottomSheet, label = "BottomSheetTransition")
 
     val offsetY by transition.animateDp(
-        label = "OffsetY",
-        transitionSpec = {
+        label = "OffsetY", transitionSpec = {
             if (false isTransitioningTo true) {
                 spring(
-                    dampingRatio = Spring.DampingRatioLowBouncy,
-                    stiffness = Spring.StiffnessLow
+                    dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow
                 )
             } else {
                 tween(durationMillis = 300, easing = FastOutLinearInEasing)
             }
-        }
-    ) { visible -> if (visible) 0.dp else 400.dp }
+        }) { visible -> if (visible) 0.dp else 400.dp }
 
     val scrimAlpha by transition.animateFloat(
-        transitionSpec = { tween(durationMillis = 300) },
-        label = "scrim_alpha"
+        transitionSpec = { tween(durationMillis = 300) }, label = "scrim_alpha"
     ) { visible -> if (visible) 0.6f else 0f }
 
     val isVisible = transition.currentState || transition.targetState
@@ -109,12 +103,10 @@ private fun TudeeBottomSheetContainer(
     if (isVisible) {
         TudeeBottomSheetScrim(
             scrimAlpha = scrimAlpha,
-            onDismiss = onDismiss
         )
 
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.BottomCenter
+            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter
         ) {
             Box(
                 modifier = Modifier
@@ -122,8 +114,7 @@ private fun TudeeBottomSheetContainer(
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
-                    ) {}
-            ) {
+                    ) {}) {
                 TudeeBottomSheet(
                     visible = showBottomSheet,
                     onDismiss = onDismiss,
@@ -139,18 +130,12 @@ private fun TudeeBottomSheetContainer(
 @Composable
 private fun TudeeBottomSheetScrim(
     scrimAlpha: Float,
-    onDismiss: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black.copy(alpha = scrimAlpha))
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            ) {
-                onDismiss()
-            }
+
     )
 }
 
@@ -230,8 +215,7 @@ private fun RegularBottomSheetScreenPreview() {
                     onClick = { showBottomSheet = false },
                     modifier = Modifier.fillMaxWidth()
                 )
-            }
-        )
+            })
     }
 }
 
@@ -328,7 +312,6 @@ private fun ScrollableBottomSheetScreenPreview() {
                     onClick = { showBottomSheet = false },
                     modifier = Modifier.fillMaxWidth()
                 )
-            }
-        )
+            })
     }
 }
