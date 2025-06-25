@@ -15,4 +15,8 @@ interface CategoryDetailsInteractions {
     fun deleteCategory(category: Category)
     fun refreshAfterChange()
     fun onCategoryDeleted()
+    fun onCategoryEdited()
+    fun onCategoryEditError()
+    fun onCategoryDeleteError()
+    fun clearMessages()
 }
