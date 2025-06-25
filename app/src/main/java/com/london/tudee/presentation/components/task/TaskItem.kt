@@ -33,8 +33,8 @@ import com.london.tudee.presentation.components.date.DateBadgeStyleValues
 import com.london.tudee.presentation.components.priority.PriorityBadge
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.utils.DateFormatter.toFormattedDateString
 import com.london.tudee.presentation.utils.converterStringToBitmap
-import com.london.tudee.presentation.utils.formatDate
 import kotlinx.datetime.Instant
 
 
@@ -65,7 +65,7 @@ fun TaskItem(
             Spacer(modifier = Modifier.width(8.dp))
             TaskItemTopBar(
                 priority = task.priority,
-                date = formatDate(task.timeStamp),
+                date = task.timeStamp.toFormattedDateString(),
                 isSelected = isSelected,
                 hasDate = hasDate
             )

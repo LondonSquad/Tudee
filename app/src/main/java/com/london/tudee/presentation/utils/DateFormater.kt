@@ -1,45 +1,40 @@
 package com.london.tudee.presentation.utils
 
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toLocalDateTime
-
-fun formatDate(instant: Instant): String {
-    val date = instant.toLocalDateTime(TimeZone.currentSystemDefault()).date
-    val day = date.dayOfMonth.toString().padStart(2, '0')
-    val month = date.monthNumber.toString().padStart(2, '0')
-    val year = date.year.toString()
-    return "$day-$month-$year"
-}
 
 object DateFormatter {
 
     private val timeZone = TimeZone.currentSystemDefault()
 
+    fun LocalDate.toLongDate() = this.atStartOfDayIn(timeZone).toEpochMilliseconds()
+
+    fun Long.toLocalDate() = Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone).date
+
+    fun LocalDate.toMonthNumber() = this.month.value.toString().padStart(2, '0') // ex. 03
+
+    fun Long.toYear() = this.toLocalDate().year.toString() // 1999
+
+    fun LocalDate.toDayNumber() = this.dayOfMonth.toString().padStart(2, '0') // ex. 25
+
     fun Long.toMonthShort(): String {
         val dateTime = Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone)
-        return dateTime.month.name.take(3).lowercase().replaceFirstChar { it.uppercase() } //  Jun
+        return dateTime.month.name.take(3).lowercase().replaceFirstChar { it.uppercase() } // ex. Jun
     }
 
-    fun Long.toMonthNumber(timeZone: TimeZone = DateFormatter.timeZone): String {
-        val monthValue = Instant.fromEpochMilliseconds(this)
-            .toLocalDateTime(timeZone).month.value
+    fun LocalDate.toDayOfWeekShort() = this.dayOfWeek.name
+        .take(3)
+        .lowercase()
+        .replaceFirstChar { it.uppercase() } //  Mon
 
-        return monthValue.toString().padStart(2, '0') // 03
-    }
-
-    fun Long.toYear(): String {
-        val dateTime = Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone)
-        return dateTime.year.toString() // 1999
-    }
-
-    fun Long.toDayNumber(): String {
-        val dateTime = Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone)
-        return dateTime.dayOfMonth.toString().padStart(2, '0') // 25
-    }
-
-    fun Long.toDayOfWeekShort(): String {
-        val dateTime = Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone)
-        return dateTime.dayOfWeek.name.take(3).lowercase().replaceFirstChar { it.uppercase() } //  Mon
+    fun Instant.toFormattedDateString(): String {
+        val localDate = this.toLocalDateTime(timeZone).date
+        val day = localDate.toDayNumber()
+        val month = localDate.toMonthNumber()
+        val year = localDate.toLongDate().toYear()
+        return "$day-$month-$year"
     }
 }
