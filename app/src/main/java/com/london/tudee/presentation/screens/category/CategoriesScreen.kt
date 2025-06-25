@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.categories
+package com.london.tudee.presentation.screens.category
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -23,15 +23,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.presentation.components.CategoryItem
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.category.create_category.CreateCategoryScreen
+import org.koin.androidx.compose.koinViewModel
 import com.london.tudee.presentation.screens.categories.crud.CreateCategoryScreen
 import com.london.tudee.presentation.utils.converterStringToBitmap
 import org.koin.compose.viewmodel.koinViewModel
@@ -81,10 +83,11 @@ fun CategoriesScreenContent(
                     text = stringResource(screenTitle),
                     style = TudeeTheme.typography.headlineSmall,
                     color = TudeeTheme.colors.title,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
                 )
             }
 
-            // Show error message if there's an error
             uiState.errorMessage?.let { error ->
                 Text(
                     text = "Error: $error",
@@ -118,7 +121,8 @@ fun CategoriesScreenContent(
                             CategoryItem(
                                 iconRes = category.iconRes,
                                 title = category.title,
-                                count = category.taskCount,
+                                taskCount = category.taskCount,
+                                categoryId = category.id,
                                 onClick = { onCategoryClick(category.id) })
                         }
                     }

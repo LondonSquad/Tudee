@@ -1,4 +1,5 @@
-package com.london.tudee.presentation.screens.categories.crud
+package com.london.tudee.presentation.screens.category.delete_category
+
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,37 +11,30 @@ import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
-class CreateCategoryScreenViewModel(
+class DeleteCategoryScreenViewModel(
     private val categoryService: CategoryService
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(CreateCategoryUiState())
-    val uiState = _uiState.asStateFlow()
+    private val _deleteState = MutableStateFlow(DeleteCategoryUiState())
+    val deleteState = _deleteState.asStateFlow()
 
-
-    fun createCategory(
-        category: Category
-    ) {
-        _uiState.value = _uiState.value.copy(isLoading = true)
+    fun deleteCategory(category: Category) {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true)
+            _deleteState.value = _deleteState.value.copy(isLoading = true)
             try {
-                categoryService.add(category)
-                _uiState.value = _uiState.value.copy(isDeleted = true, isLoading = false)
-
+                categoryService.delete(category)
+                _deleteState.value = _deleteState.value.copy(isDeleted = true, isLoading = false)
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
+                _deleteState.value = _deleteState.value.copy(
                     isLoading = false,
                     errorMessage = e.message
                 )
             }
         }
     }
-
 }
 
-
-data class CreateCategoryUiState(
+data class DeleteCategoryUiState(
     val isLoading: Boolean = false,
     val isDeleted: Boolean = false,
     val errorMessage: String? = null

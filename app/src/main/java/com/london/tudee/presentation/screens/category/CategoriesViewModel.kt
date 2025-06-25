@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.categories
+package com.london.tudee.presentation.screens.category
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -64,14 +64,6 @@ class CategoriesViewModel(
                     }
                 }
         }
-    }
-
-    fun refreshCategories() {
-        getCategories()
-    }
-
-    fun clearError() {
-        _uiState.update { it.copy(errorMessage = null) }
     }
 
     fun setShowBottomSheet(show: Boolean) {

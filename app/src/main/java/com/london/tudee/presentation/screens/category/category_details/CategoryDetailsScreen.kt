@@ -1,6 +1,6 @@
 @file:JvmName("TaskDetailsScreenKt")
 
-package com.london.tudee.presentation.screens.task.view_tasks
+package com.london.tudee.presentation.screens.category.category_details
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -35,7 +36,9 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import org.koin.compose.viewmodel.koinViewModel
+import com.london.tudee.presentation.screens.category.delete_category.DeleteCategoryScreen
+import com.london.tudee.presentation.screens.category.edit_category.EditCategoryScreen
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CategoryDetailsScreen(
@@ -44,14 +47,26 @@ fun CategoryDetailsScreen(
     viewModel: CategoryDetailsViewModel = koinViewModel(),
 ) {
 
-    val uiState by viewModel.uiState.collectAsState()
+    LaunchedEffect(categoryId) {
+        viewModel.initializeWithCategoryId(categoryId)
+    }
+    val state by viewModel.uiState.collectAsState()
+
+
+    LaunchedEffect(state.categoryDeleted) {
+        if (state.categoryDeleted) {
+            onBackClick()
+        }
+    }
+
     when {
-        uiState.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
-        uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
+        state.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
+        state.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
         else -> CategoryDetailsContent(
-            state = uiState,
+            state = state,
             onBackClick = onBackClick,
-            categoryId = categoryId
+//            editState = state,
+            interactions = viewModel
         )
     }
 }
@@ -78,28 +93,59 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun CategoryDetailsContent(
-    categoryId: Int,
-    state: CategoryDetailsState,
-    onBackClick: () -> Unit
+    state: CategoryDetailsUiState,
+//    editState: EditCategoryUiState,
+    onBackClick: () -> Unit,
+    interactions: CategoryDetailsInteractions
 ) {
-    Column(
-        modifier = Modifier
-            .background(TudeeTheme.colors.surface)
-            .padding(WindowInsets.statusBars.asPaddingValues())
-    ) {
 
-        TopAPPBar(
-            onBackClick = onBackClick,
-            state = state,
-            categoryId = categoryId
-        )
+    Box {
+        Column(
+            modifier = Modifier
+                .background(TudeeTheme.colors.surface)
+                .padding(WindowInsets.statusBars.asPaddingValues())
+        ) {
 
-        TasksPagerSection(state = state)
+            TopAPPBar(
+                onBackClick = onBackClick,
+                state = state,
+                onEditClick = interactions::showEditBottomSheet
+            )
+
+            TasksPagerSection(state = state)
+        }
+
+        if (state.isEditBottomSheetVisible) {
+            EditCategoryScreen(
+                category = state.category,
+                onDismiss = {
+                    interactions.hideEditBottomSheet()
+                    interactions.refreshAfterChange()
+                },
+                onDeleteClick = {
+                    interactions.hideEditBottomSheet()
+                    interactions.showDeleteBottomSheet()
+                }
+//                state = state,
+//                interactions = interactions
+            )
+        }
+
+        if (state.isDeleteBottomSheetVisible) {
+            DeleteCategoryScreen(
+                category = state.category,
+                onDismiss = { interactions.hideDeleteBottomSheet() },
+                onCategoryDeleted = {
+                    interactions.hideDeleteBottomSheet()
+                    interactions.onCategoryDeleted()
+                }
+            )
+        }
     }
 }
 
 @Composable
-fun TasksPagerSection(state: CategoryDetailsState) {
+fun TasksPagerSection(state: CategoryDetailsUiState) {
     TudeeTabLayoutWithPager(
         tabs = listOf(
             TabItem(text = R.string.In_Progress, number = state.inProgressTasks.size),
@@ -108,7 +154,7 @@ fun TasksPagerSection(state: CategoryDetailsState) {
         ),
         tasksList = listOf(state.inProgressTasks, state.toDoTasks, state.doneTasks)
     )
-    { page, tasks ->
+    { _, tasks ->
 
         Box(
             modifier = Modifier
@@ -135,7 +181,11 @@ fun TasksPagerSection(state: CategoryDetailsState) {
 }
 
 @Composable
-private fun TopAPPBar(onBackClick: () -> Unit, state: CategoryDetailsState, categoryId: Int) {
+private fun TopAPPBar(
+    onBackClick: () -> Unit,
+    state: CategoryDetailsUiState,
+    onEditClick: () -> Unit = {}
+) {
     TopAppBar(
         title = state.category.title,
         onBackClick = onBackClick,
@@ -164,28 +214,27 @@ private fun TopAPPBar(onBackClick: () -> Unit, state: CategoryDetailsState, cate
             }
         },
         actions = {
-            IconButton(
-                onClick = it,
-                modifier = Modifier
-                    .then(
-                        if (LocalLayoutDirection.current == LayoutDirection.Rtl)
-                            Modifier.rotate(180f)
-                        else Modifier
-                    )
-                    .border(
-                        1.dp,
-                        TudeeTheme.colors.stroke,
-                        TudeeTheme.shapes.circle
-                    )
-            ) {
-                if (!state.category.isDefault) {
+            if (!state.category.isDefault) {
+                IconButton(
+                    onClick = onEditClick,
+                    modifier = Modifier
+                        .then(
+                            if (LocalLayoutDirection.current == LayoutDirection.Rtl)
+                                Modifier.rotate(180f)
+                            else Modifier
+                        )
+                        .border(
+                            1.dp,
+                            TudeeTheme.colors.stroke,
+                            TudeeTheme.shapes.circle
+                        )
+                ) {
                     Icon(
                         painter = painterResource(R.drawable.edit_icon),
                         contentDescription = "Edit Icon",
                         tint = TudeeTheme.colors.body
                     )
                 }
-
             }
         }
     )

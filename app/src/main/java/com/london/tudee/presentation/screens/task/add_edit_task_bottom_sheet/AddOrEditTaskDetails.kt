@@ -240,6 +240,7 @@ private fun CategoriesGrid(
                         modifier = Modifier.weight(1f),
                         iconRes = category.iconRes,
                         title = category.title,
+                        categoryId = category.id,
                         isSelected = selectedCategory?.id == category.id,
                         onClick = { onCategorySelected(category) }
                     )

@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.task.view_tasks
+package com.london.tudee.presentation.screens.category.category_details
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -7,6 +7,8 @@ import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
+import com.london.tudee.presentation.screens.category.delete_category.DeleteCategoryUiState
+import com.london.tudee.presentation.screens.category.edit_category.EditCategoryUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,20 +21,24 @@ import org.koin.android.annotation.KoinViewModel
 class CategoryDetailsViewModel(
     private val taskService: TaskService,
     private val categoryService: CategoryService,
-) : ViewModel() {
+) : ViewModel(), CategoryDetailsInteractions {
 
-    private val _uiState = MutableStateFlow(CategoryDetailsState())
+    private val _uiState = MutableStateFlow(CategoryDetailsUiState())
     val uiState = _uiState.asStateFlow()
 
-    init {
-        getDoneTasksByCategoryId(uiState.value.category.id)
-        getToDoTasksByCategoryId(uiState.value.category.id)
-        getInProgressTasksByCategoryId(uiState.value.category.id)
-        Log.d("ID", "ID ${uiState.value.category.id}")
-        getCategoryNameById(5) //for testing until nav completed
+    private val _editState = MutableStateFlow(EditCategoryUiState())
+
+    private val _deleteState = MutableStateFlow(DeleteCategoryUiState())
+
+    fun initializeWithCategoryId(categoryId: Int) {
+        getDoneTasksByCategoryId(categoryId)
+        getToDoTasksByCategoryId(categoryId)
+        getInProgressTasksByCategoryId(categoryId)
+        getCategoryNameById(categoryId)
+
     }
 
-    private fun getDoneTasksByCategoryId(categoryId: Int) {
+    override fun getDoneTasksByCategoryId(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
                 categoryId = categoryId,
@@ -55,7 +61,7 @@ class CategoryDetailsViewModel(
         }
     }
 
-    private fun getInProgressTasksByCategoryId(categoryId: Int) {
+    override fun getInProgressTasksByCategoryId(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
                 categoryId = categoryId,
@@ -78,7 +84,7 @@ class CategoryDetailsViewModel(
         }
     }
 
-    private fun getToDoTasksByCategoryId(categoryId: Int) {
+    override fun getToDoTasksByCategoryId(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
                 categoryId = categoryId,
@@ -101,7 +107,7 @@ class CategoryDetailsViewModel(
         }
     }
 
-    private fun getCategoryNameById(categoryId: Int) {
+    override fun getCategoryNameById(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val category = categoryService.getById(categoryId)
@@ -129,5 +135,67 @@ class CategoryDetailsViewModel(
                 }
             }
         }
+    }
+
+    override fun editCategory(
+        category: Category
+    ) {
+        viewModelScope.launch {
+            _editState.value = _editState.value.copy(isLoading = true)
+
+
+            try {
+                categoryService.edit(category)
+                _editState.value = _editState.value.copy(isLoading = false)
+
+            } catch (e: Exception) {
+                _editState.value = _editState.value.copy(
+                    isLoading = false,
+                    errorMessage = e.message
+                )
+            }
+        }
+    }
+
+    override fun deleteCategory(category: Category) {
+        viewModelScope.launch {
+            _deleteState.value = _deleteState.value.copy(isLoading = true)
+            try {
+                categoryService.delete(category)
+                _deleteState.value = _deleteState.value.copy(isDeleted = true, isLoading = false)
+            } catch (e: Exception) {
+                _deleteState.value = _deleteState.value.copy(
+                    isLoading = false,
+                    errorMessage = e.message
+                )
+            }
+        }
+    }
+
+    override fun refreshAfterChange() {
+        val categoryId = _uiState.value.category.id
+        initializeWithCategoryId(categoryId)
+    }
+
+    override fun onCategoryDeleted() {
+        _uiState.update {
+            it.copy(categoryDeleted = true)
+        }
+    }
+
+    override fun showEditBottomSheet() {
+        _uiState.update { it.copy(isEditBottomSheetVisible = true) }
+    }
+
+    override fun hideEditBottomSheet() {
+        _uiState.update { it.copy(isEditBottomSheetVisible = false) }
+    }
+
+    override fun hideDeleteBottomSheet() {
+        _uiState.update { it.copy(isDeleteBottomSheetVisible = false) }
+    }
+
+    override fun showDeleteBottomSheet() {
+        _uiState.update { it.copy(isDeleteBottomSheetVisible = true) }
     }
 }
