@@ -2,9 +2,8 @@ package com.london.tudee.presentation.screens.tasks
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.london.tudee.domain.entities.Priority
-import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
+import com.london.tudee.domain.mapper.toInstant
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
 import com.london.tudee.presentation.screens.tasks.TasksScreenUtils.getDayRangeMillis
@@ -38,33 +37,16 @@ class TasksScreenViewModel(
 
     init {
         loadCategories()
-        addTestTask()
-        getTargetDates(date = _uiState.value.date, arrowAction = ArrowActions.None)
-        getDoneTasks()
-        getToDoTasks()
-        getInProgressTasks()
+        updateDateByAction(date = _uiState.value.date, arrowAction = ArrowActions.None)
+        initializeDoneTasks()
+        initializeToDoTasks()
+        initializeInProgressTasks()
     }
-
 
     //region get tasks
-    private fun addTestTask() {
+    fun initializeDoneTasks() {
         viewModelScope.launch(Dispatchers.IO) {
-            val categoryId = uiState.value.categories.firstOrNull()?.id ?: 1
-            taskService.add(
-                Task(
-                    title = "33333333333",
-                    description = "kimo",
-                    taskStatus = TaskStatus.DONE,
-                    priority = Priority.MEDIUM,
-                    categoryId = categoryId,
-                )
-            )
-        }
-    }
-
-    fun getDoneTasks() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val targetDate = Instant.fromEpochMilliseconds(_uiState.value.date)
+            val targetDate = _uiState.value.date.toInstant()
                 .toLocalDateTime(TimeZone.currentSystemDefault()).date
 
             val (startOfDayMillis, endOfDayMillis) = getDayRangeMillis(targetDate)
@@ -88,9 +70,9 @@ class TasksScreenViewModel(
         }
     }
 
-    fun getInProgressTasks() {
+    fun initializeInProgressTasks() {
         viewModelScope.launch(Dispatchers.IO) {
-            val targetDate = Instant.fromEpochMilliseconds(_uiState.value.date)
+            val targetDate = _uiState.value.date.toInstant()
                 .toLocalDateTime(TimeZone.currentSystemDefault()).date
 
             val (startOfDayMillis, endOfDayMillis) = getDayRangeMillis(targetDate)
@@ -115,9 +97,9 @@ class TasksScreenViewModel(
         }
     }
 
-    fun getToDoTasks() {
+    fun initializeToDoTasks() {
         viewModelScope.launch(Dispatchers.IO) {
-            val targetDate = Instant.fromEpochMilliseconds(_uiState.value.date)
+            val targetDate = _uiState.value.date.toInstant()
                 .toLocalDateTime(TimeZone.currentSystemDefault()).date
             val (startOfDayMillis, endOfDayMillis) = getDayRangeMillis(targetDate)
             taskService.getTasksForDay(
@@ -141,14 +123,11 @@ class TasksScreenViewModel(
     }
     //endregion
 
-
-    fun getTargetDates(date: Long, arrowAction: ArrowActions) {
-        val currentDate = Instant.fromEpochMilliseconds(date)
+    fun updateDateByAction(date: Long, arrowAction: ArrowActions) {
+        val currentDate = date.toInstant()
             .toLocalDateTime(TimeZone.currentSystemDefault()).date
-
         val selectedDate = Instant.fromEpochMilliseconds(_uiState.value.date)
             .toLocalDateTime(TimeZone.currentSystemDefault()).date
-
         val targetDate = when (arrowAction) {
             ArrowActions.Next -> currentDate.plus(DatePeriod(months = 1))
             ArrowActions.Previous -> currentDate.minus(DatePeriod(months = 1))
@@ -158,7 +137,9 @@ class TasksScreenViewModel(
         _uiState.update { currentState ->
             val daysOfMonth = (1..targetDate.lengthOfMonth(_uiState.value.date)).map { day ->
                 val dateForDay = LocalDate(targetDate.year, targetDate.month, day)
-                val dayOfWeek = dateForDay.dayOfWeek.name.take(3).lowercase()
+                val dayOfWeek = dateForDay.dayOfWeek.name
+                    .take(3)
+                    .lowercase()
                     .replaceFirstChar { it.uppercase() }
 
                 DaysOfMonth(
@@ -169,17 +150,19 @@ class TasksScreenViewModel(
             }
             currentState.copy(
                 days = daysOfMonth,
-                date = targetDate.atStartOfDayIn(TimeZone.currentSystemDefault())
-                    .toEpochMilliseconds()
+                date = targetDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
             )
         }
     }
 
-
-    fun onDayCardSelected(indexOfSelectedDay: Int) {
+    fun onDaySelected(indexOfSelectedDay: Int) {
         val days = _uiState.value.days.toMutableList()
-        val currentDate = Instant.fromEpochMilliseconds(_uiState.value.date)
+        val currentDate = _uiState.value.date.toInstant()
             .toLocalDateTime(TimeZone.currentSystemDefault()).date
+
+        if (days[indexOfSelectedDay].isSelected) {
+            return
+        }
 
         days.forEach { it.isSelected = false }
         days[indexOfSelectedDay].isSelected = true
@@ -193,21 +176,24 @@ class TasksScreenViewModel(
         _uiState.update {
             it.copy(days = days, dayItemIndex = indexOfSelectedDay, date = dateInMillis)
         }
+        initializeDoneTasks()
+        initializeInProgressTasks()
+        initializeToDoTasks()
+
     }
 
     fun onDateSelected(datePickerDate: Long) {
-        val targetLocalDate = Instant.fromEpochMilliseconds(datePickerDate)
+        val targetLocalDate = datePickerDate.toInstant()
             .toLocalDateTime(TimeZone.currentSystemDefault()).date
 
-        getTargetDates(date = datePickerDate, arrowAction = ArrowActions.None)
+        updateDateByAction(date = datePickerDate, arrowAction = ArrowActions.None)
 
         val updatedDays = _uiState.value.days.mapIndexed { index, day ->
             val dayOfMonth = day.dayOfMonth.toInt()
             val dayLocalDate = LocalDate(targetLocalDate.year, targetLocalDate.month, dayOfMonth)
             day.copy(
                 isSelected = (dayLocalDate == targetLocalDate),
-                date = dayLocalDate.atStartOfDayIn(TimeZone.currentSystemDefault())
-                    .toEpochMilliseconds()
+                date = dayLocalDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
             )
         }
         _uiState.update {
@@ -217,8 +203,12 @@ class TasksScreenViewModel(
                 dayItemIndex = targetLocalDate.dayOfMonth - 1
             )
         }
+        initializeDoneTasks()
+        initializeInProgressTasks()
+        initializeToDoTasks()
     }
 
+    //region delete task
     fun showDeleteDialog(taskId: Int?) {
         _uiState.update {
             it.copy(selectedTaskId = taskId, isDeleteDialogVisible = true)
@@ -243,9 +233,9 @@ class TasksScreenViewModel(
                     taskService.delete(task)
                     onSuccess()
                     dismissDeleteDialog()
-                    getDoneTasks()
-                    getToDoTasks()
-                    getInProgressTasks()
+                    initializeDoneTasks()
+                    initializeInProgressTasks()
+                    initializeToDoTasks()
 
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
@@ -278,4 +268,5 @@ class TasksScreenViewModel(
             }
         }
     }
+    //endregion
 }
