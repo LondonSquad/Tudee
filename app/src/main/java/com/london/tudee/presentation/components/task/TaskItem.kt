@@ -108,7 +108,7 @@ private fun TaskItemTopBar(
                 modifier = Modifier
                     .height(28.dp)
                     .align(Alignment.CenterVertically),
-                dateText = "12-03-2025",
+                dateText = date,
                 isVisible = hasDate,
                 dateBadgeStyle = DateBadgeStyleValues(
                     shape = TudeeTheme.shapes.circle,

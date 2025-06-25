@@ -1,7 +1,6 @@
 package com.london.tudee.di
 
 import com.london.tudee.presentation.screens.home.HomeViewModel
-import com.london.tudee.presentation.screens.task.confirm_delete_task.ConfirmDeleteTaskViewModel
 import com.london.tudee.presentation.screens.task.view_tasks.CategoryDetailsViewModel
 import com.london.tudee.presentation.screens.tasks.TasksScreenViewModel
 import com.london.tudee.presentation.screens.categories.CategoriesViewModel
@@ -15,7 +14,6 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModelOf(::TasksScreenViewModel)
-    viewModelOf(::ConfirmDeleteTaskViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::CategoryDetailsViewModel)
     viewModelOf(::CategoriesViewModel)

@@ -14,29 +14,31 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.london.tudee.R
 import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScreen
 import com.london.tudee.presentation.components.buttons.TudeeNegativeButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.tasks.TasksScreenViewModel
 import org.koin.androidx.compose.koinViewModel
+
 
 @Composable
 fun ConfirmDeleteTaskScreen(
-    viewModel: ConfirmDeleteTaskViewModel = koinViewModel(),
+    viewModel: TasksScreenViewModel = koinViewModel(),
     onTaskDeleted: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    if (!uiState.isVisible) return
-
     TudeeBottomSheetScreen(
-        showBottomSheet = true,
-        onDismiss = { viewModel.dismissDialog() },
+        showBottomSheet = uiState.isDeleteDialogVisible,
+        onDismiss = { viewModel.dismissDeleteDialog() },
         screenContent = {},
         bottomSheetContent = {
             ConfirmDeleteBottomSheetContent()
@@ -44,15 +46,10 @@ fun ConfirmDeleteTaskScreen(
         bottomSheetActions = {
             ConfirmDeleteBottomSheetActions(
                 onDelete = {
-                    viewModel.deleteTask(
-                        onSuccess = {
-                            viewModel.dismissDialog()
-                            onTaskDeleted()
-                        }
-                    )
+                    viewModel.deleteTask(onSuccess = onTaskDeleted)
                 },
                 onCancel = {
-                    viewModel.dismissDialog()
+                    viewModel.dismissDeleteDialog()
                 }
             )
         }
@@ -70,21 +67,23 @@ private fun ConfirmDeleteBottomSheetContent() {
     ) {
         Text(
             text = stringResource(R.string.delete_task_title),
-            style = TudeeTheme.typography.headlineMedium,
+            style = TudeeTheme.typography.titleLarge,
+            lineHeight = 24.sp,
             color = TudeeTheme.colors.title,
             modifier = Modifier.align(Alignment.Start)
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = stringResource(R.string.delete_task_message),
-            style = TudeeTheme.typography.bodyMedium,
+            style = TudeeTheme.typography.bodyLarge,
+            lineHeight = 22.sp,
             color = TudeeTheme.colors.body,
             modifier = Modifier.align(Alignment.Start)
         )
         Spacer(modifier = Modifier.height(12.dp))
         Image(
             painter = painterResource(R.drawable.tudee_delete),
-            contentDescription = null,
+            contentDescription = "Tudee Delete",
             modifier = Modifier.size(width = 107.dp, height = 100.dp)
         )
     }
@@ -96,7 +95,7 @@ private fun ConfirmDeleteBottomSheetActions(
     onCancel: () -> Unit
 ) {
     Column(
-        modifier = Modifier.background(TudeeTheme.colors.surface)
+        modifier = Modifier.background(Color.Transparent)
     ) {
         TudeeNegativeButton(
             text = stringResource(R.string.delete),

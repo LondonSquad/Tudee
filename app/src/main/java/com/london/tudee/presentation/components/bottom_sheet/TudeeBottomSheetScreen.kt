@@ -1,9 +1,12 @@
 package com.london.tudee.presentation.components.bottom_sheet
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -15,6 +18,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -59,42 +64,94 @@ fun TudeeBottomSheetScreen(
     ) {
         screenContent()
 
-        AnimatedVisibility(
-            visible = showBottomSheet,
-            enter = fadeIn(animationSpec = tween(300)),
-            exit = fadeOut(animationSpec = tween(300))
+        TudeeBottomSheetContainer(
+            showBottomSheet = showBottomSheet,
+            onDismiss = onDismiss,
+            bottomSheetContent = bottomSheetContent,
+            bottomSheetActions = bottomSheetActions,
+            showActions = showActions
+        )
+    }
+}
+
+@Composable
+private fun TudeeBottomSheetContainer(
+    showBottomSheet: Boolean,
+    onDismiss: () -> Unit,
+    bottomSheetContent: @Composable () -> Unit,
+    bottomSheetActions: @Composable ColumnScope.() -> Unit,
+    showActions: Boolean
+) {
+    val transition =
+        updateTransition(targetState = showBottomSheet, label = "BottomSheetTransition")
+
+    val offsetY by transition.animateDp(
+        label = "OffsetY",
+        transitionSpec = {
+            if (false isTransitioningTo true) {
+                spring(
+                    dampingRatio = Spring.DampingRatioLowBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            } else {
+                tween(durationMillis = 300, easing = FastOutLinearInEasing)
+            }
+        }
+    ) { visible -> if (visible) 0.dp else 400.dp }
+
+    val scrimAlpha by transition.animateFloat(
+        transitionSpec = { tween(durationMillis = 300) },
+        label = "scrim_alpha"
+    ) { visible -> if (visible) 0.6f else 0f }
+
+    val isVisible = transition.currentState || transition.targetState
+
+    if (isVisible) {
+        TudeeBottomSheetScrim(
+            scrimAlpha = scrimAlpha,
+            onDismiss = onDismiss
+        )
+
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.5f))
+                    .offset(y = offsetY)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
-                    ) {
-                        onDismiss()
-                    }
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            TudeeBottomSheet(
-                visible = showBottomSheet,
-                onDismiss = onDismiss,
-                modifier = Modifier.clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ) {},
-                content = bottomSheetContent,
-                actions = bottomSheetActions,
-                showActions = showActions
-            )
+                    ) {}
+            ) {
+                TudeeBottomSheet(
+                    visible = showBottomSheet,
+                    onDismiss = onDismiss,
+                    content = bottomSheetContent,
+                    actions = bottomSheetActions,
+                    showActions = showActions
+                )
+            }
         }
     }
+}
+
+@Composable
+private fun TudeeBottomSheetScrim(
+    scrimAlpha: Float,
+    onDismiss: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = scrimAlpha))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) {
+                onDismiss()
+            }
+    )
 }
 
 @ThemePreviews
