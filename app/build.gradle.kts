@@ -68,15 +68,25 @@ dependencies {
     implementation(libs.androidx.room.rxjava3)
 
     // coil
-    implementation (libs.coil.compose)
+    implementation(libs.coil.compose)
 
     // koin
-    implementation (libs.koin.android)
-    implementation (libs.koin.androidx.compose)
+    implementation(libs.koin.android)
 
     implementation(libs.kotlinx.datetime)
 
     implementation(libs.remember.preference)
+    implementation(libs.koin.core)
+
+    implementation(libs.koin.android.v3xx)
+
+    implementation(libs.koin.annotations)
+    ksp(libs.koin.ksp.compiler)
+    implementation(libs.koin.compose.viewmodel)
+
+}
+ksp {
+    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
 }
 
 tasks.register("installGitHooks") {

@@ -46,7 +46,7 @@ import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.utils.base64ToBitmap
 import com.london.tudee.presentation.utils.uriToBase64
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun EditCategoryScreen(

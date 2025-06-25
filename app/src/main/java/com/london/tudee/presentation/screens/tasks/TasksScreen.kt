@@ -58,12 +58,12 @@ import com.london.tudee.presentation.utils.DateFormatter.toMonthShort
 import com.london.tudee.presentation.utils.DateFormatter.toYear
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun TasksScreen(
     initialTabIndex: Int = 0,
-    viewModel: TasksScreenViewModel = koinViewModel<TasksScreenViewModel>()
+    viewModel: TasksScreenViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var showDeleteSheet by remember { mutableStateOf(false) }
@@ -236,13 +236,12 @@ fun TasksContent(
         Box(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(16.dp)
         ) {
             TudeeFloatingActionButton(
                 painter = painterResource(R.drawable.note_add),
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(bottom = 84.dp, end = 12.dp),
+                    .padding(bottom = 10.dp, end = 12.dp),
                 contentDescription = "note icon",
                 onClick = {},
                 isEnabled = true,
@@ -407,8 +406,7 @@ fun DaySelector(
                 dayOfWeek = days[index].dayOfWeek,
                 isSelected = days[index].isSelected,
                 onClick = {
-                    onClickDay(index)
-                }
+                    onClickDay(index) }
             )
         }
     }

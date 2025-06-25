@@ -5,6 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.TaskStatus
+import kotlinx.datetime.Clock
 
 @Entity(
     tableName = "TASK_TABLE", foreignKeys = [ForeignKey(
@@ -22,5 +23,5 @@ data class TaskDto(
     val taskStatus: TaskStatus,
     val priority: Priority,
     val categoryId: Int,
-    val timeStamp: Long = System.currentTimeMillis(),
+    val timeStamp: Long = Clock.System.now().toEpochMilliseconds()
 )

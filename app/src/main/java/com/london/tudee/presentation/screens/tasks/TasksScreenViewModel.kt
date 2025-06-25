@@ -25,7 +25,9 @@ import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
+import org.koin.android.annotation.KoinViewModel
 
+@KoinViewModel
 class TasksScreenViewModel(
     private val taskService: TaskService,
     private val categoryService: CategoryService

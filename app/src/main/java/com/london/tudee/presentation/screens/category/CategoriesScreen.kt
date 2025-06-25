@@ -33,7 +33,7 @@ import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButto
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.category.create_category.CreateCategoryScreen
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CategoriesScreen(
