@@ -65,8 +65,10 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
-                ) {
+                ) { paddingValues ->
                     NavHost(
+                        modifier = Modifier
+                            .padding(bottom = paddingValues.calculateBottomPadding()),
                         navController = navController,
                         startDestination = startDestination,
                     ) {
