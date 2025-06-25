@@ -34,6 +34,7 @@ fun CategoryItem(
     title: String,
     taskCount: Int = 0,
     categoryId: Int = 0,
+    inCategorySection: Boolean = false,
     isSelected: Boolean = false,
     onClick: () -> Unit
 ) {
@@ -69,7 +70,6 @@ fun CategoryItem(
                 else Modifier.size(32.dp),
             )
 
-
             if (isSelected) {
                 Image(
                     painter = painterResource(R.drawable.ic_check),
@@ -83,11 +83,9 @@ fun CategoryItem(
                             shape = TudeeTheme.shapes.circle
                         )
                         .padding(2.dp)
-
                 )
             }
-
-            Box(
+            if(inCategorySection){Box(
                 modifier = Modifier
                     .width(36.dp)
                     .align(Alignment.TopEnd)
@@ -104,7 +102,7 @@ fun CategoryItem(
                     style = TudeeTheme.typography.labelSmall,
                     color = TudeeTheme.colors.hint
                 )
-            }
+            }}
         }
 
         Spacer(modifier = Modifier.height(4.dp))
