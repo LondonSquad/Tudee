@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
@@ -61,7 +62,7 @@ fun CategoryItem(
         ) {
             Image(
                 painter = image,
-                contentScale = if (categoryId >= 17) ContentScale.Crop else ContentScale.Fit,
+                contentScale = if (categoryId >= 17) ContentScale.FillBounds else ContentScale.Fit,
                 contentDescription = "Editable categories",
                 modifier = if (categoryId >= 17)
                     Modifier
@@ -110,7 +111,9 @@ fun CategoryItem(
         Text(
             text = title,
             style = TudeeTheme.typography.labelSmall,
-            color = TudeeTheme.colors.body
+            color = TudeeTheme.colors.body,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
