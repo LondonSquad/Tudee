@@ -1,5 +1,10 @@
 package com.london.tudee.presentation.screens.tasks
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -17,7 +22,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -93,16 +97,22 @@ fun TasksScreen(
         }
     )
 
-    if (showDeleteSnackBar) {
+    AnimatedVisibility(
+        visible = showDeleteSnackBar,
+        enter = fadeIn() + slideInVertically(initialOffsetY = { -100 }),
+        exit = fadeOut() + slideOutVertically(targetOffsetY = { -100 })
+    ) {
         SnackBar(
             modifier = Modifier
-                .windowInsetsPadding(WindowInsets.statusBars)
                 .padding(top = 16.dp),
             message = R.string.delete_task_success,
             iconPainter = painterResource(id = R.drawable.snack_bar_container),
             iconTint = TudeeTheme.colors.greenAccent
         )
-        LaunchedEffect(showDeleteSnackBar) {
+    }
+
+    LaunchedEffect(showDeleteSnackBar) {
+        if (showDeleteSnackBar) {
             delay(3000)
             showDeleteSnackBar = false
         }
