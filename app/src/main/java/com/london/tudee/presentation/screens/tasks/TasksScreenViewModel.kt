@@ -3,11 +3,13 @@ package com.london.tudee.presentation.screens.tasks
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.tudee.domain.entities.TaskStatus
-import com.london.tudee.domain.mapper.toInstant
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
 import com.london.tudee.presentation.screens.tasks.TasksScreenUtils.getDayRangeMillis
 import com.london.tudee.presentation.screens.tasks.TasksScreenUtils.lengthOfMonth
+import com.london.tudee.presentation.utils.DateFormatter.toDayOfWeekShort
+import com.london.tudee.presentation.utils.DateFormatter.toLocalDate
+import com.london.tudee.presentation.utils.DateFormatter.toLongDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,14 +18,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
-import kotlinx.datetime.toLocalDateTime
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -46,8 +44,7 @@ class TasksScreenViewModel(
     //region get tasks
     fun initializeDoneTasks() {
         viewModelScope.launch(Dispatchers.IO) {
-            val targetDate = _uiState.value.date.toInstant()
-                .toLocalDateTime(TimeZone.currentSystemDefault()).date
+            val targetDate = _uiState.value.date.toLocalDate()
 
             val (startOfDayMillis, endOfDayMillis) = getDayRangeMillis(targetDate)
             taskService.getTasksForDay(
@@ -72,9 +69,7 @@ class TasksScreenViewModel(
 
     fun initializeInProgressTasks() {
         viewModelScope.launch(Dispatchers.IO) {
-            val targetDate = _uiState.value.date.toInstant()
-                .toLocalDateTime(TimeZone.currentSystemDefault()).date
-
+            val targetDate = _uiState.value.date.toLocalDate()
             val (startOfDayMillis, endOfDayMillis) = getDayRangeMillis(targetDate)
 
             taskService.getTasksForDay(
@@ -99,8 +94,7 @@ class TasksScreenViewModel(
 
     fun initializeToDoTasks() {
         viewModelScope.launch(Dispatchers.IO) {
-            val targetDate = _uiState.value.date.toInstant()
-                .toLocalDateTime(TimeZone.currentSystemDefault()).date
+            val targetDate = _uiState.value.date.toLocalDate()
             val (startOfDayMillis, endOfDayMillis) = getDayRangeMillis(targetDate)
             taskService.getTasksForDay(
                 start = startOfDayMillis, end = endOfDayMillis, taskStatus = TaskStatus.TODO
@@ -124,10 +118,8 @@ class TasksScreenViewModel(
     //endregion
 
     fun updateDateByAction(date: Long, arrowAction: ArrowActions) {
-        val currentDate = date.toInstant()
-            .toLocalDateTime(TimeZone.currentSystemDefault()).date
-        val selectedDate = Instant.fromEpochMilliseconds(_uiState.value.date)
-            .toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val currentDate = date.toLocalDate()
+        val selectedDate = _uiState.value.date.toLocalDate()
         val targetDate = when (arrowAction) {
             ArrowActions.Next -> currentDate.plus(DatePeriod(months = 1))
             ArrowActions.Previous -> currentDate.minus(DatePeriod(months = 1))
@@ -137,28 +129,25 @@ class TasksScreenViewModel(
         _uiState.update { currentState ->
             val daysOfMonth = (1..targetDate.lengthOfMonth(_uiState.value.date)).map { day ->
                 val dateForDay = LocalDate(targetDate.year, targetDate.month, day)
-                val dayOfWeek = dateForDay.dayOfWeek.name
-                    .take(3)
-                    .lowercase()
-                    .replaceFirstChar { it.uppercase() }
+                val dayOfWeek = dateForDay.toDayOfWeekShort()
 
                 DaysOfMonth(
                     dayOfMonth = day.toString(),
                     dayOfWeek = dayOfWeek,
                     isSelected = dateForDay == selectedDate,
+                    date = dateForDay.toLongDate()
                 )
             }
             currentState.copy(
                 days = daysOfMonth,
-                date = targetDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+                date = targetDate.toLongDate()
             )
         }
     }
 
     fun onDaySelected(indexOfSelectedDay: Int) {
         val days = _uiState.value.days.toMutableList()
-        val currentDate = _uiState.value.date.toInstant()
-            .toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val currentDate = _uiState.value.date.toLocalDate()
 
         if (days[indexOfSelectedDay].isSelected) {
             return
@@ -169,8 +158,7 @@ class TasksScreenViewModel(
         val selectedDayOfMonth = days[indexOfSelectedDay].dayOfMonth.toInt()
         val selectedDate =
             LocalDate(currentDate.year, Month(currentDate.monthNumber), selectedDayOfMonth)
-        val dateInMillis =
-            selectedDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+        val dateInMillis = selectedDate.toLongDate()
 
         days[indexOfSelectedDay].date = dateInMillis
         _uiState.update {
@@ -183,8 +171,7 @@ class TasksScreenViewModel(
     }
 
     fun onDateSelected(datePickerDate: Long) {
-        val targetLocalDate = datePickerDate.toInstant()
-            .toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val targetLocalDate = datePickerDate.toLocalDate()
 
         updateDateByAction(date = datePickerDate, arrowAction = ArrowActions.None)
 
@@ -193,7 +180,7 @@ class TasksScreenViewModel(
             val dayLocalDate = LocalDate(targetLocalDate.year, targetLocalDate.month, dayOfMonth)
             day.copy(
                 isSelected = (dayLocalDate == targetLocalDate),
-                date = dayLocalDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+                date = dayLocalDate.toLongDate()
             )
         }
         _uiState.update {
