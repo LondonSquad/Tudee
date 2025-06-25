@@ -61,7 +61,6 @@ fun TudeeBottomSheetScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .navigationBarsPadding()
     ) {
         screenContent()
 
@@ -91,7 +90,7 @@ private fun TudeeBottomSheetContainer(
         transitionSpec = {
             if (false isTransitioningTo true) {
                 spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    dampingRatio = Spring.DampingRatioLowBouncy,
                     stiffness = Spring.StiffnessLow
                 )
             } else {
