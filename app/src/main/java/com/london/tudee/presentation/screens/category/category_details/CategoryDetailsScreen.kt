@@ -65,7 +65,6 @@ fun CategoryDetailsScreen(
         else -> CategoryDetailsContent(
             state = state,
             onBackClick = onBackClick,
-//            editState = state,
             interactions = viewModel
         )
     }
@@ -94,7 +93,6 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 @Composable
 fun CategoryDetailsContent(
     state: CategoryDetailsUiState,
-//    editState: EditCategoryUiState,
     onBackClick: () -> Unit,
     interactions: CategoryDetailsInteractions
 ) {
@@ -126,8 +124,6 @@ fun CategoryDetailsContent(
                     interactions.hideEditBottomSheet()
                     interactions.showDeleteBottomSheet()
                 }
-//                state = state,
-//                interactions = interactions
             )
         }
 
