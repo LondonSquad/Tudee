@@ -2,6 +2,7 @@ package com.london.tudee.presentation.components.bottom_navigation_bar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -18,11 +19,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.navigation.Screen
+import com.london.tudee.presentation.navigation.tudeeNavGraph
 
 @Composable
 fun TudeeBottomNavigationBar(
@@ -33,19 +35,25 @@ fun TudeeBottomNavigationBar(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-
     NavigationBar(
         modifier = modifier,
         tonalElevation = 0.dp,
-        containerColor = TudeeTheme.colors.surfaceHigh
+        containerColor = TudeeTheme.colors.surfaceHigh,
+        windowInsets = WindowInsets(0)
     ) {
         items.forEach { item ->
-            val isSelected = item.route == currentRoute
+            val isSelected = when (item.screen) {
+                is Screen.Home -> currentRoute?.contains("Screen.Home") == true
+                is Screen.Tasks -> currentRoute?.contains("Screen.Tasks") == true
+                is Screen.Categories -> currentRoute?.contains("Screen.Categories") == true
+                else -> false
+            }
+
             NavigationBarItem(
                 selected = isSelected,
                 onClick = {
-                    if (item.route != currentRoute) {
-                        navController.navigate(item.route) {
+                    if (!isSelected) {
+                        navController.navigate(item.screen) {
                             launchSingleTop = true
                             popUpTo(navController.graph.startDestinationId) { saveState = true }
                             restoreState = true
@@ -77,7 +85,8 @@ fun TudeeBottomNavigationBar(
                             tint = TudeeTheme.colors.hint
                         )
                     }
-                }, colors = NavigationBarItemDefaults.colors(
+                },
+                colors = NavigationBarItemDefaults.colors(
                     indicatorColor = Color.Transparent
                 )
             )
@@ -98,12 +107,10 @@ fun PreviewTestScreen() {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = Routes.HOME,
+                startDestination = Screen.Home,
                 modifier = Modifier.padding(innerPadding)
             ) {
-                composable(Routes.HOME) { NavigationTestScreen(TudeeTheme.colors.primary) }
-                composable(Routes.TASKS) { NavigationTestScreen(TudeeTheme.colors.purpleAccent) }
-                composable(Routes.CATEGORIES) { NavigationTestScreen(TudeeTheme.colors.emojiTint) }
+                tudeeNavGraph(navController)
             }
         }
     }

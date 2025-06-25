@@ -58,6 +58,7 @@
     <string name="category_event">Event</string>
     <string name="delete_task_title">Delete Task</string>
     <string name="delete_task_message">Are you sure to continue?</string>
+    <string name="delete_task_success">Deleted task successfully.</string>
     <string name="delete">Delete</string>
     <string name="edit_icon" translatable="false">Edit Icon</string>
     <string name="clear">Clear</string>
@@ -100,4 +101,9 @@
     <string name="Dec">Dec</string>
     <string name="Something_went_wrong_task_not_found_or_no_category_icon">Something went wrong task not found or no category icon</string>
     <string name="Something_went_wrong_cant_update_task">Something went wrong cant update task</string>
+    <string name="loading">loading...</string>
+    <string name="there_was_an_unexpected_error">There was an unexpected error</string>
+    <string name="tasks">Tasks</string>
+    <string name="delete_category_successfully">Delete Category Successfully</string>
+    <string name="edit_category_successfully">Edit Category Successfully</string>
 </resources>

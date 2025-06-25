@@ -1,6 +1,7 @@
 package com.london.tudee.data.services
 
 import com.london.tudee.data.local.roomdb.dao.TaskDao
+import com.london.tudee.data.local.roomdb.dto.TaskDto
 import com.london.tudee.data.mappers.convertToTask
 import com.london.tudee.data.mappers.convertToTaskDto
 import com.london.tudee.domain.entities.Task
@@ -69,10 +70,12 @@ class TasksServicesImpl(
         }
     }
 
-    override suspend fun getByDateAndTaskStatus(
-        timeStamp: Long?, taskStatus: TaskStatus
+    override suspend fun getTasksForDay(
+        start: Long,
+        end: Long,
+        taskStatus: TaskStatus
     ): Flow<List<Task>> {
-        return taskDao.getByDateAndTaskStatus(timeStamp, taskStatus).map { taskDtoList ->
+        return taskDao.getTasksForDay(start, end, taskStatus).map { taskDtoList ->
             taskDtoList.map { taskDto -> taskDto.convertToTask() }
         }
     }
