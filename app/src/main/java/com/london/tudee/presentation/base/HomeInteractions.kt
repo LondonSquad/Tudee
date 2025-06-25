@@ -5,6 +5,7 @@ import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.Task
 
 interface HomeInteractions {
+    fun onThemeSwitched(isDarkMode: Boolean)
     fun loadCategories()
     fun updateTitle(title: String)
     fun updateDescription(description: String)

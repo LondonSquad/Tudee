@@ -59,6 +59,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.core)
+
     //Navigation compose
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.room.runtime)
@@ -68,25 +71,15 @@ dependencies {
     implementation(libs.androidx.room.rxjava3)
 
     // coil
-    implementation(libs.coil.compose)
+    implementation (libs.coil.compose)
 
     // koin
-    implementation(libs.koin.android)
+    implementation (libs.koin.android)
+    implementation (libs.koin.androidx.compose)
 
     implementation(libs.kotlinx.datetime)
 
     implementation(libs.remember.preference)
-    implementation(libs.koin.core)
-
-    implementation(libs.koin.android.v3xx)
-
-    implementation(libs.koin.annotations)
-    ksp(libs.koin.ksp.compiler)
-    implementation(libs.koin.compose.viewmodel)
-
-}
-ksp {
-    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
 }
 
 tasks.register("installGitHooks") {

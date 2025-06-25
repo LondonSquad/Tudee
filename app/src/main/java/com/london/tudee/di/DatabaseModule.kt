@@ -17,7 +17,6 @@ const val DATABASE_NAME = "TudeeDatabase"
 
 @Module
 class DatabaseModule {
-
     @Single
     fun provideDatabase(context: Context): TudeeDatabase {
         return Room.databaseBuilder(context, TudeeDatabase::class.java, DATABASE_NAME)
