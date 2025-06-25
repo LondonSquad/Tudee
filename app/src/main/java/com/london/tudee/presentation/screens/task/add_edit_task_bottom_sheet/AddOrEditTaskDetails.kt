@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
-import com.london.tudee.presentation.base.HomeInteractions
+import com.london.tudee.presentation.base.AddOrEditInteractions
 import com.london.tudee.presentation.components.CategoryItem
 import com.london.tudee.presentation.components.TudeeTextField
 import com.london.tudee.presentation.components.date.TudeeDatePicker
@@ -45,7 +45,7 @@ fun AddOrEditTaskDetails(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
     uiState: AddOrEditTaskUiState,
-    interactions: HomeInteractions,
+    interactions: AddOrEditInteractions,
     categories: List<Category> = emptyList()
 ) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
