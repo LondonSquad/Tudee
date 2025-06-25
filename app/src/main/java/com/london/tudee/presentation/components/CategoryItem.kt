@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
@@ -29,8 +32,9 @@ fun CategoryItem(
     modifier: Modifier = Modifier,
     iconRes: String,
     title: String,
-    count: Int? = null,
-    isSelected: Boolean = false, // Add selection state
+    taskCount: Int = 0,
+    categoryId: Int = 0,
+    isSelected: Boolean = false,
     onClick: () -> Unit
 ) {
     val bitmap = remember(iconRes) {
@@ -52,13 +56,19 @@ fun CategoryItem(
                     color = TudeeTheme.colors.surfaceHigh,
                     shape = TudeeTheme.shapes.circle
                 )
-                .padding(23.dp)
+                .padding(if (categoryId <= 17) 23.dp else 0.dp)
         ) {
             Image(
                 painter = image,
-                contentDescription = title,
-                modifier = Modifier.size(32.dp),
+                contentScale = if (categoryId >= 17) ContentScale.Crop else ContentScale.Fit,
+                contentDescription = "Editable categories",
+                modifier = if (categoryId >= 17)
+                    Modifier
+                        .fillMaxSize()
+                        .clip(TudeeTheme.shapes.circle)
+                else Modifier.size(32.dp),
             )
+
 
             if (isSelected) {
                 Image(
@@ -77,25 +87,23 @@ fun CategoryItem(
                 )
             }
 
-            count?.let {
-                Box(
-                    modifier = Modifier
-                        .width(36.dp)
-                        .align(Alignment.TopEnd)
-                        .offset(x = 20.dp, y = (-20).dp)
-                        .background(
-                            color = TudeeTheme.colors.surfaceLow,
-                            shape = TudeeTheme.shapes.circle
-                        )
-                        .padding(horizontal = 6.dp, vertical = 2.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = count.toString(),
-                        style = TudeeTheme.typography.labelSmall,
-                        color = TudeeTheme.colors.hint
+            Box(
+                modifier = Modifier
+                    .width(36.dp)
+                    .align(Alignment.TopEnd)
+                    .offset(x = 20.dp, y = (-20).dp)
+                    .background(
+                        color = TudeeTheme.colors.surfaceLow,
+                        shape = TudeeTheme.shapes.circle
                     )
-                }
+                    .padding(horizontal = 6.dp, vertical = 2.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = taskCount.toString(),
+                    style = TudeeTheme.typography.labelSmall,
+                    color = TudeeTheme.colors.hint
+                )
             }
         }
 

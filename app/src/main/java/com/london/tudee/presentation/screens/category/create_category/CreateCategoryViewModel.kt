@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.categories.crud
+package com.london.tudee.presentation.screens.category.create_category
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,7 +19,6 @@ class CreateCategoryScreenViewModel(
     fun createCategory(
         category: Category
     ) {
-        _uiState.value = _uiState.value.copy(isLoading = true)
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
             try {

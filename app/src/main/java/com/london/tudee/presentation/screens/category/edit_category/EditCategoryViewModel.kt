@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.categories.crud
+package com.london.tudee.presentation.screens.category.edit_category
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,7 +26,7 @@ class EditCategoryScreenViewModel(
 
             try {
                 categoryService.edit(category)
-                _uiState.value = _uiState.value.copy(isDeleted = true, isLoading = false)
+                _uiState.value = _uiState.value.copy(isEdited = true, isLoading = false)
 
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
@@ -43,6 +43,6 @@ class EditCategoryScreenViewModel(
 
 data class EditCategoryUiState(
     val isLoading: Boolean = false,
-    val isDeleted: Boolean = false,
-    val errorMessage: String? = null
+    val isEdited: Boolean = false,
+    val errorMessage: String? = null,
 )
