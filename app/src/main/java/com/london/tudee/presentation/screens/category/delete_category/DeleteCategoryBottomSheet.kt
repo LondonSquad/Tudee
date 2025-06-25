@@ -32,7 +32,8 @@ fun DeleteCategoryScreen(
     modifier: Modifier = Modifier,
     category: Category,
     onDismiss: () -> Unit,
-    onCategoryDeleted: () -> Unit
+    onCategoryDeleted: () -> Unit,
+    onDeleteError: () -> Unit = {},
 ) {
     TudeeBottomSheetScreen(
         showBottomSheet = true,
@@ -45,7 +46,8 @@ fun DeleteCategoryScreen(
                 modifier = modifier,
                 category = category,
                 onCancel = onDismiss,
-                onCategoryDeleted = onCategoryDeleted
+                onCategoryDeleted = onCategoryDeleted,
+                onDeleteError = onDeleteError
             )
         }
     )
@@ -57,13 +59,15 @@ fun DeleteCategoryContent(
     modifier: Modifier = Modifier,
     onCancel: () -> Unit,
     onCategoryDeleted: () -> Unit,
+    onDeleteError: () -> Unit = {},
     viewModel: DeleteCategoryScreenViewModel = koinViewModel()
 ) {
     val uiState by viewModel.deleteState.collectAsState()
 
-    LaunchedEffect(uiState.isDeleted) {
-        if (uiState.isDeleted) {
-            onCategoryDeleted()
+    LaunchedEffect(uiState.isDeleted, uiState.errorMessage) {
+        when {
+            uiState.isDeleted -> onCategoryDeleted()
+            uiState.errorMessage != null -> onDeleteError()
         }
     }
 

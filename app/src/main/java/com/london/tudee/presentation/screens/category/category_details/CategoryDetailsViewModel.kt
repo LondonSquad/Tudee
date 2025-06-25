@@ -1,6 +1,6 @@
 package com.london.tudee.presentation.screens.category.category_details
 
-import android.util.Log
+import com.london.tudee.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.tudee.domain.entities.Category
@@ -124,12 +124,6 @@ class CategoryDetailsViewModel(
                     )
                 }
             } catch (e: Exception) {
-                Log.e(
-                    "CategoryDetailsViewModel",
-                    "Error fetching category $categoryId: ${e.message}",
-                    e
-                )
-                // Handle error state
                 _uiState.update {
                     it.copy(errMessage = "Category not found")
                 }
@@ -179,7 +173,49 @@ class CategoryDetailsViewModel(
 
     override fun onCategoryDeleted() {
         _uiState.update {
-            it.copy(categoryDeleted = true)
+            it.copy(
+                categoryDeleted = true,
+                stateMessage = R.string.delete_category_successfully,
+                showSuccessMessage = true
+            )
+        }
+    }
+
+    override fun onCategoryEdited() {
+        _uiState.update {
+            it.copy(
+                stateMessage = R.string.edit_category_successfully,
+                showSuccessMessage = true
+            )
+        }
+        refreshAfterChange()
+    }
+
+    override fun onCategoryEditError() {
+        _uiState.update {
+            it.copy(
+                stateMessage = R.string.some_error_happened,
+                showErrorMessage = true
+            )
+        }
+    }
+
+    override fun onCategoryDeleteError() {
+        _uiState.update {
+            it.copy(
+                stateMessage = R.string.some_error_happened,
+                showErrorMessage = true
+            )
+        }
+    }
+
+    override fun clearMessages() {
+        _uiState.update {
+            it.copy(
+                stateMessage = null,
+                showSuccessMessage = false,
+                showErrorMessage = false
+            )
         }
     }
 
