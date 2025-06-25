@@ -12,6 +12,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import kotlinx.coroutines.launch
 
+@Immutable
 data class TabItem(
     @StringRes val text: Int,
     val number: Int
@@ -54,6 +56,7 @@ fun TudeeTabLayoutWithPager(
     initialTabIndex: Int = 0,
     tabs: List<TabItem>,
     tasksList: List<List<Task>> = emptyList(),
+    headerContent: (@Composable () -> Unit)? = null,
     content: @Composable (page: Int, tasks: List<Task>) -> Unit
 ) {
     val pagerState = rememberPagerState(
@@ -62,6 +65,7 @@ fun TudeeTabLayoutWithPager(
     val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = modifier) {
+        headerContent?.invoke()
         TudeeTabLayout(
             tabs = tabs,
             selectedIndex = pagerState.currentPage,
