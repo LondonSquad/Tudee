@@ -1,5 +1,6 @@
 package com.london.tudee.presentation.screens.category.category_details
 
+import androidx.annotation.StringRes
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Task
 
@@ -14,6 +15,9 @@ data class CategoryDetailsUiState(
     val categoryDeleted: Boolean = false,
     val isEditBottomSheetVisible:Boolean = false,
     val isDeleteBottomSheetVisible:Boolean = false,
+    @StringRes val stateMessage: Int? = null,
+    val showSuccessMessage: Boolean = false,
+    val showErrorMessage: Boolean = false,
     val category: Category = Category(
         id = 0,
         title = "xz",

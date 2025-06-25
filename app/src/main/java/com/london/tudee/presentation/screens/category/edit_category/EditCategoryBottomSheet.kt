@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,7 +55,9 @@ fun EditCategoryScreen(
     modifier: Modifier = Modifier,
     category: Category,
     onDeleteClick: () -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onEditSuccess: () -> Unit = {},
+    onEditError: () -> Unit = {}
 ) {
 
     TudeeBottomSheetScreen(
@@ -67,7 +71,9 @@ fun EditCategoryScreen(
                 modifier = modifier,
                 category = category,
                 onDismiss = onDismiss,
-                onDeleteClick = onDeleteClick
+                onDeleteClick = onDeleteClick,
+                onEditSuccess = onEditSuccess,
+                onEditError = onEditError
             )
         }
     )
@@ -79,11 +85,22 @@ private fun EditCategoryContent(
     category: Category,
     onDismiss: () -> Unit,
     onDeleteClick: () -> Unit,
+    onEditSuccess: () -> Unit = {},
+    onEditError: () -> Unit = {},
     viewModel: EditCategoryScreenViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
     var categoryName by remember { mutableStateOf(category.title) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val uiState by viewModel.uiState.collectAsState()
+
+
+    LaunchedEffect(uiState.isEdited, uiState.errorMessage) {
+        when {
+            uiState.isEdited -> onEditSuccess()
+            uiState.errorMessage != null -> onEditError()
+        }
+    }
 
     Column(
         modifier = modifier

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
+import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.TopAppBar
 import com.london.tudee.presentation.components.tabs.TabItem
 import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
@@ -38,6 +40,7 @@ import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.category.delete_category.DeleteCategoryScreen
 import com.london.tudee.presentation.screens.category.edit_category.EditCategoryScreen
+import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -55,6 +58,7 @@ fun CategoryDetailsScreen(
 
     LaunchedEffect(state.categoryDeleted) {
         if (state.categoryDeleted) {
+            delay(1000)
             onBackClick()
         }
     }
@@ -116,13 +120,18 @@ fun CategoryDetailsContent(
         if (state.isEditBottomSheetVisible) {
             EditCategoryScreen(
                 category = state.category,
-                onDismiss = {
-                    interactions.hideEditBottomSheet()
-                    interactions.refreshAfterChange()
-                },
+                onDismiss = interactions::hideEditBottomSheet,
                 onDeleteClick = {
                     interactions.hideEditBottomSheet()
                     interactions.showDeleteBottomSheet()
+                },
+                onEditSuccess = {
+                    interactions.hideEditBottomSheet()
+                    interactions.onCategoryEdited()
+                },
+                onEditError = {
+                    interactions.hideEditBottomSheet()
+                    interactions.onCategoryEditError()
                 }
             )
         }
@@ -130,12 +139,54 @@ fun CategoryDetailsContent(
         if (state.isDeleteBottomSheetVisible) {
             DeleteCategoryScreen(
                 category = state.category,
-                onDismiss = { interactions.hideDeleteBottomSheet() },
+                onDismiss = interactions::hideDeleteBottomSheet,
                 onCategoryDeleted = {
                     interactions.hideDeleteBottomSheet()
                     interactions.onCategoryDeleted()
+                },
+                onDeleteError = {
+                    interactions.hideDeleteBottomSheet()
+                    interactions.onCategoryDeleteError()
                 }
             )
+        }
+
+        // Snackbar for messages
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            when {
+                state.showSuccessMessage -> {
+                    state.stateMessage?.let { messageRes ->
+                        SnackBar(
+                            modifier = Modifier.offset(y = 56.dp),
+                            message = messageRes,
+                            iconPainter = painterResource(id = R.drawable.snack_bar_container),
+                            iconTint = TudeeTheme.colors.greenAccent
+                        )
+                    }
+                }
+
+                state.showErrorMessage -> {
+                    state.stateMessage?.let { messageRes ->
+                        SnackBar(
+                            modifier = Modifier.offset(y = 56.dp),
+                            message = messageRes,
+                            iconPainter = painterResource(id = R.drawable.snack_bar_error),
+                            iconTint = TudeeTheme.colors.errorVariant,
+                        )
+                    }
+                }
+            }
+
+
+            LaunchedEffect(state.stateMessage) {
+                if (state.stateMessage != null) {
+                    delay(3000)
+                    interactions.clearMessages()
+                }
+            }
         }
     }
 }
