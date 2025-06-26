@@ -1,8 +1,8 @@
 package com.london.tudee.presentation.screens.category.category_details
 
-import com.london.tudee.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
@@ -42,7 +42,7 @@ class CategoryDetailsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
                 categoryId = categoryId,
-                taskStatus = TaskStatus.DONE
+                status = TaskStatus.DONE
             ).catch { throwable ->
                 _uiState.update {
                     it.copy(isLoading = false, errMessage = throwable.message)
@@ -65,7 +65,7 @@ class CategoryDetailsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
                 categoryId = categoryId,
-                taskStatus = TaskStatus.IN_PROGRESS
+                status = TaskStatus.IN_PROGRESS
             ).catch { throwable ->
                 _uiState.update {
                     it.copy(isLoading = false, errMessage = throwable.message)
@@ -88,7 +88,7 @@ class CategoryDetailsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
                 categoryId = categoryId,
-                taskStatus = TaskStatus.TODO
+                status = TaskStatus.TODO
             ).catch { throwable ->
                 _uiState.update {
                     it.copy(isLoading = false, errMessage = throwable.message)
@@ -109,21 +109,21 @@ class CategoryDetailsViewModel(
 
     override fun getCategoryNameById(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
+            runCatching {
                 val category = categoryService.getById(categoryId)
 
                 _uiState.update {
                     it.copy(
                         category = Category(
                             id = category.id,
-                            isDefault = category.isDefault,
-                            iconRes = category.iconRes,
-                            taskCount = category.taskCount,
                             title = category.title,
+                            iconRes = category.iconRes,
+                            isDefault = category.isDefault,
+                            taskCount = category.taskCount,
                         )
                     )
                 }
-            } catch (e: Exception) {
+            }.onFailure {
                 _uiState.update {
                     it.copy(errMessage = "Category not found")
                 }
@@ -136,16 +136,14 @@ class CategoryDetailsViewModel(
     ) {
         viewModelScope.launch {
             _editState.value = _editState.value.copy(isLoading = true)
-
-
-            try {
+            runCatching{
                 categoryService.edit(category)
                 _editState.value = _editState.value.copy(isLoading = false)
 
-            } catch (e: Exception) {
+            }.onFailure{
                 _editState.value = _editState.value.copy(
                     isLoading = false,
-                    errorMessage = e.message
+                    errorMessage = it.message
                 )
             }
         }
@@ -154,13 +152,13 @@ class CategoryDetailsViewModel(
     override fun deleteCategory(category: Category) {
         viewModelScope.launch {
             _deleteState.value = _deleteState.value.copy(isLoading = true)
-            try {
+            runCatching{
                 categoryService.delete(category)
                 _deleteState.value = _deleteState.value.copy(isDeleted = true, isLoading = false)
-            } catch (e: Exception) {
+            }.onFailure {
                 _deleteState.value = _deleteState.value.copy(
                     isLoading = false,
-                    errorMessage = e.message
+                    errorMessage = it.message
                 )
             }
         }

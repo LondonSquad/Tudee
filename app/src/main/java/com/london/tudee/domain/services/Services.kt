@@ -7,5 +7,5 @@ interface Services<T> {
     suspend fun edit(service: T)
     suspend fun delete(service: T)
     suspend fun getAll(): Flow<List<T>>
-    suspend fun getById(id: Int) : T
+    suspend fun getById(id: Int): T
 }

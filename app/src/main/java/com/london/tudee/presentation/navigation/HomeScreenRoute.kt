@@ -5,8 +5,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.london.tudee.presentation.screens.home.HomeScreen
 
-fun NavGraphBuilder.homeRoute(navController: NavController){
-    composable<Screen.Home>{
+fun NavGraphBuilder.homeRoute(navController: NavController) {
+    composable<Screen.Home> {
         HomeScreen(
             onArrowClicked = { statusIndex ->
                 navController.navigateToTasksScreen(statusIndex)
@@ -15,8 +15,8 @@ fun NavGraphBuilder.homeRoute(navController: NavController){
     }
 }
 
-fun NavController.navigateToHomeScreen(popUp: Boolean = false){
-    navigate(route = Screen.Home){
+fun NavController.navigateToHomeScreen(popUp: Boolean = false) {
+    navigate(route = Screen.Home) {
         if (popUp) {
             popUpTo(Screen.Onboarding) {
                 inclusive = true

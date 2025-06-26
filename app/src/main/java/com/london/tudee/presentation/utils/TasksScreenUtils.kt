@@ -23,7 +23,7 @@ object TasksScreenUtils {
             else -> 31
         }
 
-    fun isLeapYear(year: Int): Boolean =
+    private fun isLeapYear(year: Int): Boolean =
         (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
 
     fun getDayRangeMillis(targetDate: LocalDate): Pair<Long, Long> {

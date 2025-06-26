@@ -26,12 +26,11 @@ import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.home.NotificationSliderUiState
 
-
 @Composable
 fun NotificationSlider(
     note: String?,
-    notificationSliderUiState: NotificationSliderUiState,
     modifier: Modifier = Modifier,
+    notificationSliderUiState: NotificationSliderUiState,
 ) {
     Box(
         modifier = modifier
@@ -85,9 +84,7 @@ fun NotificationSlider(
                     lineHeight = 17.sp
                 )
             }
-
             Spacer(modifier = Modifier.width(8.dp))
-
             Box(
                 modifier = Modifier
                     .weight(0.17f)
@@ -102,7 +99,6 @@ fun NotificationSlider(
                             shape = TudeeTheme.shapes.circle
                         )
                 )
-
                 Column(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -124,12 +120,10 @@ fun NotificationSlider(
 
 @ThemePreviews
 @Composable
-fun TaskStatusSliderPreview() {
-
+private fun TaskStatusSliderPreview() {
     NotificationSlider(
         note = "Tudee is watching. back to work!!!",
         notificationSliderUiState = NotificationSliderUiState(),
         modifier = Modifier.padding(start = 6.dp)
     )
 }
-

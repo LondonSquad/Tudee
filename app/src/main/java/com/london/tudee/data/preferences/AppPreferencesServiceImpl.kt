@@ -24,8 +24,8 @@ class AppPreferencesServiceImpl(
     private fun getDefaultIsDarkModeValue(): Boolean? {
         return if (preferences.contains(DARK_MODE_ENABLED))
             preferences.getBoolean(
-                /* key = */ DARK_MODE_ENABLED,
-                /* defValue = */ false
+                DARK_MODE_ENABLED,
+                false
             )
         else null
     }

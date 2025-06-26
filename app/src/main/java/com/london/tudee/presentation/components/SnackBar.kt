@@ -74,9 +74,7 @@ fun SnackBar(
                     tint = iconTint
                 )
             }
-
             Spacer(modifier = Modifier.width(12.dp))
-
             Text(
                 text = stringResource(message),
                 style = TudeeTheme.typography.bodyMedium,
@@ -89,7 +87,7 @@ fun SnackBar(
 
 @ThemePreviews
 @Composable
-fun SnackBarPreview() {
+private fun SnackBarPreview() {
     Box(modifier = Modifier.fillMaxSize()) {
         SnackBar(
             modifier = Modifier

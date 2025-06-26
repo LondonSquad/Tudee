@@ -9,7 +9,8 @@ import com.london.tudee.domain.entities.TaskStatus
 import kotlinx.datetime.Clock
 
 @Entity(
-    tableName = "TASK_TABLE", foreignKeys = [ForeignKey(
+    tableName = "TASK_TABLE", foreignKeys = [
+        ForeignKey(
         entity = CategoryDto::class,
         parentColumns = ["id"],
         childColumns = ["categoryId"],
@@ -21,7 +22,7 @@ data class TaskDto(
     @PrimaryKey(autoGenerate = true) val id: Int = INITIALIZE_ID,
     val title: String,
     val description: String,
-    val taskStatus: TaskStatus,
+    val status: TaskStatus,
     val priority: Priority,
     val categoryId: Int,
     val timeStamp: Long = Clock.System.now().toEpochMilliseconds()

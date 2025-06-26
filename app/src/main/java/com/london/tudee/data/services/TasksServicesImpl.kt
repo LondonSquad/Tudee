@@ -1,5 +1,6 @@
 package com.london.tudee.data.services
 
+import com.london.tudee.data.exception.TaskException.*
 import com.london.tudee.data.local.roomdb.dao.TaskDao
 import com.london.tudee.data.mappers.convertToTask
 import com.london.tudee.data.mappers.convertToTaskDto
@@ -12,66 +13,101 @@ import kotlinx.coroutines.flow.map
 class TasksServicesImpl(
     private val taskDao: TaskDao
 ) : TaskService {
+
     override suspend fun add(service: Task) {
-        val task = service.copy(id = 0)
-        return taskDao.insert(task.convertToTaskDto())
+        runCatching {
+            taskDao.insert(service.copy(id = 0).convertToTaskDto())
+        }.onFailure {
+            throw TaskInsertException()
+        }
     }
 
-    override suspend fun edit(service: Task) =  taskDao.update(service.convertToTaskDto())
+    override suspend fun edit(service: Task) {
+        runCatching {
+            taskDao.update(service.convertToTaskDto())
+        }.onFailure {
+            throw TaskUpdateException()
+        }
+    }
 
-    override suspend fun delete(service: Task) = taskDao.delete(service.convertToTaskDto())
-
+    override suspend fun delete(service: Task) {
+        runCatching {
+            taskDao.delete(service.convertToTaskDto())
+        }.onFailure {
+            throw TaskDeleteException()
+        }
+    }
 
     override suspend fun getAll(): Flow<List<Task>> {
-        return taskDao.getAll().map { taskDtoList ->
-            taskDtoList.map { taskDto -> taskDto.convertToTask() }
+        return runCatching {
+            taskDao.getAll().map { it.map { dto -> dto.convertToTask() } }
+        }.getOrElse {
+            throw TaskLoadException()
         }
     }
 
-    override suspend fun getById(id: Int): Task = taskDao.getById(id).convertToTask()
-
+    override suspend fun getById(id: Int): Task {
+        return runCatching {
+            taskDao.getById(id).convertToTask()
+        }.getOrElse {
+            throw TaskNotFoundException()
+        }
+    }
 
     override suspend fun getByCategoryId(categoryId: Int): Flow<List<Task>> {
-        return taskDao.getByCategoryId(categoryId).map { taskDtoList ->
-            taskDtoList.map { taskDto -> taskDto.convertToTask() }
+        return runCatching {
+            taskDao.getByCategoryId(categoryId).map { it.map { dto -> dto.convertToTask() } }
+        }.getOrElse {
+            throw TaskLoadException()
         }
     }
 
-    override suspend fun getByTaskStatus(taskStatus: TaskStatus): Flow<List<Task>> {
-        return taskDao.getByTaskStatus(taskStatus).map { taskDtoList ->
-            taskDtoList.map { taskDto -> taskDto.convertToTask() }
+    override suspend fun getByTaskStatus(status: TaskStatus): Flow<List<Task>> {
+        return runCatching {
+            taskDao.getByTaskStatus(status).map { it.map { dto -> dto.convertToTask() } }
+        }.getOrElse {
+            throw TaskLoadException()
         }
     }
 
     override suspend fun getTasksByDate(date: Long): Flow<List<Task>> {
-        return taskDao.getTasksByDate(date).map { taskDtoList ->
-            taskDtoList.map { taskDto -> taskDto.convertToTask() }
+        return runCatching {
+            taskDao.getTasksByDate(date).map { it.map { dto -> dto.convertToTask() } }
+        }.getOrElse {
+            throw TaskLoadException()
         }
     }
 
     override suspend fun getByTimeStampAndTaskStatus(
-        taskStatus: TaskStatus, timeStamp: Long
+        status: TaskStatus, timeStamp: Long
     ): Flow<List<Task>> {
-        return taskDao.getByTimeStampAndTaskStatus(taskStatus, timeStamp).map { taskDtoList ->
-            taskDtoList.map { taskDto -> taskDto.convertToTask() }
+        return runCatching {
+            taskDao.getByTimeStampAndTaskStatus(status, timeStamp)
+                .map { it.map { dto -> dto.convertToTask() } }
+        }.getOrElse {
+            throw TaskLoadException()
         }
     }
 
     override suspend fun getByCategoryIdAndTaskStatus(
-        categoryId: Int, taskStatus: TaskStatus
+        categoryId: Int, status: TaskStatus
     ): Flow<List<Task>> {
-        return taskDao.getByCategoryIdAndTaskStatus(categoryId, taskStatus).map { taskDtoList ->
-            taskDtoList.map { taskDto -> taskDto.convertToTask() }
+        return runCatching {
+            taskDao.getByCategoryIdAndTaskStatus(categoryId, status)
+                .map { it.map { dto -> dto.convertToTask() } }
+        }.getOrElse {
+            throw TaskLoadException()
         }
     }
 
     override suspend fun getTasksForDay(
-        start: Long,
-        end: Long,
-        taskStatus: TaskStatus
+        start: Long, end: Long, status: TaskStatus
     ): Flow<List<Task>> {
-        return taskDao.getTasksForDay(start, end, taskStatus).map { taskDtoList ->
-            taskDtoList.map { taskDto -> taskDto.convertToTask() }
+        return runCatching {
+            taskDao.getTasksForDay(start, end, status)
+                .map { it.map { dto -> dto.convertToTask() } }
+        }.getOrElse {
+            throw TaskLoadException()
         }
     }
 }

@@ -16,8 +16,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.zIndex
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.london.tudee.R
 import com.london.tudee.presentation.components.buttons.TudeeTextButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
@@ -40,7 +40,6 @@ fun OnBoardingHorizontalPager(
 
     Box(modifier = Modifier.fillMaxSize()) {
         OnBoardingBackground()
-
         AnimatedVisibility(
             visible = currentPage != OnBoardingContent.size - 1, modifier = Modifier.zIndex(1f)
         ) {
@@ -57,7 +56,6 @@ fun OnBoardingHorizontalPager(
                 isDisabled = false,
             )
         }
-
         HorizontalPager(state = pagerState) { pageIndex ->
             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                 Column {
@@ -72,12 +70,12 @@ fun OnBoardingHorizontalPager(
                                 viewModel.onboardingFinished()
                                 onCompleted()
                             }
-                        })
+                        }
+                    )
                 }
             }
         }
-
-        StepIndicatorBar(
+        OnboardingIndicatorBar(
             currentPage, modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .systemGesturesPadding()
@@ -87,7 +85,7 @@ fun OnBoardingHorizontalPager(
 
 @ThemePreviews
 @Composable
-fun PreviewOnboardingFlow() {
+private fun PreviewOnboardingFlow() {
     TudeeTheme {
         OnBoardingHorizontalPager(onClickSkip = {}, onCompleted = {})
     }

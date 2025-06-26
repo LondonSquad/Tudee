@@ -69,7 +69,7 @@ fun DateBadge(
 
 @ThemePreviews
 @Composable
-fun PreviewDateBadge() {
+private fun PreviewDateBadge() {
     TudeeTheme {
         DateBadge(
             modifier = Modifier.height(28.dp),
@@ -93,7 +93,7 @@ fun PreviewDateBadge() {
 
 @ThemePreviews
 @Composable
-fun PreviewDateBadgeHomeScreen() {
+private fun PreviewDateBadgeHomeScreen() {
     TudeeTheme {
         DateBadge(
             modifier = Modifier.height(17.dp),
@@ -114,5 +114,3 @@ fun PreviewDateBadgeHomeScreen() {
         )
     }
 }
-
-

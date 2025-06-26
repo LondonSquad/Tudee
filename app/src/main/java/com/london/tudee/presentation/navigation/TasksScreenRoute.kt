@@ -6,12 +6,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.london.tudee.presentation.screens.task.TasksScreen
 
-fun NavGraphBuilder.tasksRoute(navController: NavController){
+fun NavGraphBuilder.tasksRoute(navController: NavController) {
     composable<Screen.Tasks> { bacStackEntry ->
         val entry = bacStackEntry.toRoute<Screen.Tasks>()
         val tabIndex = entry.tabIndex
         TasksScreen(
-            initialTabIndex = tabIndex ?: 0
+            initialTabIndex = tabIndex ?: 0,
         )
     }
 }

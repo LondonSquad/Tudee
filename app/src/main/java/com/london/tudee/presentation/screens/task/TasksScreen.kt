@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -41,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Task
@@ -55,6 +57,8 @@ import com.london.tudee.presentation.components.task.SwipeToDeleteTask
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.task.task_delete.TaskDeletingBottomSheet
+import com.london.tudee.presentation.screens.task.task_modify.TaskModifyBottomSheet
+import com.london.tudee.presentation.screens.task.task_modify.TaskModifyUiState
 import com.london.tudee.presentation.utils.DateFormatter.toMonthShort
 import com.london.tudee.presentation.utils.DateFormatter.toYear
 import kotlinx.coroutines.delay
@@ -67,6 +71,7 @@ fun TasksScreen(
     viewModel: TasksScreenViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val taskModifyUiState by viewModel.taskUiState.collectAsState()
     var showDeleteSheet by remember { mutableStateOf(false) }
     var showDeleteSnackBar by remember { mutableStateOf(false) }
 
@@ -80,12 +85,14 @@ fun TasksScreen(
         toDoTasks = uiState.toDoTasks,
         doneTasks = uiState.doneTasks,
         days = uiState.days,
-        categories = uiState.categories,
+        categories = taskModifyUiState.categories,
         onClickLeft = { viewModel.updateDateByAction(uiState.date, ArrowActions.Previous) },
         onClickRight = { viewModel.updateDateByAction(uiState.date, ArrowActions.Next) },
         onDateSelected = { viewModel.onDateSelected(it) },
         onDayClick = { viewModel.onDaySelected(it) },
-        onDeleteTask = { task -> viewModel.showDeleteDialog(task.id) }
+        onDeleteTask = { task -> viewModel.showDeleteDialog(task.id) },
+        taskModifyUiState = taskModifyUiState,
+        interactions = viewModel,
     )
     TaskDeletingBottomSheet(
         viewModel = viewModel,
@@ -97,7 +104,6 @@ fun TasksScreen(
             viewModel.initializeInProgressTasks()
         }
     )
-
     AnimatedVisibility(
         visible = showDeleteSnackBar,
         enter = fadeIn() + slideInVertically(initialOffsetY = { -100 }),
@@ -111,7 +117,6 @@ fun TasksScreen(
             iconTint = TudeeTheme.colors.greenAccent
         )
     }
-
     LaunchedEffect(showDeleteSnackBar) {
         if (showDeleteSnackBar) {
             delay(3000)
@@ -121,7 +126,7 @@ fun TasksScreen(
 }
 
 @Composable
-fun TasksContent(
+private fun TasksContent(
     initialTabIndex: Int,
     date: Long,
     inProgressTasksCount: Int,
@@ -136,10 +141,12 @@ fun TasksContent(
     onClickRight: () -> Unit,
     onDateSelected: (Long) -> Unit,
     onDayClick: (index: Int) -> Unit,
-    onDeleteTask: (Task) -> Unit
+    onDeleteTask: (Task) -> Unit,
+    taskModifyUiState: TaskModifyUiState,
+    interactions: TasksInteractions,
 ) {
-    var showDatePicker by remember { mutableStateOf(false) }
-    var showBottomSheet by remember { mutableStateOf(false) }
+
+    var showDatePickerDetails by remember { mutableStateOf(false) }
 
     Scaffold(
         containerColor = TudeeTheme.colors.surface,
@@ -153,8 +160,11 @@ fun TasksContent(
             TudeeFloatingActionButton(
                 painter = painterResource(R.drawable.note_add),
                 contentDescription = "note icon",
-                onClick = {},
+                onClick = { interactions.showBottomSheet() },
                 isEnabled = true,
+                modifier = Modifier
+                    .zIndex(if (taskModifyUiState.showBottomSheet) 0f else 1f)
+                    .padding(bottom = 16.dp, end = 16.dp)
             )
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -174,7 +184,7 @@ fun TasksContent(
                     modifier = Modifier.background(color = TudeeTheme.colors.surfaceHigh),
                     month = date.toMonthShort(),
                     year = date.toYear(),
-                    onClickDate = { showDatePicker = true },
+                    onClickDate = { showDatePickerDetails = true },
                     days = days,
                     onClickLeft = onClickLeft,
                     onClickRight = onClickRight,
@@ -191,7 +201,6 @@ fun TasksContent(
                 ) { EmptyTasksScreen() }
                 return@TudeeTabLayoutWithPager
             }
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -211,18 +220,61 @@ fun TasksContent(
                 }
             }
         }
-    }
 
-    if (showDatePicker)
+
+    }
+    if (showDatePickerDetails) {
         TudeeDatePicker(
             onDateSelected = { selectedDate ->
                 selectedDate?.let { onDateSelected(it) }
-                showDatePicker = false
+                showDatePickerDetails = false
             },
-            onDismiss = { showDatePicker = false }
+            onDismiss = { showDatePickerDetails = false }
         )
-}
+    }
 
+    TaskModifyBottomSheet(
+        modifier = Modifier.zIndex(1f),
+        screenContent = { },
+        uiState = taskModifyUiState,
+        interactions =  interactions ,
+        onHideBottomSheet = { interactions.hideBottomSheet() },
+        onShowDatePicker = { interactions.showDatePicker() },
+        onHideDatePicker = { interactions.hideDatePicker() }
+    )
+
+    Box(
+        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter
+    ) {
+        when (taskModifyUiState.stateMessage) {
+            R.string.add_task_successfully -> {
+                SnackBar(
+                    modifier = Modifier
+                        .windowInsetsPadding(WindowInsets.statusBars)
+                        .padding(top = 16.dp),
+                    message = R.string.add_task_successfully,
+                    iconPainter = painterResource(id = R.drawable.snack_bar_container),
+                    iconTint = TudeeTheme.colors.greenAccent
+                )
+            }
+
+            R.string.some_error_happened -> {
+                SnackBar(
+                    modifier = Modifier
+                        .windowInsetsPadding(WindowInsets.statusBars)
+                        .padding(top = 16.dp),
+                    message = R.string.some_error_happened,
+                    iconPainter = painterResource(id = R.drawable.snack_bar_error),
+                    iconTint = TudeeTheme.colors.errorVariant,
+                )
+            }
+        }
+        LaunchedEffect(taskModifyUiState.stateMessage) {
+            delay(3000)
+            interactions.clearMessages()
+        }
+    }
+}
 @Composable
 private fun TasksTopBar(
     modifier: Modifier = Modifier,
@@ -248,9 +300,8 @@ private fun TasksTopBar(
     }
 }
 
-
 @Composable
-fun DateSection(
+private fun DateSection(
     modifier: Modifier,
     month: String,
     year: String,
@@ -272,7 +323,7 @@ fun DateSection(
 }
 
 @Composable
-fun DateSelector(
+private fun DateSelector(
     modifier: Modifier = Modifier,
     month: String,
     year: String,
@@ -305,7 +356,6 @@ fun DateSelector(
                 tint = TudeeTheme.colors.body
             )
         }
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -327,7 +377,6 @@ fun DateSelector(
                 tint = TudeeTheme.colors.body
             )
         }
-
         Box(
             modifier = Modifier
                 .size(32.dp)
@@ -350,11 +399,12 @@ fun DateSelector(
 }
 
 @Composable
-fun DaySelector(
+private fun DaySelector(
     modifier: Modifier = Modifier,
     days: List<DaysOfMonth>,
     onClickDay: (index: Int) -> Unit
 ) {
+
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -388,8 +438,11 @@ fun DaySelector(
 
 @ThemePreviews
 @Composable
-fun TasksScreenPreview() {
+private fun TasksScreenPreview() {
     TudeeTheme {
-        TasksScreen()
+        TasksScreen(
+            initialTabIndex = TODO(),
+            viewModel = TODO(),
+        )
     }
 }

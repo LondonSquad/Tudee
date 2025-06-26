@@ -8,7 +8,8 @@ import com.london.tudee.data.local.roomdb.dto.CategoryDtoDefaults.DEFAULT_ICON
 data class CategoryDto(
     @PrimaryKey(autoGenerate = true)
     val id: Int = DEFAULT_ICON,
-    val name: String,
+    val titleRes: Int? = null,
+    val title: String? = null,
     val iconRes: String,
     val isDefault: Boolean,
     val taskCount: Int

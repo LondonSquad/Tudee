@@ -39,7 +39,6 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import kotlinx.datetime.Clock
 import kotlin.math.roundToInt
 
-
 @Composable
 fun SwipeToDeleteTask(
     modifier: Modifier = Modifier,
@@ -55,7 +54,6 @@ fun SwipeToDeleteTask(
         animationSpec = tween(durationMillis = 300),
         label = "SwipeAnimation"
     )
-
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -71,7 +69,6 @@ fun SwipeToDeleteTask(
                 onDeleteClick()
             })
         }
-
         TaskItem(
             task = task,
             modifier = Modifier
@@ -85,7 +82,7 @@ fun SwipeToDeleteTask(
                         rawOffsetX = (rawOffsetX + dragAmount).coerceIn(-swipeThreshold, 0f)
                     }
                 },
-            hasDate = true,
+            hasDate = false,
             iconResId = iconResId,
             isSelected = true
         )
@@ -122,7 +119,7 @@ private fun DeleteBackground(onDeleteClick: () -> Unit) {
 
 @ThemePreviews
 @Composable
-fun SwipeToDeleteTaskPreview() {
+private fun SwipeToDeleteTaskPreview() {
     TudeeTheme {
         SwipeToDeleteTask(
             task = Task(
@@ -139,4 +136,3 @@ fun SwipeToDeleteTaskPreview() {
         )
     }
 }
-

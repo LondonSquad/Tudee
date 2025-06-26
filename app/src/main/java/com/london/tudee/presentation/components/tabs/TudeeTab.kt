@@ -1,6 +1,5 @@
 package com.london.tudee.presentation.components.tabs
 
-
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-
 
 @Composable
 fun TudeeTab(
@@ -153,4 +151,3 @@ private fun TudeeTabPreview() {
         )
     }
 }
-

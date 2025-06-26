@@ -29,26 +29,6 @@ data class TabItem(
 )
 
 @Composable
-fun TudeeTabLayout(
-    tabs: List<TabItem>,
-    selectedIndex: Int,
-    modifier: Modifier = Modifier,
-    onTabSelected: (Int) -> Unit
-) {
-    Row(modifier = modifier) {
-        tabs.forEachIndexed { index, tab ->
-            TudeeTab(
-                text = tab.text,
-                number = tab.number,
-                isSelected = index == selectedIndex,
-                onClick = { onTabSelected(index) },
-                modifier = Modifier.weight(1f)
-            )
-        }
-    }
-}
-
-@Composable
 fun TudeeTabLayoutWithPager(
     modifier: Modifier = Modifier,
     initialTabIndex: Int = 0,
@@ -82,9 +62,28 @@ fun TudeeTabLayoutWithPager(
     }
 }
 
+@Composable
+private fun TudeeTabLayout(
+    tabs: List<TabItem>,
+    selectedIndex: Int,
+    modifier: Modifier = Modifier,
+    onTabSelected: (Int) -> Unit
+) {
+    Row(modifier = modifier) {
+        tabs.forEachIndexed { index, tab ->
+            TudeeTab(
+                text = tab.text,
+                number = tab.number,
+                isSelected = index == selectedIndex,
+                onClick = { onTabSelected(index) },
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
 
 @Composable
-fun TabLayoutScreen(modifier: Modifier = Modifier) {
+private fun TabLayoutScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -108,11 +107,8 @@ fun TabLayoutScreen(modifier: Modifier = Modifier) {
                     textAlign = TextAlign.Center
                 )
             }
-
-
         }
     }
-
 }
 
 @ThemePreviews

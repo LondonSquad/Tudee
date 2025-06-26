@@ -17,30 +17,23 @@ class EditCategoryScreenViewModel(
     private val _uiState = MutableStateFlow(EditCategoryUiState())
     val uiState = _uiState.asStateFlow()
 
-
     fun editCategory(
         category: Category
     ) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
-
-
-            try {
+            runCatching {
                 categoryService.edit(category)
                 _uiState.value = _uiState.value.copy(isEdited = true, isLoading = false)
-
-            } catch (e: Exception) {
+            }.onFailure {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    errorMessage = e.message
+                    errorMessage = it.message
                 )
             }
         }
     }
-
-
 }
-
 
 data class EditCategoryUiState(
     val isLoading: Boolean = false,
