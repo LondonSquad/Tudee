@@ -27,8 +27,7 @@ class AppPreferencesServiceImpl(
                 /* key = */ DARK_MODE_ENABLED,
                 /* defValue = */ false
             )
-        else
-            null
+        else null
     }
 
     override fun setOnboardingShown() {

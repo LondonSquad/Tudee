@@ -17,13 +17,10 @@ class TasksServicesImpl(
         return taskDao.insert(task.convertToTaskDto())
     }
 
-    override suspend fun edit(service: Task) {
-        return taskDao.update(service.convertToTaskDto())
-    }
+    override suspend fun edit(service: Task) =  taskDao.update(service.convertToTaskDto())
 
-    override suspend fun delete(service: Task) {
-        return taskDao.delete(service.convertToTaskDto())
-    }
+    override suspend fun delete(service: Task) = taskDao.delete(service.convertToTaskDto())
+
 
     override suspend fun getAll(): Flow<List<Task>> {
         return taskDao.getAll().map { taskDtoList ->
@@ -31,9 +28,8 @@ class TasksServicesImpl(
         }
     }
 
-    override suspend fun getById(id: Int): Task {
-        return taskDao.getById(id).convertToTask()
-    }
+    override suspend fun getById(id: Int): Task = taskDao.getById(id).convertToTask()
+
 
     override suspend fun getByCategoryId(categoryId: Int): Flow<List<Task>> {
         return taskDao.getByCategoryId(categoryId).map { taskDtoList ->
