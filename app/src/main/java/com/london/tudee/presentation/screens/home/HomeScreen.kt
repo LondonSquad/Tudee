@@ -119,7 +119,7 @@ private fun HomeScreenContent(
                 .padding(bottom = 16.dp, end = 16.dp),
             contentDescription = "note icon",
             onClick = {
-                interactions.showBottomSheet()
+                interactions.toggleBottomSheet(true)
             },
             isEnabled = true,
         )
@@ -189,7 +189,9 @@ private fun HomeScreenContent(
             screenContent = { },
             uiState = taskUiState,
             interactions = interactions,
-            onHideBottomSheet = interactions::hideBottomSheet,
+            onHideBottomSheet = {
+                interactions.toggleBottomSheet(false)
+            },
             onShowDatePicker = interactions::showDatePicker,
             onHideDatePicker = interactions::hideDatePicker
         )
