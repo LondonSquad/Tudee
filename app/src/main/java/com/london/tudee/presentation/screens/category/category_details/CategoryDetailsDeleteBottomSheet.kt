@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.category.delete_category
+package com.london.tudee.presentation.screens.category.category_details
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -60,9 +60,9 @@ private fun DeleteCategoryContent(
     onCancel: () -> Unit,
     onCategoryDeleted: () -> Unit,
     onDeleteError: () -> Unit = {},
-    viewModel: DeleteCategoryScreenViewModel = koinViewModel()
+    viewModel: CategoryDetailsViewModel = koinViewModel()
 ) {
-    val uiState by viewModel.deleteState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(uiState.isDeleted, uiState.errorMessage) {
         when {
@@ -100,7 +100,7 @@ private fun DeleteCategoryContent(
             text = stringResource(R.string.delete),
             onClick = {
                 viewModel.deleteCategory(category)
-                if (viewModel.deleteState.value.isDeleted) {
+                if (viewModel.uiState.value.isDeleted) {
                     onCancel()
                 }
             },
