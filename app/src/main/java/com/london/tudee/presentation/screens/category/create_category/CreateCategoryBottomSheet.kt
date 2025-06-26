@@ -47,7 +47,6 @@ import com.london.tudee.presentation.utils.galleryImageToBitmap
 import com.london.tudee.presentation.utils.saveImageToInternalStorage
 import org.koin.compose.viewmodel.koinViewModel
 
-
 @Composable
 fun CreateCategoryScreen(
     modifier: Modifier = Modifier, onDismiss: () -> Unit
@@ -79,41 +78,29 @@ private fun CreateCategoryContent(
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-
         Text(
             text = stringResource(R.string.add_new_category),
             style = TudeeTheme.typography.titleLarge,
             color = TudeeTheme.colors.title
         )
-
-
         Spacer(modifier = Modifier.height(12.dp))
-
-
         TudeeTextField(
             icon = R.drawable.add_category_icon,
             hint = R.string.category_name,
             value = categoryName,
             onValueChange = { categoryName = it },
         )
-
         Spacer(modifier = Modifier.height(12.dp))
-
         Text(
             text = stringResource(R.string.category_image),
             style = TudeeTheme.typography.titleMedium,
             color = TudeeTheme.colors.title
         )
-
         Spacer(modifier = Modifier.height(12.dp))
-
         ImagePickerAddCategory { uri ->
             imageUri = uri
         }
-
         Spacer(modifier = Modifier.height(36.dp))
-
-
         TudeePrimaryButton(
             onClick = {
                 val savedImageUri = saveImageToInternalStorage(
@@ -135,9 +122,7 @@ private fun CreateCategoryContent(
             text = stringResource(R.string.add),
             modifier = Modifier.fillMaxWidth()
         )
-
         Spacer(modifier = Modifier.height(12.dp))
-
         TudeeSecondaryButton(
             onClick = onDismiss,
             text = stringResource(R.string.cancel),
@@ -150,9 +135,7 @@ private fun CreateCategoryContent(
 private fun ImagePickerAddCategory(
     modifier: Modifier = Modifier, onImagePicked: (Uri?) -> Unit
 ) {
-
     var imageUri by remember { mutableStateOf<Uri?>(null) }
-
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -160,7 +143,6 @@ private fun ImagePickerAddCategory(
         imageUri = uri
         onImagePicked(uri)
     }
-
 
     Box(
         modifier = modifier
@@ -188,9 +170,7 @@ private fun ImagePickerAddCategory(
                     contentScale = ContentScale.Crop
                 )
             }
-
         }
-
         if (imageUri != null) {
             Box(
                 modifier = Modifier
@@ -231,9 +211,7 @@ private fun ImagePickerAddCategory(
                 )
             }
         }
-
     }
-
 }
 
 @ThemePreviews

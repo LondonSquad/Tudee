@@ -17,7 +17,7 @@ class TasksServicesImpl(
         return taskDao.insert(task.convertToTaskDto())
     }
 
-    override suspend fun edit(service: Task) =  taskDao.update(service.convertToTaskDto())
+    override suspend fun edit(service: Task) = taskDao.update(service.convertToTaskDto())
 
     override suspend fun delete(service: Task) = taskDao.delete(service.convertToTaskDto())
 

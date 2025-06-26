@@ -93,7 +93,7 @@ fun TudeeDatePicker(
 
 @ThemePreviews
 @Composable
-fun Prev() {
+private fun Prev() {
     TudeeTheme {
         TudeeDatePicker(
             onDateSelected = {},

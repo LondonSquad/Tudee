@@ -59,7 +59,6 @@ fun TaskDetailsBottomSheet(
         bottomSheetActions = {},
         modifier = modifier
     )
-
 }
 
 @Composable
@@ -136,7 +135,6 @@ private fun TaskDetailsBottomSheetContent(
     }
 }
 
-
 @Composable
 private fun StatusRow(
     modifier: Modifier = Modifier, status: TaskStatus, priority: Priority
@@ -157,7 +155,8 @@ private fun StatusRow(
                         TaskStatus.IN_PROGRESS -> TudeeTheme.colors.purpleVariant
                         TaskStatus.DONE -> TudeeTheme.colors.greenVariant
                     }
-                ), contentAlignment = Alignment.Center
+                ),
+            contentAlignment = Alignment.Center
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -221,5 +220,3 @@ private fun PreviewTaskDetail() {
         showBottomSheet = true
     )
 }
-
-

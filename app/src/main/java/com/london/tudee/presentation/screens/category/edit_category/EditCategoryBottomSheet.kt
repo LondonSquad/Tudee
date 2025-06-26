@@ -166,7 +166,6 @@ private fun EditCategoryContent(
             modifier = Modifier.fillMaxWidth()
         )
 
-
         Spacer(modifier = Modifier.height(12.dp))
 
         TudeeSecondaryButton(
@@ -177,7 +176,6 @@ private fun EditCategoryContent(
     }
 }
 
-
 @Composable
 private fun ImagePickerEditCategory(
     modifier: Modifier = Modifier,
@@ -186,7 +184,6 @@ private fun ImagePickerEditCategory(
 ) {
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
-
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()

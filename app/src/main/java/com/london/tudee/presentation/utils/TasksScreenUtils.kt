@@ -9,7 +9,6 @@ import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.plus
 
 object TasksScreenUtils {
-
     fun LocalDate.lengthOfMonth(date: Long) =
         when (month) {
             Month.FEBRUARY -> {
@@ -33,5 +32,4 @@ object TasksScreenUtils {
             targetDate.plus(DatePeriod(days = 1)).atStartOfDayIn(timeZone).toEpochMilliseconds() - 1
         return Pair(startOfDayMillis, endOfDayMillis)
     }
-
 }

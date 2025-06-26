@@ -1,11 +1,11 @@
 package com.london.tudee.presentation.screens.splash
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.screens.onboarding.OnBoardingBackground
-
 
 @ThemePreviews
 @Composable
@@ -21,4 +21,3 @@ fun SplashScreen() {
         TudeeLogoText(modifier = Modifier.align(Alignment.Center))
     }
 }
-

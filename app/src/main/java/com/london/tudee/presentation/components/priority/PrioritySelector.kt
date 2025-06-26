@@ -31,7 +31,7 @@ fun PrioritySelector(
 
 @ThemePreviews
 @Composable
-fun PrioritySelectorPreview() {
+private fun PrioritySelectorPreview() {
     PrioritySelector(
         selectedPriority = Priority.MEDIUM,
         onPrioritySelected = {}

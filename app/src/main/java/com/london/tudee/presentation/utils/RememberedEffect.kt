@@ -5,7 +5,6 @@ import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.remember
 
-
 @Composable
 @NonRestartableComposable
 fun RememberedEffect(

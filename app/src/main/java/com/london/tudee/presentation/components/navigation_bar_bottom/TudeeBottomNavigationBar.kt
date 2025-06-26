@@ -94,10 +94,9 @@ fun TudeeBottomNavigationBar(
     }
 }
 
-
 @ThemePreviews
 @Composable
-fun PreviewTestScreen() {
+private fun PreviewTestScreen() {
     val navController = rememberNavController()
     TudeeTheme {
         Scaffold(

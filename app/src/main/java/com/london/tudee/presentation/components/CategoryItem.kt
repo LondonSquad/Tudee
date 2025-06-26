@@ -65,7 +65,6 @@ fun CategoryItem(
                         .clip(TudeeTheme.shapes.circle)
                 else Modifier.size(32.dp),
             )
-
             if (isSelected) {
                 Image(
                     painter = painterResource(R.drawable.ic_check),
@@ -81,28 +80,28 @@ fun CategoryItem(
                         .padding(2.dp)
                 )
             }
-            if(inCategorySection){Box(
-                modifier = Modifier
-                    .width(36.dp)
-                    .align(Alignment.TopEnd)
-                    .offset(x = 20.dp, y = (-20).dp)
-                    .background(
-                        color = TudeeTheme.colors.surfaceLow,
-                        shape = TudeeTheme.shapes.circle
+            if (inCategorySection) {
+                Box(
+                    modifier = Modifier
+                        .width(36.dp)
+                        .align(Alignment.TopEnd)
+                        .offset(x = 20.dp, y = (-20).dp)
+                        .background(
+                            color = TudeeTheme.colors.surfaceLow,
+                            shape = TudeeTheme.shapes.circle
+                        )
+                        .padding(horizontal = 6.dp, vertical = 2.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = taskCount.toString(),
+                        style = TudeeTheme.typography.labelSmall,
+                        color = TudeeTheme.colors.hint
                     )
-                    .padding(horizontal = 6.dp, vertical = 2.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = taskCount.toString(),
-                    style = TudeeTheme.typography.labelSmall,
-                    color = TudeeTheme.colors.hint
-                )
-            }}
+                }
+            }
         }
-
         Spacer(modifier = Modifier.height(4.dp))
-
         Text(
             text = title,
             style = TudeeTheme.typography.labelSmall,

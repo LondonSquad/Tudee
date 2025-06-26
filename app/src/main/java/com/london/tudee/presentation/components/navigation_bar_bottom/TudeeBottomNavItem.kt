@@ -8,6 +8,6 @@ data class TudeeBottomNavItem(
     val contentDescription: String?,
     @DrawableRes val selectedIcon: Int,
     @DrawableRes val unselectedIcon: Int
-){
+) {
     val route: String get() = screen::class.qualifiedName ?: screen::class.java.name
 }

@@ -235,7 +235,6 @@ class HomeViewModel(
                     )
                 }
                 validateForm()
-
             }.onFailure {
                 _taskUiState.update {
                     it.copy(
@@ -247,7 +246,6 @@ class HomeViewModel(
             }
         }
     }
-
 
     override fun updateTitle(title: String) {
         _taskUiState.update { it.copy(title = title) }
@@ -291,7 +289,6 @@ class HomeViewModel(
                 showBottomSheet = false,
             )
         }
-
         viewModelScope.launch {
             delay(500)
             _taskUiState.update {
@@ -350,7 +347,6 @@ class HomeViewModel(
                             ?: Clock.System.now()
                     )
                 }
-
                 if (currentState.isEditMode) {
                     taskService.edit(task)
                 } else {
@@ -359,7 +355,6 @@ class HomeViewModel(
                     }
                     taskService.add(task)
                 }
-
                 _taskUiState.update {
                     it.copy(
                         isLoading = false,
@@ -368,7 +363,6 @@ class HomeViewModel(
                         showBottomSheet = false
                     )
                 }
-
             }.onFailure {
                 _taskUiState.update {
                     it.copy(
@@ -379,7 +373,6 @@ class HomeViewModel(
             }
         }
     }
-
 
     override fun validateForm() {
         _taskUiState.update { currentState ->

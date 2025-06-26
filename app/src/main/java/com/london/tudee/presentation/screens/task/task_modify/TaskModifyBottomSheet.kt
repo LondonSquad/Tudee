@@ -20,15 +20,16 @@ fun TaskModifyBottomSheet(
     modifier: Modifier = Modifier,
     screenContent: @Composable () -> Unit,
     uiState: TaskModifyUiState,
-    interactions: TaskModifyInteractions
+    interactions: TaskModifyInteractions,
+    onHideBottomSheet: () -> Unit,
+    onShowDatePicker: () -> Unit,
+    onHideDatePicker: () -> Unit,
 ) {
 
     Box(modifier = Modifier.fillMaxSize()) {
         TudeeBottomSheetScreen(
             showBottomSheet = uiState.showBottomSheet,
-            onDismiss = {
-                interactions.hideBottomSheet()
-            },
+            onDismiss = onHideBottomSheet,
             screenContent = { screenContent() },
             bottomSheetContent = {
                 TaskModifyDetails(
@@ -36,15 +37,16 @@ fun TaskModifyBottomSheet(
                     title = if (uiState.isEditMode) R.string.edit_task else R.string.add_new_task,
                     uiState = uiState,
                     interactions = interactions,
-                    categories = uiState.categories
+                    categories = uiState.categories,
+                    onShowDatePicker = onShowDatePicker,
+                    onHideDatePicker = onHideDatePicker
                 )
             },
             bottomSheetActions = {
                 TudeePrimaryButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = if (uiState.isEditMode) stringResource(R.string.edit_task) else stringResource(
-                        R.string.add
-                    ),
+                    text = if (uiState.isEditMode) stringResource(R.string.edit_task)
+                    else stringResource(R.string.add),
                     isDisabled = !uiState.isFormValid || uiState.isLoading,
                     isLoading = uiState.isLoading,
                     onClick = {
@@ -57,9 +59,7 @@ fun TaskModifyBottomSheet(
                 TudeeSecondaryButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.cancel),
-                    onClick = {
-                        interactions.hideBottomSheet()
-                    },
+                    onClick = onHideBottomSheet,
                 )
             }
         )

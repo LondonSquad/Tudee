@@ -5,12 +5,9 @@ import com.london.tudee.domain.entities.Priority
 
 interface TaskModifyInteractions {
     fun saveTask()
-    fun showDatePicker()
-    fun hideDatePicker()
-    fun hideBottomSheet()
-    fun updateDate(date: Long)
     fun updateTitle(title: String)
+    fun updateDescription(description: String)
+    fun updateDate(date: Long)
     fun updatePriority(priority: Priority)
     fun updateCategory(category: Category)
-    fun updateDescription(description: String)
 }

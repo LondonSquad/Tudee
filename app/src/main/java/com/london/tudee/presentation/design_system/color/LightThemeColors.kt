@@ -35,7 +35,6 @@ val OnPrimaryStroke = Color(0x99FFFFFF)
 val PrimaryGradientLight = listOf(Color(0xFF49BAF2), Color(0xFF3A9CCD))
 val miniBlack = Color(0xFF1F1F1F)
 
-
 val LightTudeeColors = TudeeColors(
     primary = PrimaryLight,
     secondary = SecondaryLight,
