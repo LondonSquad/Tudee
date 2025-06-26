@@ -13,21 +13,23 @@ import com.london.tudee.data.mappers.convertToCategory
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.junit.Before
+import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+
 
 class CategoriesServicesImplTest {
 
     private lateinit var categoryDao: CategoryDao
     private lateinit var categoriesServicesImpl: CategoriesServicesImpl
 
-    @BeforeEach
+    @Before
     fun setup() {
         categoryDao = mockk(relaxed = true)
         categoriesServicesImpl = CategoriesServicesImpl(categoryDao)
