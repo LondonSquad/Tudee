@@ -210,7 +210,8 @@ private fun TasksPagerSection(state: CategoryDetailsUiState) {
                         modifier = Modifier,
                         isSelected = true,
                         task = tasks[index],
-                        hasDate = true
+                        hasDate = true,
+                        iconResId = ""
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -226,7 +227,7 @@ private fun TopAPPBar(
     onEditClick: () -> Unit = {}
 ) {
     TopAppBar(
-        title = state.category.title,
+        title = state.category.title ?: "",
         onBackClick = onBackClick,
         onClickAction = {},
         modifier = Modifier,

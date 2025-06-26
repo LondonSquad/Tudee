@@ -1,12 +1,6 @@
 package com.london.tudee.presentation.screens.category.create_category
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
-import android.util.Base64
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -49,6 +43,8 @@ import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.color.RectBorderColor
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.utils.galleryImageToBitmap
+import com.london.tudee.presentation.utils.saveImageToInternalStorage
 import org.koin.compose.viewmodel.koinViewModel
 import java.io.ByteArrayOutputStream
 
@@ -68,26 +64,6 @@ fun CreateCategoryScreen(
             )
         }
     )
-}
-
-// Helper function to convert URI to Base64
-private fun uriToBase64(context: Context, uri: Uri): String? {
-    return try {
-        val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
-        } else {
-            @Suppress("DEPRECATION")
-            MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
-        }
-
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-        val byteArray = byteArrayOutputStream.toByteArray()
-        Base64.encodeToString(byteArray, Base64.DEFAULT)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
 }
 
 @Composable
@@ -128,16 +104,18 @@ private fun CreateCategoryContent(
         Spacer(modifier = Modifier.height(36.dp))
         TudeePrimaryButton(
             onClick = {
-                val base64Image = imageUri?.let { uriToBase64(context, it) } ?: ""
+                val savedImageUri = saveImageToInternalStorage(
+                    context = context,
+                    bitmap = galleryImageToBitmap(context, imageUri!!),
+                    fileName = categoryName
+                )
                 viewModel.createCategory(
                     category = Category(
-                        id = 1,
                         title = categoryName,
-                        iconRes = base64Image,
+                        iconRes = savedImageUri,
                         isDefault = false,
                         taskCount = 0
                     )
-
                 )
                 onDismiss()
             },

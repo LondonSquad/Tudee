@@ -225,10 +225,10 @@ private fun CategoriesGrid(
     selectedCategory: Category?,
     onCategorySelected: (Category) -> Unit
 ) {
+    val context = LocalContext.current
     val chunkedCategories = remember(categories) {
         categories.chunked(3)
     }
-
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -242,7 +242,8 @@ private fun CategoriesGrid(
                     CategoryItem(
                         modifier = Modifier.weight(1f),
                         iconRes = category.iconRes,
-                        title = category.title,
+                        title = category.titleRes?.let { context.getString(it) }
+                            ?: category.title ?: "",
                         categoryId = category.id,
                         isSelected = selectedCategory?.id == category.id,
                         inCategorySection = false,

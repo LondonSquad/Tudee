@@ -116,10 +116,10 @@ class CategoryDetailsViewModel(
                     it.copy(
                         category = Category(
                             id = category.id,
-                            isDefault = category.isDefault,
-                            iconRes = category.iconRes,
-                            taskCount = category.taskCount,
                             title = category.title,
+                            iconRes = category.iconRes,
+                            isDefault = category.isDefault,
+                            taskCount = category.taskCount,
                         )
                     )
                 }
