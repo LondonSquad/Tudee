@@ -53,17 +53,16 @@ fun CategoryItem(
                     color = TudeeTheme.colors.surfaceHigh,
                     shape = TudeeTheme.shapes.circle
                 )
-                .padding(if (categoryId <= 17) 23.dp else 0.dp)
         ) {
             Image(
                 painter = image,
-                contentScale = if (categoryId >= 17) ContentScale.FillBounds else ContentScale.Fit,
+                contentScale = ContentScale.FillBounds ,
                 contentDescription = "Editable categories",
-                modifier = if (categoryId >= 17)
+                modifier = if (categoryId > 17)
                     Modifier
                         .fillMaxSize()
                         .clip(TudeeTheme.shapes.circle)
-                else Modifier.size(32.dp),
+                else Modifier.size(32.dp).align(Alignment.Center),
             )
             if (isSelected) {
                 Image(
@@ -72,7 +71,6 @@ fun CategoryItem(
                     modifier = Modifier
                         .size(20.dp)
                         .align(Alignment.TopEnd)
-                        .offset(x = 15.dp, y = (-25).dp)
                         .background(
                             color = TudeeTheme.colors.greenAccent,
                             shape = TudeeTheme.shapes.circle
