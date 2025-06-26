@@ -108,6 +108,7 @@ fun TasksScreen(
     )
     AnimatedVisibility(
         visible = showDeleteSnackBar,
+        modifier = Modifier.padding(top = 50.dp),
         enter = fadeIn() + slideInVertically(initialOffsetY = { -100 }),
         exit = fadeOut() + slideOutVertically(targetOffsetY = { -100 })
     ) {
@@ -238,7 +239,7 @@ private fun TasksContent(
         modifier = Modifier.zIndex(1f),
         screenContent = { },
         uiState = taskModifyUiState,
-        interactions =  interactions ,
+        interactions = interactions,
         onHideBottomSheet = { interactions.hideBottomSheet() },
         onShowDatePicker = { interactions.showDatePicker() },
         onHideDatePicker = { interactions.hideDatePicker() }
@@ -276,6 +277,7 @@ private fun TasksContent(
         }
     }
 }
+
 @Composable
 private fun TasksTopBar(
     modifier: Modifier = Modifier,
