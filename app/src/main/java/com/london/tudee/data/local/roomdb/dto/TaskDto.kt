@@ -21,7 +21,7 @@ data class TaskDto(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val title: String,
     val description: String,
-    val taskStatus: TaskStatus,
+    val status: TaskStatus,
     val priority: Priority,
     val categoryId: Int,
     val timeStamp: Long = Clock.System.now().toEpochMilliseconds()
