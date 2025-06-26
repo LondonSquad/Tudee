@@ -29,12 +29,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
@@ -45,20 +49,23 @@ import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.color.RectBorderColor
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.utils.galleryImageToBitmap
+import com.london.tudee.presentation.utils.saveImageToInternalStorage
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun EditCategoryScreen(
-    modifier: Modifier = Modifier,
     category: Category,
+    showBottomSheet: Boolean,
     onDeleteClick: () -> Unit,
     onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
     onEditSuccess: () -> Unit = {},
     onEditError: () -> Unit = {}
 ) {
 
     TudeeBottomSheetScreen(
-        showBottomSheet = true,
+        showBottomSheet = showBottomSheet,
         modifier = modifier,
         onDismiss = onDismiss,
         screenContent = {},
@@ -72,8 +79,7 @@ fun EditCategoryScreen(
                 onEditSuccess = onEditSuccess,
                 onEditError = onEditError
             )
-        }
-    )
+        })
 }
 
 @Composable
@@ -86,7 +92,10 @@ private fun EditCategoryContent(
     onEditError: () -> Unit = {},
     viewModel: EditCategoryScreenViewModel = koinViewModel(),
 ) {
-    var categoryName by remember { mutableStateOf(category.title) }
+    val context = LocalContext.current
+    var categoryName by remember {
+        mutableStateOf(category.titleRes?.let { context.getString(it) } ?: category.title ?: "")
+    }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val uiState by viewModel.uiState.collectAsState()
 
@@ -99,8 +108,7 @@ private fun EditCategoryContent(
     }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -127,7 +135,7 @@ private fun EditCategoryContent(
         TudeeTextField(
             icon = R.drawable.add_category_icon,
             hint = R.string.category_name,
-            value = categoryName ?: "",
+            value = categoryName,
             onValueChange = { categoryName = it },
         )
 
@@ -151,11 +159,16 @@ private fun EditCategoryContent(
 
         TudeePrimaryButton(
             onClick = {
+                val savedImageUri = saveImageToInternalStorage(
+                    context = context,
+                    bitmap = galleryImageToBitmap(context, imageUri!!),
+                    fileName = categoryName
+                )
                 viewModel.editCategory(
                     category = Category(
                         id = category.id,
                         title = categoryName,
-                        iconRes = imageUri.toString(),
+                        iconRes = savedImageUri,
                         isDefault = category.isDefault,
                         taskCount = category.taskCount
                     )
@@ -163,7 +176,8 @@ private fun EditCategoryContent(
                 onDismiss()
             },
             text = stringResource(R.string.save),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            isDisabled = imageUri == null
         )
 
 
@@ -180,13 +194,9 @@ private fun EditCategoryContent(
 
 @Composable
 private fun ImagePickerEditCategory(
-    modifier: Modifier = Modifier,
-    currentImageUri: String? = null,
-    onImagePicked: (Uri?) -> Unit
+    modifier: Modifier = Modifier, currentImageUri: String? = null, onImagePicked: (Uri?) -> Unit
 ) {
-
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
-
+    var imageUri by remember { mutableStateOf(currentImageUri?.toUri()) }
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -195,56 +205,27 @@ private fun ImagePickerEditCategory(
         onImagePicked(uri)
     }
 
-    Box(
-        modifier = modifier
-            .size(112.dp)
-            .clip(TudeeTheme.shapes.extraSmall)
-            .drawBehind {
-                drawRect(
-                    color = RectBorderColor,
-                    style = Stroke(
-                        width = 1.dp.toPx(),
-                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(8f, 8f), 0f)
-                    )
-                )
-            }, contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = modifier
-                .size(112.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            // Display new selected image or existing Base64 image
-            when {
-                imageUri != null -> {
-                    // Show newly selected image
-                    Image(
-                        painter = rememberAsyncImagePainter(imageUri),
-                        contentDescription = "Selected Image",
-                        modifier = Modifier
-                            .matchParentSize()
-                            .clip(TudeeTheme.shapes.extraSmall),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-
-                !currentImageUri.isNullOrBlank() -> {
-                    Image(
-                        painter = rememberAsyncImagePainter(currentImageUri),
-                        contentDescription = "Current Image",
-                        modifier = Modifier
-                            .matchParentSize()
-                            .clip(TudeeTheme.shapes.extraSmall),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-            }
+    Box(modifier = modifier
+        .size(112.dp)
+        .drawBehind {
+            drawRoundRect(
+                color = RectBorderColor, style = Stroke(
+                    width = 1.dp.toPx(),
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(48f, 24f), 0f),
+                    cap = StrokeCap.Butt
+                ), cornerRadius = CornerRadius(16.dp.toPx(), 16.dp.toPx())
+            )
         }
-    }
-
-    // Show edit button if image exists, otherwise show upload area
-    val hasImage = imageUri != null || !currentImageUri.isNullOrBlank()
-    if (hasImage) {
+        .clip(TudeeTheme.shapes.extraSmall), contentAlignment = Alignment.Center) {
+        Image(
+            painter = rememberAsyncImagePainter(imageUri),
+            contentDescription = "Selected Image",
+            modifier = Modifier
+                .matchParentSize()
+                .padding(4.dp)
+                .clip(TudeeTheme.shapes.extraSmall),
+            contentScale = ContentScale.Crop
+        )
         Box(
             modifier = Modifier
                 .size(34.dp)
@@ -252,36 +233,13 @@ private fun ImagePickerEditCategory(
                 .background(TudeeTheme.colors.surfaceHigh)
                 .clickable {
                     imagePickerLauncher.launch("image/*")
-                },
-            contentAlignment = Alignment.Center
+                }, contentAlignment = Alignment.Center
         ) {
             Icon(
                 painter = painterResource(R.drawable.pencil_edit_01),
                 contentDescription = "Edit Image",
                 tint = TudeeTheme.colors.secondary,
                 modifier = Modifier.padding(6.dp)
-            )
-        }
-    } else {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable {
-                    imagePickerLauncher.launch("image/*")
-                },
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_add_image),
-                contentDescription = "Add Image",
-                tint = TudeeTheme.colors.hint,
-            )
-            Text(
-                text = stringResource(R.string.upload),
-                style = TudeeTheme.typography.labelMedium,
-                color = TudeeTheme.colors.hint,
-                modifier = Modifier.padding(top = 4.dp)
             )
         }
     }
@@ -291,17 +249,13 @@ private fun ImagePickerEditCategory(
 @Composable
 private fun EditCategoryScreenPreview() {
     TudeeTheme {
-        EditCategoryScreen(
-            modifier = Modifier,
-            category = Category(
-                id = 1,
-                title = "Work",
-                iconRes = "",
-                isDefault = true,
-                taskCount = 0,
-            ),
-            onDismiss = {},
-            onDeleteClick = {}
+        EditCategoryScreen(modifier = Modifier, category = Category(
+            id = 1,
+            title = "Work",
+            iconRes = "",
+            isDefault = true,
+            taskCount = 0,
+        ), onDismiss = {}, onDeleteClick = {}, showBottomSheet = true
         )
     }
 }

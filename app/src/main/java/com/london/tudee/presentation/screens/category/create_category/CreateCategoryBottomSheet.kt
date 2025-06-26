@@ -51,10 +51,12 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CreateCategoryScreen(
-    modifier: Modifier = Modifier, onDismiss: () -> Unit
+    showBottomSheet: Boolean,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     TudeeBottomSheetScreen(
-        showBottomSheet = true,
+        showBottomSheet = showBottomSheet,
         modifier = modifier.zIndex(2f),
         onDismiss = onDismiss,
         screenContent = {},
@@ -221,6 +223,7 @@ private fun ImagePickerAddCategory(
 private fun CreateCategoryPreview() {
     TudeeTheme {
         CreateCategoryScreen(
-            modifier = Modifier, onDismiss = {})
+            modifier = Modifier, onDismiss = {}, showBottomSheet = true
+        )
     }
 }
