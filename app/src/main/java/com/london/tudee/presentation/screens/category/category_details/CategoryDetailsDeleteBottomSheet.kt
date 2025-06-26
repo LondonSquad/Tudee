@@ -28,7 +28,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun DeleteCategoryScreen(
+fun CategoryDetailsDeleteScreen(
     modifier: Modifier = Modifier,
     category: Category,
     onDismiss: () -> Unit,
@@ -42,7 +42,7 @@ fun DeleteCategoryScreen(
         screenContent = {},
         bottomSheetActions = {},
         bottomSheetContent = {
-            DeleteCategoryContent(
+            CategoryDetailsDeleteContent(
                 modifier = modifier,
                 category = category,
                 onCancel = onDismiss,
@@ -54,7 +54,7 @@ fun DeleteCategoryScreen(
 }
 
 @Composable
-private fun DeleteCategoryContent(
+private fun CategoryDetailsDeleteContent(
     category: Category,
     modifier: Modifier = Modifier,
     onCancel: () -> Unit,
@@ -117,9 +117,9 @@ private fun DeleteCategoryContent(
 
 @ThemePreviews
 @Composable
-private fun DeleteCategoryScreenPreview() {
+private fun CategoryDetailsDeleteScreenPreview() {
     TudeeTheme {
-        DeleteCategoryScreen(
+        CategoryDetailsDeleteScreen(
             modifier = Modifier,
             category = Category(
                 id = 1,

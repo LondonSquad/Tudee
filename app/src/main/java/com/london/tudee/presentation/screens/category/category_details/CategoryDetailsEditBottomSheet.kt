@@ -48,7 +48,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun EditCategoryScreen(
+fun CategoryDetailsEditScreen(
     modifier: Modifier = Modifier,
     category: Category,
     onDeleteClick: () -> Unit,
@@ -64,7 +64,7 @@ fun EditCategoryScreen(
         screenContent = {},
         bottomSheetActions = {},
         bottomSheetContent = {
-            EditCategoryContent(
+            CategoryDetailsEditContent(
                 modifier = modifier,
                 category = category,
                 onDismiss = onDismiss,
@@ -77,7 +77,7 @@ fun EditCategoryScreen(
 }
 
 @Composable
-private fun EditCategoryContent(
+private fun CategoryDetailsEditContent(
     modifier: Modifier = Modifier,
     category: Category,
     onDismiss: () -> Unit,
@@ -288,9 +288,9 @@ private fun ImagePickerEditCategory(
 
 @ThemePreviews
 @Composable
-private fun EditCategoryScreenPreview() {
+private fun CategoryDetailsEditScreenPreview() {
     TudeeTheme {
-        EditCategoryScreen(
+        CategoryDetailsEditScreen(
             modifier = Modifier,
             category = Category(
                 id = 1,

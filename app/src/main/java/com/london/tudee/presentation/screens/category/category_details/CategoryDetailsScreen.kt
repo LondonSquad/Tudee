@@ -113,7 +113,7 @@ private fun CategoryDetailsContent(
             TasksPagerSection(state = state)
         }
         if (state.isEditBottomSheetVisible) {
-            EditCategoryScreen(
+            CategoryDetailsEditScreen(
                 category = state.category,
                 onDismiss = interactions::hideEditBottomSheet,
                 onDeleteClick = {
@@ -131,7 +131,7 @@ private fun CategoryDetailsContent(
             )
         }
         if (state.isDeleteBottomSheetVisible) {
-            DeleteCategoryScreen(
+            CategoryDetailsDeleteScreen(
                 category = state.category,
                 onDismiss = interactions::hideDeleteBottomSheet,
                 onCategoryDeleted = {
