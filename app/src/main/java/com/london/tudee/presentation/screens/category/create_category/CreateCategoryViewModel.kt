@@ -22,14 +22,14 @@ class CreateCategoryScreenViewModel(
     ) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
-            try {
+            runCatching{
                 categoryService.add(category)
                 _uiState.value = _uiState.value.copy(isDeleted = true, isLoading = false)
 
-            } catch (e: Exception) {
+            }.onFailure {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    errorMessage = e.message
+                    errorMessage = it.message
                 )
             }
         }

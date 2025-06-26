@@ -20,13 +20,13 @@ class DeleteCategoryScreenViewModel(
     fun deleteCategory(category: Category) {
         viewModelScope.launch {
             _deleteState.value = _deleteState.value.copy(isLoading = true)
-            try {
+            runCatching {
                 categoryService.delete(category)
                 _deleteState.value = _deleteState.value.copy(isDeleted = true, isLoading = false)
-            } catch (e: Exception) {
+            }.onFailure {
                 _deleteState.value = _deleteState.value.copy(
                     isLoading = false,
-                    errorMessage = e.message
+                    errorMessage = it.message
                 )
             }
         }

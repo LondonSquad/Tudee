@@ -1,158 +1,196 @@
 package com.london.tudee.data.local.roomdb
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.util.Base64
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.graphics.createBitmap
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
-import java.io.ByteArrayOutputStream
-
-fun convertDrawableToByteArray(context: Context, drawableResId: Int): String {
-    val drawable = AppCompatResources.getDrawable(context, drawableResId)
-        ?: throw IllegalArgumentException("Drawable resource ID $drawableResId could not be found.")
-
-    val bitmap = drawableToBitmap(drawable)
-    val outputStream = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-    val byteArray = outputStream.toByteArray()
-    return Base64.encodeToString(byteArray, Base64.DEFAULT)
-}
-
-private fun drawableToBitmap(drawable: Drawable): Bitmap {
-    if (drawable is BitmapDrawable) {
-        return drawable.bitmap
-    }
-    val width = drawable.intrinsicWidth.takeIf { it > 0 } ?: 100
-    val height = drawable.intrinsicHeight.takeIf { it > 0 } ?: 100
-    val bitmap = createBitmap(width, height)
-    val canvas = Canvas(bitmap)
-    drawable.setBounds(0, 0, canvas.width, canvas.height)
-    drawable.draw(canvas)
-    return bitmap
-}
+import com.london.tudee.presentation.utils.convertDrawableResToBitmap
+import com.london.tudee.presentation.utils.saveImageToInternalStorage
 
 fun defaultCategory(context: Context) = listOf(
     Category(
-        id = 0,
-        title = context.getString(R.string.education),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_education),
+        titleRes = R.string.education,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_education),
+            "education"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.shopping),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_shopping),
+        titleRes = R.string.shopping,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_shopping),
+            "shopping"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.medical),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_medical),
+        titleRes = R.string.medical,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_medical),
+            "medical"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.gym),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_gym),
+        titleRes = R.string.gym,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_gym),
+            "gym"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.entertainment),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_entertainment),
+        titleRes = R.string.entertainment,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_entertainment),
+            "entertainment"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.cooking),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_cooking),
+        titleRes = R.string.cooking,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_cooking),
+            "cooking"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.family_friend),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_family),
+        titleRes = R.string.family_friend,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_family),
+            "family_friend"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.traveling),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_travel),
+        titleRes = R.string.traveling,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_travel),
+            "traveling"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.agriculture),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_agriculture),
+        titleRes = R.string.agriculture,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_agriculture),
+            "agriculture"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.coding),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_coding),
+        titleRes = R.string.coding,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_coding),
+            "coding"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.adoration),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_adoration),
+        titleRes = R.string.adoration,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_adoration),
+            "adoration"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.fixing_bugs),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_bug_fix),
+        titleRes = R.string.fixing_bugs,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_bug_fix),
+            "fixing_bugs"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.cleaning),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_cleaning),
+        titleRes = R.string.cleaning,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_cleaning),
+            "cleaning"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.work),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_work),
+        titleRes = R.string.work,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_work),
+            "work"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.budgeting),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_budgeting),
+        titleRes = R.string.budgeting,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_budgeting),
+            "budgeting"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.self_care),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_self_care),
+        titleRes = R.string.self_care,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_self_care),
+            "self_care"
+        ),
         isDefault = true,
         taskCount = 0
     ),
     Category(
-        id = 0,
-        title = context.getString(R.string.event),
-        iconRes = convertDrawableToByteArray(context, R.drawable.ic_event),
+        titleRes = R.string.event,
+        title = null,
+        iconRes = saveImageToInternalStorage(
+            context,
+            convertDrawableResToBitmap(context, R.drawable.ic_event),
+            "event"
+        ),
         isDefault = true,
         taskCount = 0
     )
