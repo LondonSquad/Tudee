@@ -10,7 +10,4 @@ interface TaskModifyInteractions {
     fun updateDate(date: Long)
     fun updatePriority(priority: Priority)
     fun updateCategory(category: Category)
-    fun hideBottomSheet()
-    fun showDatePicker()
-    fun hideDatePicker()
 }

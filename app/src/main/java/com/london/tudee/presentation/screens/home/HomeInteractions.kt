@@ -6,10 +6,10 @@ import com.london.tudee.domain.entities.Task
 import com.london.tudee.presentation.screens.task.TaskModifyInteractions
 
 interface HomeInteractions : TaskModifyInteractions {
-    override fun showDatePicker()
-    override fun hideDatePicker()
+    fun showDatePicker()
+    fun hideDatePicker()
     fun showBottomSheet()
-    override fun hideBottomSheet()
+    fun hideBottomSheet()
     fun onThemeSwitched(isDarkMode: Boolean)
     fun loadCategories()
     fun validateForm()

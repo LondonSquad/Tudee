@@ -197,7 +197,10 @@ fun HomeScreenContent(
             modifier = Modifier.zIndex(1f),
             screenContent = { },
             uiState = taskUiState,
-            interactions = interactions
+            interactions = interactions,
+            onHideBottomSheet = interactions::hideBottomSheet,
+            onShowDatePicker = interactions::showDatePicker,
+            onHideDatePicker = interactions::hideDatePicker
         )
 
         Box(
