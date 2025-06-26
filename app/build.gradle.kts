@@ -88,7 +88,6 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation (libs.truth)
     testImplementation(kotlin("test"))
-
 }
 
 tasks.register("installGitHooks") {

@@ -1,6 +1,5 @@
 package com.london.tudee.presentation.components.bottom_sheet
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDp
@@ -33,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
@@ -64,7 +64,7 @@ fun TudeeBottomSheetScreen(
     }
 }
 
-@SuppressLint("UseOfNonLambdaOffsetOverload")
+
 @Composable
 private fun TudeeBottomSheetContainer(
     showBottomSheet: Boolean,
@@ -93,10 +93,8 @@ private fun TudeeBottomSheetContainer(
 
     val isVisible = transition.currentState || transition.targetState
 
-    var topPadding=0.0
-    val density= LocalDensity.current
-    with(density) {
-        topPadding=LocalConfiguration.current.screenHeightDp*.2
+    val topPadding = with(LocalDensity.current) {
+        LocalConfiguration.current.screenHeightDp*.2
     }
 
     if (isVisible) {
@@ -109,11 +107,14 @@ private fun TudeeBottomSheetContainer(
                 .fillMaxSize()
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() }, indication = null
-                ) {}.padding(top = topPadding.dp)
+                ) {}
+                .padding(top = topPadding.dp)
             , contentAlignment = Alignment.BottomCenter
         ) {
             Box(
-                modifier = Modifier.offset(y = offsetY)
+                modifier = Modifier.offset{
+                    IntOffset(x = 0, y = offsetY.roundToPx())
+                }
             ) {
                 TudeeBottomSheet(
                     visible = showBottomSheet,

@@ -114,38 +114,40 @@ private fun CategoryDetailsContent(
 
             TasksPagerSection(state = state)
         }
-        if (state.isEditBottomSheetVisible) {
-            EditCategoryScreen(
-                category = state.category,
-                onDismiss = interactions::hideEditBottomSheet,
-                onDeleteClick = {
-                    interactions.hideEditBottomSheet()
-                    interactions.showDeleteBottomSheet()
-                },
-                onEditSuccess = {
-                    interactions.hideEditBottomSheet()
-                    interactions.onCategoryEdited()
-                },
-                onEditError = {
-                    interactions.hideEditBottomSheet()
-                    interactions.onCategoryEditError()
-                }
-            )
-        }
-        if (state.isDeleteBottomSheetVisible) {
-            DeleteCategoryScreen(
-                category = state.category,
-                onDismiss = interactions::hideDeleteBottomSheet,
-                onCategoryDeleted = {
-                    interactions.hideDeleteBottomSheet()
-                    interactions.onCategoryDeleted()
-                },
-                onDeleteError = {
-                    interactions.hideDeleteBottomSheet()
-                    interactions.onCategoryDeleteError()
-                }
-            )
-        }
+
+        EditCategoryScreen(
+            category = state.category,
+            onDismiss = interactions::hideEditBottomSheet,
+            onDeleteClick = {
+                interactions.hideEditBottomSheet()
+                interactions.showDeleteBottomSheet()
+            },
+            onEditSuccess = {
+                interactions.hideEditBottomSheet()
+                interactions.onCategoryEdited()
+            },
+            onEditError = {
+                interactions.hideEditBottomSheet()
+                interactions.onCategoryEditError()
+            },
+            showBottomSheet = state.isEditBottomSheetVisible
+        )
+
+
+        DeleteCategoryScreen(
+            category = state.category,
+            onDismiss = interactions::hideDeleteBottomSheet,
+            onCategoryDeleted = {
+                interactions.hideDeleteBottomSheet()
+                interactions.onCategoryDeleted()
+            },
+            onDeleteError = {
+                interactions.hideDeleteBottomSheet()
+                interactions.onCategoryDeleteError()
+            },
+            showBottomSheet = state.isDeleteBottomSheetVisible
+        )
+
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter

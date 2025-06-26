@@ -131,7 +131,7 @@ private fun CategoriesScreenContent(
                 }
             }
         }
-        if (uiState.showBottomSheet) CreateCategoryScreen(onDismiss = onDismissBottomSheet)
+        CreateCategoryScreen(showBottomSheet = uiState.showBottomSheet, onDismiss = onDismissBottomSheet)
 
         TudeeFloatingActionButton(
             painter = painterResource(id = R.drawable.ic_add_category_button),

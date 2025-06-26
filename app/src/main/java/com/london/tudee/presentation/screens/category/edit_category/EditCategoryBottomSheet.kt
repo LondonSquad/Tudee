@@ -29,12 +29,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
@@ -49,16 +52,17 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun EditCategoryScreen(
-    modifier: Modifier = Modifier,
     category: Category,
+    showBottomSheet: Boolean,
     onDeleteClick: () -> Unit,
     onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
     onEditSuccess: () -> Unit = {},
     onEditError: () -> Unit = {}
 ) {
 
     TudeeBottomSheetScreen(
-        showBottomSheet = true,
+        showBottomSheet = showBottomSheet,
         modifier = modifier,
         onDismiss = onDismiss,
         screenContent = {},
@@ -184,9 +188,7 @@ private fun ImagePickerEditCategory(
     currentImageUri: String? = null,
     onImagePicked: (Uri?) -> Unit
 ) {
-
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
-
+    var imageUri by remember { mutableStateOf(currentImageUri?.toUri()) }
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -198,53 +200,28 @@ private fun ImagePickerEditCategory(
     Box(
         modifier = modifier
             .size(112.dp)
-            .clip(TudeeTheme.shapes.extraSmall)
             .drawBehind {
-                drawRect(
+                drawRoundRect(
                     color = RectBorderColor,
                     style = Stroke(
                         width = 1.dp.toPx(),
-                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(8f, 8f), 0f)
-                    )
+                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(48f, 24f), 0f),
+                        cap = StrokeCap.Butt
+                    ),
+                    cornerRadius = CornerRadius(16.dp.toPx(), 16.dp.toPx())
                 )
-            }, contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = modifier
-                .size(112.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            // Display new selected image or existing Base64 image
-            when {
-                imageUri != null -> {
-                    // Show newly selected image
-                    Image(
-                        painter = rememberAsyncImagePainter(imageUri),
-                        contentDescription = "Selected Image",
-                        modifier = Modifier
-                            .matchParentSize()
-                            .clip(TudeeTheme.shapes.extraSmall),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-
-                !currentImageUri.isNullOrBlank() -> {
-                    Image(
-                        painter = rememberAsyncImagePainter(currentImageUri),
-                        contentDescription = "Current Image",
-                        modifier = Modifier
-                            .matchParentSize()
-                            .clip(TudeeTheme.shapes.extraSmall),
-                        contentScale = ContentScale.Crop
-                    )
-                }
             }
-        }
-    }
-
-    // Show edit button if image exists, otherwise show upload area
-    val hasImage = imageUri != null || !currentImageUri.isNullOrBlank()
-    if (hasImage) {
+            .clip(TudeeTheme.shapes.extraSmall), contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = rememberAsyncImagePainter(imageUri),
+            contentDescription = "Selected Image",
+            modifier = Modifier
+                .matchParentSize()
+                .padding(4.dp)
+                .clip(TudeeTheme.shapes.extraSmall),
+            contentScale = ContentScale.Crop
+        )
         Box(
             modifier = Modifier
                 .size(34.dp)
@@ -260,28 +237,6 @@ private fun ImagePickerEditCategory(
                 contentDescription = "Edit Image",
                 tint = TudeeTheme.colors.secondary,
                 modifier = Modifier.padding(6.dp)
-            )
-        }
-    } else {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable {
-                    imagePickerLauncher.launch("image/*")
-                },
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_add_image),
-                contentDescription = "Add Image",
-                tint = TudeeTheme.colors.hint,
-            )
-            Text(
-                text = stringResource(R.string.upload),
-                style = TudeeTheme.typography.labelMedium,
-                color = TudeeTheme.colors.hint,
-                modifier = Modifier.padding(top = 4.dp)
             )
         }
     }
@@ -301,7 +256,8 @@ private fun EditCategoryScreenPreview() {
                 taskCount = 0,
             ),
             onDismiss = {},
-            onDeleteClick = {}
+            onDeleteClick = {},
+            showBottomSheet = true
         )
     }
 }
