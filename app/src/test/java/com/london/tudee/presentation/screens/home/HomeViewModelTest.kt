@@ -84,11 +84,7 @@ class HomeViewModelTest {
         taskCount: Int = 5,
         isDefault: Boolean = true
     ) = Category(
-        id = id,
-        title = title,
-        iconRes = iconRes,
-        taskCount = taskCount,
-        isDefault = isDefault
+        id = id, title = title, iconRes = iconRes, taskCount = taskCount, isDefault = isDefault
     )
 
     private fun createTestTasks() = listOf(
@@ -107,14 +103,11 @@ class HomeViewModelTest {
 
         coEvery { taskService.getAll() } returns flowOf(testTasks)
         coEvery { taskService.getByTaskStatus(TaskStatus.TODO) } returns flowOf(
-            testTasks.filter { it.taskStatus == TaskStatus.TODO }
-        )
+            testTasks.filter { it.taskStatus == TaskStatus.TODO })
         coEvery { taskService.getByTaskStatus(TaskStatus.IN_PROGRESS) } returns flowOf(
-            testTasks.filter { it.taskStatus == TaskStatus.IN_PROGRESS }
-        )
+            testTasks.filter { it.taskStatus == TaskStatus.IN_PROGRESS })
         coEvery { taskService.getByTaskStatus(TaskStatus.DONE) } returns flowOf(
-            testTasks.filter { it.taskStatus == TaskStatus.DONE }
-        )
+            testTasks.filter { it.taskStatus == TaskStatus.DONE })
         coEvery { categoryService.getAll() } returns flowOf(testCategories)
         every { categoryService.getIconResById(any()) } returns "test_icon"
         coEvery { categoryService.getById(any()) } returns testCategory
@@ -189,8 +182,9 @@ class HomeViewModelTest {
         val expectedUpdatedTask = inProgressTask.copy(taskStatus = TaskStatus.DONE)
         coVerify { taskService.edit(expectedUpdatedTask) }
 
-        assertThat(viewModel.uiState.value.taskDetailBottomSheetUiState.task.taskStatus)
-            .isEqualTo(TaskStatus.DONE)
+        assertThat(viewModel.uiState.value.taskDetailBottomSheetUiState.task.taskStatus).isEqualTo(
+                TaskStatus.DONE
+            )
     }
 
     @Test
@@ -337,7 +331,7 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         // When
-        viewModel.showBottomSheet()
+        viewModel.toggleBottomSheet(true)
 
         // Then
         assertThat(viewModel.taskUiState.value.showBottomSheet).isTrue()
@@ -350,11 +344,11 @@ class HomeViewModelTest {
         viewModel = createViewModel()
         viewModel.updateTitle("Test Title")
         viewModel.updateDescription("Test Description")
-        viewModel.showBottomSheet()
+        viewModel.toggleBottomSheet(false)
         advanceUntilIdle()
 
         // When
-        viewModel.hideBottomSheet()
+        viewModel.toggleBottomSheet(false)
         advanceUntilIdle()
 
         // Then
