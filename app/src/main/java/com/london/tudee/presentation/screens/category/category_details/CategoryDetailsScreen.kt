@@ -94,8 +94,8 @@ private fun ErrorScreen(modifier: Modifier = Modifier) {
 @Composable
 private fun CategoryDetailsContent(
     state: CategoryDetailsUiState,
+    interactions: CategoryDetailsInteractions,
     onBackClick: () -> Unit,
-    interactions: CategoryDetailsInteractions
 ) {
     Box {
         Column(
@@ -220,8 +220,8 @@ private fun TasksPagerSection(state: CategoryDetailsUiState) {
 
 @Composable
 private fun TopAPPBar(
-    onBackClick: () -> Unit,
     state: CategoryDetailsUiState,
+    onBackClick: () -> Unit,
     onEditClick: () -> Unit = {}
 ) {
     TopAppBar(

@@ -55,8 +55,8 @@ fun CategoryDetailsDeleteScreen(
 
 @Composable
 private fun CategoryDetailsDeleteContent(
-    category: Category,
     modifier: Modifier = Modifier,
+    category: Category,
     onCancel: () -> Unit,
     onCategoryDeleted: () -> Unit,
     onDeleteError: () -> Unit = {},
