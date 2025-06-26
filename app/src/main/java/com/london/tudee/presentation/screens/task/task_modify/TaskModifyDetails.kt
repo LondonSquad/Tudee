@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
@@ -222,10 +223,10 @@ private fun CategoriesGrid(
     selectedCategory: Category?,
     onCategorySelected: (Category) -> Unit
 ) {
+    val context = LocalContext.current
     val chunkedCategories = remember(categories) {
         categories.chunked(3)
     }
-
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -239,7 +240,8 @@ private fun CategoriesGrid(
                     CategoryItem(
                         modifier = Modifier.weight(1f),
                         iconRes = category.iconRes,
-                        title = category.title,
+                        title = category.titleRes?.let { context.getString(it) }
+                            ?: category.title ?: "",
                         categoryId = category.id,
                         isSelected = selectedCategory?.id == category.id,
                         inCategorySection = false,

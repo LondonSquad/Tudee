@@ -34,7 +34,6 @@ import com.london.tudee.presentation.components.priority.PriorityBadge
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.utils.DateFormatter.toFormattedDateString
-import com.london.tudee.presentation.utils.converterStringToBitmap
 import kotlinx.datetime.Instant
 
 
@@ -44,7 +43,7 @@ fun TaskItem(
     isSelected: Boolean = false,
     task: Task,
     hasDate: Boolean,
-    iconResId: String = ""
+    iconResId: String
 ) {
 
     Card(
@@ -84,7 +83,7 @@ private fun TaskItemIconSection(iconResId: String) {
         modifier = Modifier.size(56.dp), contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = rememberAsyncImagePainter(converterStringToBitmap(iconResId)),
+            painter = rememberAsyncImagePainter(iconResId),
             contentDescription = "Category Icon",
         )
     }
@@ -176,7 +175,8 @@ fun PreviewTaskItemHigh() {
                 timeStamp = Instant.parse("2023-09-20T00:00:00Z"),
                 taskStatus = TaskStatus.TODO
             ),
-            hasDate = true
+            hasDate = true,
+            iconResId = ""
         )
     }
 }
@@ -195,7 +195,8 @@ fun PreviewTaskItemMedium() {
                 timeStamp = Instant.parse("2023-09-20T00:00:00Z"),
                 taskStatus = TaskStatus.TODO
             ),
-            hasDate = true
+            hasDate = true,
+            iconResId = ""
         )
     }
 }
@@ -214,7 +215,8 @@ fun PreviewTaskItemLow() {
                 timeStamp = Instant.parse("2023-09-20T00:00:00Z"),
                 taskStatus = TaskStatus.TODO
             ),
-            hasDate = false
+            hasDate = false,
+            iconResId = ""
         )
     }
 }
