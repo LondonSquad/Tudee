@@ -62,9 +62,9 @@ class TasksServicesImpl(
         }
     }
 
-    override suspend fun getByTaskStatus(taskStatus: TaskStatus): Flow<List<Task>> {
+    override suspend fun getByTaskStatus(status: TaskStatus): Flow<List<Task>> {
         return runCatching {
-            taskDao.getByTaskStatus(taskStatus).map { it.map { dto -> dto.convertToTask() } }
+            taskDao.getByTaskStatus(status).map { it.map { dto -> dto.convertToTask() } }
         }.getOrElse {
             throw TaskLoadException()
         }
@@ -79,10 +79,10 @@ class TasksServicesImpl(
     }
 
     override suspend fun getByTimeStampAndTaskStatus(
-        taskStatus: TaskStatus, timeStamp: Long
+        status: TaskStatus, timeStamp: Long
     ): Flow<List<Task>> {
         return runCatching {
-            taskDao.getByTimeStampAndTaskStatus(taskStatus, timeStamp)
+            taskDao.getByTimeStampAndTaskStatus(status, timeStamp)
                 .map { it.map { dto -> dto.convertToTask() } }
         }.getOrElse {
             throw TaskLoadException()
@@ -90,10 +90,10 @@ class TasksServicesImpl(
     }
 
     override suspend fun getByCategoryIdAndTaskStatus(
-        categoryId: Int, taskStatus: TaskStatus
+        categoryId: Int, status: TaskStatus
     ): Flow<List<Task>> {
         return runCatching {
-            taskDao.getByCategoryIdAndTaskStatus(categoryId, taskStatus)
+            taskDao.getByCategoryIdAndTaskStatus(categoryId, status)
                 .map { it.map { dto -> dto.convertToTask() } }
         }.getOrElse {
             throw TaskLoadException()
@@ -101,10 +101,10 @@ class TasksServicesImpl(
     }
 
     override suspend fun getTasksForDay(
-        start: Long, end: Long, taskStatus: TaskStatus
+        start: Long, end: Long, status: TaskStatus
     ): Flow<List<Task>> {
         return runCatching {
-            taskDao.getTasksForDay(start, end, taskStatus)
+            taskDao.getTasksForDay(start, end, status)
                 .map { it.map { dto -> dto.convertToTask() } }
         }.getOrElse {
             throw TaskLoadException()

@@ -82,7 +82,7 @@ fun SwipeToDeleteTask(
                         rawOffsetX = (rawOffsetX + dragAmount).coerceIn(-swipeThreshold, 0f)
                     }
                 },
-            hasDate = true,
+            hasDate = false,
             iconResId = iconResId,
             isSelected = true
         )

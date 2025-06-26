@@ -11,7 +11,7 @@ fun NavGraphBuilder.tasksRoute(navController: NavController) {
         val entry = bacStackEntry.toRoute<Screen.Tasks>()
         val tabIndex = entry.tabIndex
         TasksScreen(
-            initialTabIndex = tabIndex ?: 0
+            initialTabIndex = tabIndex ?: 0,
         )
     }
 }
