@@ -1,13 +1,11 @@
 package com.london.tudee.data.local.roomdb.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.london.tudee.data.local.roomdb.dto.CategoryDto
-import com.london.tudee.domain.entities.Category
 import kotlinx.coroutines.flow.Flow
 
 @Dao

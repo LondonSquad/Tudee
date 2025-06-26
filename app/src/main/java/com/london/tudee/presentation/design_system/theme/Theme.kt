@@ -10,8 +10,8 @@ import com.london.tudee.presentation.design_system.color.LightTudeeColors
 import com.london.tudee.presentation.design_system.color.TudeeColors
 import com.london.tudee.presentation.design_system.shape.TudeeShapes
 import com.london.tudee.presentation.design_system.shape.TudeeThemeShape
-import com.london.tudee.presentation.design_system.text_style.TudeeTypography
 import com.london.tudee.presentation.design_system.text_style.TudeeTextStyle
+import com.london.tudee.presentation.design_system.text_style.TudeeTypography
 
 object TudeeTheme {
     val colors: TudeeColors
