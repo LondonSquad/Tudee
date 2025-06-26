@@ -7,7 +7,7 @@ if [[ "$branch_name" == "main" || "$branch_name" == "development" ]]; then
 fi
 
 # Check pattern for other branches
-pattern="^(feature|component|fix|hotfix|release|chore|test)/[a-z0-9\-]+$"
+pattern="^(feature|refactor|component|fix|hotfix|release|chore|test)/[a-z0-9\-]+$"
 if [[ ! "$branch_name" =~ $pattern ]]; then
 echo ""
 echo "❌ Invalid branch name: '$branch_name'"
