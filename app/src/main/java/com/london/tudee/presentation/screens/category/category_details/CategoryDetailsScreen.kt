@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -228,10 +229,13 @@ private fun TopAPPBar(
     state: CategoryDetailsUiState,
     onEditClick: () -> Unit = {}
 ) {
+    val context = LocalContext.current
     TopAppBar(
-        title = state.category.title ?: "",
+        title = state.category.titleRes?.let { context.getString(it) }
+            ?: state.category.title
+            ?: "",
         onBackClick = onBackClick,
-        onClickAction = {},
+        onClickAction = onEditClick,
         modifier = Modifier,
         navigationIcon = {
             IconButton(

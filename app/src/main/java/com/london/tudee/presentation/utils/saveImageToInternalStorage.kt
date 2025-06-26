@@ -7,7 +7,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 fun saveImageToInternalStorage(context: Context, bitmap: Bitmap?, fileName: String): String {
-    val file = File(context.filesDir, fileName)
+    val file = File(context.filesDir, fileName + System.currentTimeMillis())
     FileOutputStream(file).use { outputStream ->
         bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
     }

@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -48,6 +49,8 @@ import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.color.RectBorderColor
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.utils.galleryImageToBitmap
+import com.london.tudee.presentation.utils.saveImageToInternalStorage
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -76,8 +79,7 @@ fun EditCategoryScreen(
                 onEditSuccess = onEditSuccess,
                 onEditError = onEditError
             )
-        }
-    )
+        })
 }
 
 @Composable
@@ -90,7 +92,10 @@ private fun EditCategoryContent(
     onEditError: () -> Unit = {},
     viewModel: EditCategoryScreenViewModel = koinViewModel(),
 ) {
-    var categoryName by remember { mutableStateOf(category.title) }
+    val context = LocalContext.current
+    var categoryName by remember {
+        mutableStateOf(category.titleRes?.let { context.getString(it) } ?: category.title ?: "")
+    }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val uiState by viewModel.uiState.collectAsState()
 
@@ -103,8 +108,7 @@ private fun EditCategoryContent(
     }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -131,7 +135,7 @@ private fun EditCategoryContent(
         TudeeTextField(
             icon = R.drawable.add_category_icon,
             hint = R.string.category_name,
-            value = categoryName ?: "",
+            value = categoryName,
             onValueChange = { categoryName = it },
         )
 
@@ -155,11 +159,16 @@ private fun EditCategoryContent(
 
         TudeePrimaryButton(
             onClick = {
+                val savedImageUri = saveImageToInternalStorage(
+                    context = context,
+                    bitmap = galleryImageToBitmap(context, imageUri!!),
+                    fileName = categoryName
+                )
                 viewModel.editCategory(
                     category = Category(
                         id = category.id,
                         title = categoryName,
-                        iconRes = imageUri.toString(),
+                        iconRes = savedImageUri,
                         isDefault = category.isDefault,
                         taskCount = category.taskCount
                     )
@@ -167,7 +176,8 @@ private fun EditCategoryContent(
                 onDismiss()
             },
             text = stringResource(R.string.save),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            isDisabled = imageUri == null
         )
 
 
@@ -184,9 +194,7 @@ private fun EditCategoryContent(
 
 @Composable
 private fun ImagePickerEditCategory(
-    modifier: Modifier = Modifier,
-    currentImageUri: String? = null,
-    onImagePicked: (Uri?) -> Unit
+    modifier: Modifier = Modifier, currentImageUri: String? = null, onImagePicked: (Uri?) -> Unit
 ) {
     var imageUri by remember { mutableStateOf(currentImageUri?.toUri()) }
 
@@ -197,22 +205,18 @@ private fun ImagePickerEditCategory(
         onImagePicked(uri)
     }
 
-    Box(
-        modifier = modifier
-            .size(112.dp)
-            .drawBehind {
-                drawRoundRect(
-                    color = RectBorderColor,
-                    style = Stroke(
-                        width = 1.dp.toPx(),
-                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(48f, 24f), 0f),
-                        cap = StrokeCap.Butt
-                    ),
-                    cornerRadius = CornerRadius(16.dp.toPx(), 16.dp.toPx())
-                )
-            }
-            .clip(TudeeTheme.shapes.extraSmall), contentAlignment = Alignment.Center
-    ) {
+    Box(modifier = modifier
+        .size(112.dp)
+        .drawBehind {
+            drawRoundRect(
+                color = RectBorderColor, style = Stroke(
+                    width = 1.dp.toPx(),
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(48f, 24f), 0f),
+                    cap = StrokeCap.Butt
+                ), cornerRadius = CornerRadius(16.dp.toPx(), 16.dp.toPx())
+            )
+        }
+        .clip(TudeeTheme.shapes.extraSmall), contentAlignment = Alignment.Center) {
         Image(
             painter = rememberAsyncImagePainter(imageUri),
             contentDescription = "Selected Image",
@@ -229,8 +233,7 @@ private fun ImagePickerEditCategory(
                 .background(TudeeTheme.colors.surfaceHigh)
                 .clickable {
                     imagePickerLauncher.launch("image/*")
-                },
-            contentAlignment = Alignment.Center
+                }, contentAlignment = Alignment.Center
         ) {
             Icon(
                 painter = painterResource(R.drawable.pencil_edit_01),
@@ -246,18 +249,13 @@ private fun ImagePickerEditCategory(
 @Composable
 private fun EditCategoryScreenPreview() {
     TudeeTheme {
-        EditCategoryScreen(
-            modifier = Modifier,
-            category = Category(
-                id = 1,
-                title = "Work",
-                iconRes = "",
-                isDefault = true,
-                taskCount = 0,
-            ),
-            onDismiss = {},
-            onDeleteClick = {},
-            showBottomSheet = true
+        EditCategoryScreen(modifier = Modifier, category = Category(
+            id = 1,
+            title = "Work",
+            iconRes = "",
+            isDefault = true,
+            taskCount = 0,
+        ), onDismiss = {}, onDeleteClick = {}, showBottomSheet = true
         )
     }
 }
