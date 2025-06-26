@@ -16,7 +16,7 @@
     <string name="on_bording_title_1">هل تشعر بالإرهاق من المهام؟</string>
     <string name="on_bording_body_1">هيا بنا نُعيد ترتيب الفوضى. تودي هنا لمساعدتك في الترتيب والتخطيط والتنفس بسهولة.</string>
     <string name="on_bording_title_2">يا إلهي! ها قد بدأتُ بالتسويف.</string>
-    <string name="on_bording_body_2">تودي ليس غاضبًا... فقط أشعر ببعض خيبة الأمل، لنعد إلى المسار الصحيح معًا.</string>
+    <string name="on_bording_body_2">تودي ليس غاضبًا… فقط أشعر ببعض خيبة الأمل، لنعد إلى المسار الصحيح معًا.</string>
     <string name="on_bording_title_3">لنُكمل المهمة ونحتفل معًا.</string>
     <string name="on_bording_body_3">التقدم هو التقدم. سيحتفل بك تودي على كل فوز، كبيرًا كان أم صغيرًا.</string>
     <string name="category">عنوان الصنف</string>
@@ -43,7 +43,6 @@
     <string name="category_family_friend">العائلة والأصدقاء</string>
     <string name="category_traveling">السفر</string>
     <string name="category_agriculture">الزراعة</string>
-    <string name="category_coding">البرمجة</string>
     <string name="category_adoration">العبادة</string>
     <string name="category_fixing_bugs">تصليح الأعطال</string>
     <string name="category_cleaning">التنظيف</string>
@@ -58,9 +57,8 @@
     <string name="cancel">إلغاء</string>
     <string name="clear">حذف</string>
     <string name="ok">موافق</string>
-    <string name="coding">برمجة</string>
     <string name="skip">تخطي</string>
-    <string name="category_name">قراءة الكتب</string>
+    <string name="category_name">عنوان النص</string>
     <string name="edit_category">تعديل الفئه</string>
     <string name="category_image">صورة الفئه</string>
     <string name="add_new_category">اضافة فئه جديده</string>
@@ -99,5 +97,24 @@
     <string name="loading">جاري التحميل....</string>
     <string name="there_was_an_unexpected_error">هناك خطا غير متوقع</string>
     <string name="tasks">المهام</string>
-    <string name="empty_task">Empty Task</string>
+    <string name="empty_task">لا يوجد مهام</string>
+    <string name="delete_category_successfully">تم حذف الفئة بنجاح</string>
+    <string name="edit_category_successfully">تم تعديل الفئة بنجاح</string>
+    <string name="education">التعليم</string>
+    <string name="shopping">التسوق</string>
+    <string name="medical">الصحة</string>
+    <string name="gym">الجيم</string>
+    <string name="cooking">الطبخ</string>
+    <string name="traveling">السفر</string>
+    <string name="family_friend">الأهل و الأصدقاء</string>
+    <string name="entertainment">المتعة</string>
+    <string name="agriculture">الزراعة</string>
+    <string name="adoration">عبادة</string>
+    <string name="fixing_bugs">تصليح الأعطال</string>
+    <string name="cleaning">التنظيف</string>
+    <string name="work">العمل</string>
+    <string name="budgeting">الميزانية</string>
+    <string name="self_care">العناية بالنفس</string>
+    <string name="event">الفاعليات</string>
+    <string name="coding">البرمجة</string>
 </resources>

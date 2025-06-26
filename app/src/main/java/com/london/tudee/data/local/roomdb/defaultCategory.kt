@@ -39,119 +39,119 @@ private fun drawableToBitmap(drawable: Drawable): Bitmap {
 fun defaultCategory(context: Context) = listOf(
     Category(
         id = 0,
-        title = "Education",
+        title = context.getString(R.string.education),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_education),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Shopping",
+        title = context.getString(R.string.shopping),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_shopping),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Medical",
+        title = context.getString(R.string.medical),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_medical),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Gym",
+        title = context.getString(R.string.gym),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_gym),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Entertainment",
+        title = context.getString(R.string.entertainment),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_entertainment),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Cooking",
+        title = context.getString(R.string.cooking),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_cooking),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Family & friend",
+        title = context.getString(R.string.family_friend),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_family),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Traveling",
+        title = context.getString(R.string.traveling),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_travel),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Agriculture",
+        title = context.getString(R.string.agriculture),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_agriculture),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Coding",
+        title = context.getString(R.string.coding),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_coding),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Adoration",
+        title = context.getString(R.string.adoration),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_adoration),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Fixing bugs",
+        title = context.getString(R.string.fixing_bugs),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_bug_fix),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Cleaning",
+        title = context.getString(R.string.cleaning),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_cleaning),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Work",
+        title = context.getString(R.string.work),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_work),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Budgeting",
+        title = context.getString(R.string.budgeting),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_budgeting),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Self-care",
+        title = context.getString(R.string.self_care),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_self_care),
         isDefault = true,
         taskCount = 0
     ),
     Category(
         id = 0,
-        title = "Event",
+        title = context.getString(R.string.event),
         iconRes = convertDrawableToByteArray(context, R.drawable.ic_event),
         isDefault = true,
         taskCount = 0
