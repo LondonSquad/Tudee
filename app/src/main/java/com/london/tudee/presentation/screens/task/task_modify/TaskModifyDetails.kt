@@ -84,10 +84,10 @@ fun TaskModifyDetails(
         TudeeDatePicker(
             onDateSelected = { date ->
                 interactions.updateDate(date ?: System.currentTimeMillis())
-                onHideDatePicker
+                onHideDatePicker()
             },
             onDismiss = {
-                onHideDatePicker
+                onHideDatePicker()
             }
         )
     }
