@@ -33,6 +33,10 @@ class EditCategoryScreenViewModel(
             }
         }
     }
+
+    fun resetState() {
+        _uiState.value = EditCategoryUiState()
+    }
 }
 
 data class EditCategoryUiState(

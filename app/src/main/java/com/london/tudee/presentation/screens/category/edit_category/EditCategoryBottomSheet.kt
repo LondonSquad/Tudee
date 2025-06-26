@@ -102,9 +102,13 @@ private fun EditCategoryContent(
 
     LaunchedEffect(uiState.isEdited, uiState.errorMessage) {
         when {
-            uiState.isEdited -> onEditSuccess()
+            uiState.isEdited -> {
+                onEditSuccess()
+                viewModel.resetState()
+            }
             uiState.errorMessage != null -> onEditError()
         }
+
     }
 
     Column(
