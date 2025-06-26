@@ -111,6 +111,7 @@ class CategoryDetailsViewModel(
                         category = Category(
                             id = category.id,
                             title = category.title,
+                            titleRes = category.titleRes,
                             iconRes = category.iconRes,
                             isDefault = category.isDefault,
                             taskCount = category.taskCount,

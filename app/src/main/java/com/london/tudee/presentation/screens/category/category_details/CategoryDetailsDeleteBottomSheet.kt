@@ -29,14 +29,15 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CategoryDetailsDeleteScreen(
-    modifier: Modifier = Modifier,
     category: Category,
+    showBottomSheet: Boolean,
+    modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
     onCategoryDeleted: () -> Unit,
     onDeleteError: () -> Unit = {},
 ) {
     TudeeBottomSheetScreen(
-        showBottomSheet = true,
+        showBottomSheet = showBottomSheet,
         modifier = modifier,
         onDismiss = onDismiss,
         screenContent = {},
@@ -129,7 +130,8 @@ private fun CategoryDetailsDeleteScreenPreview() {
                 taskCount = 0,
             ),
             onDismiss = {},
-            onCategoryDeleted = {}
+            onCategoryDeleted = {},
+            showBottomSheet = true
         )
     }
 }

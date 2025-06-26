@@ -36,14 +36,32 @@ class OnBoardingViewModel(
                     page = nextPage,
                     animationSpec = tween(durationMillis = 750, easing = FastOutSlowInEasing)
                 )
+                onPageChanged(nextPage)
             }
         }
     }
 
     fun onboardingFinished() {
         viewModelScope.launch(Dispatchers.IO) {
-            runCatching { appPreferencesService.setOnBoardingShown() }
-                .onFailure { Log.e("OnboardingViewModel", "onboardingFinished: ", it) }
+            runCatching { appPreferencesService.setOnBoardingShown() }.onFailure {
+                    Log.e(
+                        "OnboardingViewModel",
+                        "onboardingFinished: ",
+                        it
+                    )
+                }
+        }
+    }
+
+    fun onPageSelected(page: Int, pagerState: PagerState, scope: CoroutineScope) {
+        scope.launch {
+            if (page in 0 until pagerState.pageCount) {
+                pagerState.animateScrollToPage(
+                    page = page,
+                    animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
+                )
+                onPageChanged(page)
+            }
         }
     }
 }

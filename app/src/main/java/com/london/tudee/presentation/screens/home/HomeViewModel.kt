@@ -13,7 +13,6 @@ import com.london.tudee.domain.services.TaskService
 import com.london.tudee.presentation.screens.task.task_details.TaskDetailsBottomSheetUiState
 import com.london.tudee.presentation.screens.task.task_modify.TaskModifyUiState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -279,32 +278,21 @@ class HomeViewModel(
         _taskUiState.update { it.copy(showDatePicker = false) }
     }
 
-    override fun showBottomSheet() {
+    override fun toggleBottomSheet(show: Boolean) {
         loadCategories()
-        _taskUiState.update { it.copy(showBottomSheet = true) }
-    }
-
-    override fun hideBottomSheet() {
-        _taskUiState.update {
-            it.copy(
-                showBottomSheet = false,
+        _taskUiState.update { currentState ->
+            currentState.copy(
+                showBottomSheet = show,
+                title = "",
+                description = "",
+                selectedDate = null,
+                selectedPriority = Priority.LOW,
+                selectedCategory = currentState.categories.firstOrNull(),
+                stateMessage = null,
+                isEditMode = false,
+                taskId = null,
+                isFormValid = false
             )
-        }
-        viewModelScope.launch {
-            delay(500)
-            _taskUiState.update {
-                it.copy(
-                    title = "",
-                    description = "",
-                    selectedDate = null,
-                    selectedPriority = Priority.LOW,
-                    selectedCategory = it.categories.firstOrNull(),
-                    stateMessage = null,
-                    isEditMode = false,
-                    taskId = null
-                )
-            }
-            validateForm()
         }
     }
 

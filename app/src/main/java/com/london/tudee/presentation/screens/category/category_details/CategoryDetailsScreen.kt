@@ -1,5 +1,3 @@
-@file:JvmName("TaskDetailsScreenKt")
-
 package com.london.tudee.presentation.screens.category.category_details
 
 import androidx.compose.foundation.background
@@ -25,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -112,38 +111,40 @@ private fun CategoryDetailsContent(
 
             TasksPagerSection(state = state)
         }
-        if (state.isEditBottomSheetVisible) {
-            CategoryDetailsEditScreen(
-                category = state.category,
-                onDismiss = interactions::hideEditBottomSheet,
-                onDeleteClick = {
-                    interactions.hideEditBottomSheet()
-                    interactions.showDeleteBottomSheet()
-                },
-                onEditSuccess = {
-                    interactions.hideEditBottomSheet()
-                    interactions.onCategoryEdited()
-                },
-                onEditError = {
-                    interactions.hideEditBottomSheet()
-                    interactions.onCategoryEditError()
-                }
-            )
-        }
-        if (state.isDeleteBottomSheetVisible) {
-            CategoryDetailsDeleteScreen(
-                category = state.category,
-                onDismiss = interactions::hideDeleteBottomSheet,
-                onCategoryDeleted = {
-                    interactions.hideDeleteBottomSheet()
-                    interactions.onCategoryDeleted()
-                },
-                onDeleteError = {
-                    interactions.hideDeleteBottomSheet()
-                    interactions.onCategoryDeleteError()
-                }
-            )
-        }
+
+        CategoryDetailsEditScreen(
+            category = state.category,
+            onDismiss = interactions::hideEditBottomSheet,
+            onDeleteClick = {
+                interactions.hideEditBottomSheet()
+                interactions.showDeleteBottomSheet()
+            },
+            onEditSuccess = {
+                interactions.hideEditBottomSheet()
+                interactions.onCategoryEdited()
+            },
+            onEditError = {
+                interactions.hideEditBottomSheet()
+                interactions.onCategoryEditError()
+            },
+            showBottomSheet = state.isEditBottomSheetVisible
+        )
+
+
+        CategoryDetailsDeleteScreen(
+            category = state.category,
+            onDismiss = interactions::hideDeleteBottomSheet,
+            onCategoryDeleted = {
+                interactions.hideDeleteBottomSheet()
+                interactions.onCategoryDeleted()
+            },
+            onDeleteError = {
+                interactions.hideDeleteBottomSheet()
+                interactions.onCategoryDeleteError()
+            },
+            showBottomSheet = state.isDeleteBottomSheetVisible
+        )
+
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
@@ -224,10 +225,13 @@ private fun TopAPPBar(
     onBackClick: () -> Unit,
     onEditClick: () -> Unit = {}
 ) {
+    val context = LocalContext.current
     TopAppBar(
-        title = state.category.title ?: "",
+        title = state.category.titleRes?.let { context.getString(it) }
+            ?: state.category.title
+            ?: "",
         onBackClick = onBackClick,
-        onClickAction = {},
+        onClickAction = onEditClick,
         modifier = Modifier,
         navigationIcon = {
             IconButton(
