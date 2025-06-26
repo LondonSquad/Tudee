@@ -7,6 +7,8 @@ import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.just
 import io.mockk.mockk
+import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -15,10 +17,10 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.After
+import org.junit.Before
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -29,7 +31,7 @@ class CategoriesViewModelTest {
     private lateinit var viewModel: CategoriesViewModel
     private lateinit var categoryService: CategoryService
 
-    @BeforeEach
+    @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
         clearAllMocks()
@@ -41,7 +43,7 @@ class CategoriesViewModelTest {
     }
 
 
-    @AfterEach
+    @After
     fun tearDown() {
         Dispatchers.resetMain()
     }
@@ -69,7 +71,8 @@ class CategoriesViewModelTest {
 
     @Test
     fun `createCategory success updates createCategoryUiState`() = runTest {
-        val newCategory = Category(3, title = "Study", iconRes = "", isDefault = false, taskCount = 0)
+        val newCategory =
+            Category(3, title = "Study", iconRes = "", isDefault = false, taskCount = 0)
         coEvery { categoryService.add(newCategory) } just Runs
 
         viewModel.createCategory(newCategory)
@@ -82,7 +85,8 @@ class CategoriesViewModelTest {
 
     @Test
     fun `createCategory failure updates createCategoryUiState with error`() = runTest {
-        val newCategory = Category(4, title = "Error", iconRes = "", isDefault = false, taskCount = 5)
+        val newCategory =
+            Category(4, title = "Error", iconRes = "", isDefault = false, taskCount = 5)
         val exception = RuntimeException("Failed to add")
         coEvery { categoryService.add(newCategory) } throws exception
 
