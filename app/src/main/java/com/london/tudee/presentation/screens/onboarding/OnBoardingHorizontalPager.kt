@@ -75,7 +75,7 @@ fun OnBoardingHorizontalPager(
                 }
             }
         }
-        StepIndicatorBar(
+        OnboardingIndicatorBar(
             currentPage, modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .systemGesturesPadding()

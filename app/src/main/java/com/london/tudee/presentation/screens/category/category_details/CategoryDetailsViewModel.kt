@@ -42,7 +42,7 @@ class CategoryDetailsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
                 categoryId = categoryId,
-                taskStatus = TaskStatus.DONE
+                status = TaskStatus.DONE
             ).catch { throwable ->
                 _uiState.update {
                     it.copy(isLoading = false, errMessage = throwable.message)
@@ -65,7 +65,7 @@ class CategoryDetailsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
                 categoryId = categoryId,
-                taskStatus = TaskStatus.IN_PROGRESS
+                status = TaskStatus.IN_PROGRESS
             ).catch { throwable ->
                 _uiState.update {
                     it.copy(isLoading = false, errMessage = throwable.message)
@@ -88,7 +88,7 @@ class CategoryDetailsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
                 categoryId = categoryId,
-                taskStatus = TaskStatus.TODO
+                status = TaskStatus.TODO
             ).catch { throwable ->
                 _uiState.update {
                     it.copy(isLoading = false, errMessage = throwable.message)

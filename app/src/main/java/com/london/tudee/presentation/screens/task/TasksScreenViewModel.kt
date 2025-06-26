@@ -48,7 +48,7 @@ class TasksScreenViewModel(
 
             val (startOfDayMillis, endOfDayMillis) = TasksScreenUtils.getDayRangeMillis(targetDate)
             taskService.getTasksForDay(
-                start = startOfDayMillis, end = endOfDayMillis, taskStatus = TaskStatus.DONE
+                start = startOfDayMillis, end = endOfDayMillis, status = TaskStatus.DONE
             ).catch { throwable ->
                 _uiState.update {
                     it.copy(isLoading = false, errMessage = throwable.message)
@@ -73,7 +73,7 @@ class TasksScreenViewModel(
             val (startOfDayMillis, endOfDayMillis) = TasksScreenUtils.getDayRangeMillis(targetDate)
 
             taskService.getTasksForDay(
-                start = startOfDayMillis, end = endOfDayMillis, taskStatus = TaskStatus.IN_PROGRESS
+                start = startOfDayMillis, end = endOfDayMillis, status = TaskStatus.IN_PROGRESS
             ).catch { throwable ->
                 _uiState.update {
                     it.copy(isLoading = false, errMessage = throwable.message)
@@ -97,7 +97,7 @@ class TasksScreenViewModel(
             val targetDate = _uiState.value.date.toLocalDate()
             val (startOfDayMillis, endOfDayMillis) = TasksScreenUtils.getDayRangeMillis(targetDate)
             taskService.getTasksForDay(
-                start = startOfDayMillis, end = endOfDayMillis, taskStatus = TaskStatus.TODO
+                start = startOfDayMillis, end = endOfDayMillis, status = TaskStatus.TODO
             ).catch { throwable ->
                 _uiState.update {
                     it.copy(isLoading = false, errMessage = throwable.message)

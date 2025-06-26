@@ -37,8 +37,8 @@ class TasksServicesImpl(
         }
     }
 
-    override suspend fun getByTaskStatus(taskStatus: TaskStatus): Flow<List<Task>> {
-        return taskDao.getByTaskStatus(taskStatus).map { taskDtoList ->
+    override suspend fun getByTaskStatus(status: TaskStatus): Flow<List<Task>> {
+        return taskDao.getByTaskStatus(status).map { taskDtoList ->
             taskDtoList.map { taskDto -> taskDto.convertToTask() }
         }
     }
@@ -50,17 +50,17 @@ class TasksServicesImpl(
     }
 
     override suspend fun getByTimeStampAndTaskStatus(
-        taskStatus: TaskStatus, timeStamp: Long
+        status: TaskStatus, timeStamp: Long
     ): Flow<List<Task>> {
-        return taskDao.getByTimeStampAndTaskStatus(taskStatus, timeStamp).map { taskDtoList ->
+        return taskDao.getByTimeStampAndTaskStatus(status, timeStamp).map { taskDtoList ->
             taskDtoList.map { taskDto -> taskDto.convertToTask() }
         }
     }
 
     override suspend fun getByCategoryIdAndTaskStatus(
-        categoryId: Int, taskStatus: TaskStatus
+        categoryId: Int, status: TaskStatus
     ): Flow<List<Task>> {
-        return taskDao.getByCategoryIdAndTaskStatus(categoryId, taskStatus).map { taskDtoList ->
+        return taskDao.getByCategoryIdAndTaskStatus(categoryId, status).map { taskDtoList ->
             taskDtoList.map { taskDto -> taskDto.convertToTask() }
         }
     }
@@ -68,9 +68,9 @@ class TasksServicesImpl(
     override suspend fun getTasksForDay(
         start: Long,
         end: Long,
-        taskStatus: TaskStatus
+        status: TaskStatus
     ): Flow<List<Task>> {
-        return taskDao.getTasksForDay(start, end, taskStatus).map { taskDtoList ->
+        return taskDao.getTasksForDay(start, end, status).map { taskDtoList ->
             taskDtoList.map { taskDto -> taskDto.convertToTask() }
         }
     }
