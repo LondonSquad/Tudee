@@ -8,8 +8,7 @@ import com.london.tudee.presentation.screens.task.TaskModifyInteractions
 interface HomeInteractions : TaskModifyInteractions {
     fun showDatePicker()
     fun hideDatePicker()
-    fun showBottomSheet()
-    fun hideBottomSheet()
+    fun toggleBottomSheet(show: Boolean)
     fun onThemeSwitched(isDarkMode: Boolean)
     fun loadCategories()
     fun validateForm()

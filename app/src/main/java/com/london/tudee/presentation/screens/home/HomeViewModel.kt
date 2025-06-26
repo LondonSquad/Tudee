@@ -279,33 +279,21 @@ class HomeViewModel(
         _taskUiState.update { it.copy(showDatePicker = false) }
     }
 
-    override fun showBottomSheet() {
-        loadCategories()
-        _taskUiState.update { it.copy(showBottomSheet = true) }
-    }
-
-    override fun hideBottomSheet() {
-        _taskUiState.update {
-            it.copy(
-                showBottomSheet = false,
-            )
-        }
-        viewModelScope.launch {
-            delay(500)
-            _taskUiState.update {
-                it.copy(
+    override fun toggleBottomSheet(show: Boolean) {
+            _taskUiState.update { currentState ->
+                currentState.copy(
+                    showBottomSheet = show,
                     title = "",
                     description = "",
                     selectedDate = null,
                     selectedPriority = Priority.LOW,
-                    selectedCategory = it.categories.firstOrNull(),
+                    selectedCategory = currentState.categories.firstOrNull(),
                     stateMessage = null,
                     isEditMode = false,
-                    taskId = null
+                    taskId = null,
+                    isFormValid = false
                 )
             }
-            validateForm()
-        }
     }
 
     override fun saveTask() {
