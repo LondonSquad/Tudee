@@ -46,7 +46,7 @@ class TasksServicesImplTest {
         //when
         taskService.add(task)
         //then
-        coVerify(exactly = 1) { taskDao.insert(task.convertToTaskDto()) }
+        coVerify(exactly = 1) { taskDao.insert(task.copy(id = 0).convertToTaskDto()) }
     }
 
     @Test
@@ -226,7 +226,7 @@ class TasksServicesImplTest {
             // when
             val result = taskService.getByTimeStampAndTaskStatus(
                 timeStamp = task.timeStamp.toMillis(),
-                taskStatus = task.taskStatus
+                status = task.taskStatus
             ).first()
             // then
             assertThat(result).isEqualTo(listOf(task))
@@ -241,7 +241,7 @@ class TasksServicesImplTest {
             assertThrows<TaskLoadException> {
                 taskService.getByTimeStampAndTaskStatus(
                     timeStamp = task.timeStamp.toMillis(),
-                    taskStatus = task.taskStatus
+                    status = task.taskStatus
                 )
             }
         }
@@ -260,7 +260,7 @@ class TasksServicesImplTest {
             // when
             val result = taskService.getByCategoryIdAndTaskStatus(
                 categoryId = task.categoryId,
-                taskStatus = task.taskStatus
+                status = task.taskStatus
             ).first()
             // then
             assertThat(result).isEqualTo(listOf(task))
@@ -275,7 +275,7 @@ class TasksServicesImplTest {
             assertThrows<TaskLoadException> {
                 taskService.getByCategoryIdAndTaskStatus(
                     categoryId = task.categoryId,
-                    taskStatus = task.taskStatus
+                    status = task.taskStatus
                 )
             }
         }
@@ -320,6 +320,7 @@ class TasksServicesImplTest {
 
     private companion object {
         val task = Task(
+            id = 1,
             title = "Test",
             description = "Test",
             taskStatus = TaskStatus.IN_PROGRESS,

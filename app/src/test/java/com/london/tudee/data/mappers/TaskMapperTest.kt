@@ -39,7 +39,7 @@ class TaskMapperTest {
         id = 1,
         title = "Test Task",
         description = "Test Description",
-        taskStatus = TaskStatus.TODO,
+        status = TaskStatus.TODO,
         priority = Priority.LOW,
         categoryId = 1,
         timeStamp = 0
