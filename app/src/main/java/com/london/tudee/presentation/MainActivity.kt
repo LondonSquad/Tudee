@@ -6,11 +6,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -27,6 +29,7 @@ class MainActivity : ComponentActivity() {
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
@@ -61,7 +64,7 @@ class MainActivity : ComponentActivity() {
                         if (showBottomBar) {
                             TudeeBottomNavigationBar(
                                 navController = navController,
-                                modifier = Modifier.zIndex(0f)
+                                modifier = Modifier.zIndex(0f).navigationBarsPadding()
                             )
                         }
                     }

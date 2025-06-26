@@ -4,7 +4,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
 data class Task(
-    val id: Int = 0,
+    val id: Int,
     val title: String,
     val description: String,
     val taskStatus: TaskStatus,
@@ -12,3 +12,4 @@ data class Task(
     val categoryId: Int,
     val timeStamp: Instant = Clock.System.now()
 )
+

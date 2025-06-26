@@ -166,7 +166,6 @@ private fun TasksContent(
                 isEnabled = true,
                 modifier = Modifier
                     .zIndex(if (taskModifyUiState.showBottomSheet) 0f else 1f)
-                    .padding(bottom = 16.dp, end = 16.dp)
             )
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -239,7 +238,7 @@ private fun TasksContent(
         modifier = Modifier.zIndex(1f),
         screenContent = { },
         uiState = taskModifyUiState,
-        interactions = interactions,
+        interactions =  interactions ,
         onHideBottomSheet = { interactions.hideBottomSheet() },
         onShowDatePicker = { interactions.showDatePicker() },
         onHideDatePicker = { interactions.hideDatePicker() }
@@ -277,7 +276,6 @@ private fun TasksContent(
         }
     }
 }
-
 @Composable
 private fun TasksTopBar(
     modifier: Modifier = Modifier,
@@ -439,11 +437,12 @@ private fun DaySelector(
     }
 }
 
-
 @ThemePreviews
 @Composable
 private fun TasksScreenPreview() {
     TudeeTheme {
-
+        TasksScreen(
+            initialTabIndex = 0,
+        )
     }
 }
