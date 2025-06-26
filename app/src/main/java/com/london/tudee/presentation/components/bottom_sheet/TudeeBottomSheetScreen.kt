@@ -30,6 +30,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
@@ -91,21 +93,28 @@ private fun TudeeBottomSheetContainer(
 
     val isVisible = transition.currentState || transition.targetState
 
+    var topPadding=0.0
+    val density= LocalDensity.current
+    with(density) {
+        topPadding=LocalConfiguration.current.screenHeightDp*.2
+    }
+
     if (isVisible) {
         TudeeBottomSheetScrim(
             scrimAlpha = scrimAlpha,
         )
 
         Box(
-            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() }, indication = null
+                ) {}.padding(top = topPadding.dp)
+            , contentAlignment = Alignment.BottomCenter
         ) {
             Box(
-                modifier = Modifier
-                    .offset(y = offsetY)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ) {}) {
+                modifier = Modifier.offset(y = offsetY)
+            ) {
                 TudeeBottomSheet(
                     visible = showBottomSheet,
                     onDismiss = onDismiss,
@@ -303,7 +312,6 @@ private fun ScrollableBottomSheetScreenPreview() {
                     onClick = { showBottomSheet = false },
                     modifier = Modifier.fillMaxWidth()
                 )
-            }
-        )
+            })
     }
 }
