@@ -151,7 +151,7 @@ fun CategoryDetailsContent(
             )
         }
 
-        // Snackbar for messages
+        // Snack bar for messages
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter

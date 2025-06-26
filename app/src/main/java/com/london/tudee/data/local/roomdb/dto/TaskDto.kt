@@ -3,6 +3,7 @@ package com.london.tudee.data.local.roomdb.dto
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.london.tudee.data.local.roomdb.dto.InitializeId.INITIALIZE_ID
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.TaskStatus
 import kotlinx.datetime.Clock
@@ -17,7 +18,7 @@ import kotlinx.datetime.Clock
     ]
 )
 data class TaskDto(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int = INITIALIZE_ID,
     val title: String,
     val description: String,
     val taskStatus: TaskStatus,
@@ -25,3 +26,7 @@ data class TaskDto(
     val categoryId: Int,
     val timeStamp: Long = Clock.System.now().toEpochMilliseconds()
 )
+
+private object InitializeId {
+    const val INITIALIZE_ID = 0
+}
