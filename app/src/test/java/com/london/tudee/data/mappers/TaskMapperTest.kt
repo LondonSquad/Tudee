@@ -4,9 +4,10 @@ import com.london.tudee.data.local.roomdb.dto.TaskDto
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
-import  kotlin.test.assertEquals
 import kotlinx.datetime.Instant
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+
 
 class TaskMapperTest {
     @Test
