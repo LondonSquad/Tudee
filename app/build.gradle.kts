@@ -80,7 +80,6 @@ dependencies {
     implementation(libs.koin.annotations)
     ksp(libs.koin.ksp.compiler)
 
-
     implementation(libs.kotlinx.datetime)
     implementation(libs.remember.preference)
 

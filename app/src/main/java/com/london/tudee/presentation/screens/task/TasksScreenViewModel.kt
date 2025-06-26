@@ -2,9 +2,14 @@ package com.london.tudee.presentation.screens.task
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.london.tudee.R
+import com.london.tudee.domain.entities.Category
+import com.london.tudee.domain.entities.Priority
+import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
+import com.london.tudee.presentation.screens.task.task_modify.TaskModifyUiState
 import com.london.tudee.presentation.utils.DateFormatter.toDayOfWeekShort
 import com.london.tudee.presentation.utils.DateFormatter.toLocalDate
 import com.london.tudee.presentation.utils.DateFormatter.toLongDate
@@ -17,7 +22,9 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.Clock
 import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.minus
@@ -28,10 +35,13 @@ import org.koin.android.annotation.KoinViewModel
 class TasksScreenViewModel(
     private val taskService: TaskService,
     private val categoryService: CategoryService
-) : ViewModel() {
+) : ViewModel(), TasksInteractions {
 
     private val _uiState = MutableStateFlow(TasksUiState())
     val uiState = _uiState.asStateFlow()
+
+    private val _taskUiState = MutableStateFlow(TaskModifyUiState())
+    val taskUiState = _taskUiState.asStateFlow()
 
     init {
         loadCategories()
@@ -41,6 +51,7 @@ class TasksScreenViewModel(
         initializeInProgressTasks()
     }
 
+    //region get tasks
     fun initializeDoneTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             val targetDate = _uiState.value.date.toLocalDate()
@@ -114,6 +125,7 @@ class TasksScreenViewModel(
             }
         }
     }
+    //endregion
 
     fun updateDateByAction(date: Long, arrowAction: ArrowActions) {
 
@@ -182,7 +194,7 @@ class TasksScreenViewModel(
 
         updateDateByAction(date = datePickerDate, arrowAction = ArrowActions.None)
 
-        val updatedDays = _uiState.value.days.map { day ->
+        val updatedDays = _uiState.value.days.mapIndexed { index, day ->
             val dayOfMonth = day.dayOfMonth.toInt()
             val dayLocalDate = LocalDate(targetLocalDate.year, targetLocalDate.month, dayOfMonth)
             day.copy(
@@ -202,7 +214,7 @@ class TasksScreenViewModel(
         initializeToDoTasks()
     }
 
-
+    //region delete task
     fun showDeleteDialog(taskId: Int?) {
         _uiState.update {
             it.copy(selectedTaskId = taskId, isDeleteDialogVisible = true)
@@ -222,7 +234,7 @@ class TasksScreenViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val selectedTaskId = uiState.value.selectedTaskId
             if (selectedTaskId != null) {
-                runCatching {
+                try {
                     val task = taskService.getById(selectedTaskId)
                     taskService.delete(task)
                     onSuccess()
@@ -231,9 +243,9 @@ class TasksScreenViewModel(
                     initializeInProgressTasks()
                     initializeToDoTasks()
 
-                }.onFailure {
+                } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        onError(it)
+                        onError(e)
                     }
                 }
             } else {
@@ -244,22 +256,131 @@ class TasksScreenViewModel(
         }
     }
 
-    private fun loadCategories() {
+    fun loadCategories() {
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
                 categoryService.getAll().collect { categories ->
-                    _uiState.update { currentState ->
+                    _taskUiState.update { currentState ->
                         currentState.copy(
                             categories = categories,
+                            selectedCategory = currentState.selectedCategory,
                             categoryIcons = categories.map { it.iconRes }
                         )
                     }
+                    validateForm()
                 }
-            }.onFailure { throwable ->
-                _uiState.update {
-                    it.copy(errMessage = throwable.message)
+            }.onFailure {
+                _taskUiState.update {
+                    it.copy(stateMessage = R.string.some_error_happened)
                 }
             }
+        }
+    }
+    //endregion
+
+    override fun saveTask() {
+        val currentState = _taskUiState.value
+        if (!currentState.isFormValid) return
+
+        viewModelScope.launch(Dispatchers.IO) {
+            _taskUiState.update { it.copy(isLoading = true) }
+
+            runCatching {
+                val task = Task(
+                    id = 0,
+                    title = currentState.title.trim(),
+                    description = currentState.description.trim(),
+                    taskStatus = TaskStatus.TODO,
+                    priority = currentState.selectedPriority,
+                    categoryId = currentState.selectedCategory?.id ?: 1,
+                    timeStamp = currentState.selectedDate?.let {
+                        Instant.fromEpochMilliseconds(
+                            it
+                        )
+                    }
+                        ?: Clock.System.now()
+                )
+                currentState.selectedCategory?.let { category ->
+                    categoryService.edit(category.copy(taskCount = category.taskCount + 1))
+                }
+                taskService.add(task)
+                _taskUiState.update {
+                    it.copy(
+                        isLoading = false,
+                        stateMessage = R.string.add_task_successfully,
+                        showBottomSheet = false
+                    )
+                }
+            }.onFailure {
+                _taskUiState.update {
+                    it.copy(
+                        isLoading = false,
+                        stateMessage = R.string.some_error_happened
+                    )
+                }
+            }
+        }
+    }
+
+    override fun updateTitle(title: String) {
+        _taskUiState.update { it.copy(title = title) }
+        validateForm()
+    }
+
+    override fun updateDescription(description: String) {
+        _taskUiState.update { it.copy(description = description) }
+    }
+
+    override fun updateDate(date: Long) {
+        _taskUiState.update { it.copy(selectedDate = date) }
+        validateForm()
+    }
+
+    override fun updatePriority(priority: Priority) {
+        _taskUiState.update { it.copy(selectedPriority = priority) }
+        validateForm()
+    }
+
+    override fun updateCategory(category: Category) {
+        _taskUiState.update { it.copy(selectedCategory = category) }
+        validateForm()
+    }
+
+    override fun validateForm() {
+        _taskUiState.update { currentState ->
+            currentState.copy(
+                isFormValid = currentState.title.isNotBlank()
+                        && currentState.selectedDate != null
+                        && currentState.selectedCategory != null
+            )
+        }
+    }
+
+    override fun showDatePicker() {
+        _taskUiState.update { it.copy(showDatePicker = true) }
+    }
+
+    override fun hideDatePicker() {
+        _taskUiState.update { it.copy(showDatePicker = false) }
+    }
+
+    override fun showBottomSheet() {
+        _taskUiState.update { it.copy(showBottomSheet = true) }
+    }
+
+    override fun hideBottomSheet() {
+        _taskUiState.update {
+            it.copy(
+                showBottomSheet = false,
+            )
+        }
+    }
+
+    override fun clearMessages() {
+        _taskUiState.update {
+            it.copy(
+                stateMessage = null
+            )
         }
     }
 }
