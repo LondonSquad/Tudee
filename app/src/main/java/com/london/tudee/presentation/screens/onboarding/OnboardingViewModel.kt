@@ -42,8 +42,8 @@ class OnBoardingViewModel(
 
     fun onboardingFinished() {
         viewModelScope.launch(Dispatchers.IO) {
-            runCatching { appPreferencesService.setOnboardingShown() }
-            .onFailure { Log.e("OnboardingViewModel", "onboardingFinished: ", it) }
+            runCatching { appPreferencesService.setOnBoardingShown() }
+                .onFailure { Log.e("OnboardingViewModel", "onboardingFinished: ", it) }
         }
     }
 }

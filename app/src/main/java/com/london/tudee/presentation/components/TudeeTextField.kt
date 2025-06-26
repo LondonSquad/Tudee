@@ -38,14 +38,14 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun TudeeTextField(
-    modifier: Modifier = Modifier,
-    icon: Int? = null,
     @StringRes hint: Int,
-    multiLined: Boolean = false,
     value: String,
-    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    multiLined: Boolean = false,
     readOnly: Boolean = false,
+    icon: Int? = null,
     onClick: (() -> Unit)? = null,
+    onValueChange: (String) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     val interactionSource = remember { MutableInteractionSource() }
@@ -101,9 +101,7 @@ fun TudeeTextField(
                         .background(outlineColor)
                 )
             }
-
             Spacer(modifier = modifier.width(12.dp))
-
             BasicTextField(
                 value = value,
                 onValueChange = onValueChange,
@@ -129,7 +127,6 @@ fun TudeeTextField(
                     .padding(end = 12.dp),
             )
         }
-
         if (readOnly && onClick != null) {
             Box(
                 modifier = Modifier
@@ -147,7 +144,7 @@ fun TudeeTextField(
 
 @ThemePreviews
 @Composable
-fun TudeeTextFieldPreview() {
+private fun TudeeTextFieldPreview() {
     val textState = rememberSaveable { mutableStateOf("") }
     TudeeTheme {
         TudeeTextField(
@@ -162,7 +159,7 @@ fun TudeeTextFieldPreview() {
 
 @ThemePreviews
 @Composable
-fun TudeeTextFieldReadOnlyPreview() {
+private fun TudeeTextFieldReadOnlyPreview() {
     TudeeTheme {
         TudeeTextField(
             multiLined = false,

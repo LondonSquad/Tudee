@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,23 +25,19 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.utils.converterStringToBitmap
 
 @Composable
 fun CategoryItem(
-    modifier: Modifier = Modifier,
     iconRes: String,
     title: String,
+    modifier: Modifier = Modifier,
     taskCount: Int = 0,
     categoryId: Int = 0,
     inCategorySection: Boolean = false,
     isSelected: Boolean = false,
     onClick: () -> Unit
 ) {
-    val bitmap = remember(iconRes) {
-        converterStringToBitmap(iconRes)
-    }
-    val image = rememberAsyncImagePainter(bitmap)
+    val image = rememberAsyncImagePainter(iconRes)
 
     Column(
         modifier = modifier
@@ -70,7 +65,6 @@ fun CategoryItem(
                         .clip(TudeeTheme.shapes.circle)
                 else Modifier.size(32.dp),
             )
-
             if (isSelected) {
                 Image(
                     painter = painterResource(R.drawable.ic_check),
@@ -86,28 +80,28 @@ fun CategoryItem(
                         .padding(2.dp)
                 )
             }
-            if(inCategorySection){Box(
-                modifier = Modifier
-                    .width(36.dp)
-                    .align(Alignment.TopEnd)
-                    .offset(x = 20.dp, y = (-20).dp)
-                    .background(
-                        color = TudeeTheme.colors.surfaceLow,
-                        shape = TudeeTheme.shapes.circle
+            if (inCategorySection) {
+                Box(
+                    modifier = Modifier
+                        .width(36.dp)
+                        .align(Alignment.TopEnd)
+                        .offset(x = 20.dp, y = (-20).dp)
+                        .background(
+                            color = TudeeTheme.colors.surfaceLow,
+                            shape = TudeeTheme.shapes.circle
+                        )
+                        .padding(horizontal = 6.dp, vertical = 2.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = taskCount.toString(),
+                        style = TudeeTheme.typography.labelSmall,
+                        color = TudeeTheme.colors.hint
                     )
-                    .padding(horizontal = 6.dp, vertical = 2.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = taskCount.toString(),
-                    style = TudeeTheme.typography.labelSmall,
-                    color = TudeeTheme.colors.hint
-                )
-            }}
+                }
+            }
         }
-
         Spacer(modifier = Modifier.height(4.dp))
-
         Text(
             text = title,
             style = TudeeTheme.typography.labelSmall,

@@ -6,7 +6,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.london.tudee.presentation.screens.category.category_details.CategoryDetailsScreen
 
-
 fun NavGraphBuilder.categoryDetailsRoute(navController: NavController) {
     composable<Screen.CategoryDetails> { backStackEntry ->
         val entry = backStackEntry.toRoute<Screen.CategoryDetails>()
@@ -14,7 +13,7 @@ fun NavGraphBuilder.categoryDetailsRoute(navController: NavController) {
         CategoryDetailsScreen(
             categoryId = categoryId,
             onBackClick = {
-                navController.popBackStack()
+                navController.navigateUp()
             }
         )
     }

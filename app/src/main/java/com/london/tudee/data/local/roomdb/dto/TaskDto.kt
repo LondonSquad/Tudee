@@ -8,7 +8,8 @@ import com.london.tudee.domain.entities.TaskStatus
 import kotlinx.datetime.Clock
 
 @Entity(
-    tableName = "TASK_TABLE", foreignKeys = [ForeignKey(
+    tableName = "TASK_TABLE", foreignKeys = [
+        ForeignKey(
         entity = CategoryDto::class,
         parentColumns = ["id"],
         childColumns = ["categoryId"],
