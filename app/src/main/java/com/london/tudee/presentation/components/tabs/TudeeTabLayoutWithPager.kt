@@ -1,7 +1,6 @@
 package com.london.tudee.presentation.components.tabs
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,7 +48,6 @@ fun TudeeTabLayout(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TudeeTabLayoutWithPager(
     modifier: Modifier = Modifier,
@@ -99,8 +97,7 @@ fun TabLayoutScreen(modifier: Modifier = Modifier) {
                 TabItem(text = R.string.To_Do, number = 8),
                 TabItem(text = R.string.Done, number = 5)
             )
-        ) { page, emptyTasks ->
-            // Content for each tab
+        ) { page, _ ->
             Box(
                 modifier = Modifier.fillMaxSize(), contentAlignment = Center
             ) {

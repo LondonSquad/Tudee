@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
-import com.london.tudee.presentation.base.HomeInteractions
+import com.london.tudee.presentation.base.AddOrEditInteractions
 import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScreen
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
@@ -20,7 +20,7 @@ fun AddOrEditTaskBottomSheet(
     modifier: Modifier = Modifier,
     screenContent: @Composable () -> Unit,
     uiState: AddOrEditTaskUiState,
-    interactions: HomeInteractions
+    interactions: AddOrEditInteractions
 ) {
 
     Box(modifier = Modifier.fillMaxSize()) {
