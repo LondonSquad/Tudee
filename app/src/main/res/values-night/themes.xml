@@ -3,7 +3,7 @@
     <style name="Theme.Tudee" parent="android:Theme.Material.NoActionBar"/>
 
     <style name="Theme.Tudee.Splash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/overlay</item> <!-- Dark version -->
+        <item name="windowSplashScreenBackground">@color/overlay</item>
         <item name="postSplashScreenTheme">@style/Theme.Tudee</item>
     </style>
 </resources>
