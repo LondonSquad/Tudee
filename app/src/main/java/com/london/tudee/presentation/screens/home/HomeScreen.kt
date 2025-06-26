@@ -44,9 +44,9 @@ import com.london.tudee.R
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.presentation.components.HomeTopBar
+import com.london.tudee.presentation.components.NotificationSlider
 import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.StatusCard
-import com.london.tudee.presentation.components.TaskStatusSlider
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.components.date.DateBadge
 import com.london.tudee.presentation.components.date.DateBadgeStyleValues
@@ -57,6 +57,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.task.task_details.TaskDetailsBottomSheet
 import com.london.tudee.presentation.screens.task.task_modify.TaskModifyBottomSheet
 import com.london.tudee.presentation.screens.task.task_modify.TaskModifyUiState
+import com.london.tudee.presentation.utils.HomeScreenUtils
 import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -309,8 +310,8 @@ private fun OverLayerBox(
                 isVisible = true
             )
 
-            TaskStatusSlider(
-                note = null, taskStatusUiState = getTaskStatus(
+            NotificationSlider(
+                note = null, notificationSliderUiState = getTaskStatus(
                     allTasks = numberOfAllTasks,
                     doneTasks = numberOfDoneTasks,
                     inProgressTasks = numberOfInProgressTasks,
@@ -637,10 +638,10 @@ private fun DoneSection(
 @Composable
 fun getTaskStatus(
     allTasks: Int, doneTasks: Int, inProgressTasks: Int, toDoTasks: Int
-): TaskStatusUiState {
+): NotificationSliderUiState {
     when {
         doneTasks == 0 && inProgressTasks == 0 && toDoTasks == 0 -> {
-            return TaskStatusUiState(
+            return NotificationSliderUiState(
                 title = stringResource(R.string.Nothing_on_your_list),
                 subtitle = stringResource(R.string.Fill_your_day_with_something_awesome_),
                 emoji = R.drawable.bad_emoji,
@@ -649,7 +650,7 @@ fun getTaskStatus(
         }
 
         inProgressTasks > doneTasks && inProgressTasks > toDoTasks -> {
-            return TaskStatusUiState(
+            return NotificationSliderUiState(
                 title = stringResource(R.string.Stay_working),
                 subtitle = stringResource(R.string.task_progress, doneTasks, allTasks),
                 emoji = R.drawable.okay_status,
@@ -658,7 +659,7 @@ fun getTaskStatus(
         }
 
         doneTasks > inProgressTasks && doneTasks > toDoTasks && doneTasks == allTasks -> {
-            return TaskStatusUiState(
+            return NotificationSliderUiState(
                 title = stringResource(R.string.Tadaa),
                 subtitle = stringResource(R.string.encouragement_message),
                 emoji = R.drawable.good_emoji,
@@ -667,7 +668,7 @@ fun getTaskStatus(
         }
 
         doneTasks == 0 && inProgressTasks == 0 && toDoTasks == allTasks -> {
-            return TaskStatusUiState(
+            return NotificationSliderUiState(
                 title = stringResource(R.string.Zero_progress),
                 subtitle = stringResource(R.string.blaming_message),
                 emoji = R.drawable.poor_emoji,
@@ -675,7 +676,7 @@ fun getTaskStatus(
             )
         }
 
-        else -> return TaskStatusUiState(
+        else -> return NotificationSliderUiState(
             title = "",
             subtitle = "",
             emoji = R.drawable.bad_emoji,

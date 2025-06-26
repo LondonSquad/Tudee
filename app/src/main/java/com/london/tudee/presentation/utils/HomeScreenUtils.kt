@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.home
+package com.london.tudee.presentation.utils
 
 import android.content.Context
 import com.london.tudee.R

@@ -138,7 +138,6 @@ fun TasksContent(
     onDayClick: (index: Int) -> Unit,
     onDeleteTask: (Task) -> Unit
 ) {
-
     var showDatePicker by remember { mutableStateOf(false) }
     var showBottomSheet by remember { mutableStateOf(false) }
 

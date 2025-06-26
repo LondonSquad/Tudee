@@ -24,14 +24,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.home.TaskStatusUiState
+import com.london.tudee.presentation.screens.home.NotificationSliderUiState
 
 
 @Composable
-fun TaskStatusSlider(
+fun NotificationSlider(
     note: String?,
-    taskStatusUiState: TaskStatusUiState,
     modifier: Modifier = Modifier,
+    notificationSliderUiState: NotificationSliderUiState,
 ) {
     Box(
         modifier = modifier
@@ -52,7 +52,7 @@ fun TaskStatusSlider(
             ) {
                 Row {
                     Text(
-                        text = taskStatusUiState.title,
+                        text = notificationSliderUiState.title,
                         style = TudeeTheme.typography.titleSmall,
                         color = TudeeTheme.colors.title,
                         lineHeight = 20.sp
@@ -63,13 +63,13 @@ fun TaskStatusSlider(
                     Image(
                         modifier = Modifier
                             .size(20.dp),
-                        painter = painterResource(id = taskStatusUiState.emoji),
+                        painter = painterResource(id = notificationSliderUiState.emoji),
                         contentDescription = null,
                     )
                 }
 
                 Text(
-                    text = taskStatusUiState.subtitle,
+                    text = notificationSliderUiState.subtitle,
                     style = TudeeTheme.typography.bodySmall,
                     color = TudeeTheme.colors.body,
                     maxLines = 1,
@@ -111,7 +111,7 @@ fun TaskStatusSlider(
                         .padding(bottom = 8.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = taskStatusUiState.tudeePicture),
+                        painter = painterResource(id = notificationSliderUiState.tudeePicture),
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxSize()
@@ -126,9 +126,9 @@ fun TaskStatusSlider(
 @Composable
 fun TaskStatusSliderPreview() {
 
-    TaskStatusSlider(
+    NotificationSlider(
         note = "Tudee is watching. back to work!!!",
-        taskStatusUiState = TaskStatusUiState(),
+        notificationSliderUiState = NotificationSliderUiState(),
         modifier = Modifier.padding(start = 6.dp)
     )
 }

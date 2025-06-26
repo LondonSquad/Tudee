@@ -14,3 +14,9 @@ data class HomeUiState(
     val taskDetailBottomSheetUiState: TaskDetailsBottomSheetUiState = TaskDetailsBottomSheetUiState(),
     val isTaskDetailsBottomSheetVisible: Boolean = false
 )
+data class NotificationSliderUiState(
+    val title: String = "",
+    val subtitle: String = "",
+    val emoji: Int = -1,
+    val tudeePicture: Int = -1,
+)
