@@ -1,5 +1,8 @@
 package com.london.tudee.presentation.utils
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.london.tudee.R
 import com.london.tudee.presentation.utils.DateFormatter.toYear
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
@@ -34,4 +37,33 @@ object TasksScreenUtils {
         return Pair(startOfDayMillis, endOfDayMillis)
     }
 
+    @Composable
+    fun String.toDayName() =
+        when (this) {
+            "Fri" -> stringResource(R.string.fri)
+            "Sat" -> stringResource(R.string.sat)
+            "Sun" -> stringResource(R.string.sun)
+            "Mon" -> stringResource(R.string.mon)
+            "Tue" -> stringResource(R.string.tue)
+            "Wed" -> stringResource(R.string.wed)
+            else -> stringResource(R.string.thu)
+        }
+
+    @Composable
+    fun String.toMonthName() =
+        when (this) {
+            "Jan" -> stringResource(R.string.Jan)
+            "Feb" -> stringResource(R.string.Feb)
+            "Mar" -> stringResource(R.string.Mar)
+            "Apr" -> stringResource(R.string.Apr)
+            "May" -> stringResource(R.string.May)
+            "Jun" -> stringResource(R.string.Jun)
+            "Jul" -> stringResource(R.string.Jul)
+            "Aug" -> stringResource(R.string.Aug)
+            "Sep" -> stringResource(R.string.Sep)
+            "Oct" -> stringResource(R.string.Oct)
+            "Nov" -> stringResource(R.string.Nov)
+            else -> stringResource(R.string.Dec)
+
+        }
 }
