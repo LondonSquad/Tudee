@@ -270,7 +270,7 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         // When
-        viewModel.updateSelectedDate(testDate)
+        viewModel.updateDate(testDate)
 
         // Then
         assertThat(viewModel.taskUiState.value.selectedDate).isEqualTo(testDate)
@@ -283,7 +283,7 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         // When
-        viewModel.updateSelectedPriority(Priority.HIGH)
+        viewModel.updatePriority(Priority.HIGH)
 
         // Then
         assertThat(viewModel.taskUiState.value.selectedPriority).isEqualTo(Priority.HIGH)
@@ -297,7 +297,7 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         // When
-        viewModel.updateSelectedCategory(newCategory)
+        viewModel.updateCategory(newCategory)
 
         // Then
         assertThat(viewModel.taskUiState.value.selectedCategory).isEqualTo(newCategory)
@@ -381,8 +381,8 @@ class HomeViewModelTest {
         // Set up valid form
         viewModel.updateTitle("New Task")
         viewModel.updateDescription("New Description")
-        viewModel.updateSelectedDate(Clock.System.now().toEpochMilliseconds())
-        viewModel.updateSelectedCategory(testCategory)
+        viewModel.updateDate(Clock.System.now().toEpochMilliseconds())
+        viewModel.updateCategory(testCategory)
         advanceUntilIdle()
 
         // When
@@ -431,8 +431,8 @@ class HomeViewModelTest {
 
         // When - Valid form
         viewModel.updateTitle("Valid Title")
-        viewModel.updateSelectedDate(Clock.System.now().toEpochMilliseconds())
-        viewModel.updateSelectedCategory(testCategory)
+        viewModel.updateDate(Clock.System.now().toEpochMilliseconds())
+        viewModel.updateCategory(testCategory)
         advanceUntilIdle()
 
         // Then
