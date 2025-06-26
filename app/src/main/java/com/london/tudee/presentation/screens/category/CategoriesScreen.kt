@@ -73,7 +73,7 @@ private fun CategoriesScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(TudeeTheme.colors.surfaceHigh)
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 16.dp, vertical = 20.dp)
                     .padding(WindowInsets.statusBars.asPaddingValues())
             ) {
                 Text(
