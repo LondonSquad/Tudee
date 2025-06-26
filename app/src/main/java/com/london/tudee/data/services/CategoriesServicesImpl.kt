@@ -20,53 +20,53 @@ class CategoriesServicesImpl(
 ) : CategoryService {
 
     override suspend fun add(service: Category) {
-        return try {
+        return runCatching {
             val category = service.copy(id = 0)
             categoryDao.insert(category.convertToCategoryDto())
-        } catch (e: Exception) {
+        }.getOrElse {
             throw AddCategoryException()
         }
     }
 
     override suspend fun edit(service: Category) {
-        return try {
+        return runCatching {
             categoryDao.update(service.convertToCategoryDto())
-        } catch (e: Exception) {
+        }.getOrElse {
             throw EditCategoryException()
         }
     }
 
     override suspend fun delete(service: Category) {
-        return try {
+        return runCatching {
             categoryDao.delete(service.convertToCategoryDto())
-        } catch (e: Exception) {
+        }.getOrElse {
             throw DeleteCategoryException()
         }
     }
 
     override suspend fun getAll(): Flow<List<Category>> {
-        return try {
+        return runCatching {
             categoryDao.getAll().map { categoryDtoList ->
                 categoryDtoList.map { categoryDto -> categoryDto.convertToCategory() }
             }
-        } catch (e: Exception) {
+        }.getOrElse {
             throw GetAllCategoriesException()
         }
     }
 
     override suspend fun getById(id: Int): Category {
-        return try {
+        return runCatching {
             categoryDao.getById(id).convertToCategory()
-        } catch (e: Exception) {
+        }.getOrElse {
             throw CategoryNotFoundException()
         }
     }
 
 
     override fun getIconResById(id: Int): String {
-        return try {
+        return runCatching {
             categoryDao.getIconResById(id)
-        } catch (e: Exception) {
+        }.getOrElse {
             throw GetCategoryIconException()
         }
     }
