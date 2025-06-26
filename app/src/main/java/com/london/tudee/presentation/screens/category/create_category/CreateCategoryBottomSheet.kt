@@ -26,7 +26,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -153,11 +155,12 @@ private fun ImagePickerAddCategory(
             .size(112.dp)
             .clip(TudeeTheme.shapes.extraSmall)
             .drawBehind {
-                drawRect(
+                drawRoundRect(
                     color = RectBorderColor, style = Stroke(
                         width = 1.dp.toPx(),
-                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(8f, 8f), 0f)
-                    )
+                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(48f, 24f), 0f),
+                        cap = StrokeCap.Butt
+                    ), cornerRadius = CornerRadius(16.dp.toPx(), 16.dp.toPx())
                 )
             }, contentAlignment = Alignment.Center
     ) {
