@@ -113,7 +113,7 @@ private fun ConfirmDeleteBottomSheetActions(
 
 @ThemePreviews
 @Composable
-fun ConfirmDeleteBottomSheetContentPreview() {
+private fun ConfirmDeleteBottomSheetContentPreview() {
     TudeeTheme {
         ConfirmDeleteBottomSheetContent()
     }
@@ -121,7 +121,7 @@ fun ConfirmDeleteBottomSheetContentPreview() {
 
 @ThemePreviews
 @Composable
-fun ConfirmDeleteBottomSheetActionsPreview() {
+private fun ConfirmDeleteBottomSheetActionsPreview() {
     TudeeTheme {
         ConfirmDeleteBottomSheetActions(
             onDelete = {},

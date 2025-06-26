@@ -17,7 +17,6 @@ class CreateCategoryScreenViewModel(
     private val _uiState = MutableStateFlow(CreateCategoryUiState())
     val uiState = _uiState.asStateFlow()
 
-
     fun createCategory(
         category: Category
     ) {
@@ -35,9 +34,7 @@ class CreateCategoryScreenViewModel(
             }
         }
     }
-
 }
-
 
 data class CreateCategoryUiState(
     val isLoading: Boolean = false,

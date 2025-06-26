@@ -43,20 +43,21 @@ import androidx.compose.ui.zIndex
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
-import com.london.tudee.presentation.components.EmptyTasksScreen
 import com.london.tudee.presentation.components.HomeTopBar
+import com.london.tudee.presentation.components.NotificationSlider
 import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.StatusCard
-import com.london.tudee.presentation.components.TaskStatusSlider
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.components.date.DateBadge
 import com.london.tudee.presentation.components.date.DateBadgeStyleValues
+import com.london.tudee.presentation.components.task.EmptyTasksScreen
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.task.task_details.TaskDetailsBottomSheet
 import com.london.tudee.presentation.screens.task.task_modify.TaskModifyBottomSheet
 import com.london.tudee.presentation.screens.task.task_modify.TaskModifyUiState
+import com.london.tudee.presentation.utils.HomeScreenUtils
 import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -81,7 +82,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
+private fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(modifier) {
         Text(
             text = stringResource(R.string.loading), modifier = Modifier.align(Alignment.Center)
@@ -90,7 +91,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ErrorScreen(modifier: Modifier = Modifier) {
+private fun ErrorScreen(modifier: Modifier = Modifier) {
     Box(modifier) {
         Text(
             text = stringResource(R.string.there_was_an_unexpected_error),
@@ -100,7 +101,7 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun HomeScreenContent(
+private fun HomeScreenContent(
     state: HomeUiState,
     viewmodel: HomeViewModel,
     taskUiState: TaskModifyUiState,
@@ -110,7 +111,6 @@ fun HomeScreenContent(
     val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
-
         TudeeFloatingActionButton(
             painter = painterResource(R.drawable.note_add),
             modifier = Modifier
@@ -123,19 +123,16 @@ fun HomeScreenContent(
             },
             isEnabled = true,
         )
-
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
             TopAPPBar(viewmodel, state)
-
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .background(TudeeTheme.colors.surface)
                     .verticalScroll(rememberScrollState())
             ) {
-
                 OverLayerBox(
                     numberOfAllTasks = state.allTasks.size,
                     numberOfDoneTasks = state.doneTasks.size,
@@ -147,7 +144,6 @@ fun HomeScreenContent(
                         )
                     }"
                 )
-
                 if (state.allTasks.isEmpty()) {
                     EmptyTasksScreen()
                 } else {
@@ -158,9 +154,7 @@ fun HomeScreenContent(
                         onTaskClicked = interactions::showTaskDetailsBottomSheet,
                         loadTask = interactions::loadTask
                     )
-
                     Spacer(Modifier.height(24.dp))
-
                     ToDoSection(
                         toDoTasks = state.toDoTasks,
                         onTodoTasksArrowClicked = onArrowClicked,
@@ -168,9 +162,7 @@ fun HomeScreenContent(
                         onTaskClicked = interactions::showTaskDetailsBottomSheet,
                         loadTask = interactions::loadTask
                     )
-
                     Spacer(Modifier.height(24.dp))
-
                     DoneSection(
                         doneTasks = state.doneTasks,
                         onDoneTasksArrowClicked = onArrowClicked,
@@ -181,7 +173,6 @@ fun HomeScreenContent(
                 }
             }
         }
-
         TaskDetailsBottomSheet(
             state.taskDetailBottomSheetUiState,
             showBottomSheet = state.isTaskDetailsBottomSheetVisible,
@@ -191,8 +182,8 @@ fun HomeScreenContent(
                 interactions.hideTaskDetailsBottomSheet()
                 val taskId = state.taskDetailBottomSheetUiState.task.id
                 interactions.onEditTask(taskId)
-            })
-
+            }
+        )
         TaskModifyBottomSheet(
             modifier = Modifier.zIndex(1f),
             screenContent = { },
@@ -202,7 +193,6 @@ fun HomeScreenContent(
             onShowDatePicker = interactions::showDatePicker,
             onHideDatePicker = interactions::hideDatePicker
         )
-
         Box(
             modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter
         ) {
@@ -230,7 +220,6 @@ fun HomeScreenContent(
                     )
                 }
             }
-
             LaunchedEffect(taskUiState.stateMessage) {
                 delay(3000)
                 interactions.clearMessages()
@@ -273,7 +262,6 @@ private fun OverLayerBox(
             .fillMaxWidth()
             .padding(bottom = 24.dp)
     ) {
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -282,7 +270,6 @@ private fun OverLayerBox(
                 .align(Alignment.TopCenter)
                 .zIndex(0f)
         )
-
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -311,25 +298,21 @@ private fun OverLayerBox(
                 ),
                 isVisible = true
             )
-
-            TaskStatusSlider(
-                note = null, taskStatusUiState = getTaskStatus(
+            NotificationSlider(
+                note = null, notificationSliderUiState = getTaskStatus(
                     allTasks = numberOfAllTasks,
                     doneTasks = numberOfDoneTasks,
                     inProgressTasks = numberOfInProgressTasks,
                     toDoTasks = numberOfToDoTasks
                 ), modifier = Modifier.padding(start = 6.dp)
             )
-
             Text(
                 text = stringResource(R.string.Overview),
                 style = TudeeTheme.typography.titleLarge,
                 color = TudeeTheme.colors.title,
                 modifier = Modifier.padding(horizontal = 12.dp)
             )
-
             Spacer(Modifier.height(8.dp))
-
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
@@ -344,7 +327,6 @@ private fun OverLayerBox(
                     taskStatusName = R.string.Done,
                     modifier = Modifier.weight(1f)
                 )
-
                 StatusCard(
                     backgroundColor = TudeeTheme.colors.yellowAccent,
                     statusIcon = R.drawable.file_pin,
@@ -352,7 +334,6 @@ private fun OverLayerBox(
                     taskStatusName = R.string.In_Progress,
                     modifier = Modifier.weight(1f)
                 )
-
                 StatusCard(
                     backgroundColor = TudeeTheme.colors.purpleAccent,
                     statusIcon = R.drawable.file_unknown,
@@ -391,7 +372,6 @@ private fun ToDoSection(
             style = TudeeTheme.typography.titleLarge,
             color = TudeeTheme.colors.title
         )
-
         Box(
             Modifier
                 .background(
@@ -482,7 +462,6 @@ private fun InProgressSection(
             style = TudeeTheme.typography.titleLarge,
             color = TudeeTheme.colors.title
         )
-
         Box(
             Modifier
                 .background(
@@ -497,14 +476,12 @@ private fun InProgressSection(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(2.dp),
-
-                ) {
+            ) {
                 Text(
                     text = "${inProgressTasks.size}",
                     style = TudeeTheme.typography.labelSmall,
                     color = TudeeTheme.colors.body
                 )
-
                 Icon(
                     painter = painterResource(R.drawable.left_arrow_icon),
                     contentDescription = null,
@@ -573,7 +550,6 @@ private fun DoneSection(
             style = TudeeTheme.typography.titleLarge,
             color = TudeeTheme.colors.title
         )
-
         Box(
             Modifier
                 .background(
@@ -594,7 +570,6 @@ private fun DoneSection(
                     style = TudeeTheme.typography.labelSmall,
                     color = TudeeTheme.colors.body
                 )
-
                 Icon(
                     painter = painterResource(R.drawable.left_arrow_icon),
                     contentDescription = null,
@@ -638,12 +613,12 @@ private fun DoneSection(
 }
 
 @Composable
-fun getTaskStatus(
+private fun getTaskStatus(
     allTasks: Int, doneTasks: Int, inProgressTasks: Int, toDoTasks: Int
-): TaskStatusUiState {
+): NotificationSliderUiState {
     when {
         doneTasks == 0 && inProgressTasks == 0 && toDoTasks == 0 -> {
-            return TaskStatusUiState(
+            return NotificationSliderUiState(
                 title = stringResource(R.string.Nothing_on_your_list),
                 subtitle = stringResource(R.string.Fill_your_day_with_something_awesome_),
                 emoji = R.drawable.bad_emoji,
@@ -652,7 +627,7 @@ fun getTaskStatus(
         }
 
         inProgressTasks > doneTasks && inProgressTasks > toDoTasks -> {
-            return TaskStatusUiState(
+            return NotificationSliderUiState(
                 title = stringResource(R.string.Stay_working),
                 subtitle = stringResource(R.string.task_progress, doneTasks, allTasks),
                 emoji = R.drawable.okay_status,
@@ -661,7 +636,7 @@ fun getTaskStatus(
         }
 
         doneTasks > inProgressTasks && doneTasks > toDoTasks && doneTasks == allTasks -> {
-            return TaskStatusUiState(
+            return NotificationSliderUiState(
                 title = stringResource(R.string.Tadaa),
                 subtitle = stringResource(R.string.encouragement_message),
                 emoji = R.drawable.good_emoji,
@@ -670,7 +645,7 @@ fun getTaskStatus(
         }
 
         doneTasks == 0 && inProgressTasks == 0 && toDoTasks == allTasks -> {
-            return TaskStatusUiState(
+            return NotificationSliderUiState(
                 title = stringResource(R.string.Zero_progress),
                 subtitle = stringResource(R.string.blaming_message),
                 emoji = R.drawable.poor_emoji,
@@ -678,7 +653,7 @@ fun getTaskStatus(
             )
         }
 
-        else -> return TaskStatusUiState(
+        else -> return NotificationSliderUiState(
             title = "",
             subtitle = "",
             emoji = R.drawable.bad_emoji,
@@ -689,7 +664,7 @@ fun getTaskStatus(
 
 @ThemePreviews
 @Composable
-fun PreviewHomeScreen() {
+private fun PreviewHomeScreen() {
     TudeeTheme {
         HomeScreen(
             onArrowClicked = {})

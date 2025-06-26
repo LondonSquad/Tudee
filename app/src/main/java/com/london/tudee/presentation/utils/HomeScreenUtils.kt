@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.home
+package com.london.tudee.presentation.utils
 
 import android.content.Context
 import com.london.tudee.R
@@ -11,11 +11,9 @@ object HomeScreenUtils {
         val currentDate = Clock.System.now()
             .toLocalDateTime(TimeZone.currentSystemDefault())
             .date
-
         val day = currentDate.dayOfMonth
         val monthName = getMonthName(currentDate.monthNumber, context)
         val year = currentDate.year
-
         return "$day $monthName $year"
     }
 
@@ -37,5 +35,4 @@ object HomeScreenUtils {
         }
         return context.getString(resId)
     }
-
 }

@@ -32,14 +32,15 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun PriorityBadge(
-    modifier: Modifier = Modifier,
     priority: Priority,
+    modifier: Modifier = Modifier,
     isSelected: Boolean = false,
     onClick: (Priority) -> Unit = {}
 ) {
     val resources = getPriorityResources(priority)
 
-    val targetBackgroundColor = if (isSelected) resources.backgroundColor else TudeeTheme.colors.surfaceLow
+    val targetBackgroundColor =
+        if (isSelected) resources.backgroundColor else TudeeTheme.colors.surfaceLow
     val targetContentColor = if (isSelected) TudeeTheme.colors.onPrimary else TudeeTheme.colors.hint
 
     val backgroundColor by animateColorAsState(
@@ -50,7 +51,6 @@ fun PriorityBadge(
         targetValue = targetContentColor,
         animationSpec = tween(durationMillis = 100)
     )
-
     Card(
         modifier = modifier
             .height(28.dp)
@@ -94,7 +94,7 @@ fun PriorityBadge(
 }
 
 @Composable
-fun getPriorityResources(priority: Priority): PriorityResources {
+private fun getPriorityResources(priority: Priority): PriorityResources {
     return when (priority) {
         Priority.HIGH -> PriorityResources(
             iconResId = R.drawable.ic_priority_high,
@@ -118,7 +118,7 @@ fun getPriorityResources(priority: Priority): PriorityResources {
 
 @ThemePreviews
 @Composable
-fun PreviewPriorityBadgeHigh() {
+private fun PreviewPriorityBadgeHigh() {
     TudeeTheme {
         PriorityBadge(priority = Priority.HIGH, isSelected = true)
     }
@@ -126,7 +126,7 @@ fun PreviewPriorityBadgeHigh() {
 
 @ThemePreviews
 @Composable
-fun PreviewPriorityBadgeMedium() {
+private fun PreviewPriorityBadgeMedium() {
     TudeeTheme {
         PriorityBadge(priority = Priority.MEDIUM, isSelected = true)
     }
@@ -134,7 +134,7 @@ fun PreviewPriorityBadgeMedium() {
 
 @ThemePreviews
 @Composable
-fun PreviewPriorityBadgeLowSelected() {
+private fun PreviewPriorityBadgeLowSelected() {
     TudeeTheme {
         PriorityBadge(priority = Priority.LOW, isSelected = true)
     }
@@ -142,7 +142,7 @@ fun PreviewPriorityBadgeLowSelected() {
 
 @ThemePreviews
 @Composable
-fun PreviewPriorityBadgeLow() {
+private fun PreviewPriorityBadgeLow() {
     TudeeTheme {
         PriorityBadge(priority = Priority.LOW)
     }

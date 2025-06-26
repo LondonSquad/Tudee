@@ -5,16 +5,12 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.london.tudee.presentation.screens.category.CategoriesScreen
 
-fun NavGraphBuilder.categoriesRoute(navController: NavController){
-    composable<Screen.Categories>{
+fun NavGraphBuilder.categoriesRoute(navController: NavController) {
+    composable<Screen.Categories> {
         CategoriesScreen(
             onCategoryClick = { index ->
                 navController.navigateToCategoryDetailsScreen(index)
             },
         )
     }
-}
-
-fun NavController.navigateToCategoriesScreen(){
-    navigate(route = Screen.Categories)
 }

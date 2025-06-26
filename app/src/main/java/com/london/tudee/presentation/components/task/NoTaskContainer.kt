@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.components
+package com.london.tudee.presentation.components.task
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -50,7 +50,7 @@ fun EmptyTasksScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CircularContainer(modifier: Modifier = Modifier) {
+private fun CircularContainer(modifier: Modifier = Modifier) {
     Box(modifier = modifier, contentAlignment = Alignment.BottomEnd) {
 
         Box(
@@ -124,7 +124,7 @@ fun CircularContainer(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun MessageBox(modifier: Modifier = Modifier) {
+private fun MessageBox(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .padding(end = 127.dp)
@@ -171,7 +171,7 @@ fun MessageBox(modifier: Modifier = Modifier) {
 
 @Composable
 @ThemePreviews
-fun EmptyTasksScreenPreview() {
+private fun EmptyTasksScreenPreview() {
     TudeeTheme {
         EmptyTasksScreen()
     }

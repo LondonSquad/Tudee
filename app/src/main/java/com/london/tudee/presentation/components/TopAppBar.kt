@@ -28,9 +28,9 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun TopAppBar(
     title: String,
+    modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
     onClickAction: () -> Unit,
-    modifier: Modifier = Modifier,
     navigationIcon: @Composable (onBackClick: () -> Unit) -> Unit = {
         IconButton(
             onClick = it,

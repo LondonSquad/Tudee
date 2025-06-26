@@ -59,7 +59,6 @@ fun EditCategoryScreen(
     onEditSuccess: () -> Unit = {},
     onEditError: () -> Unit = {}
 ) {
-
     TudeeBottomSheetScreen(
         showBottomSheet = true,
         modifier = modifier,
@@ -94,14 +93,12 @@ private fun EditCategoryContent(
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val uiState by viewModel.uiState.collectAsState()
 
-
     LaunchedEffect(uiState.isEdited, uiState.errorMessage) {
         when {
             uiState.isEdited -> onEditSuccess()
             uiState.errorMessage != null -> onEditError()
         }
     }
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -125,34 +122,26 @@ private fun EditCategoryContent(
                 )
             )
         }
-
         Spacer(modifier = Modifier.height(12.dp))
-
         TudeeTextField(
             icon = R.drawable.add_category_icon,
             hint = R.string.category_name,
             value = categoryName,
             onValueChange = { categoryName = it },
         )
-
         Spacer(modifier = Modifier.height(12.dp))
-
         Text(
             text = stringResource(R.string.category_image),
             style = TudeeTheme.typography.titleMedium,
             color = TudeeTheme.colors.title
         )
-
         Spacer(modifier = Modifier.height(12.dp))
-
         ImagePickerEditCategory(
             currentImageUri = category.iconRes
         ) { uri ->
             imageUri = uri
         }
-
         Spacer(modifier = Modifier.height(36.dp))
-
         TudeePrimaryButton(
             onClick = {
                 val base64Image = imageUri?.let { uriToBase64(context, it) } ?: category.iconRes
@@ -170,10 +159,7 @@ private fun EditCategoryContent(
             text = stringResource(R.string.save),
             modifier = Modifier.fillMaxWidth()
         )
-
-
         Spacer(modifier = Modifier.height(12.dp))
-
         TudeeSecondaryButton(
             onClick = onDismiss,
             text = stringResource(R.string.cancel),
@@ -181,7 +167,6 @@ private fun EditCategoryContent(
         )
     }
 }
-
 
 @Composable
 private fun ImagePickerEditCategory(
@@ -192,10 +177,10 @@ private fun ImagePickerEditCategory(
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
-
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? -> imageUri = uri
+    ) { uri: Uri? ->
+        imageUri = uri
         onImagePicked(uri)
     }
 
@@ -248,7 +233,6 @@ private fun ImagePickerEditCategory(
                 }
             }
         }
-
         // Show edit button if image exists, otherwise show upload area
         val hasImage = imageUri != null || !currentImageUri.isNullOrBlank()
         if (hasImage) {

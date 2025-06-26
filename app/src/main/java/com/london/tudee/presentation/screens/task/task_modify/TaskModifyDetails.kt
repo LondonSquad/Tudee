@@ -52,6 +52,7 @@ fun TaskModifyDetails(
     onHideDatePicker: () -> Unit,
     categories: List<Category> = emptyList()
 ) {
+
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val maxHeight = screenHeight * 0.75f
 
@@ -79,7 +80,6 @@ fun TaskModifyDetails(
             )
         }
     }
-
     if (uiState.showDatePicker) {
         TudeeDatePicker(
             onDateSelected = { date ->
@@ -156,7 +156,6 @@ private fun TaskInputFields(
         onValueChange = onTitleValueChange
     )
     Spacer(modifier = Modifier.height(16.dp))
-
     TudeeTextField(
         multiLined = true,
         hint = R.string.description,

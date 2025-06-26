@@ -11,6 +11,15 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
+    @Insert
+    suspend fun insert(task: TaskDto)
+
+    @Update
+    suspend fun update(task: TaskDto)
+
+    @Delete
+    suspend fun delete(task: TaskDto)
+
     @Query("SELECT * FROM TASK_TABLE")
     fun getAll(): Flow<List<TaskDto>>
 
@@ -34,13 +43,4 @@ interface TaskDao {
 
     @Query("SELECT * FROM TASK_TABLE WHERE timeStamp BETWEEN :start AND :end AND taskStatus = :taskStatus")
     fun getTasksForDay(start: Long, end: Long, taskStatus: TaskStatus): Flow<List<TaskDto>>
-
-    @Insert
-    suspend fun insert(task: TaskDto)
-
-    @Update
-    suspend fun update(task: TaskDto)
-
-    @Delete
-    suspend fun delete(task: TaskDto)
 }
