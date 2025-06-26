@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.tasks
+package com.london.tudee.presentation.screens.task
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Task
+import com.london.tudee.presentation.components.EmptyTasksScreen
 import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.components.date.DateItem
@@ -53,7 +54,7 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.SwipeToDeleteTask
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.task.confirm_delete_task.ConfirmDeleteTaskScreen
+import com.london.tudee.presentation.screens.task.task_delete.TaskDeletingBottomSheet
 import com.london.tudee.presentation.utils.DateFormatter.toMonthShort
 import com.london.tudee.presentation.utils.DateFormatter.toYear
 import kotlinx.coroutines.delay
@@ -86,7 +87,7 @@ fun TasksScreen(
         onDayClick = { viewModel.onDaySelected(it) },
         onDeleteTask = { task -> viewModel.showDeleteDialog(task.id) }
     )
-    ConfirmDeleteTaskScreen(
+    TaskDeletingBottomSheet(
         viewModel = viewModel,
         onTaskDeleted = {
             showDeleteSheet = false

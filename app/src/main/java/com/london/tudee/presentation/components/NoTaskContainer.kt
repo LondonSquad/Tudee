@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.tasks
+package com.london.tudee.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -73,7 +73,7 @@ fun CircularContainer(modifier: Modifier = Modifier) {
 
         Image(
             painter = painterResource(R.drawable.empty_task_tudee),
-            contentDescription = "Empty Task",
+            contentDescription = stringResource(R.string.empty_task),
             modifier = Modifier
                 .size(width = 107.dp, height = 100.dp)
                 .padding(bottom = 3.dp)

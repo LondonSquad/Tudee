@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet
+package com.london.tudee.presentation.screens.task.task_modify
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -10,17 +10,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
-import com.london.tudee.presentation.base.AddOrEditInteractions
 import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScreen
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
+import com.london.tudee.presentation.screens.task.TaskModifyInteractions
 
 @Composable
-fun AddOrEditTaskBottomSheet(
+fun TaskModifyBottomSheet(
     modifier: Modifier = Modifier,
     screenContent: @Composable () -> Unit,
-    uiState: AddOrEditTaskUiState,
-    interactions: AddOrEditInteractions
+    uiState: TaskModifyUiState,
+    interactions: TaskModifyInteractions
 ) {
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -31,7 +31,7 @@ fun AddOrEditTaskBottomSheet(
             },
             screenContent = { screenContent() },
             bottomSheetContent = {
-                AddOrEditTaskDetails(
+                TaskModifyDetails(
                     modifier = modifier,
                     title = if (uiState.isEditMode) R.string.edit_task else R.string.add_new_task,
                     uiState = uiState,

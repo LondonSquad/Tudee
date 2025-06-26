@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.london.tudee.presentation.screens.tasks.TasksScreen
+import com.london.tudee.presentation.screens.task.TasksScreen
 
 fun NavGraphBuilder.tasksRoute(navController: NavController){
     composable<Screen.Tasks> { bacStackEntry ->

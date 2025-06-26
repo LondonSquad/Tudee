@@ -1,6 +1,5 @@
 package com.london.tudee.presentation.screens.home
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,7 +43,7 @@ import androidx.compose.ui.zIndex
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
-import com.london.tudee.presentation.base.HomeInteractions
+import com.london.tudee.presentation.components.EmptyTasksScreen
 import com.london.tudee.presentation.components.HomeTopBar
 import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.StatusCard
@@ -55,13 +54,11 @@ import com.london.tudee.presentation.components.date.DateBadgeStyleValues
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskBottomSheet
-import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskUiState
-import com.london.tudee.presentation.screens.task.taskdetails.TaskDetailsBottomSheet
-import com.london.tudee.presentation.screens.tasks.EmptyTasksScreen
+import com.london.tudee.presentation.screens.task.task_details.TaskDetailsBottomSheet
+import com.london.tudee.presentation.screens.task.task_modify.TaskModifyBottomSheet
+import com.london.tudee.presentation.screens.task.task_modify.TaskModifyUiState
 import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
-
 
 @Composable
 fun HomeScreen(
@@ -102,12 +99,11 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
     }
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreenContent(
     state: HomeUiState,
     viewmodel: HomeViewModel,
-    taskUiState: AddOrEditTaskUiState,
+    taskUiState: TaskModifyUiState,
     interactions: HomeInteractions,
     onArrowClicked: (Int) -> Unit
 ) {
@@ -194,10 +190,10 @@ fun HomeScreenContent(
             onEditClick = {
                 interactions.hideTaskDetailsBottomSheet()
                 val taskId = state.taskDetailBottomSheetUiState.task.id
-                interactions.initializeForEdit(taskId)
+                interactions.onEditTask(taskId)
             })
 
-        AddOrEditTaskBottomSheet(
+        TaskModifyBottomSheet(
             modifier = Modifier.zIndex(1f),
             screenContent = { },
             uiState = taskUiState,
@@ -252,7 +248,6 @@ private fun TopAPPBar(viewmodel: HomeViewModel, state: HomeUiState) {
         Row(
             modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically
         ) {
-            Log.d("HOMEBARSTATE", "${state.isDarkMode}")
             HomeTopBar(
                 isDarkMode = state.isDarkMode,
                 onThemeChanged = { viewmodel.onThemeSwitched(it) },
@@ -636,6 +631,56 @@ private fun DoneSection(
                 iconResId = categoryIcons[doneTasks[it].categoryId - 1]
             )
         }
+    }
+}
+
+@Composable
+fun getTaskStatus(
+    allTasks: Int, doneTasks: Int, inProgressTasks: Int, toDoTasks: Int
+): TaskStatusUiState {
+    when {
+        doneTasks == 0 && inProgressTasks == 0 && toDoTasks == 0 -> {
+            return TaskStatusUiState(
+                title = stringResource(R.string.Nothing_on_your_list),
+                subtitle = stringResource(R.string.Fill_your_day_with_something_awesome_),
+                emoji = R.drawable.bad_emoji,
+                tudeePicture = R.drawable.tudee_warning
+            )
+        }
+
+        inProgressTasks > doneTasks && inProgressTasks > toDoTasks -> {
+            return TaskStatusUiState(
+                title = stringResource(R.string.Stay_working),
+                subtitle = stringResource(R.string.task_progress, doneTasks, allTasks),
+                emoji = R.drawable.okay_status,
+                tudeePicture = R.drawable.tudee_warning
+            )
+        }
+
+        doneTasks > inProgressTasks && doneTasks > toDoTasks && doneTasks == allTasks -> {
+            return TaskStatusUiState(
+                title = stringResource(R.string.Tadaa),
+                subtitle = stringResource(R.string.encouragement_message),
+                emoji = R.drawable.good_emoji,
+                tudeePicture = R.drawable.tudee_motivation
+            )
+        }
+
+        doneTasks == 0 && inProgressTasks == 0 && toDoTasks == allTasks -> {
+            return TaskStatusUiState(
+                title = stringResource(R.string.Zero_progress),
+                subtitle = stringResource(R.string.blaming_message),
+                emoji = R.drawable.poor_emoji,
+                tudeePicture = R.drawable.tudee_complment
+            )
+        }
+
+        else -> return TaskStatusUiState(
+            title = "",
+            subtitle = "",
+            emoji = R.drawable.bad_emoji,
+            tudeePicture = R.drawable.tudee_warning
+        )
     }
 }
 

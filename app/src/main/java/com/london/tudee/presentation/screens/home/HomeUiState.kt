@@ -1,7 +1,7 @@
 package com.london.tudee.presentation.screens.home
 
 import com.london.tudee.domain.entities.Task
-import com.london.tudee.presentation.screens.task.taskdetails.TaskDetailsBottomSheetUiState
+import com.london.tudee.presentation.screens.task.task_details.TaskDetailsBottomSheetUiState
 
 data class HomeUiState(
     val isDarkMode: Boolean = false,

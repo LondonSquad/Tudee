@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.task.taskdetails
+package com.london.tudee.presentation.screens.task.task_details
 
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.Task

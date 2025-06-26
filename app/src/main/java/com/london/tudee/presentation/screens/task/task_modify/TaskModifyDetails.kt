@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet
+package com.london.tudee.presentation.screens.task.task_modify
 
 import android.annotation.SuppressLint
 import androidx.annotation.StringRes
@@ -28,24 +28,24 @@ import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
-import com.london.tudee.presentation.base.AddOrEditInteractions
 import com.london.tudee.presentation.components.CategoryItem
 import com.london.tudee.presentation.components.TudeeTextField
 import com.london.tudee.presentation.components.date.TudeeDatePicker
 import com.london.tudee.presentation.components.priority.PrioritySelector
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.task.TaskModifyInteractions
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
-fun AddOrEditTaskDetails(
+fun TaskModifyDetails(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
-    uiState: AddOrEditTaskUiState,
-    interactions: AddOrEditInteractions,
+    uiState: TaskModifyUiState,
+    interactions: TaskModifyInteractions,
     categories: List<Category> = emptyList()
 ) {
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
@@ -69,8 +69,8 @@ fun AddOrEditTaskDetails(
                 onTitleValueChange = { interactions.updateTitle(it) },
                 onDescriptionValueChange = { interactions.updateDescription(it) },
                 onDateFieldClick = { interactions.showDatePicker() },
-                onPrioritySelected = { interactions.updateSelectedPriority(it) },
-                onCategorySelected = { interactions.updateSelectedCategory(it) },
+                onPrioritySelected = { interactions.updatePriority(it) },
+                onCategorySelected = { interactions.updateCategory(it) },
                 modifier = modifier.fillMaxWidth()
             )
         }
@@ -79,7 +79,7 @@ fun AddOrEditTaskDetails(
     if (uiState.showDatePicker) {
         TudeeDatePicker(
             onDateSelected = { date ->
-                interactions.updateSelectedDate(date ?: System.currentTimeMillis())
+                interactions.updateDate(date ?: System.currentTimeMillis())
                 interactions.hideDatePicker()
             },
             onDismiss = {
@@ -93,7 +93,7 @@ fun AddOrEditTaskDetails(
 private fun TaskDetailsContent(
     modifier: Modifier,
     @StringRes title: Int,
-    uiState: AddOrEditTaskUiState,
+    uiState: TaskModifyUiState,
     categories: List<Category>,
     onTitleValueChange: (String) -> Unit,
     onDescriptionValueChange: (String) -> Unit,
@@ -278,90 +278,7 @@ private fun PreviewCategorySection() {
             var selectedCategory by remember { mutableStateOf<Category?>(null) }
 
             CategorySection(
-                categories = listOf(
-                    Category(
-                        id = 1,
-                        title = "Education",
-                        // arName = "التعليم",
-                        iconRes = "",
-                        isDefault = true,
-                        taskCount = 0,
-                        // tint = primaryColor
-                    ),
-                    Category(
-                        id = 2,
-                        title = "Shopping",
-                        // arName = "التسوق",
-                        iconRes = "",
-                        isDefault = true,
-                        taskCount = 0,
-                        // tint = secondaryColor
-                    ),
-                    Category(
-                        id = 3,
-                        title = "Medical",
-                        // arName = "طبي",
-                        iconRes = "",
-                        isDefault = true,
-                        taskCount = 0,
-                        // tint =primaryColor
-                    ),
-                    Category(
-                        id = 4,
-                        title = "Gym",
-                        // arName = "رياضة",
-                        iconRes = "",
-                        isDefault = false,
-                        taskCount = 0,
-                        //   tint = primaryColor
-                    ),
-                    Category(
-                        id = 5,
-                        title = "Entertainment",
-                        // arName = "ترفيه",
-                        iconRes = "",
-                        isDefault = false,
-                        taskCount = 0,
-                        //tint = primaryColor
-
-                    ),
-                    Category(
-                        id = 6,
-                        title = "Cooking",
-                        // arName = "طبخ",
-                        iconRes = "",
-                        isDefault = false,
-                        taskCount = 0,
-                        // tint = primaryColor
-                    ),
-                    Category(
-                        id = 7,
-                        title = "Family & Friends",
-                        // arName = "العائلة والأصدقاء",
-                        iconRes = "",
-                        isDefault = false,
-                        taskCount = 0,
-                        // tint = primaryColor
-                    ),
-                    Category(
-                        id = 8,
-                        title = "Traveling",
-                        // arName = "سفر",
-                        iconRes = "",
-                        isDefault = false,
-                        taskCount = 0,
-                        // tint = primaryColor
-                    ),
-                    Category(
-                        id = 9,
-                        title = "Agriculture",
-                        //arName = "زراعة",
-                        iconRes = "",
-                        isDefault = false,
-                        taskCount = 0,
-                        //   tint = primaryColor
-                    )
-                ),
+                categories = category,
                 selectedCategory = selectedCategory,
                 onCategorySelected = { selectedCategory = it }
             )

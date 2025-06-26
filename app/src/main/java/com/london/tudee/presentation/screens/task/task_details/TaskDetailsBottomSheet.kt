@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.task.taskdetails
+package com.london.tudee.presentation.screens.task.task_details
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
