@@ -14,7 +14,7 @@ fun NavGraphBuilder.categoryDetailsRoute(navController: NavController) {
         CategoryDetailsScreen(
             categoryId = categoryId,
             onBackClick = {
-                navController.popBackStack()
+                navController.navigateUp()
             }
         )
     }
