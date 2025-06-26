@@ -130,7 +130,7 @@ class CategoryDetailsViewModel(
             _uiState.value = _uiState.value.copy(isLoading = true)
             runCatching {
                 categoryService.edit(category)
-                _uiState.value = _uiState.value.copy(isLoading = false)
+                _uiState.value = _uiState.value.copy(isEdited = true, isLoading = false)
 
             }.onFailure {
                 _uiState.value = _uiState.value.copy(
