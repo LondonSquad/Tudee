@@ -48,8 +48,6 @@ fun TaskModifyDetails(
     @StringRes title: Int,
     uiState: TaskModifyUiState,
     interactions: TaskModifyInteractions,
-    onShowDatePicker: () -> Unit,
-    onHideDatePicker: () -> Unit,
     categories: List<Category> = emptyList()
 ) {
 
@@ -73,7 +71,7 @@ fun TaskModifyDetails(
                 categories = categories.ifEmpty { uiState.categories },
                 onTitleValueChange = { interactions.updateTitle(it) },
                 onDescriptionValueChange = { interactions.updateDescription(it) },
-                onDateFieldClick = { onShowDatePicker() },
+                onDateFieldClick = { interactions.showDatePicker() },
                 onPrioritySelected = { interactions.updatePriority(it) },
                 onCategorySelected = { interactions.updateCategory(it) },
                 modifier = modifier.fillMaxWidth()
@@ -84,10 +82,10 @@ fun TaskModifyDetails(
         TudeeDatePicker(
             onDateSelected = { date ->
                 interactions.updateDate(date ?: System.currentTimeMillis())
-                onHideDatePicker
+                interactions.hideDatePicker()
             },
             onDismiss = {
-                onHideDatePicker
+                interactions.hideDatePicker()
             }
         )
     }
