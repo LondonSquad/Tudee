@@ -280,6 +280,7 @@ class HomeViewModel(
     }
 
     override fun showBottomSheet() {
+        loadCategories()
         _taskUiState.update { it.copy(showBottomSheet = true) }
     }
 
