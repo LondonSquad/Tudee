@@ -19,6 +19,6 @@ abstract class TudeeDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
     abstract fun categoryDao(): CategoryDao
 }
-object DataBaseVersion {
+private object DataBaseVersion {
     const val VERSION_1 = 1
 }

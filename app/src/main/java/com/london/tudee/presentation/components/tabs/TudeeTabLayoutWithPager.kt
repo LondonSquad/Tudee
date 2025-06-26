@@ -83,7 +83,6 @@ fun TudeeTabLayoutWithPager(
 }
 
 
-/* Usage Example */
 @Composable
 fun TabLayoutScreen(modifier: Modifier = Modifier) {
     Column(

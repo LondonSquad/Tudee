@@ -37,5 +37,6 @@ data class TudeeColors(
     val onPrimaryCard : Color,
     val onPrimaryStroke : Color,
     val spotColor : Color = Color(0x0A000000),
-    val miniBlack : Color = Color(0xFF1F1F1F)
+    val miniBlack: Color = Color(0xFF1F1F1F),
+    val babyBlue: Color = Color(0xffC9D9FF)
 )

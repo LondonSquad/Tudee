@@ -30,8 +30,8 @@ import com.london.tudee.presentation.screens.home.NotificationSliderUiState
 @Composable
 fun NotificationSlider(
     note: String?,
-    modifier: Modifier = Modifier,
     notificationSliderUiState: NotificationSliderUiState,
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier

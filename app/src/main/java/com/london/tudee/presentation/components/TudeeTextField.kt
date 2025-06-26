@@ -38,8 +38,8 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun TudeeTextField(
-    @StringRes hint: Int,
     value: String,
+    @StringRes hint: Int,
     modifier: Modifier = Modifier,
     multiLined: Boolean = false,
     readOnly: Boolean = false,

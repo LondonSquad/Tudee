@@ -51,11 +51,11 @@ import kotlin.math.roundToInt
 @Composable
 fun TudeeBottomSheet(
     visible: Boolean,
-    content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
+    showActions: Boolean = true,
+    content: @Composable () -> Unit,
     onDismiss: () -> Unit = {},
-    actions: @Composable ColumnScope.() -> Unit = {},
-    showActions: Boolean = true
+    actions: @Composable ColumnScope.() -> Unit = {}
 ) {
     val containerHeight = LocalWindowInfo.current.containerSize.height
     val maxHeight = with(LocalDensity.current) { (containerHeight * 0.86f).toDp() }

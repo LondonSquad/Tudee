@@ -109,14 +109,14 @@ fun TudeeTab(
                             .background(color = TudeeTheme.colors.secondary)
                     )
                 }
-            ) { measurables, constraints ->
-                val rowMeasurable = measurables[0]
+            ) { measurable, constraints ->
+                val rowMeasurable = measurable[0]
                 val rowPlaceable = rowMeasurable.measure(
                     constraints.copy(minWidth = 0, maxWidth = constraints.maxWidth)
                 )
-                val spacerMeasurable = measurables[1]
+                val spacerMeasurable = measurable[1]
                 val spacerPlaceable = spacerMeasurable.measure(constraints)
-                val boxMeasurable = measurables[2]
+                val boxMeasurable = measurable[2]
                 val boxPlaceable = boxMeasurable.measure(
                     constraints.copy(minWidth = rowPlaceable.width, maxWidth = rowPlaceable.width)
                 )
