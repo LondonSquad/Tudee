@@ -32,8 +32,8 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun PriorityBadge(
-    modifier: Modifier = Modifier,
     priority: Priority,
+    modifier: Modifier = Modifier,
     isSelected: Boolean = false,
     onClick: (Priority) -> Unit = {}
 ) {

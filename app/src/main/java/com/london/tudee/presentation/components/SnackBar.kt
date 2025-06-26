@@ -33,9 +33,9 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun SnackBar(
+    iconPainter: Painter,
     modifier: Modifier = Modifier,
     @StringRes message: Int = R.string.successfully,
-    iconPainter: Painter,
     iconTint: Color = TudeeTheme.colors.greenAccent,
 ) {
     Box(
@@ -46,7 +46,7 @@ fun SnackBar(
             .shadow(
                 elevation = 4.dp,
                 shape = TudeeTheme.shapes.small,
-                ambientColor = Color(0x1F000000)
+                ambientColor = TudeeTheme.colors.miniBlack
             )
             .clip(TudeeTheme.shapes.small)
             .background(TudeeTheme.colors.surface)

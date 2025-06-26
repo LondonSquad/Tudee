@@ -34,6 +34,7 @@ val PrimaryGradientDark = listOf(Color(0xFF3090BF), Color(0xFF3A9CCD))
 val RectBorderColor = Color(0xFFCCCCCC)
 
 
+
 val OnPrimaryCardDark = Color(0x29060414)
 val OnPrimaryStrokeDark = Color(0x99242424)
 

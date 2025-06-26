@@ -15,7 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.london.tudee.domain.services.AppPreferencesService
-import com.london.tudee.presentation.components.bottom_navigation_bar.TudeeBottomNavigationBar
+import com.london.tudee.presentation.components.navigation_bar_bottom.TudeeBottomNavigationBar
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.navigation.Screen
 import com.london.tudee.presentation.navigation.tudeeNavGraph

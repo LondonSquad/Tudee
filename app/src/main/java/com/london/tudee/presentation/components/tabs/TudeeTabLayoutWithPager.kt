@@ -32,8 +32,8 @@ data class TabItem(
 fun TudeeTabLayout(
     tabs: List<TabItem>,
     selectedIndex: Int,
-    onTabSelected: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onTabSelected: (Int) -> Unit
 ) {
     Row(modifier = modifier) {
         tabs.forEachIndexed { index, tab ->

@@ -16,11 +16,11 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun TudeeTextButton(
-    onClick: () -> Unit,
     text: String,
     modifier: Modifier = Modifier,
     isDisabled: Boolean = false,
-    isLoading: Boolean = false
+    isLoading: Boolean = false,
+    onClick: () -> Unit
 ) {
 
     if (isDisabled.not()) {

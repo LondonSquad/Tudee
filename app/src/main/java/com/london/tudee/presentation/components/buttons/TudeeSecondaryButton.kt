@@ -25,12 +25,12 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun TudeeSecondaryButton(
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     text: String? = null,
     painter: Painter? = null,
     isEnabled: Boolean = true,
-    isLoading: Boolean = false
+    isLoading: Boolean = false,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier

@@ -18,9 +18,9 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun DateItem(
-    modifier: Modifier = Modifier,
     dayOfMonth: String,
     dayOfWeek: String,
+    modifier: Modifier = Modifier,
     isSelected: Boolean = false,
     onClick: () -> Unit
 ) {

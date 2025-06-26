@@ -29,9 +29,9 @@ import com.london.tudee.presentation.screens.home.TaskStatusUiState
 
 @Composable
 fun TaskStatusSlider(
+    note: String?,
     taskStatusUiState: TaskStatusUiState,
     modifier: Modifier = Modifier,
-    note: String?,
 ) {
     Box(
         modifier = modifier

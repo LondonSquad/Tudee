@@ -30,7 +30,7 @@ class AppPreferencesServiceImpl(
         else null
     }
 
-    override fun setOnboardingShown() {
+    override fun setOnBoardingShown() {
         preferences.edit { putBoolean(HAS_ONBOARDING_BEEN_SHOWN, true) }
     }
 

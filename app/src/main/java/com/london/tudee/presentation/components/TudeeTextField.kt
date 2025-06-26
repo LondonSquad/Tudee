@@ -38,14 +38,14 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun TudeeTextField(
-    modifier: Modifier = Modifier,
-    icon: Int? = null,
     @StringRes hint: Int,
-    multiLined: Boolean = false,
     value: String,
-    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    multiLined: Boolean = false,
     readOnly: Boolean = false,
+    icon: Int? = null,
     onClick: (() -> Unit)? = null,
+    onValueChange: (String) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     val interactionSource = remember { MutableInteractionSource() }

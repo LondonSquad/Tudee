@@ -89,7 +89,7 @@ fun OnboardingScreen(
                         }
                     }
                     TudeeFloatingActionButton(
-                        modifier = Modifier.offset(y = -30.dp),
+                        modifier = Modifier.offset(y = (-30).dp),
                         painter = painterResource(R.drawable.arrow_right_double),
                         contentDescription = "Add Note",
                         isEnabled = true,

@@ -30,8 +30,8 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun StatusCard(
     backgroundColor: Color,
-    @DrawableRes statusIcon: Int,
     tasksNumber: Int,
+    @DrawableRes statusIcon: Int,
     @StringRes taskStatusName: Int,
     modifier: Modifier = Modifier,
 ) {

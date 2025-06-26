@@ -28,10 +28,10 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun DateBadge(
-    modifier: Modifier = Modifier,
     dateText: String,
-    dateBadgeStyle: DateBadgeStyleValues,
-    isVisible: Boolean
+    isVisible: Boolean,
+    modifier: Modifier = Modifier,
+    dateBadgeStyle: DateBadgeStyleValues
 ) {
     if (!isVisible) return
     Card(

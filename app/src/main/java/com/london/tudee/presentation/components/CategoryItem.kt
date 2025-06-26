@@ -30,9 +30,9 @@ import com.london.tudee.presentation.utils.converterStringToBitmap
 
 @Composable
 fun CategoryItem(
-    modifier: Modifier = Modifier,
     iconRes: String,
     title: String,
+    modifier: Modifier = Modifier,
     taskCount: Int = 0,
     categoryId: Int = 0,
     inCategorySection: Boolean = false,

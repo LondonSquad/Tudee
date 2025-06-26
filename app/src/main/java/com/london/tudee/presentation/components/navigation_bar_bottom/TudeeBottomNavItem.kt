@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.components.bottom_navigation_bar
+package com.london.tudee.presentation.components.navigation_bar_bottom
 
 import androidx.annotation.DrawableRes
 import com.london.tudee.presentation.navigation.Screen

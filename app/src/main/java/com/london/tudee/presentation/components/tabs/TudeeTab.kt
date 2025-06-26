@@ -35,11 +35,11 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun TudeeTab(
-    @StringRes text: Int,
     number: Int,
+    @StringRes text: Int,
     isSelected: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 

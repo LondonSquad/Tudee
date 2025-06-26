@@ -21,11 +21,11 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun TudeeFloatingActionButton(
-    modifier: Modifier = Modifier,
     painter: Painter,
-    contentDescription: String,
-    onClick: () -> Unit = {},
     isEnabled: Boolean,
+    contentDescription: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
