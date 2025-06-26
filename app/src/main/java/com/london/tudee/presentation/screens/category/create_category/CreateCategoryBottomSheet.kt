@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
@@ -46,7 +47,6 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.utils.galleryImageToBitmap
 import com.london.tudee.presentation.utils.saveImageToInternalStorage
 import org.koin.compose.viewmodel.koinViewModel
-import java.io.ByteArrayOutputStream
 
 @Composable
 fun CreateCategoryScreen(
@@ -54,13 +54,13 @@ fun CreateCategoryScreen(
 ) {
     TudeeBottomSheetScreen(
         showBottomSheet = true,
-        modifier = modifier,
+        modifier = modifier.zIndex(2f),
         onDismiss = onDismiss,
         screenContent = {},
         bottomSheetActions = {},
         bottomSheetContent = {
             CreateCategoryContent(
-                modifier = modifier, onDismiss = onDismiss
+                modifier = Modifier, onDismiss = onDismiss
             )
         }
     )
