@@ -1,5 +1,6 @@
 package com.london.tudee.presentation.components.bottom_sheet
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDp
@@ -36,17 +37,6 @@ import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
-/**
- * A reusable component that provides a screen with bottom sheet functionality.
- * Handles overlay, click-outside-to-dismiss, and proper animations.
- *
- * @param showBottomSheet Whether the bottom sheet should be visible
- * @param onDismiss Callback when the bottom sheet should be dismissed (click outside or back gesture)
- * @param screenContent The main screen content that will be dimmed when bottom sheet is shown
- * @param bottomSheetContent The content inside the bottom sheet
- * @param bottomSheetActions The action buttons at the bottom of the sheet
- * @param modifier Modifier for the root container
- */
 @Composable
 fun TudeeBottomSheetScreen(
     showBottomSheet: Boolean,
@@ -72,6 +62,7 @@ fun TudeeBottomSheetScreen(
     }
 }
 
+@SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
 private fun TudeeBottomSheetContainer(
     showBottomSheet: Boolean,
@@ -312,6 +303,7 @@ private fun ScrollableBottomSheetScreenPreview() {
                     onClick = { showBottomSheet = false },
                     modifier = Modifier.fillMaxWidth()
                 )
-            })
+            }
+        )
     }
 }

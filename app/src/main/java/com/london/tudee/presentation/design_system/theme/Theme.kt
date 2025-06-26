@@ -25,15 +25,12 @@ object TudeeTheme {
 }
 
 object NoRippleTheme : RippleTheme {
-    @Composable override fun defaultColor() = Color.Transparent
-    @Composable override fun rippleAlpha() = RippleAlpha(0f, 0f, 0f, 0f)
+    @Composable
+    override fun defaultColor() = Color.Transparent
+    @Composable
+    override fun rippleAlpha() = RippleAlpha(0f, 0f, 0f, 0f)
 }
 
 val LocalTudeeColors = staticCompositionLocalOf { LightTudeeColors }
-
 val LocalTudeeTypography = staticCompositionLocalOf { TudeeTextStyle }
-
 val LocalTudeeShape = staticCompositionLocalOf { TudeeThemeShape }
-
-
-

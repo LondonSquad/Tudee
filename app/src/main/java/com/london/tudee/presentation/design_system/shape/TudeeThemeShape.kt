@@ -14,14 +14,9 @@ val TudeeThemeShape = TudeeShapes(
 
 object TudeeShapeDefaults {
     val ExtraSmall = RoundedCornerShape(12.dp)
-
     val Small = RoundedCornerShape(16.dp)
-
     val Medium = RoundedCornerShape(20.dp)
-
     val Large = RoundedCornerShape(24.dp)
-
     val ExtraLarge = RoundedCornerShape(28.dp)
-
     val Circle = RoundedCornerShape(100.dp)
 }
