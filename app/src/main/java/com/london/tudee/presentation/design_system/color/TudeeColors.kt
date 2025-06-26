@@ -34,8 +34,9 @@ data class TudeeColors(
     val skyNightBackground: Color = Color(0xff151535),
     val linearMoodColor: List<Color> = listOf(Color(0xffE9F0FF), Color(0xffE0E9FE)),
     val upperSmallCircleMoon: Color = Color(0xffE9EFFF),
-    val onPrimaryCard: Color,
-    val onPrimaryStroke: Color,
-    val spotColor: Color = Color(0x0A000000),
-    val miniBlack: Color = Color(0xFF1F1F1F)
+    val onPrimaryCard : Color,
+    val onPrimaryStroke : Color,
+    val spotColor : Color = Color(0x0A000000),
+    val miniBlack: Color = Color(0xFF1F1F1F),
+    val babyBlue: Color = Color(0xffC9D9FF)
 )

@@ -164,7 +164,6 @@ private fun TasksContent(
                 isEnabled = true,
                 modifier = Modifier
                     .zIndex(if (taskModifyUiState.showBottomSheet) 0f else 1f)
-                    .padding(bottom = 16.dp, end = 16.dp)
             )
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -441,8 +440,7 @@ private fun DaySelector(
 private fun TasksScreenPreview() {
     TudeeTheme {
         TasksScreen(
-            initialTabIndex = TODO(),
-            viewModel = TODO(),
+            initialTabIndex = 0,
         )
     }
 }
