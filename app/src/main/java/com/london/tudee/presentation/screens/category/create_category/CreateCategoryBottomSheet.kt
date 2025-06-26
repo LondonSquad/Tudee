@@ -44,6 +44,7 @@ import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.color.RectBorderColor
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
+import com.london.tudee.presentation.screens.category.CategoriesViewModel
 import com.london.tudee.presentation.utils.galleryImageToBitmap
 import com.london.tudee.presentation.utils.saveImageToInternalStorage
 import org.koin.compose.viewmodel.koinViewModel
@@ -70,7 +71,7 @@ fun CreateCategoryScreen(
 private fun CreateCategoryContent(
     modifier: Modifier,
     onDismiss: () -> Unit,
-    viewModel: CreateCategoryScreenViewModel = koinViewModel()
+    viewModel: CategoriesViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
     var categoryName by remember { mutableStateOf("") }
