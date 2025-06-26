@@ -122,4 +122,11 @@
     <string name="self_care">Self-care</string>
     <string name="event">Event</string>
     <string name="coding">Coding</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
+    <string name="sun">Sun</string>
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thu">Thu</string>
 </resources>

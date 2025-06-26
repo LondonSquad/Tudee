@@ -117,4 +117,11 @@
     <string name="self_care">العناية بالنفس</string>
     <string name="event">الفاعليات</string>
     <string name="coding">البرمجة</string>
+    <string name="fri">جمعة</string>
+    <string name="sat">سبت</string>
+    <string name="sun">احد</string>
+    <string name="mon">اثنين</string>
+    <string name="tue">ثلاث</string>
+    <string name="wed">اربع</string>
+    <string name="thu">خميس</string>
 </resources>
