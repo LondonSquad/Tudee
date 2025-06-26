@@ -1,6 +1,12 @@
 package com.london.tudee.data.services
 
 import com.london.tudee.data.local.roomdb.dao.CategoryDao
+import com.london.tudee.data.exception.AddCategoryException
+import com.london.tudee.data.exception.CategoryNotFoundException
+import com.london.tudee.data.exception.DeleteCategoryException
+import com.london.tudee.data.exception.EditCategoryException
+import com.london.tudee.data.exception.GetAllCategoriesException
+import com.london.tudee.data.exception.GetCategoryIconException
 import com.london.tudee.data.mappers.convertToCategory
 import com.london.tudee.data.mappers.convertToCategoryDto
 import com.london.tudee.domain.entities.Category
@@ -13,29 +19,53 @@ class CategoriesServicesImpl(
 ) : CategoryService {
 
     override suspend fun add(service: Category) {
-        val category = service.copy(id = 0)
-        return categoryDao.insert(category.convertToCategoryDto())
+        return try {
+            val category = service.copy(id = 0)
+            categoryDao.insert(category.convertToCategoryDto())
+        } catch (e: Exception) {
+            throw AddCategoryException()
+        }
     }
 
     override suspend fun edit(service: Category) {
-        return categoryDao.update(service.convertToCategoryDto())
+        return try {
+            categoryDao.update(service.convertToCategoryDto())
+        } catch (e: Exception) {
+            throw EditCategoryException()
+        }
     }
 
     override suspend fun delete(service: Category) {
-        return categoryDao.delete(service.convertToCategoryDto())
+        return try {
+            categoryDao.delete(service.convertToCategoryDto())
+        } catch (e: Exception) {
+            throw DeleteCategoryException()
+        }
     }
 
     override suspend fun getAll(): Flow<List<Category>> {
-        return categoryDao.getAll().map { categoryDtoList ->
-            categoryDtoList.map { categoryDto -> categoryDto.convertToCategory() }
+        return try {
+            categoryDao.getAll().map { categoryDtoList ->
+                categoryDtoList.map { categoryDto -> categoryDto.convertToCategory() }
+            }
+        } catch (e: Exception) {
+            throw GetAllCategoriesException()
         }
     }
 
     override suspend fun getById(id: Int): Category {
-        return categoryDao.getById(id).convertToCategory()
+        return try {
+            categoryDao.getById(id).convertToCategory()
+        } catch (e: Exception) {
+            throw CategoryNotFoundException()
+        }
     }
 
     override fun getIconResById(id: Int): String {
-        return categoryDao.getIconResById(id)
+        return try {
+            categoryDao.getIconResById(id)
+        } catch (e: Exception) {
+            throw GetCategoryIconException()
+        }
     }
 }
