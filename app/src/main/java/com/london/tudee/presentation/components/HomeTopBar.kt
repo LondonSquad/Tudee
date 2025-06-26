@@ -18,14 +18,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
+import com.london.tudee.presentation.components.buttons.ThemeSwitcher
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun HomeTopBar(
     isDarkMode: Boolean,
-    onThemeChanged: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onThemeChanged: (Boolean) -> Unit
 ) {
     Row(
         modifier = modifier
@@ -57,7 +58,7 @@ fun HomeTopBar(
                 color = TudeeTheme.colors.caption
             )
         }
-        ThemeSwitcher(isDarkMode ,onThemeChanged)
+        ThemeSwitcher(isDarkMode, onThemeChanged)
     }
 }
 
@@ -65,6 +66,6 @@ fun HomeTopBar(
 @Composable
 private fun HomeTopBarPreview() {
     TudeeTheme {
-        HomeTopBar(isDarkMode = false,onThemeChanged = {})
+        HomeTopBar(isDarkMode = false, onThemeChanged = {})
     }
 }

@@ -1,10 +1,10 @@
-package com.london.tudee.presentation.screens.tasks
+package com.london.tudee.presentation.screens.task
 
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Task
 import kotlinx.datetime.Clock
 
-data class FilterTasksUiState(
+data class TasksUiState(
     val isLoading: Boolean = true,
     val errMessage: String? = null,
     val categoryId: Int? = null,

@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.components.bottom_navigation_bar
+package com.london.tudee.presentation.components.navigation_bar_bottom
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -28,8 +28,8 @@ import com.london.tudee.presentation.navigation.tudeeNavGraph
 
 @Composable
 fun TudeeBottomNavigationBar(
-    modifier: Modifier = Modifier,
     navController: NavHostController,
+    modifier: Modifier = Modifier,
     items: List<TudeeBottomNavItem> = TudeeBottomNavItems.items,
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -94,10 +94,9 @@ fun TudeeBottomNavigationBar(
     }
 }
 
-
 @ThemePreviews
 @Composable
-fun PreviewTestScreen() {
+private fun PreviewTestScreen() {
     val navController = rememberNavController()
     TudeeTheme {
         Scaffold(

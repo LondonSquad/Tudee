@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.task.confirm_delete_task
+package com.london.tudee.presentation.screens.task.task_delete
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,12 +25,11 @@ import com.london.tudee.presentation.components.buttons.TudeeNegativeButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.tasks.TasksScreenViewModel
+import com.london.tudee.presentation.screens.task.TasksScreenViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
-
 @Composable
-fun ConfirmDeleteTaskScreen(
+fun TaskDeletingBottomSheet(
     viewModel: TasksScreenViewModel = koinViewModel(),
     onTaskDeleted: () -> Unit
 ) {
@@ -114,7 +113,7 @@ private fun ConfirmDeleteBottomSheetActions(
 
 @ThemePreviews
 @Composable
-fun ConfirmDeleteBottomSheetContentPreview() {
+private fun ConfirmDeleteBottomSheetContentPreview() {
     TudeeTheme {
         ConfirmDeleteBottomSheetContent()
     }
@@ -122,7 +121,7 @@ fun ConfirmDeleteBottomSheetContentPreview() {
 
 @ThemePreviews
 @Composable
-fun ConfirmDeleteBottomSheetActionsPreview() {
+private fun ConfirmDeleteBottomSheetActionsPreview() {
     TudeeTheme {
         ConfirmDeleteBottomSheetActions(
             onDelete = {},

@@ -37,72 +37,70 @@ fun OnboardingScreen(
     onClickForward: () -> Unit = {},
 ) {
     TudeeTheme {
-            Column(modifier.fillMaxSize()) {
-                Column(Modifier.fillMaxSize(),
-                   verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
+        Column(modifier.fillMaxSize()) {
+            Column(
+                Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp),
+                    painter = painterResource(id = image),
+                    contentDescription = null
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 32.dp)
+                        .fillMaxHeight(0.4f)
+                        .background(
+                            color = TudeeTheme.colors.onPrimaryCard,
+                            shape = RoundedCornerShape(32.dp)
+                        )
+                        .border(
+                            width = 1.dp,
+                            color = TudeeTheme.colors.onPrimaryStroke,
+                            shape = RoundedCornerShape(32.dp)
+                        ),
                 ) {
-
-                    Image(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 32.dp),
-                        painter = painterResource(id = image),
-                        contentDescription = null
-                    )
                     Box(
-                        modifier = Modifier
+                        Modifier
                             .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, top = 32.dp)
-                            .fillMaxHeight(0.4f)
-                            .background(
-                                color = TudeeTheme.colors.onPrimaryCard,
-                                shape = RoundedCornerShape(32.dp)
-                            )
-                            .border(
-                                width = 1.dp,
-                                color = TudeeTheme.colors.onPrimaryStroke,
-                                shape = RoundedCornerShape(32.dp)
-                            ),
+                            .height(120.dp)
+                            .padding(top = 24.dp, start = 16.dp)
                     ) {
-
-                        Box(
-                            Modifier
-                                .fillMaxWidth()
-                                .height(120.dp)
-                                .padding(top = 24.dp , start = 16.dp )
-                        ) {
-                            Text(
-                                text = stringResource(title),
-                                style = TudeeTextStyle.titleMedium,
-                                color = TudeeTheme.colors.title,
-                                modifier = Modifier.align(Alignment.TopCenter)
-                            )
-                            Text(
-                                stringResource(body),
-                                style = TudeeTextStyle.bodyMedium,
-                                color = TudeeTheme.colors.body,
-                                modifier = Modifier.align(Alignment.BottomEnd),
-                                textAlign = TextAlign.Center,
-
-                            )
-                        }
+                        Text(
+                            text = stringResource(title),
+                            style = TudeeTextStyle.titleMedium,
+                            color = TudeeTheme.colors.title,
+                            modifier = Modifier.align(Alignment.TopCenter)
+                        )
+                        Text(
+                            stringResource(body),
+                            style = TudeeTextStyle.bodyMedium,
+                            color = TudeeTheme.colors.body,
+                            modifier = Modifier.align(Alignment.BottomEnd),
+                            textAlign = TextAlign.Center,
+                        )
                     }
-                    TudeeFloatingActionButton(
-                        modifier = Modifier.offset(y = -30.dp),
-                        painter = painterResource(R.drawable.arrow_right_double),
-                        contentDescription = "Add Note",
-                        isEnabled = true,
-                        onClick = onClickForward
-                    )
                 }
+                TudeeFloatingActionButton(
+                    modifier = Modifier.offset(y = (-30).dp),
+                    painter = painterResource(R.drawable.arrow_right_double),
+                    contentDescription = "Add Note",
+                    isEnabled = true,
+                    onClick = onClickForward
+                )
+            }
         }
     }
 }
 
 @ThemePreviews
 @Composable
-fun PreviewOnboardingScreen() {
+private fun PreviewOnboardingScreen() {
     TudeeTheme {
         OnboardingScreen(
             title = R.string.on_bording_title_1,

@@ -24,14 +24,13 @@ class AppPreferencesServiceImpl(
     private fun getDefaultIsDarkModeValue(): Boolean? {
         return if (preferences.contains(DARK_MODE_ENABLED))
             preferences.getBoolean(
-                /* key = */ DARK_MODE_ENABLED,
-                /* defValue = */ false
+                DARK_MODE_ENABLED,
+                false
             )
-        else
-            null
+        else null
     }
 
-    override fun setOnboardingShown() {
+    override fun setOnBoardingShown() {
         preferences.edit { putBoolean(HAS_ONBOARDING_BEEN_SHOWN, true) }
     }
 
