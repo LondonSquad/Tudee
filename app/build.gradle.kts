@@ -77,6 +77,8 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     implementation(libs.remember.preference)
+
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }
 
 tasks.register("installGitHooks") {
