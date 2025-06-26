@@ -118,6 +118,7 @@ class TasksScreenViewModel(
     //endregion
 
     fun updateDateByAction(date: Long, arrowAction: ArrowActions) {
+
         val currentLocalDate = date.toLocalDate()
         val previouslySelectedDate = _uiState.value.date.toLocalDate()
 
@@ -130,7 +131,10 @@ class TasksScreenViewModel(
         val dayToSelect = if (arrowAction == ArrowActions.None) {
             previouslySelectedDate.dayOfMonth
         } else {
-            minOf(previouslySelectedDate.dayOfMonth, targetDate.lengthOfMonth(targetDate.toLongDate()))
+            minOf(
+                previouslySelectedDate.dayOfMonth,
+                targetDate.lengthOfMonth(targetDate.toLongDate())
+            )
         }
         val newSelectedDate = LocalDate(targetDate.year, targetDate.month, dayToSelect)
 

@@ -10,6 +10,3 @@ data class TudeeShapes(
     val extraLarge: CornerBasedShape,
     val circle: CornerBasedShape,
 )
-
-
-

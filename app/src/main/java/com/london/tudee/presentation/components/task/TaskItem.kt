@@ -37,7 +37,6 @@ import com.london.tudee.presentation.utils.DateFormatter.toFormattedDateString
 import com.london.tudee.presentation.utils.converterStringToBitmap
 import kotlinx.datetime.Instant
 
-
 @Composable
 fun TaskItem(
     modifier: Modifier = Modifier,
@@ -46,7 +45,6 @@ fun TaskItem(
     hasDate: Boolean,
     iconResId: String = ""
 ) {
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -70,7 +68,6 @@ fun TaskItem(
                 hasDate = hasDate
             )
         }
-
         TaskItemContent(
             title = task.title,
             description = task.description
@@ -164,7 +161,7 @@ private fun TaskItemContent(
 
 @ThemePreviews
 @Composable
-fun PreviewTaskItemHigh() {
+private fun PreviewTaskItemHigh() {
     TudeeTheme {
         TaskItem(
             task = Task(
@@ -183,7 +180,7 @@ fun PreviewTaskItemHigh() {
 
 @ThemePreviews
 @Composable
-fun PreviewTaskItemMedium() {
+private fun PreviewTaskItemMedium() {
     TudeeTheme {
         TaskItem(
             task = Task(
@@ -202,7 +199,7 @@ fun PreviewTaskItemMedium() {
 
 @ThemePreviews
 @Composable
-fun PreviewTaskItemLow() {
+private fun PreviewTaskItemLow() {
     TudeeTheme {
         TaskItem(
             task = Task(

@@ -1,6 +1,5 @@
 package com.london.tudee.presentation.components.tabs
 
-
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-
 
 @Composable
 fun TudeeTab(
@@ -109,14 +107,14 @@ fun TudeeTab(
                             .background(color = TudeeTheme.colors.secondary)
                     )
                 }
-            ) { measurables, constraints ->
-                val rowMeasurable = measurables[0]
+            ) { measurable, constraints ->
+                val rowMeasurable = measurable[0]
                 val rowPlaceable = rowMeasurable.measure(
                     constraints.copy(minWidth = 0, maxWidth = constraints.maxWidth)
                 )
-                val spacerMeasurable = measurables[1]
+                val spacerMeasurable = measurable[1]
                 val spacerPlaceable = spacerMeasurable.measure(constraints)
-                val boxMeasurable = measurables[2]
+                val boxMeasurable = measurable[2]
                 val boxPlaceable = boxMeasurable.measure(
                     constraints.copy(minWidth = rowPlaceable.width, maxWidth = rowPlaceable.width)
                 )
@@ -153,4 +151,3 @@ private fun TudeeTabPreview() {
         )
     }
 }
-

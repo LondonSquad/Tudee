@@ -12,9 +12,11 @@ class CategoriesServicesImpl(
     private val categoryDao: CategoryDao
 ) : CategoryService {
 
-    override suspend fun edit(service: Category) = categoryDao.update(service.convertToCategoryDto())
+    override suspend fun edit(service: Category) =
+        categoryDao.update(service.convertToCategoryDto())
 
-    override suspend fun delete(service: Category) = categoryDao.delete(service.convertToCategoryDto())
+    override suspend fun delete(service: Category) =
+        categoryDao.delete(service.convertToCategoryDto())
 
 
     override suspend fun getById(id: Int): Category = categoryDao.getById(id).convertToCategory()

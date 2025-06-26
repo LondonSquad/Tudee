@@ -1,8 +1,8 @@
 package com.london.tudee.presentation.screens.category.category_details
 
-import com.london.tudee.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
@@ -123,7 +123,7 @@ class CategoryDetailsViewModel(
                         )
                     )
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 _uiState.update {
                     it.copy(errMessage = "Category not found")
                 }
@@ -136,8 +136,6 @@ class CategoryDetailsViewModel(
     ) {
         viewModelScope.launch {
             _editState.value = _editState.value.copy(isLoading = true)
-
-
             try {
                 categoryService.edit(category)
                 _editState.value = _editState.value.copy(isLoading = false)

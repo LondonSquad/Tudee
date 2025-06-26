@@ -7,10 +7,10 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Base64
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.createBitmap
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import java.io.ByteArrayOutputStream
-import androidx.core.graphics.createBitmap
 
 fun convertDrawableToByteArray(context: Context, drawableResId: Int): String {
     val drawable = AppCompatResources.getDrawable(context, drawableResId)
