@@ -34,9 +34,7 @@ import com.london.tudee.presentation.components.priority.PriorityBadge
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.utils.DateFormatter.toFormattedDateString
-import com.london.tudee.presentation.utils.converterStringToBitmap
 import kotlinx.datetime.Instant
-
 
 @Composable
 fun TaskItem(
@@ -44,9 +42,8 @@ fun TaskItem(
     isSelected: Boolean = false,
     task: Task,
     hasDate: Boolean,
-    iconResId: String = ""
+    iconResId: String
 ) {
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -70,7 +67,6 @@ fun TaskItem(
                 hasDate = hasDate
             )
         }
-
         TaskItemContent(
             title = task.title,
             description = task.description
@@ -84,7 +80,7 @@ private fun TaskItemIconSection(iconResId: String) {
         modifier = Modifier.size(56.dp), contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = rememberAsyncImagePainter(converterStringToBitmap(iconResId)),
+            painter = rememberAsyncImagePainter(iconResId),
             contentDescription = "Category Icon",
         )
     }
@@ -164,7 +160,7 @@ private fun TaskItemContent(
 
 @ThemePreviews
 @Composable
-fun PreviewTaskItemHigh() {
+private fun PreviewTaskItemHigh() {
     TudeeTheme {
         TaskItem(
             task = Task(
@@ -176,14 +172,15 @@ fun PreviewTaskItemHigh() {
                 timeStamp = Instant.parse("2023-09-20T00:00:00Z"),
                 taskStatus = TaskStatus.TODO
             ),
-            hasDate = true
+            hasDate = true,
+            iconResId = ""
         )
     }
 }
 
 @ThemePreviews
 @Composable
-fun PreviewTaskItemMedium() {
+private fun PreviewTaskItemMedium() {
     TudeeTheme {
         TaskItem(
             task = Task(
@@ -195,14 +192,15 @@ fun PreviewTaskItemMedium() {
                 timeStamp = Instant.parse("2023-09-20T00:00:00Z"),
                 taskStatus = TaskStatus.TODO
             ),
-            hasDate = true
+            hasDate = true,
+            iconResId = ""
         )
     }
 }
 
 @ThemePreviews
 @Composable
-fun PreviewTaskItemLow() {
+private fun PreviewTaskItemLow() {
     TudeeTheme {
         TaskItem(
             task = Task(
@@ -214,7 +212,8 @@ fun PreviewTaskItemLow() {
                 timeStamp = Instant.parse("2023-09-20T00:00:00Z"),
                 taskStatus = TaskStatus.TODO
             ),
-            hasDate = false
+            hasDate = false,
+            iconResId = ""
         )
     }
 }

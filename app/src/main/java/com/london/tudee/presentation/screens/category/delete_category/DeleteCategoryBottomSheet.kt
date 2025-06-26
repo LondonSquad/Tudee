@@ -54,7 +54,7 @@ fun DeleteCategoryScreen(
 }
 
 @Composable
-fun DeleteCategoryContent(
+private fun DeleteCategoryContent(
     category: Category,
     modifier: Modifier = Modifier,
     onCancel: () -> Unit,
@@ -70,7 +70,6 @@ fun DeleteCategoryContent(
             uiState.errorMessage != null -> onDeleteError()
         }
     }
-
     Column(
         modifier = modifier
             .fillMaxSize(),
@@ -81,18 +80,14 @@ fun DeleteCategoryContent(
             color = TudeeTheme.colors.title,
             modifier = Modifier.align(Alignment.Start)
         )
-
         Spacer(modifier = Modifier.height(12.dp))
-
         Text(
             text = stringResource(R.string.delete_task_message),
             style = TudeeTheme.typography.bodyMedium,
             color = TudeeTheme.colors.body,
             modifier = Modifier.align(Alignment.Start)
         )
-
         Spacer(modifier = Modifier.height(12.dp))
-
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             Image(
                 painter = painterResource(R.drawable.tudee_delete),
@@ -100,9 +95,7 @@ fun DeleteCategoryContent(
                 modifier = Modifier.size(width = 107.dp, height = 100.dp)
             )
         }
-
         Spacer(modifier = Modifier.height(36.dp))
-
         TudeeNegativeButton(
             text = stringResource(R.string.delete),
             onClick = {
@@ -119,7 +112,6 @@ fun DeleteCategoryContent(
             onClick = onCancel,
             modifier = Modifier.fillMaxWidth()
         )
-
     }
 }
 
@@ -134,7 +126,7 @@ private fun DeleteCategoryScreenPreview() {
                 title = "Work",
                 iconRes = "",
                 isDefault = true,
-                taskCount =0,
+                taskCount = 0,
             ),
             onDismiss = {},
             onCategoryDeleted = {}

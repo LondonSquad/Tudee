@@ -6,10 +6,10 @@ import com.london.tudee.domain.entities.Category
 fun CategoryDto.convertToCategory(): Category {
     return Category(
         id = this.id,
-        title = this.name,
-        //arName = this.arName,
-        isDefault = this.isDefault,
+        title = this.title,
+        titleRes = this.titleRes,
         iconRes = this.iconRes,
+        isDefault = this.isDefault,
         taskCount = this.taskCount,
     )
 }
@@ -17,8 +17,8 @@ fun CategoryDto.convertToCategory(): Category {
 fun Category.convertToCategoryDto(): CategoryDto {
     return CategoryDto(
         id = this.id,
-        name = this.title,
-        //arName = this.arName,
+        title = this.title,
+        titleRes = this.titleRes,
         isDefault = this.isDefault,
         iconRes = this.iconRes,
         taskCount = this.taskCount,

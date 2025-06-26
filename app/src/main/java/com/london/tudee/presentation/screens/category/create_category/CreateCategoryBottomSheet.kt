@@ -151,19 +151,14 @@ private fun CreateCategoryContent(
                         isDefault = false,
                         taskCount = 0
                     )
-
                 )
-
                 onDismiss()
-
             },
             isDisabled = categoryName.isBlank() || imageUri == null,
             text = stringResource(R.string.add),
             modifier = Modifier.fillMaxWidth()
         )
-
         Spacer(modifier = Modifier.height(12.dp))
-
         TudeeSecondaryButton(
             onClick = onDismiss,
             text = stringResource(R.string.cancel),
@@ -176,9 +171,7 @@ private fun CreateCategoryContent(
 private fun ImagePickerAddCategory(
     modifier: Modifier = Modifier, onImagePicked: (Uri?) -> Unit
 ) {
-
     var imageUri by remember { mutableStateOf<Uri?>(null) }
-
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -186,7 +179,6 @@ private fun ImagePickerAddCategory(
         imageUri = uri
         onImagePicked(uri)
     }
-
 
     Box(
         modifier = modifier
@@ -257,9 +249,7 @@ private fun ImagePickerAddCategory(
                 )
             }
         }
-
     }
-
 }
 
 @ThemePreviews

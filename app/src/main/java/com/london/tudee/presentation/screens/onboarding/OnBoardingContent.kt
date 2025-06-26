@@ -9,11 +9,13 @@ val OnBoardingContent = listOf(
         title = R.string.on_bording_title_1,
         body = R.string.on_bording_body_1,
         image = R.drawable.on_boarding1,
-    ), OnboardingPage(
+    ),
+    OnboardingPage(
         title = R.string.on_bording_title_2,
         body = R.string.on_bording_body_2,
         image = R.drawable.on_boarding2
-    ), OnboardingPage(
+    ),
+    OnboardingPage(
         title = R.string.on_bording_title_3,
         body = R.string.on_bording_body_3,
         image = R.drawable.on_boarding3,

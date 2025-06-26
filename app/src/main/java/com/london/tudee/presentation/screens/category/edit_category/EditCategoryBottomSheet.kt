@@ -32,7 +32,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -46,8 +45,6 @@ import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.color.RectBorderColor
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.utils.base64ToBitmap
-import com.london.tudee.presentation.utils.uriToBase64
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -89,7 +86,6 @@ private fun EditCategoryContent(
     onEditError: () -> Unit = {},
     viewModel: EditCategoryScreenViewModel = koinViewModel(),
 ) {
-    val context = LocalContext.current
     var categoryName by remember { mutableStateOf(category.title) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val uiState by viewModel.uiState.collectAsState()
@@ -131,7 +127,7 @@ private fun EditCategoryContent(
         TudeeTextField(
             icon = R.drawable.add_category_icon,
             hint = R.string.category_name,
-            value = categoryName,
+            value = categoryName ?: "",
             onValueChange = { categoryName = it },
         )
 
@@ -155,12 +151,11 @@ private fun EditCategoryContent(
 
         TudeePrimaryButton(
             onClick = {
-                val base64Image = imageUri?.let { uriToBase64(context, it) } ?: category.iconRes
                 viewModel.editCategory(
                     category = Category(
                         id = category.id,
                         title = categoryName,
-                        iconRes = base64Image,
+                        iconRes = imageUri.toString(),
                         isDefault = category.isDefault,
                         taskCount = category.taskCount
                     )
@@ -195,7 +190,8 @@ private fun ImagePickerEditCategory(
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? -> imageUri = uri
+    ) { uri: Uri? ->
+        imageUri = uri
         onImagePicked(uri)
     }
 
@@ -233,64 +229,60 @@ private fun ImagePickerEditCategory(
                 }
 
                 !currentImageUri.isNullOrBlank() -> {
-                    // Show existing Base64 image
-                    val bitmap = base64ToBitmap(currentImageUri)
-                    if (bitmap != null) {
-                        Image(
-                            painter = rememberAsyncImagePainter(bitmap),
-                            contentDescription = "Current Image",
-                            modifier = Modifier
-                                .matchParentSize()
-                                .clip(TudeeTheme.shapes.extraSmall),
-                            contentScale = ContentScale.Crop
-                        )
-                    }
+                    Image(
+                        painter = rememberAsyncImagePainter(currentImageUri),
+                        contentDescription = "Current Image",
+                        modifier = Modifier
+                            .matchParentSize()
+                            .clip(TudeeTheme.shapes.extraSmall),
+                        contentScale = ContentScale.Crop
+                    )
                 }
             }
         }
+    }
 
-        // Show edit button if image exists, otherwise show upload area
-        val hasImage = imageUri != null || !currentImageUri.isNullOrBlank()
-        if (hasImage) {
-            Box(
-                modifier = Modifier
-                    .size(34.dp)
-                    .clip(shape = TudeeTheme.shapes.extraSmall)
-                    .background(TudeeTheme.colors.surfaceHigh)
-                    .clickable {
-                        imagePickerLauncher.launch("image/*")
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.pencil_edit_01),
-                    contentDescription = "Edit Image",
-                    tint = TudeeTheme.colors.secondary,
-                    modifier = Modifier.padding(6.dp)
-                )
-            }
-        } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable {
-                        imagePickerLauncher.launch("image/*")
-                    },
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_add_image),
-                    contentDescription = "Add Image",
-                    tint = TudeeTheme.colors.hint,
-                )
-                Text(
-                    text = stringResource(R.string.upload),
-                    style = TudeeTheme.typography.labelMedium,
-                    color = TudeeTheme.colors.hint,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-            }
+    // Show edit button if image exists, otherwise show upload area
+    val hasImage = imageUri != null || !currentImageUri.isNullOrBlank()
+    if (hasImage) {
+        Box(
+            modifier = Modifier
+                .size(34.dp)
+                .clip(shape = TudeeTheme.shapes.extraSmall)
+                .background(TudeeTheme.colors.surfaceHigh)
+                .clickable {
+                    imagePickerLauncher.launch("image/*")
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.pencil_edit_01),
+                contentDescription = "Edit Image",
+                tint = TudeeTheme.colors.secondary,
+                modifier = Modifier.padding(6.dp)
+            )
+        }
+    } else {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable {
+                    imagePickerLauncher.launch("image/*")
+                },
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_add_image),
+                contentDescription = "Add Image",
+                tint = TudeeTheme.colors.hint,
+            )
+            Text(
+                text = stringResource(R.string.upload),
+                style = TudeeTheme.typography.labelMedium,
+                color = TudeeTheme.colors.hint,
+                modifier = Modifier.padding(top = 4.dp)
+            )
         }
     }
 }

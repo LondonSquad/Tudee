@@ -10,9 +10,8 @@ import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.AppPreferencesService
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
-import com.london.tudee.presentation.base.HomeInteractions
-import com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet.AddOrEditTaskUiState
-import com.london.tudee.presentation.screens.task.taskdetails.TaskDetailsBottomSheetUiState
+import com.london.tudee.presentation.screens.task.task_details.TaskDetailsBottomSheetUiState
+import com.london.tudee.presentation.screens.task.task_modify.TaskModifyUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,7 +32,7 @@ class HomeViewModel(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val _taskUiState = MutableStateFlow(AddOrEditTaskUiState())
+    private val _taskUiState = MutableStateFlow(TaskModifyUiState())
     val taskUiState = _taskUiState.asStateFlow()
 
     init {
@@ -213,7 +212,7 @@ class HomeViewModel(
         }
     }
 
-    override fun initializeForEdit(taskId: Int) {
+    override fun onEditTask(taskId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             _taskUiState.update { it.copy(isLoading = true) }
 
@@ -236,7 +235,6 @@ class HomeViewModel(
                     )
                 }
                 validateForm()
-
             }.onFailure {
                 _taskUiState.update {
                     it.copy(
@@ -249,7 +247,6 @@ class HomeViewModel(
         }
     }
 
-
     override fun updateTitle(title: String) {
         _taskUiState.update { it.copy(title = title) }
         validateForm()
@@ -259,17 +256,17 @@ class HomeViewModel(
         _taskUiState.update { it.copy(description = description) }
     }
 
-    override fun updateSelectedDate(date: Long) {
+    override fun updateDate(date: Long) {
         _taskUiState.update { it.copy(selectedDate = date) }
         validateForm()
     }
 
-    override fun updateSelectedPriority(priority: Priority) {
+    override fun updatePriority(priority: Priority) {
         _taskUiState.update { it.copy(selectedPriority = priority) }
         validateForm()
     }
 
-    override fun updateSelectedCategory(category: Category) {
+    override fun updateCategory(category: Category) {
         _taskUiState.update { it.copy(selectedCategory = category) }
         validateForm()
     }
@@ -283,6 +280,7 @@ class HomeViewModel(
     }
 
     override fun showBottomSheet() {
+        loadCategories()
         _taskUiState.update { it.copy(showBottomSheet = true) }
     }
 
@@ -292,7 +290,6 @@ class HomeViewModel(
                 showBottomSheet = false,
             )
         }
-
         viewModelScope.launch {
             delay(500)
             _taskUiState.update {
@@ -351,7 +348,6 @@ class HomeViewModel(
                             ?: Clock.System.now()
                     )
                 }
-
                 if (currentState.isEditMode) {
                     taskService.edit(task)
                 } else {
@@ -360,7 +356,6 @@ class HomeViewModel(
                     }
                     taskService.add(task)
                 }
-
                 _taskUiState.update {
                     it.copy(
                         isLoading = false,
@@ -369,7 +364,6 @@ class HomeViewModel(
                         showBottomSheet = false
                     )
                 }
-
             }.onFailure {
                 _taskUiState.update {
                     it.copy(
@@ -380,7 +374,6 @@ class HomeViewModel(
             }
         }
     }
-
 
     override fun validateForm() {
         _taskUiState.update { currentState ->

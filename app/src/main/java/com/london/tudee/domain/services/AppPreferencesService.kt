@@ -5,6 +5,6 @@ import androidx.compose.runtime.MutableState
 interface AppPreferencesService {
     val hasOnboardingBeenShown: Boolean
     val isDarkModeEnabled: MutableState<Boolean?>
-    fun setOnboardingShown()
+    fun setOnBoardingShown()
     fun setDarkModeEnabled(isEnabled: Boolean)
 }

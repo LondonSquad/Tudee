@@ -11,8 +11,8 @@ import com.london.tudee.presentation.design_system.theme.ThemePreviews
 
 @Composable
 fun PrioritySelector(
-    modifier: Modifier = Modifier,
     selectedPriority: Priority,
+    modifier: Modifier = Modifier,
     onPrioritySelected: (Priority) -> Unit
 ) {
     Row(
@@ -31,7 +31,7 @@ fun PrioritySelector(
 
 @ThemePreviews
 @Composable
-fun PrioritySelectorPreview() {
+private fun PrioritySelectorPreview() {
     PrioritySelector(
         selectedPriority = Priority.MEDIUM,
         onPrioritySelected = {}

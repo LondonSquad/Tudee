@@ -30,8 +30,8 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun StatusCard(
     backgroundColor: Color,
-    @DrawableRes statusIcon: Int,
     tasksNumber: Int,
+    @DrawableRes statusIcon: Int,
     @StringRes taskStatusName: Int,
     modifier: Modifier = Modifier,
 ) {
@@ -70,7 +70,6 @@ fun StatusCard(
                     )
                     .padding(8.dp)
             )
-
             Column {
                 Text(
                     text = "$tasksNumber",
@@ -78,7 +77,6 @@ fun StatusCard(
                     style = TudeeTheme.typography.headlineMedium,
                     modifier = Modifier.height(28.dp)
                 )
-
                 Text(
                     text = stringResource(taskStatusName),
                     style = TudeeTheme.typography.labelSmall,
@@ -87,7 +85,6 @@ fun StatusCard(
                 )
             }
         }
-
         Image(
             painter = painterResource(R.drawable.overview_stat_icon_container),
             contentDescription = stringResource(R.string.Circle),
@@ -100,7 +97,7 @@ fun StatusCard(
 
 @ThemePreviews
 @Composable
-fun PreviewGreenStatusCard() {
+private fun PreviewGreenStatusCard() {
     TudeeTheme {
         StatusCard(
             backgroundColor = TudeeTheme.colors.greenAccent,
@@ -113,7 +110,7 @@ fun PreviewGreenStatusCard() {
 
 @ThemePreviews
 @Composable
-fun PreviewYellowStatusCard() {
+private fun PreviewYellowStatusCard() {
     TudeeTheme {
         StatusCard(
             backgroundColor = TudeeTheme.colors.yellowAccent,
@@ -126,7 +123,7 @@ fun PreviewYellowStatusCard() {
 
 @ThemePreviews
 @Composable
-fun PreviewStatusCard() {
+private fun PreviewStatusCard() {
     TudeeTheme {
         StatusCard(
             backgroundColor = TudeeTheme.colors.purpleAccent,
