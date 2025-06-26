@@ -109,7 +109,7 @@ class CategoryDetailsViewModel(
 
     override fun getCategoryNameById(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
+            runCatching {
                 val category = categoryService.getById(categoryId)
 
                 _uiState.update {
@@ -123,7 +123,7 @@ class CategoryDetailsViewModel(
                         )
                     )
                 }
-            } catch (_: Exception) {
+            }.onFailure {
                 _uiState.update {
                     it.copy(errMessage = "Category not found")
                 }
@@ -136,14 +136,14 @@ class CategoryDetailsViewModel(
     ) {
         viewModelScope.launch {
             _editState.value = _editState.value.copy(isLoading = true)
-            try {
+            runCatching{
                 categoryService.edit(category)
                 _editState.value = _editState.value.copy(isLoading = false)
 
-            } catch (e: Exception) {
+            }.onFailure{
                 _editState.value = _editState.value.copy(
                     isLoading = false,
-                    errorMessage = e.message
+                    errorMessage = it.message
                 )
             }
         }
@@ -152,13 +152,13 @@ class CategoryDetailsViewModel(
     override fun deleteCategory(category: Category) {
         viewModelScope.launch {
             _deleteState.value = _deleteState.value.copy(isLoading = true)
-            try {
+            runCatching{
                 categoryService.delete(category)
                 _deleteState.value = _deleteState.value.copy(isDeleted = true, isLoading = false)
-            } catch (e: Exception) {
+            }.onFailure {
                 _deleteState.value = _deleteState.value.copy(
                     isLoading = false,
-                    errorMessage = e.message
+                    errorMessage = it.message
                 )
             }
         }

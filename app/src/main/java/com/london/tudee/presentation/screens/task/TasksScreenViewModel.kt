@@ -41,7 +41,6 @@ class TasksScreenViewModel(
         initializeInProgressTasks()
     }
 
-    //region get tasks
     fun initializeDoneTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             val targetDate = _uiState.value.date.toLocalDate()
@@ -115,7 +114,6 @@ class TasksScreenViewModel(
             }
         }
     }
-    //endregion
 
     fun updateDateByAction(date: Long, arrowAction: ArrowActions) {
 
@@ -184,7 +182,7 @@ class TasksScreenViewModel(
 
         updateDateByAction(date = datePickerDate, arrowAction = ArrowActions.None)
 
-        val updatedDays = _uiState.value.days.mapIndexed { index, day ->
+        val updatedDays = _uiState.value.days.map { day ->
             val dayOfMonth = day.dayOfMonth.toInt()
             val dayLocalDate = LocalDate(targetLocalDate.year, targetLocalDate.month, dayOfMonth)
             day.copy(
@@ -204,7 +202,7 @@ class TasksScreenViewModel(
         initializeToDoTasks()
     }
 
-    //region delete task
+
     fun showDeleteDialog(taskId: Int?) {
         _uiState.update {
             it.copy(selectedTaskId = taskId, isDeleteDialogVisible = true)
@@ -224,7 +222,7 @@ class TasksScreenViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val selectedTaskId = uiState.value.selectedTaskId
             if (selectedTaskId != null) {
-                try {
+                runCatching {
                     val task = taskService.getById(selectedTaskId)
                     taskService.delete(task)
                     onSuccess()
@@ -233,9 +231,9 @@ class TasksScreenViewModel(
                     initializeInProgressTasks()
                     initializeToDoTasks()
 
-                } catch (e: Exception) {
+                }.onFailure {
                     withContext(Dispatchers.Main) {
-                        onError(e)
+                        onError(it)
                     }
                 }
             } else {
@@ -246,9 +244,9 @@ class TasksScreenViewModel(
         }
     }
 
-    fun loadCategories() {
+    private fun loadCategories() {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
+            runCatching {
                 categoryService.getAll().collect { categories ->
                     _uiState.update { currentState ->
                         currentState.copy(
@@ -257,12 +255,11 @@ class TasksScreenViewModel(
                         )
                     }
                 }
-            } catch (e: Exception) {
+            }.onFailure { throwable ->
                 _uiState.update {
-                    it.copy(errMessage = e.message)
+                    it.copy(errMessage = throwable.message)
                 }
             }
         }
     }
-    //endregion
 }
