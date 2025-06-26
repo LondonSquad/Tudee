@@ -4,8 +4,8 @@ import com.london.tudee.data.local.roomdb.dto.TaskDto
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
+import  kotlin.test.assertEquals
 import kotlinx.datetime.Instant
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class TaskMapperTest {
@@ -14,7 +14,7 @@ class TaskMapperTest {
         //Given & When
         val result = testTaskDto().convertToTask()
         //Then
-        Assertions.assertEquals(result, testTask())
+        assertEquals(result, testTask())
     }
 
     @Test
@@ -22,7 +22,7 @@ class TaskMapperTest {
         //Given & When
         val result = testTask().convertToTaskDto()
         //Then
-        Assertions.assertEquals(result, testTaskDto())
+        assertEquals(result, testTaskDto())
     }
 
     private fun testTask() = Task(

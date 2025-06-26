@@ -2,8 +2,8 @@ package com.london.tudee.data.mappers
 
 import com.london.tudee.data.local.roomdb.dto.CategoryDto
 import com.london.tudee.domain.entities.Category
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 class CategoryMappersTest {
     @Test
@@ -11,7 +11,7 @@ class CategoryMappersTest {
         //Given & When
         val result = testCategoryDto().convertToCategory()
         //Then
-        Assertions.assertEquals(result, testCategory())
+       assertEquals(result, testCategory())
     }
 
     @Test
@@ -19,7 +19,7 @@ class CategoryMappersTest {
         //Given & When
         val result = testCategory().convertToCategoryDto()
         //Then
-        Assertions.assertEquals(result, testCategoryDto())
+        assertEquals(result, testCategoryDto())
     }
 
     private fun testCategoryDto() = CategoryDto(
