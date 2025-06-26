@@ -38,6 +38,7 @@ fun TudeeTextButton(
                 text = text,
                 style = TudeeTheme.typography.labelLarge,
                 color = TudeeTheme.colors.primary,
+                modifier = Modifier.padding(horizontal = 4.dp)
             )
             if (isLoading) {
                 LoadingLottieAnimation(

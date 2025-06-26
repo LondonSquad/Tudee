@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -97,23 +98,20 @@ fun TasksScreen(
         interactions = viewModel,
     )
     TaskDeletingBottomSheet(
-        viewModel = viewModel,
-        onTaskDeleted = {
+        viewModel = viewModel, onTaskDeleted = {
             showDeleteSheet = false
             showDeleteSnackBar = true
             viewModel.initializeDoneTasks()
             viewModel.initializeToDoTasks()
             viewModel.initializeInProgressTasks()
-        }
-    )
+        })
     AnimatedVisibility(
         visible = showDeleteSnackBar,
         enter = fadeIn() + slideInVertically(initialOffsetY = { -100 }),
         exit = fadeOut() + slideOutVertically(targetOffsetY = { -100 })
     ) {
         SnackBar(
-            modifier = Modifier
-                .padding(top = 16.dp),
+            modifier = Modifier.padding(top = 16.dp),
             message = R.string.delete_task_success,
             iconPainter = painterResource(id = R.drawable.snack_bar_container),
             iconTint = TudeeTheme.colors.greenAccent
@@ -154,8 +152,7 @@ private fun TasksContent(
         containerColor = TudeeTheme.colors.surface,
         topBar = {
             TasksTopBar(
-                modifier = Modifier
-                    .background(color = TudeeTheme.colors.surfaceHigh)
+                modifier = Modifier.background(color = TudeeTheme.colors.surfaceHigh)
             )
         },
         floatingActionButton = {
@@ -164,8 +161,7 @@ private fun TasksContent(
                 contentDescription = "note icon",
                 onClick = { interactions.showBottomSheet() },
                 isEnabled = true,
-                modifier = Modifier
-                    .zIndex(if (taskModifyUiState.showBottomSheet) 0f else 1f)
+                modifier = Modifier.zIndex(if (taskModifyUiState.showBottomSheet) 0f else 1f)
             )
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -191,8 +187,7 @@ private fun TasksContent(
                     onClickRight = onClickRight,
                     onClickDay = onDayClick,
                 )
-            }
-        ) { _, tasks ->
+            }) { _, tasks ->
             if (tasks.isEmpty()) {
                 Box(
                     modifier = Modifier
@@ -209,14 +204,12 @@ private fun TasksContent(
             ) {
                 items(tasks.size) { index ->
                     val task = tasks[index]
-                    val iconResId =
-                        categories.find { it.id == task.categoryId }?.iconRes ?: ""
+                    val iconResId = categories.find { it.id == task.categoryId }?.iconRes ?: ""
                     SwipeToDeleteTask(
                         modifier = Modifier,
                         task = task,
                         iconResId = iconResId,
-                        onDeleteClick = { onDeleteTask(task) }
-                    )
+                        onDeleteClick = { onDeleteTask(task) })
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
@@ -225,24 +218,20 @@ private fun TasksContent(
 
     }
     if (showDatePickerDetails) {
-        TudeeDatePicker(
-            onDateSelected = { selectedDate ->
-                selectedDate?.let { onDateSelected(it) }
-                showDatePickerDetails = false
-            },
-            onDismiss = { showDatePickerDetails = false }
-        )
+        TudeeDatePicker(onDateSelected = { selectedDate ->
+            selectedDate?.let { onDateSelected(it) }
+            showDatePickerDetails = false
+        }, onDismiss = { showDatePickerDetails = false })
     }
 
     TaskModifyBottomSheet(
         modifier = Modifier.zIndex(1f),
         screenContent = { },
         uiState = taskModifyUiState,
-        interactions =  interactions ,
+        interactions = interactions,
         onHideBottomSheet = { interactions.hideBottomSheet() },
         onShowDatePicker = { interactions.showDatePicker() },
-        onHideDatePicker = { interactions.hideDatePicker() }
-    )
+        onHideDatePicker = { interactions.hideDatePicker() })
 
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter
@@ -276,6 +265,7 @@ private fun TasksContent(
         }
     }
 }
+
 @Composable
 private fun TasksTopBar(
     modifier: Modifier = Modifier,
@@ -288,9 +278,7 @@ private fun TasksTopBar(
             .fillMaxWidth(),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = stringResource(R.string.tasks),
@@ -313,12 +301,7 @@ private fun DateSection(
     onClickDay: (index: Int) -> Unit
 ) {
     DateSelector(
-        modifier,
-        month,
-        year,
-        onClickDate,
-        onClickLeft,
-        onClickRight
+        modifier, month, year, onClickDate, onClickLeft, onClickRight
     )
     DaySelector(modifier, days, onClickDay)
 }
@@ -344,12 +327,9 @@ private fun DateSelector(
                 .size(32.dp)
                 .clip(TudeeTheme.shapes.circle)
                 .border(
-                    width = 1.dp,
-                    color = TudeeTheme.colors.stroke,
-                    shape = TudeeTheme.shapes.circle
+                    width = 1.dp, color = TudeeTheme.colors.stroke, shape = TudeeTheme.shapes.circle
                 )
-                .clickable { onClickLeft() },
-            contentAlignment = Alignment.Center
+                .clickable { onClickLeft() }, contentAlignment = Alignment.Center
         ) {
             Icon(
                 painterResource(R.drawable.left_arrow),
@@ -360,8 +340,10 @@ private fun DateSelector(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier.clickable { onClickDate() }
-        ) {
+
+            modifier = Modifier
+                .clip(TudeeTheme.shapes.small)
+                .clickable { onClickDate() }) {
             Text(
                 text = "${month.toMonthName()}, ",
                 style = TudeeTheme.typography.labelMedium,
@@ -383,12 +365,9 @@ private fun DateSelector(
                 .size(32.dp)
                 .clip(TudeeTheme.shapes.circle)
                 .border(
-                    width = 1.dp,
-                    color = TudeeTheme.colors.stroke,
-                    shape = TudeeTheme.shapes.circle
+                    width = 1.dp, color = TudeeTheme.colors.stroke, shape = TudeeTheme.shapes.circle
                 )
-                .clickable { onClickRight() },
-            contentAlignment = Alignment.Center
+                .clickable { onClickRight() }, contentAlignment = Alignment.Center
         ) {
             Icon(
                 painterResource(R.drawable.right_arrow),
@@ -401,9 +380,7 @@ private fun DateSelector(
 
 @Composable
 private fun DaySelector(
-    modifier: Modifier = Modifier,
-    days: List<DaysOfMonth>,
-    onClickDay: (index: Int) -> Unit
+    modifier: Modifier = Modifier, days: List<DaysOfMonth>, onClickDay: (index: Int) -> Unit
 ) {
 
     val listState = rememberLazyListState()
@@ -431,8 +408,7 @@ private fun DaySelector(
                 isSelected = days[index].isSelected,
                 onClick = {
                     onClickDay(index)
-                }
-            )
+                })
         }
     }
 }
