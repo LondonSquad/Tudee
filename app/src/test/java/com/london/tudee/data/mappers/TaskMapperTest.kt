@@ -11,13 +11,17 @@ import org.junit.jupiter.api.Test
 class TaskMapperTest {
     @Test
     fun `when convert TaskDto to convertToTask returns Task`() {
+        //Given & When
         val result = testTaskDto().convertToTask()
+        //Then
         Assertions.assertEquals(result, testTask())
     }
 
     @Test
     fun `when convert Task to convertToTaskDto returns TaskDto`() {
+        //Given & When
         val result = testTask().convertToTaskDto()
+        //Then
         Assertions.assertEquals(result, testTaskDto())
     }
 
