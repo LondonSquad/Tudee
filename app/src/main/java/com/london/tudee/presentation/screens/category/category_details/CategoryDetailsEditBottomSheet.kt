@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.category.edit_category
+package com.london.tudee.presentation.screens.category.category_details
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -84,12 +84,11 @@ private fun EditCategoryContent(
     onDeleteClick: () -> Unit,
     onEditSuccess: () -> Unit = {},
     onEditError: () -> Unit = {},
-    viewModel: EditCategoryScreenViewModel = koinViewModel(),
+    viewModel: CategoryDetailsViewModel = koinViewModel(),
 ) {
     var categoryName by remember { mutableStateOf(category.title) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val uiState by viewModel.uiState.collectAsState()
-
 
     LaunchedEffect(uiState.isEdited, uiState.errorMessage) {
         when {
