@@ -50,8 +50,7 @@ fun OnBoardingHorizontalPager(
                 text = stringResource(R.string.skip),
                 modifier = Modifier
                     .align(Alignment.TopStart)
-                    .systemGesturesPadding()
-                    .padding(16.dp),
+                    .systemGesturesPadding(),
                 isLoading = false,
                 isDisabled = false,
             )
@@ -70,15 +69,18 @@ fun OnBoardingHorizontalPager(
                                 viewModel.onboardingFinished()
                                 onCompleted()
                             }
-                        }
-                    )
+                        })
                 }
             }
         }
         OnboardingIndicatorBar(
-            currentPage, modifier = Modifier
+            currentPage,
+            modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .systemGesturesPadding()
+                .systemGesturesPadding(),
+            onClick = { page ->
+                viewModel.onPageSelected(page, pagerState, coroutineScope)
+            }
         )
     }
 }
