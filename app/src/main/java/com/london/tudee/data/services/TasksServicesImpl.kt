@@ -1,7 +1,6 @@
 package com.london.tudee.data.services
 
 import com.london.tudee.data.local.roomdb.dao.TaskDao
-import com.london.tudee.data.local.roomdb.dto.TaskDto
 import com.london.tudee.data.mappers.convertToTask
 import com.london.tudee.data.mappers.convertToTaskDto
 import com.london.tudee.domain.entities.Task

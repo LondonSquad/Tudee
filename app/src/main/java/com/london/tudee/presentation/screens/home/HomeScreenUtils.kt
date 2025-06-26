@@ -5,7 +5,6 @@ import com.london.tudee.R
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import java.util.Locale
 
 object HomeScreenUtils {
     fun customDateFormatter(context: Context): String {
