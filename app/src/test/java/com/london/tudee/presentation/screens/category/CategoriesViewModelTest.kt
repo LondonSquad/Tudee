@@ -49,8 +49,8 @@ class CategoriesViewModelTest {
     @Test
     fun `getCategories updates uiState with categories`() = runTest {
         val expectedCategories = listOf(
-            Category(1, "Work", iconRes = "", isDefault = false, taskCount = 2),
-            Category(2, "Personal", iconRes = "", isDefault = false, taskCount = 4),
+            Category(1, title = "Work", iconRes = "", isDefault = false, taskCount = 2),
+            Category(2, title = "Personal", iconRes = "", isDefault = false, taskCount = 4),
         )
 
 
@@ -69,7 +69,7 @@ class CategoriesViewModelTest {
 
     @Test
     fun `createCategory success updates createCategoryUiState`() = runTest {
-        val newCategory = Category(3, "Study", iconRes = "", isDefault = false, taskCount = 0)
+        val newCategory = Category(3, title = "Study", iconRes = "", isDefault = false, taskCount = 0)
         coEvery { categoryService.add(newCategory) } just Runs
 
         viewModel.createCategory(newCategory)
@@ -82,7 +82,7 @@ class CategoriesViewModelTest {
 
     @Test
     fun `createCategory failure updates createCategoryUiState with error`() = runTest {
-        val newCategory = Category(4, "Error", iconRes = "", isDefault = false, taskCount = 5)
+        val newCategory = Category(4, title = "Error", iconRes = "", isDefault = false, taskCount = 5)
         val exception = RuntimeException("Failed to add")
         coEvery { categoryService.add(newCategory) } throws exception
 

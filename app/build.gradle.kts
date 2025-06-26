@@ -88,6 +88,9 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation (libs.truth)
     testImplementation(kotlin("test"))
+
+    // Splash Screen
+    implementation(libs.androidx.splashscreen)
 }
 
 tasks.register("installGitHooks") {
