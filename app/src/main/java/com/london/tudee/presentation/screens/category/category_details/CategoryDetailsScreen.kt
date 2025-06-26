@@ -38,8 +38,6 @@ import com.london.tudee.presentation.components.tabs.TudeeTabLayoutWithPager
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.category.delete_category.DeleteCategoryScreen
-import com.london.tudee.presentation.screens.category.edit_category.EditCategoryScreen
 import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -64,7 +62,7 @@ fun CategoryDetailsScreen(
     }
     when {
         state.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
-        state.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
+        state.errorMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
         else -> CategoryDetailsContent(
             state = state,
             onBackClick = onBackClick,

@@ -6,7 +6,9 @@ import com.london.tudee.domain.entities.Task
 
 data class CategoryDetailsUiState(
     val isLoading: Boolean = true,
-    val errMessage: String? = null,
+    val isEdited: Boolean = false,
+    val isDeleted: Boolean = false,
+    val errorMessage: String? = null,
     val allTasks: List<Task> = listOf(),
     val doneTasks: List<Task> = listOf(),
     val inProgressTasks: List<Task> = listOf(),
