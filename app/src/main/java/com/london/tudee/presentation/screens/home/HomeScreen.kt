@@ -636,7 +636,7 @@ private fun DoneSection(
 }
 
 @Composable
-fun getTaskStatus(
+private fun getTaskStatus(
     allTasks: Int, doneTasks: Int, inProgressTasks: Int, toDoTasks: Int
 ): NotificationSliderUiState {
     when {

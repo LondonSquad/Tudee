@@ -23,9 +23,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
+import com.london.tudee.data.local.roomdb.defaultCategory
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.presentation.components.CategoryItem
@@ -278,7 +280,7 @@ private fun PreviewCategorySection() {
             var selectedCategory by remember { mutableStateOf<Category?>(null) }
 
             CategorySection(
-                categories = category,
+                categories = defaultCategory(LocalContext.current),
                 selectedCategory = selectedCategory,
                 onCategorySelected = { selectedCategory = it }
             )
