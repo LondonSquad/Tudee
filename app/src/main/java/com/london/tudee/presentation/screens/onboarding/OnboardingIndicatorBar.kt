@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
-fun StepIndicatorBar(
+fun OnboardingIndicatorBar(
     activeStep: Int, modifier: Modifier = Modifier, totalSteps: Int = 3
 ) {
     Row(
