@@ -1,12 +1,6 @@
 package com.london.tudee.data.services
 
 import com.london.tudee.data.local.roomdb.dao.CategoryDao
-import com.london.tudee.data.exception.AddCategoryException
-import com.london.tudee.data.exception.CategoryNotFoundException
-import com.london.tudee.data.exception.DeleteCategoryException
-import com.london.tudee.data.exception.EditCategoryException
-import com.london.tudee.data.exception.GetAllCategoriesException
-import com.london.tudee.data.exception.GetCategoryIconException
 import com.london.tudee.data.mappers.convertToCategory
 import com.london.tudee.data.mappers.convertToCategoryDto
 import com.london.tudee.domain.entities.Category
@@ -60,6 +54,7 @@ class CategoriesServicesImpl(
             throw CategoryNotFoundException()
         }
     }
+}
 
     override fun getIconResById(id: Int): String {
         return try {

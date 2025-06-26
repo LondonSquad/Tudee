@@ -17,4 +17,3 @@ data class TudeeTypography(
     val labelSmall: TextStyle,
     val cherryBomb: TextStyle,
 )
-

@@ -1,9 +1,9 @@
-package com.london.tudee.presentation.screens.task.taskdetails
+package com.london.tudee.presentation.screens.task.task_details
 
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
-import kotlinx.datetime.Instant
+import kotlinx.datetime.Clock
 
 data class TaskDetailsBottomSheetUiState(
     val categoryIcon: String = "",
@@ -14,6 +14,6 @@ data class TaskDetailsBottomSheetUiState(
         taskStatus = TaskStatus.TODO,
         priority = Priority.HIGH,
         categoryId = 6,
-        timeStamp = Instant.parse("2023-09-20T00:00:00Z")
+        timeStamp = Clock.System.now()
     ),
 )

@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.task.taskdetails
+package com.london.tudee.presentation.screens.task.task_details
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,7 +29,6 @@ import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.components.priority.PriorityBadge
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.utils.converterStringToBitmap
 
 @Composable
 fun TaskDetailsBottomSheet(
@@ -60,7 +59,6 @@ fun TaskDetailsBottomSheet(
         bottomSheetActions = {},
         modifier = modifier
     )
-
 }
 
 @Composable
@@ -91,7 +89,7 @@ private fun TaskDetailsBottomSheetContent(
                 ), contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = rememberAsyncImagePainter(converterStringToBitmap(icon)),
+                painter = rememberAsyncImagePainter(icon),
                 contentDescription = "Category Icon",
                 modifier = Modifier.size(32.dp)
             )
@@ -137,7 +135,6 @@ private fun TaskDetailsBottomSheetContent(
     }
 }
 
-
 @Composable
 private fun StatusRow(
     modifier: Modifier = Modifier, status: TaskStatus, priority: Priority
@@ -158,7 +155,8 @@ private fun StatusRow(
                         TaskStatus.IN_PROGRESS -> TudeeTheme.colors.purpleVariant
                         TaskStatus.DONE -> TudeeTheme.colors.greenVariant
                     }
-                ), contentAlignment = Alignment.Center
+                ),
+            contentAlignment = Alignment.Center
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -222,5 +220,3 @@ private fun PreviewTaskDetail() {
         showBottomSheet = true
     )
 }
-
-

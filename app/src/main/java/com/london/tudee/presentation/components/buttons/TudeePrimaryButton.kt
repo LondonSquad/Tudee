@@ -21,11 +21,11 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
 @Composable
 fun TudeePrimaryButton(
-    onClick: () -> Unit,
     text: String,
     modifier: Modifier = Modifier,
     isDisabled: Boolean = false,
-    isLoading: Boolean = false
+    isLoading: Boolean = false,
+    onClick: () -> Unit
 ) {
     if (isDisabled.not()) {
         Row(
@@ -76,7 +76,6 @@ fun TudeePrimaryButton(
         }
     }
 }
-
 
 @Composable
 @ThemePreviews

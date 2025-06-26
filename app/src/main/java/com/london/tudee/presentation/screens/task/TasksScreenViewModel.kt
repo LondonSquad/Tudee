@@ -1,15 +1,15 @@
-package com.london.tudee.presentation.screens.tasks
+package com.london.tudee.presentation.screens.task
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.tudee.domain.entities.TaskStatus
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.domain.services.TaskService
-import com.london.tudee.presentation.screens.tasks.TasksScreenUtils.getDayRangeMillis
-import com.london.tudee.presentation.screens.tasks.TasksScreenUtils.lengthOfMonth
 import com.london.tudee.presentation.utils.DateFormatter.toDayOfWeekShort
 import com.london.tudee.presentation.utils.DateFormatter.toLocalDate
 import com.london.tudee.presentation.utils.DateFormatter.toLongDate
+import com.london.tudee.presentation.utils.TasksScreenUtils
+import com.london.tudee.presentation.utils.TasksScreenUtils.lengthOfMonth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,7 +30,7 @@ class TasksScreenViewModel(
     private val categoryService: CategoryService
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(FilterTasksUiState())
+    private val _uiState = MutableStateFlow(TasksUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
@@ -46,7 +46,7 @@ class TasksScreenViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val targetDate = _uiState.value.date.toLocalDate()
 
-            val (startOfDayMillis, endOfDayMillis) = getDayRangeMillis(targetDate)
+            val (startOfDayMillis, endOfDayMillis) = TasksScreenUtils.getDayRangeMillis(targetDate)
             taskService.getTasksForDay(
                 start = startOfDayMillis, end = endOfDayMillis, taskStatus = TaskStatus.DONE
             ).catch { throwable ->
@@ -70,7 +70,7 @@ class TasksScreenViewModel(
     fun initializeInProgressTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             val targetDate = _uiState.value.date.toLocalDate()
-            val (startOfDayMillis, endOfDayMillis) = getDayRangeMillis(targetDate)
+            val (startOfDayMillis, endOfDayMillis) = TasksScreenUtils.getDayRangeMillis(targetDate)
 
             taskService.getTasksForDay(
                 start = startOfDayMillis, end = endOfDayMillis, taskStatus = TaskStatus.IN_PROGRESS
@@ -95,7 +95,7 @@ class TasksScreenViewModel(
     fun initializeToDoTasks() {
         viewModelScope.launch(Dispatchers.IO) {
             val targetDate = _uiState.value.date.toLocalDate()
-            val (startOfDayMillis, endOfDayMillis) = getDayRangeMillis(targetDate)
+            val (startOfDayMillis, endOfDayMillis) = TasksScreenUtils.getDayRangeMillis(targetDate)
             taskService.getTasksForDay(
                 start = startOfDayMillis, end = endOfDayMillis, taskStatus = TaskStatus.TODO
             ).catch { throwable ->
@@ -118,6 +118,7 @@ class TasksScreenViewModel(
     //endregion
 
     fun updateDateByAction(date: Long, arrowAction: ArrowActions) {
+
         val currentLocalDate = date.toLocalDate()
         val previouslySelectedDate = _uiState.value.date.toLocalDate()
 
@@ -130,7 +131,10 @@ class TasksScreenViewModel(
         val dayToSelect = if (arrowAction == ArrowActions.None) {
             previouslySelectedDate.dayOfMonth
         } else {
-            minOf(previouslySelectedDate.dayOfMonth, targetDate.lengthOfMonth(targetDate.toLongDate()))
+            minOf(
+                previouslySelectedDate.dayOfMonth,
+                targetDate.lengthOfMonth(targetDate.toLongDate())
+            )
         }
         val newSelectedDate = LocalDate(targetDate.year, targetDate.month, dayToSelect)
 

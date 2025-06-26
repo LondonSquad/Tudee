@@ -1,10 +1,10 @@
-package com.london.tudee.presentation.screens.task.add_edit_task_bottom_sheet
+package com.london.tudee.presentation.screens.task.task_modify
 
 import androidx.annotation.StringRes
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
 
-data class AddOrEditTaskUiState(
+data class TaskModifyUiState(
     val taskId: Int? = null,
     val title: String = "",
     val description: String = "",

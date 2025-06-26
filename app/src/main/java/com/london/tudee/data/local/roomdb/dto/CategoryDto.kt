@@ -7,7 +7,8 @@ import androidx.room.PrimaryKey
 data class CategoryDto(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val name: String,
+    val titleRes: Int? = null,
+    val title: String? = null,
     val iconRes: String,
     val isDefault: Boolean,
     val taskCount: Int

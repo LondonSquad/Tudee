@@ -48,21 +48,21 @@ class CategoriesViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             categoryService.getAll().catch { throwable ->
-                    Log.e("CategoriesViewModel", "Error loading categories", throwable)
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            errorMessage = throwable.message ?: "Failed to load categories"
-                        )
-                    }
-                }.collect { categories ->
-                    Log.d("CategoriesViewModel", "Loaded ${categories.size} categories")
-                    _uiState.update {
-                        it.copy(
-                            categories = categories, isLoading = false, errorMessage = null
-                        )
-                    }
+                Log.e("CategoriesViewModel", "Error loading categories", throwable)
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = throwable.message ?: "Failed to load categories"
+                    )
                 }
+            }.collect { categories ->
+                Log.d("CategoriesViewModel", "Loaded ${categories.size} categories")
+                _uiState.update {
+                    it.copy(
+                        categories = categories, isLoading = false, errorMessage = null
+                    )
+                }
+            }
         }
     }
 
