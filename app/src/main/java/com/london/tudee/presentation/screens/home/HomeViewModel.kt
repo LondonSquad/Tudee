@@ -13,7 +13,6 @@ import com.london.tudee.domain.services.TaskService
 import com.london.tudee.presentation.screens.task.task_details.TaskDetailsBottomSheetUiState
 import com.london.tudee.presentation.screens.task.task_modify.TaskModifyUiState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -281,6 +280,18 @@ class HomeViewModel(
 
     override fun showBottomSheet() {
         loadCategories()
+        _taskUiState.update {
+            it.copy(
+                title = "",
+                description = "",
+                selectedDate = null,
+                selectedPriority = Priority.LOW,
+                selectedCategory = it.categories.firstOrNull(),
+                stateMessage = null,
+                isEditMode = false,
+                taskId = null
+            )
+        }
         _taskUiState.update { it.copy(showBottomSheet = true) }
     }
 
@@ -290,22 +301,19 @@ class HomeViewModel(
                 showBottomSheet = false,
             )
         }
-        viewModelScope.launch {
-            delay(500)
-            _taskUiState.update {
-                it.copy(
-                    title = "",
-                    description = "",
-                    selectedDate = null,
-                    selectedPriority = Priority.LOW,
-                    selectedCategory = it.categories.firstOrNull(),
-                    stateMessage = null,
-                    isEditMode = false,
-                    taskId = null
-                )
-            }
-            validateForm()
+        _taskUiState.update {
+            it.copy(
+                title = "",
+                description = "",
+                selectedDate = null,
+                selectedPriority = Priority.LOW,
+                selectedCategory = it.categories.firstOrNull(),
+                stateMessage = null,
+                isEditMode = false,
+                taskId = null
+            )
         }
+        validateForm()
     }
 
     override fun saveTask() {

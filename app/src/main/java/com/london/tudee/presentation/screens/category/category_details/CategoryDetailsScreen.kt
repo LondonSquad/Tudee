@@ -1,5 +1,3 @@
-@file:JvmName("TaskDetailsScreenKt")
-
 package com.london.tudee.presentation.screens.category.category_details
 
 import androidx.compose.foundation.background
