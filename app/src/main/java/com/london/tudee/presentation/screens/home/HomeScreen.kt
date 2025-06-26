@@ -43,7 +43,6 @@ import androidx.compose.ui.zIndex
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Task
 import com.london.tudee.domain.entities.TaskStatus
-import com.london.tudee.presentation.components.EmptyTasksScreen
 import com.london.tudee.presentation.components.HomeTopBar
 import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.StatusCard
@@ -51,6 +50,7 @@ import com.london.tudee.presentation.components.TaskStatusSlider
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.components.date.DateBadge
 import com.london.tudee.presentation.components.date.DateBadgeStyleValues
+import com.london.tudee.presentation.components.task.EmptyTasksScreen
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme

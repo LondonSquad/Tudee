@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.components
+package com.london.tudee.presentation.components.buttons
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
