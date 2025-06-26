@@ -35,8 +35,7 @@ class CategoryDetailsViewModel(
     override fun getDoneTasksByCategoryId(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
-                categoryId = categoryId,
-                status = TaskStatus.DONE
+                categoryId = categoryId, status = TaskStatus.DONE
             ).catch { throwable ->
                 _uiState.update {
                     it.copy(isLoading = false, errorMessage = throwable.message)
@@ -58,8 +57,7 @@ class CategoryDetailsViewModel(
     override fun getInProgressTasksByCategoryId(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
-                categoryId = categoryId,
-                status = TaskStatus.IN_PROGRESS
+                categoryId = categoryId, status = TaskStatus.IN_PROGRESS
             ).catch { throwable ->
                 _uiState.update {
                     it.copy(isLoading = false, errorMessage = throwable.message)
@@ -67,12 +65,9 @@ class CategoryDetailsViewModel(
             }.collect { tasks ->
                 _uiState.update { state ->
                     state.copy(
-                        isLoading = false,
-                        errorMessage = null,
-                        inProgressTasks = tasks.map {
+                        isLoading = false, errorMessage = null, inProgressTasks = tasks.map {
                             it.copy(categoryId = it.categoryId)
-                        }
-                    )
+                        })
                 }
             }
         }
@@ -81,8 +76,7 @@ class CategoryDetailsViewModel(
     override fun getToDoTasksByCategoryId(categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             taskService.getByCategoryIdAndTaskStatus(
-                categoryId = categoryId,
-                status = TaskStatus.TODO
+                categoryId = categoryId, status = TaskStatus.TODO
             ).catch { throwable ->
                 _uiState.update {
                     it.copy(isLoading = false, errorMessage = throwable.message)
@@ -90,12 +84,9 @@ class CategoryDetailsViewModel(
             }.collect { tasks ->
                 _uiState.update { state ->
                     state.copy(
-                        isLoading = false,
-                        errorMessage = null,
-                        toDoTasks = tasks.map {
+                        isLoading = false, errorMessage = null, toDoTasks = tasks.map {
                             it.copy(categoryId = it.categoryId)
-                        }
-                    )
+                        })
                 }
             }
         }
@@ -135,8 +126,7 @@ class CategoryDetailsViewModel(
 
             }.onFailure {
                 _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    errorMessage = it.message
+                    isLoading = false, errorMessage = it.message
                 )
             }
         }
@@ -150,8 +140,7 @@ class CategoryDetailsViewModel(
                 _uiState.value = _uiState.value.copy(isDeleted = true, isLoading = false)
             }.onFailure {
                 _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    errorMessage = it.message
+                    isLoading = false, errorMessage = it.message
                 )
             }
         }
@@ -175,8 +164,7 @@ class CategoryDetailsViewModel(
     override fun onCategoryEdited() {
         _uiState.update {
             it.copy(
-                stateMessage = R.string.edit_category_successfully,
-                showSuccessMessage = true
+                stateMessage = R.string.edit_category_successfully, showSuccessMessage = true
             )
         }
         refreshAfterChange()
@@ -185,8 +173,7 @@ class CategoryDetailsViewModel(
     override fun onCategoryEditError() {
         _uiState.update {
             it.copy(
-                stateMessage = R.string.some_error_happened,
-                showErrorMessage = true
+                stateMessage = R.string.some_error_happened, showErrorMessage = true
             )
         }
     }
@@ -194,8 +181,7 @@ class CategoryDetailsViewModel(
     override fun onCategoryDeleteError() {
         _uiState.update {
             it.copy(
-                stateMessage = R.string.some_error_happened,
-                showErrorMessage = true
+                stateMessage = R.string.some_error_happened, showErrorMessage = true
             )
         }
     }
@@ -203,9 +189,7 @@ class CategoryDetailsViewModel(
     override fun clearMessages() {
         _uiState.update {
             it.copy(
-                stateMessage = null,
-                showSuccessMessage = false,
-                showErrorMessage = false
+                stateMessage = null, showSuccessMessage = false, showErrorMessage = false
             )
         }
     }
@@ -216,6 +200,7 @@ class CategoryDetailsViewModel(
 
     override fun hideEditBottomSheet() {
         _uiState.update { it.copy(isEditBottomSheetVisible = false) }
+        setDefault()
     }
 
     override fun hideDeleteBottomSheet() {
@@ -226,4 +211,20 @@ class CategoryDetailsViewModel(
         _uiState.update { it.copy(isDeleteBottomSheetVisible = true) }
     }
 
+    fun setDefault() {
+        _uiState.update {
+            it.copy(
+                isLoading = false,
+                isEdited = false,
+                isDeleted = false,
+                categoryDeleted = false,
+                isEditBottomSheetVisible = false,
+                isDeleteBottomSheetVisible = false,
+                showSuccessMessage = false,
+                showErrorMessage = false,
+                errorMessage = null,
+                stateMessage = null,
+            )
+        }
+    }
 }

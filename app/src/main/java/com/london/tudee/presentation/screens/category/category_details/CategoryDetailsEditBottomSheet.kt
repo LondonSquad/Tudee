@@ -103,8 +103,8 @@ private fun CategoryDetailsEditContent(
         when {
             uiState.isEdited -> {
                 onEditSuccess()
-                viewModel.resetState()
             }
+
             uiState.errorMessage != null -> onEditError()
         }
 
@@ -252,7 +252,8 @@ private fun ImagePickerEditCategory(
 @Composable
 private fun CategoryDetailsEditScreenPreview() {
     TudeeTheme {
-        CategoryDetailsEditScreen(modifier = Modifier, category = Category(
+        CategoryDetailsEditScreen(
+            modifier = Modifier, category = Category(
             id = 1,
             title = "Work",
             iconRes = "",
