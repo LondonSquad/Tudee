@@ -61,6 +61,8 @@ import com.london.tudee.presentation.screens.task.task_modify.TaskModifyBottomSh
 import com.london.tudee.presentation.screens.task.task_modify.TaskModifyUiState
 import com.london.tudee.presentation.utils.DateFormatter.toMonthShort
 import com.london.tudee.presentation.utils.DateFormatter.toYear
+import com.london.tudee.presentation.utils.TasksScreenUtils.toDayName
+import com.london.tudee.presentation.utils.TasksScreenUtils.toMonthName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
@@ -237,7 +239,7 @@ private fun TasksContent(
         modifier = Modifier.zIndex(1f),
         screenContent = { },
         uiState = taskModifyUiState,
-        interactions =  interactions ,
+        interactions = interactions,
         onHideBottomSheet = { interactions.hideBottomSheet() },
         onShowDatePicker = { interactions.showDatePicker() },
         onHideDatePicker = { interactions.hideDatePicker() }
@@ -275,6 +277,7 @@ private fun TasksContent(
         }
     }
 }
+
 @Composable
 private fun TasksTopBar(
     modifier: Modifier = Modifier,
@@ -362,7 +365,7 @@ private fun DateSelector(
             modifier = Modifier.clickable { onClickDate() }
         ) {
             Text(
-                text = "$month, ",
+                text = "${month.toMonthName()}, ",
                 style = TudeeTheme.typography.labelMedium,
                 color = TudeeTheme.colors.body
             )
@@ -426,7 +429,7 @@ private fun DaySelector(
         items(days.size) { index ->
             DateItem(
                 dayOfMonth = days[index].dayOfMonth,
-                dayOfWeek = days[index].dayOfWeek,
+                dayOfWeek = days[index].dayOfWeek.toDayName(),
                 isSelected = days[index].isSelected,
                 onClick = {
                     onClickDay(index)
@@ -436,13 +439,11 @@ private fun DaySelector(
     }
 }
 
+
 @ThemePreviews
 @Composable
 private fun TasksScreenPreview() {
     TudeeTheme {
-        TasksScreen(
-            initialTabIndex = TODO(),
-            viewModel = TODO(),
-        )
+
     }
 }
