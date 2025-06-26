@@ -34,13 +34,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
@@ -56,8 +59,11 @@ fun ThemeSwitcher(
         targetValue = if (isDarkMode) TudeeTheme.colors.skyNightBackground else TudeeTheme.colors.primary,
         animationSpec = tween(1000)
     )
+    val direction = LocalLayoutDirection.current
+
     Box(
         modifier = Modifier
+            .then(if (direction == LayoutDirection.Ltr) Modifier else Modifier.rotate(180f))
             .height(36.dp)
             .width(64.dp)
             .clip(TudeeTheme.shapes.circle)
