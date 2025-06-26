@@ -303,6 +303,7 @@ private fun ScrollableBottomSheetScreenPreview() {
                     onClick = { showBottomSheet = false },
                     modifier = Modifier.fillMaxWidth()
                 )
-            })
+            }
+        )
     }
 }

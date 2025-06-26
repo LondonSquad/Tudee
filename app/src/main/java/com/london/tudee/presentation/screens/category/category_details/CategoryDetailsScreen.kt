@@ -53,8 +53,8 @@ fun CategoryDetailsScreen(
     LaunchedEffect(categoryId) {
         viewModel.initializeWithCategoryId(categoryId)
     }
-    val state by viewModel.uiState.collectAsState()
 
+    val state by viewModel.uiState.collectAsState()
 
     LaunchedEffect(state.categoryDeleted) {
         if (state.categoryDeleted) {
@@ -62,7 +62,6 @@ fun CategoryDetailsScreen(
             onBackClick()
         }
     }
-
     when {
         state.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
         state.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
@@ -75,7 +74,7 @@ fun CategoryDetailsScreen(
 }
 
 @Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
+private fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(modifier) {
         Text(
             text = "Loading...",
@@ -85,7 +84,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ErrorScreen(modifier: Modifier = Modifier) {
+private fun ErrorScreen(modifier: Modifier = Modifier) {
     Box(modifier) {
         Text(
             text = "There was an unexpected error",
@@ -95,12 +94,11 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CategoryDetailsContent(
+private fun CategoryDetailsContent(
     state: CategoryDetailsUiState,
     onBackClick: () -> Unit,
     interactions: CategoryDetailsInteractions
 ) {
-
     Box {
         Column(
             modifier = Modifier
@@ -116,7 +114,6 @@ fun CategoryDetailsContent(
 
             TasksPagerSection(state = state)
         }
-
         if (state.isEditBottomSheetVisible) {
             EditCategoryScreen(
                 category = state.category,
@@ -135,7 +132,6 @@ fun CategoryDetailsContent(
                 }
             )
         }
-
         if (state.isDeleteBottomSheetVisible) {
             DeleteCategoryScreen(
                 category = state.category,
@@ -150,8 +146,6 @@ fun CategoryDetailsContent(
                 }
             )
         }
-
-        // Snackbar for messages
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter
@@ -179,8 +173,6 @@ fun CategoryDetailsContent(
                     }
                 }
             }
-
-
             LaunchedEffect(state.stateMessage) {
                 if (state.stateMessage != null) {
                     delay(3000)
@@ -192,7 +184,7 @@ fun CategoryDetailsContent(
 }
 
 @Composable
-fun TasksPagerSection(state: CategoryDetailsUiState) {
+private fun TasksPagerSection(state: CategoryDetailsUiState) {
     TudeeTabLayoutWithPager(
         tabs = listOf(
             TabItem(text = R.string.In_Progress, number = state.inProgressTasks.size),
@@ -295,4 +287,3 @@ private fun TudeeTaskPreview() {
         CategoryDetailsScreen(categoryId = 1, onBackClick = {})
     }
 }
-

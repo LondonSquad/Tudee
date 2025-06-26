@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.core.content.res.ResourcesCompat
 import com.london.tudee.R
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
@@ -15,7 +16,7 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 @Composable
 fun TudeeLogoText(modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val text = "Tudee"
+    val text = stringResource(R.string.app_name)
 
     val fillColor = TudeeTheme.colors.onPrimary.toArgb()
     val strokeColor = TudeeTheme.colors.primary.toArgb()
@@ -23,7 +24,6 @@ fun TudeeLogoText(modifier: Modifier = Modifier) {
     val typeface = remember {
         ResourcesCompat.getFont(context, R.font.cherry_bomb_regular)
     }
-
     val paint = remember {
         android.graphics.Paint().apply {
             isAntiAlias = true
@@ -43,7 +43,6 @@ fun TudeeLogoText(modifier: Modifier = Modifier) {
         paint.strokeWidth = 18f
         paint.color = strokeColor
         drawContext.canvas.nativeCanvas.drawText(text, x, y, paint)
-
         paint.style = android.graphics.Paint.Style.FILL
         paint.color = fillColor
         drawContext.canvas.nativeCanvas.drawText(text, x, y, paint)

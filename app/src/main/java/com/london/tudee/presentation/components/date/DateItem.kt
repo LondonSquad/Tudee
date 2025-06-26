@@ -62,7 +62,7 @@ fun DateItem(
 
 @ThemePreviews
 @Composable
-fun DateItemPreview() {
+private fun DateItemPreview() {
     TudeeTheme {
         Row(
             modifier = Modifier

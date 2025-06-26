@@ -19,4 +19,3 @@ sealed interface Screen {
     @Serializable
     object Onboarding : Screen
 }
-

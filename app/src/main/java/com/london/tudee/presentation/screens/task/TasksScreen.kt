@@ -97,7 +97,6 @@ fun TasksScreen(
             viewModel.initializeInProgressTasks()
         }
     )
-
     AnimatedVisibility(
         visible = showDeleteSnackBar,
         enter = fadeIn() + slideInVertically(initialOffsetY = { -100 }),
@@ -111,7 +110,6 @@ fun TasksScreen(
             iconTint = TudeeTheme.colors.greenAccent
         )
     }
-
     LaunchedEffect(showDeleteSnackBar) {
         if (showDeleteSnackBar) {
             delay(3000)
@@ -121,7 +119,7 @@ fun TasksScreen(
 }
 
 @Composable
-fun TasksContent(
+private fun TasksContent(
     initialTabIndex: Int,
     date: Long,
     inProgressTasksCount: Int,
@@ -138,8 +136,8 @@ fun TasksContent(
     onDayClick: (index: Int) -> Unit,
     onDeleteTask: (Task) -> Unit
 ) {
+
     var showDatePicker by remember { mutableStateOf(false) }
-    var showBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(
         containerColor = TudeeTheme.colors.surface,
@@ -191,7 +189,6 @@ fun TasksContent(
                 ) { EmptyTasksScreen() }
                 return@TudeeTabLayoutWithPager
             }
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -212,8 +209,7 @@ fun TasksContent(
             }
         }
     }
-
-    if (showDatePicker)
+    if (showDatePicker) {
         TudeeDatePicker(
             onDateSelected = { selectedDate ->
                 selectedDate?.let { onDateSelected(it) }
@@ -221,6 +217,7 @@ fun TasksContent(
             },
             onDismiss = { showDatePicker = false }
         )
+    }
 }
 
 @Composable
@@ -248,9 +245,8 @@ private fun TasksTopBar(
     }
 }
 
-
 @Composable
-fun DateSection(
+private fun DateSection(
     modifier: Modifier,
     month: String,
     year: String,
@@ -272,7 +268,7 @@ fun DateSection(
 }
 
 @Composable
-fun DateSelector(
+private fun DateSelector(
     modifier: Modifier = Modifier,
     month: String,
     year: String,
@@ -305,7 +301,6 @@ fun DateSelector(
                 tint = TudeeTheme.colors.body
             )
         }
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -327,7 +322,6 @@ fun DateSelector(
                 tint = TudeeTheme.colors.body
             )
         }
-
         Box(
             modifier = Modifier
                 .size(32.dp)
@@ -350,11 +344,12 @@ fun DateSelector(
 }
 
 @Composable
-fun DaySelector(
+private fun DaySelector(
     modifier: Modifier = Modifier,
     days: List<DaysOfMonth>,
     onClickDay: (index: Int) -> Unit
 ) {
+
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -388,7 +383,7 @@ fun DaySelector(
 
 @ThemePreviews
 @Composable
-fun TasksScreenPreview() {
+private fun TasksScreenPreview() {
     TudeeTheme {
         TasksScreen()
     }

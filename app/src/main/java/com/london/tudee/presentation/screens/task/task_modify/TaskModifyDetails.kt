@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
+import com.london.tudee.data.local.roomdb.defaultCategory
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.presentation.components.CategoryItem
@@ -47,8 +48,11 @@ fun TaskModifyDetails(
     @StringRes title: Int,
     uiState: TaskModifyUiState,
     interactions: TaskModifyInteractions,
+    onShowDatePicker: () -> Unit,
+    onHideDatePicker: () -> Unit,
     categories: List<Category> = emptyList()
 ) {
+
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val maxHeight = screenHeight * 0.75f
 
@@ -69,22 +73,21 @@ fun TaskModifyDetails(
                 categories = categories.ifEmpty { uiState.categories },
                 onTitleValueChange = { interactions.updateTitle(it) },
                 onDescriptionValueChange = { interactions.updateDescription(it) },
-                onDateFieldClick = { interactions.showDatePicker() },
+                onDateFieldClick = { onShowDatePicker() },
                 onPrioritySelected = { interactions.updatePriority(it) },
                 onCategorySelected = { interactions.updateCategory(it) },
                 modifier = modifier.fillMaxWidth()
             )
         }
     }
-
     if (uiState.showDatePicker) {
         TudeeDatePicker(
             onDateSelected = { date ->
                 interactions.updateDate(date ?: System.currentTimeMillis())
-                interactions.hideDatePicker()
+                onHideDatePicker()
             },
             onDismiss = {
-                interactions.hideDatePicker()
+                onHideDatePicker()
             }
         )
     }
@@ -153,7 +156,6 @@ private fun TaskInputFields(
         onValueChange = onTitleValueChange
     )
     Spacer(modifier = Modifier.height(16.dp))
-
     TudeeTextField(
         multiLined = true,
         hint = R.string.description,
@@ -280,7 +282,7 @@ private fun PreviewCategorySection() {
             var selectedCategory by remember { mutableStateOf<Category?>(null) }
 
             CategorySection(
-                categories = category,
+                categories = defaultCategory(LocalContext.current),
                 selectedCategory = selectedCategory,
                 onCategorySelected = { selectedCategory = it }
             )

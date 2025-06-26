@@ -51,11 +51,12 @@ fun CategoriesScreen(
         categories = categories,
         onCategoryClick = onCategoryClick,
         onAddCategoryClick = { viewModel.setShowBottomSheet(true) },
-        onDismissBottomSheet = { viewModel.setShowBottomSheet(false) })
+        onDismissBottomSheet = { viewModel.setShowBottomSheet(false) }
+    )
 }
 
 @Composable
-fun CategoriesScreenContent(
+private fun CategoriesScreenContent(
     screenTitle: Int,
     uiState: CategoriesUiState,
     categories: List<Category>,
@@ -74,7 +75,7 @@ fun CategoriesScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(TudeeTheme.colors.surfaceHigh)
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 16.dp, vertical = 20.dp)
                     .padding(WindowInsets.statusBars.asPaddingValues())
             ) {
                 Text(
@@ -94,14 +95,14 @@ fun CategoriesScreenContent(
                 )
             }
 
-            // Show loading indicator
+
             if (uiState.isLoading) {
                 Text(
                     text = "Loading categories...", modifier = Modifier.padding(16.dp)
                 )
             }
 
-            // Show empty state or categories
+
             if (!uiState.isLoading && uiState.errorMessage == null) {
                 if (categories.isEmpty()) {
                     Text(
@@ -147,7 +148,7 @@ fun CategoriesScreenContent(
 
 @ThemePreviews
 @Composable
-fun CategoriesScreenPreview() {
+private fun CategoriesScreenPreview() {
     TudeeTheme {
         CategoriesScreen(
             screenTitle = R.string.categories,

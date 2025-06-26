@@ -21,31 +21,32 @@ fun OnBoardingBackground() {
             .background(TudeeTheme.colors.surface)
     ) {
         val photo = if (isSystemInDarkTheme()) {
-            listOf(R.drawable.vector7_dark,
-            R.drawable.vector9_dark,
-            R.drawable.vector10_dark)
-
+            listOf(
+                R.drawable.vector7_dark,
+                R.drawable.vector9_dark,
+                R.drawable.vector10_dark
+            )
         } else {
             listOf(
                 R.drawable.vector7,
                 R.drawable.vector9,
-                R.drawable.vector10)
+                R.drawable.vector10
+            )
         }
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(TudeeTheme.colors.overlay)
         ) {
             Image(
-                painter = painterResource(id = photo[0]), contentDescription = null
+                painter = painterResource(id = photo[0]),
+                contentDescription = null
             )
             Image(
                 modifier = Modifier.align(Alignment.TopEnd),
                 painter = painterResource(id = photo[1]),
                 contentDescription = null,
-
-                )
+            )
             Image(
                 modifier = Modifier.align(Alignment.CenterEnd),
                 painter = painterResource(id = photo[2]),
@@ -57,7 +58,7 @@ fun OnBoardingBackground() {
 
 @Preview
 @Composable
-fun OnboardingFlowPreview() {
+private fun OnboardingFlowPreview() {
     TudeeTheme {
         OnBoardingBackground()
     }

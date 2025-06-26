@@ -58,7 +58,7 @@ fun HomeTopBar(
                 color = TudeeTheme.colors.caption
             )
         }
-        ThemeSwitcher(isDarkMode ,onThemeChanged)
+        ThemeSwitcher(isDarkMode, onThemeChanged)
     }
 }
 
@@ -66,6 +66,6 @@ fun HomeTopBar(
 @Composable
 private fun HomeTopBarPreview() {
     TudeeTheme {
-        HomeTopBar(isDarkMode = false,onThemeChanged = {})
+        HomeTopBar(isDarkMode = false, onThemeChanged = {})
     }
 }
