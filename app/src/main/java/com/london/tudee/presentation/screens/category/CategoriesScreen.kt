@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -17,6 +18,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,10 +32,12 @@ import androidx.compose.ui.zIndex
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.presentation.components.CategoryItem
+import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import com.london.tudee.presentation.screens.category.create_category.CreateCategoryScreen
+import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -45,6 +49,12 @@ fun CategoriesScreen(
     val categories by viewModel.categoryUiState.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
 
+    LaunchedEffect(uiState.createSuccessMessage) {
+        if (uiState.createSuccessMessage != null) {
+            delay(3000)
+            viewModel.resetMessege()
+        }
+    }
     CategoriesScreenContent(
         screenTitle = screenTitle,
         uiState = uiState,
@@ -86,6 +96,7 @@ private fun CategoriesScreenContent(
                     maxLines = 1
                 )
             }
+
 
             uiState.errorMessage?.let { error ->
                 Text(
@@ -143,6 +154,12 @@ private fun CategoriesScreenContent(
             onClick = onAddCategoryClick,
             isEnabled = true,
         )
+        uiState.createSuccessMessage?.let { message ->
+            SnackBar(
+                modifier = Modifier.offset(y = 56.dp),
+                iconPainter = painterResource(id = R.drawable.snack_bar_container),
+                iconTint = TudeeTheme.colors.greenAccent
+            )}
     }
 }
 
