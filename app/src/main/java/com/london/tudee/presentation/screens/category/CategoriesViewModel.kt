@@ -6,6 +6,7 @@ import com.london.tudee.domain.entities.Category
 import com.london.tudee.domain.services.CategoryService
 import com.london.tudee.presentation.screens.category.create_category.CreateCategoryUiState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -68,6 +69,7 @@ class CategoriesViewModel(
             try {
                 categoryService.add(category)
                 _createCategoryUiState.value = _createCategoryUiState.value.copy(isDeleted = true, isLoading = false)
+                _uiState.value = _uiState.value.copy(createSuccessMessage = "Category created successfully")
 
             } catch (e: Exception) {
                 _createCategoryUiState.value = _createCategoryUiState.value.copy(
@@ -76,6 +78,9 @@ class CategoriesViewModel(
                 )
             }
         }
+    }
+    fun resetMessege(){
+        _uiState.update { it.copy(createSuccessMessage = null) }
     }
     fun setShowBottomSheet(show: Boolean) {
         _uiState.update { it.copy(showBottomSheet = show) }

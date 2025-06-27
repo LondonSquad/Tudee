@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.category.delete_category
+package com.london.tudee.presentation.screens.category.category_details
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -28,12 +28,12 @@ import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun DeleteCategoryScreen(
+fun CategoryDetailsDeleteScreen(
     category: Category,
     showBottomSheet: Boolean,
+    modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
     onCategoryDeleted: () -> Unit,
-    modifier: Modifier = Modifier,
     onDeleteError: () -> Unit = {},
 ) {
     TudeeBottomSheetScreen(
@@ -43,7 +43,7 @@ fun DeleteCategoryScreen(
         screenContent = {},
         bottomSheetActions = {},
         bottomSheetContent = {
-            DeleteCategoryContent(
+            CategoryDetailsDeleteContent(
                 modifier = modifier,
                 category = category,
                 onCancel = onDismiss,
@@ -55,15 +55,15 @@ fun DeleteCategoryScreen(
 }
 
 @Composable
-private fun DeleteCategoryContent(
-    category: Category,
+private fun CategoryDetailsDeleteContent(
     modifier: Modifier = Modifier,
+    category: Category,
     onCancel: () -> Unit,
     onCategoryDeleted: () -> Unit,
     onDeleteError: () -> Unit = {},
-    viewModel: DeleteCategoryScreenViewModel = koinViewModel()
+    viewModel: CategoryDetailsViewModel = koinViewModel()
 ) {
-    val uiState by viewModel.deleteState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(uiState.isDeleted, uiState.errorMessage) {
         when {
@@ -101,7 +101,7 @@ private fun DeleteCategoryContent(
             text = stringResource(R.string.delete),
             onClick = {
                 viewModel.deleteCategory(category)
-                if (viewModel.deleteState.value.isDeleted) {
+                if (viewModel.uiState.value.isDeleted) {
                     onCancel()
                 }
             },
@@ -118,9 +118,9 @@ private fun DeleteCategoryContent(
 
 @ThemePreviews
 @Composable
-private fun DeleteCategoryScreenPreview() {
+private fun CategoryDetailsDeleteScreenPreview() {
     TudeeTheme {
-        DeleteCategoryScreen(
+        CategoryDetailsDeleteScreen(
             modifier = Modifier,
             category = Category(
                 id = 1,

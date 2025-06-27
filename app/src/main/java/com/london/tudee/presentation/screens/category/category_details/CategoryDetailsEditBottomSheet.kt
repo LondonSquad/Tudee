@@ -1,4 +1,4 @@
-package com.london.tudee.presentation.screens.category.edit_category
+package com.london.tudee.presentation.screens.category.category_details
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -54,12 +54,12 @@ import com.london.tudee.presentation.utils.saveImageToInternalStorage
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun EditCategoryScreen(
+fun CategoryDetailsEditScreen(
     category: Category,
     showBottomSheet: Boolean,
+    modifier: Modifier = Modifier,
     onDeleteClick: () -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
     onEditSuccess: () -> Unit = {},
     onEditError: () -> Unit = {}
 ) {
@@ -71,7 +71,7 @@ fun EditCategoryScreen(
         screenContent = {},
         bottomSheetActions = {},
         bottomSheetContent = {
-            EditCategoryContent(
+            CategoryDetailsEditContent(
                 modifier = modifier,
                 category = category,
                 onDismiss = onDismiss,
@@ -83,14 +83,14 @@ fun EditCategoryScreen(
 }
 
 @Composable
-private fun EditCategoryContent(
+private fun CategoryDetailsEditContent(
     modifier: Modifier = Modifier,
     category: Category,
     onDismiss: () -> Unit,
     onDeleteClick: () -> Unit,
     onEditSuccess: () -> Unit = {},
     onEditError: () -> Unit = {},
-    viewModel: EditCategoryScreenViewModel = koinViewModel(),
+    viewModel: CategoryDetailsViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
     var categoryName by remember {
@@ -99,13 +99,12 @@ private fun EditCategoryContent(
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val uiState by viewModel.uiState.collectAsState()
 
-
     LaunchedEffect(uiState.isEdited, uiState.errorMessage) {
         when {
             uiState.isEdited -> {
                 onEditSuccess()
-                viewModel.resetState()
             }
+
             uiState.errorMessage != null -> onEditError()
         }
 
@@ -251,9 +250,10 @@ private fun ImagePickerEditCategory(
 
 @ThemePreviews
 @Composable
-private fun EditCategoryScreenPreview() {
+private fun CategoryDetailsEditScreenPreview() {
     TudeeTheme {
-        EditCategoryScreen(modifier = Modifier, category = Category(
+        CategoryDetailsEditScreen(
+            modifier = Modifier, category = Category(
             id = 1,
             title = "Work",
             iconRes = "",

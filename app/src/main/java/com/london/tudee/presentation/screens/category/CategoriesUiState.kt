@@ -6,5 +6,6 @@ data class CategoriesUiState(
     val categories: List<Category> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
+    val createSuccessMessage: String? = null,
     val showBottomSheet: Boolean = false
 )
