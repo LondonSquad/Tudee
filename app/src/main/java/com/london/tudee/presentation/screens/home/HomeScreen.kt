@@ -69,7 +69,6 @@ fun HomeScreen(
     val uiState by viewModel.uiState.collectAsState()
     val taskUiState by viewModel.taskUiState.collectAsState()
     when {
-        uiState.isLoading -> LoadingScreen(modifier = Modifier.fillMaxSize())
         uiState.errMessage != null -> ErrorScreen(modifier = Modifier.fillMaxSize())
         else -> HomeScreenContent(
             state = uiState,
