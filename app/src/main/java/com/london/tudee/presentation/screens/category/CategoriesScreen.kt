@@ -52,7 +52,7 @@ fun CategoriesScreen(
     LaunchedEffect(uiState.createSuccessMessage) {
         if (uiState.createSuccessMessage != null) {
             delay(3000)
-            viewModel.resetMessege()
+            viewModel.resetMessage()
         }
     }
     CategoriesScreenContent(
@@ -157,6 +157,7 @@ private fun CategoriesScreenContent(
         uiState.createSuccessMessage?.let { message ->
             SnackBar(
                 modifier = Modifier.offset(y = 56.dp),
+                message = R.string.category_created_successfully,
                 iconPainter = painterResource(id = R.drawable.snack_bar_container),
                 iconTint = TudeeTheme.colors.greenAccent
             )}
