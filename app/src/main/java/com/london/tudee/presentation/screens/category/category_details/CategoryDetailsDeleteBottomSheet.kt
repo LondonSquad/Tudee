@@ -51,14 +51,9 @@ fun CategoryDetailsDeleteBottomSheet(
         ),
         windowInsets = WindowInsets(0),
         dragHandle = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(TudeeTheme.colors.surface),
-                contentAlignment = Alignment.Center
-            ) {
-                BottomSheetDefaults.DragHandle()
-            }
+            BottomSheetDefaults.DragHandle(
+                modifier = Modifier.background(TudeeTheme.colors.surface),
+            )
         },
         containerColor = TudeeTheme.colors.surface
     ){
