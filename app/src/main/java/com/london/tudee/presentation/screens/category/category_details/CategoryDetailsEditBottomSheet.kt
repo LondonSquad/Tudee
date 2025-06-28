@@ -11,13 +11,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -43,7 +48,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.presentation.components.TudeeTextField
-import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScreen
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.color.RectBorderColor
@@ -53,10 +57,10 @@ import com.london.tudee.presentation.utils.galleryImageToBitmap
 import com.london.tudee.presentation.utils.saveImageToInternalStorage
 import org.koin.compose.viewmodel.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryDetailsEditScreen(
+fun CategoryDetailsEditBottomSheet(
     category: Category,
-    showBottomSheet: Boolean,
     modifier: Modifier = Modifier,
     onDeleteClick: () -> Unit,
     onDismiss: () -> Unit,
@@ -64,22 +68,33 @@ fun CategoryDetailsEditScreen(
     onEditError: () -> Unit = {}
 ) {
 
-    TudeeBottomSheetScreen(
-        showBottomSheet = showBottomSheet,
-        modifier = modifier,
-        onDismiss = onDismiss,
-        screenContent = {},
-        bottomSheetActions = {},
-        bottomSheetContent = {
-            CategoryDetailsEditContent(
-                modifier = modifier,
-                category = category,
-                onDismiss = onDismiss,
-                onDeleteClick = onDeleteClick,
-                onEditSuccess = onEditSuccess,
-                onEditError = onEditError
-            )
-        })
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = rememberModalBottomSheetState(
+            skipPartiallyExpanded = true
+        ),
+        windowInsets = WindowInsets(0),
+        dragHandle = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(TudeeTheme.colors.surface),
+                contentAlignment = Alignment.Center
+            ) {
+                BottomSheetDefaults.DragHandle()
+            }
+        },
+        containerColor = TudeeTheme.colors.surface
+    ){
+        CategoryDetailsEditContent(
+            modifier = modifier,
+            category = category,
+            onDismiss = onDismiss,
+            onDeleteClick = onDeleteClick,
+            onEditSuccess = onEditSuccess,
+            onEditError = onEditError
+        )
+    }
 }
 
 @Composable
@@ -111,7 +126,7 @@ private fun CategoryDetailsEditContent(
     }
 
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.padding(horizontal = 16.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -252,14 +267,14 @@ private fun ImagePickerEditCategory(
 @Composable
 private fun CategoryDetailsEditScreenPreview() {
     TudeeTheme {
-        CategoryDetailsEditScreen(
+        CategoryDetailsEditBottomSheet(
             modifier = Modifier, category = Category(
             id = 1,
             title = "Work",
             iconRes = "",
             isDefault = true,
             taskCount = 0,
-        ), onDismiss = {}, onDeleteClick = {}, showBottomSheet = true
+        ), onDismiss = {}, onDeleteClick = {}
         )
     }
 }

@@ -10,13 +10,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,12 +40,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
 import com.london.tudee.presentation.components.TudeeTextField
-import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScreen
 import com.london.tudee.presentation.components.buttons.TudeePrimaryButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.color.RectBorderColor
@@ -51,24 +54,33 @@ import com.london.tudee.presentation.utils.galleryImageToBitmap
 import com.london.tudee.presentation.utils.saveImageToInternalStorage
 import org.koin.compose.viewmodel.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateCategoryScreen(
-    showBottomSheet: Boolean,
+fun CreateCategoryBottomSheet(
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
-    TudeeBottomSheetScreen(
-        showBottomSheet = showBottomSheet,
-        modifier = modifier.zIndex(2f),
-        onDismiss = onDismiss,
-        screenContent = {},
-        bottomSheetActions = {},
-        bottomSheetContent = {
-            CreateCategoryContent(
-                modifier = Modifier, onDismiss = onDismiss
-            )
-        }
-    )
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = rememberModalBottomSheetState(
+            skipPartiallyExpanded = true
+        ),
+        windowInsets = WindowInsets(0),
+        dragHandle = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(TudeeTheme.colors.surface),
+                contentAlignment = Alignment.Center
+            ) {
+                BottomSheetDefaults.DragHandle()
+            }
+        },
+        containerColor = TudeeTheme.colors.surface
+    ){
+        CreateCategoryContent(
+            modifier = Modifier, onDismiss = onDismiss
+        )
+    }
 }
 
 @Composable
@@ -82,7 +94,7 @@ private fun CreateCategoryContent(
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.padding(horizontal = 16.dp)
     ) {
         Text(
             text = stringResource(R.string.add_new_category),
@@ -225,8 +237,8 @@ private fun ImagePickerAddCategory(
 @Composable
 private fun CreateCategoryPreview() {
     TudeeTheme {
-        CreateCategoryScreen(
-            modifier = Modifier, onDismiss = {}, showBottomSheet = true
+        CreateCategoryBottomSheet(
+            onDismiss = {}
         )
     }
 }

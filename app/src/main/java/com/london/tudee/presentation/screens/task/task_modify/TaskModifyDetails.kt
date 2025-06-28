@@ -61,6 +61,7 @@ fun TaskModifyDetails(
             .fillMaxWidth()
             .heightIn(max = maxHeight)
             .background(TudeeTheme.colors.surface)
+            .padding(horizontal = 16.dp)
     ) {
         Box(
             modifier = Modifier
