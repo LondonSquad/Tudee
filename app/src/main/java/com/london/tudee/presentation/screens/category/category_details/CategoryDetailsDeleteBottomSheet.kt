@@ -44,6 +44,7 @@ fun CategoryDetailsDeleteBottomSheet(
 ) {
 
     ModalBottomSheet(
+        modifier = modifier,
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(
             skipPartiallyExpanded = true
@@ -62,7 +63,6 @@ fun CategoryDetailsDeleteBottomSheet(
         containerColor = TudeeTheme.colors.surface
     ){
         CategoryDetailsDeleteContent(
-            modifier = modifier,
             category = category,
             onCancel = onDismiss,
             onCategoryDeleted = onCategoryDeleted,

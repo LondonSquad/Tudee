@@ -68,25 +68,20 @@ fun CategoryDetailsEditBottomSheet(
 ) {
 
     ModalBottomSheet(
+        modifier = modifier,
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(
             skipPartiallyExpanded = true
         ),
         windowInsets = WindowInsets(0),
         dragHandle = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(TudeeTheme.colors.surface),
-                contentAlignment = Alignment.Center
-            ) {
-                BottomSheetDefaults.DragHandle()
-            }
+            BottomSheetDefaults.DragHandle(
+                modifier = Modifier.background(TudeeTheme.colors.surface),
+            )
         },
         containerColor = TudeeTheme.colors.surface
     ){
         CategoryDetailsEditContent(
-            modifier = modifier,
             category = category,
             onDismiss = onDismiss,
             onDeleteClick = onDeleteClick,
