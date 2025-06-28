@@ -6,13 +6,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,41 +29,45 @@ import coil.compose.rememberAsyncImagePainter
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Priority
 import com.london.tudee.domain.entities.TaskStatus
-import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScreen
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.components.priority.PriorityBadge
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskDetailsBottomSheet(
     uiState: TaskDetailsBottomSheetUiState,
     modifier: Modifier = Modifier,
     onEditClick: () -> Unit = {},
     onMoveClick: () -> Unit = {},
-    onDismiss: () -> Unit = {},
-    showBottomSheet: Boolean = true
+    onDismissRequest: () -> Unit
 ) {
 
-    TudeeBottomSheetScreen(
-        showBottomSheet = showBottomSheet,
-        onDismiss = onDismiss,
-        screenContent = {},
-        bottomSheetContent = {
-            TaskDetailsBottomSheetContent(
-                taskName = uiState.task.title,
-                taskDescription = uiState.task.description,
-                taskStatus = uiState.task.taskStatus,
-                taskPriority = uiState.task.priority,
-                icon = uiState.categoryIcon,
-                onEditClick = onEditClick,
-                onMoveClick = onMoveClick,
-                modifier = modifier
+    ModalBottomSheet(
+        onDismissRequest = onDismissRequest,
+        sheetState = rememberModalBottomSheetState(
+            skipPartiallyExpanded = true
+        ),
+        windowInsets = WindowInsets(0),
+        dragHandle = {
+            BottomSheetDefaults.DragHandle(
+                modifier = Modifier.background(TudeeTheme.colors.surface),
             )
         },
-        bottomSheetActions = {},
-        modifier = modifier
-    )
+        containerColor = TudeeTheme.colors.surface
+    ) {
+        TaskDetailsBottomSheetContent(
+            taskName = uiState.task.title,
+            taskDescription = uiState.task.description,
+            taskStatus = uiState.task.taskStatus,
+            taskPriority = uiState.task.priority,
+            icon = uiState.categoryIcon,
+            onEditClick = onEditClick,
+            onMoveClick = onMoveClick,
+            modifier = modifier
+        )
+    }
 }
 
 @Composable
@@ -73,7 +82,12 @@ private fun TaskDetailsBottomSheetContent(
     onMoveClick: () -> Unit = {}
 ) {
     Column(
-        modifier = modifier.padding(bottom = 12.dp)
+        modifier = modifier
+            .padding(
+                bottom = 24.dp,
+                start = 16.dp,
+                end = 16.dp
+            )
     ) {
         Text(
             text = stringResource(R.string.task_details),
@@ -216,7 +230,6 @@ private fun PreviewTaskDetail() {
         TaskDetailsBottomSheetUiState(),
         onEditClick = {},
         onMoveClick = {},
-        onDismiss = {},
-        showBottomSheet = true
+        onDismissRequest = {},
     )
 }

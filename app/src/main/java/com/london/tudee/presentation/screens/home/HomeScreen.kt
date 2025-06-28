@@ -172,28 +172,29 @@ private fun HomeScreenContent(
                 }
             }
         }
-        TaskDetailsBottomSheet(
-            state.taskDetailBottomSheetUiState,
-            showBottomSheet = state.isTaskDetailsBottomSheetVisible,
-            onDismiss = interactions::hideTaskDetailsBottomSheet,
-            onMoveClick = interactions::onClickMove,
-            onEditClick = {
-                interactions.hideTaskDetailsBottomSheet()
-                val taskId = state.taskDetailBottomSheetUiState.task.id
-                interactions.onEditTask(taskId)
-            }
-        )
-        TaskModifyBottomSheet(
-            modifier = Modifier.zIndex(1f),
-            screenContent = { },
-            uiState = taskUiState,
-            interactions = interactions,
-            onHideBottomSheet = {
-                interactions.toggleBottomSheet(false)
-            },
-            onShowDatePicker = interactions::showDatePicker,
-            onHideDatePicker = interactions::hideDatePicker
-        )
+
+        if (state.isTaskDetailsBottomSheetVisible)
+            TaskDetailsBottomSheet(
+                uiState = state.taskDetailBottomSheetUiState,
+                onDismissRequest = interactions::hideTaskDetailsBottomSheet,
+                onMoveClick = interactions::onClickMove,
+                onEditClick = {
+                    interactions.hideTaskDetailsBottomSheet()
+                    val taskId = state.taskDetailBottomSheetUiState.task.id
+                    interactions.onEditTask(taskId)
+                }
+            )
+
+
+        if (taskUiState.showBottomSheet)
+            TaskModifyBottomSheet(
+                uiState = taskUiState,
+                interactions = interactions,
+                onShowDatePicker = interactions::showDatePicker,
+                onHideDatePicker = interactions::hideDatePicker,
+                onDismissRequest = { interactions.toggleBottomSheet(false) }
+            )
+
         Box(
             modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter
         ) {

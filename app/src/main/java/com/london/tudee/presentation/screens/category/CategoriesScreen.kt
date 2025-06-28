@@ -36,7 +36,7 @@ import com.london.tudee.presentation.components.SnackBar
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
-import com.london.tudee.presentation.screens.category.create_category.CreateCategoryScreen
+import com.london.tudee.presentation.screens.category.create_category.CreateCategoryBottomSheet
 import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -142,7 +142,9 @@ private fun CategoriesScreenContent(
                 }
             }
         }
-        CreateCategoryScreen(showBottomSheet = uiState.showBottomSheet, onDismiss = onDismissBottomSheet)
+        if (uiState.showBottomSheet)
+            CreateCategoryBottomSheet(onDismiss = onDismissBottomSheet)
+
 
         TudeeFloatingActionButton(
             painter = painterResource(id = R.drawable.ic_add_category_button),
@@ -160,7 +162,8 @@ private fun CategoriesScreenContent(
                 message = R.string.category_created_successfully,
                 iconPainter = painterResource(id = R.drawable.snack_bar_container),
                 iconTint = TudeeTheme.colors.greenAccent
-            )}
+            )
+        }
     }
 }
 

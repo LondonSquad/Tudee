@@ -1,14 +1,21 @@
 package com.london.tudee.presentation.screens.category.category_details
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -20,38 +27,43 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.tudee.R
 import com.london.tudee.domain.entities.Category
-import com.london.tudee.presentation.components.bottom_sheet.TudeeBottomSheetScreen
 import com.london.tudee.presentation.components.buttons.TudeeNegativeButton
 import com.london.tudee.presentation.components.buttons.TudeeSecondaryButton
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
 import org.koin.compose.viewmodel.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryDetailsDeleteScreen(
+fun CategoryDetailsDeleteBottomSheet(
     category: Category,
-    showBottomSheet: Boolean,
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
     onCategoryDeleted: () -> Unit,
     onDeleteError: () -> Unit = {},
 ) {
-    TudeeBottomSheetScreen(
-        showBottomSheet = showBottomSheet,
+
+    ModalBottomSheet(
         modifier = modifier,
-        onDismiss = onDismiss,
-        screenContent = {},
-        bottomSheetActions = {},
-        bottomSheetContent = {
-            CategoryDetailsDeleteContent(
-                modifier = modifier,
-                category = category,
-                onCancel = onDismiss,
-                onCategoryDeleted = onCategoryDeleted,
-                onDeleteError = onDeleteError
+        onDismissRequest = onDismiss,
+        sheetState = rememberModalBottomSheetState(
+            skipPartiallyExpanded = true
+        ),
+        windowInsets = WindowInsets(0),
+        dragHandle = {
+            BottomSheetDefaults.DragHandle(
+                modifier = Modifier.background(TudeeTheme.colors.surface),
             )
-        }
-    )
+        },
+        containerColor = TudeeTheme.colors.surface
+    ){
+        CategoryDetailsDeleteContent(
+            category = category,
+            onCancel = onDismiss,
+            onCategoryDeleted = onCategoryDeleted,
+            onDeleteError = onDeleteError
+        )
+    }
 }
 
 @Composable
@@ -72,8 +84,7 @@ private fun CategoryDetailsDeleteContent(
         }
     }
     Column(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier.padding(horizontal = 16.dp),
     ) {
         Text(
             text = stringResource(R.string.delete_category),
@@ -111,7 +122,7 @@ private fun CategoryDetailsDeleteContent(
         TudeeSecondaryButton(
             text = stringResource(R.string.cancel),
             onClick = onCancel,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)
         )
     }
 }
@@ -120,7 +131,7 @@ private fun CategoryDetailsDeleteContent(
 @Composable
 private fun CategoryDetailsDeleteScreenPreview() {
     TudeeTheme {
-        CategoryDetailsDeleteScreen(
+        CategoryDetailsDeleteBottomSheet(
             modifier = Modifier,
             category = Category(
                 id = 1,
@@ -131,7 +142,6 @@ private fun CategoryDetailsDeleteScreenPreview() {
             ),
             onDismiss = {},
             onCategoryDeleted = {},
-            showBottomSheet = true
         )
     }
 }

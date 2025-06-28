@@ -97,14 +97,18 @@ fun TasksScreen(
         taskModifyUiState = taskModifyUiState,
         interactions = viewModel,
     )
-    TaskDeletingBottomSheet(
-        viewModel = viewModel, onTaskDeleted = {
-            showDeleteSheet = false
-            showDeleteSnackBar = true
-            viewModel.initializeDoneTasks()
-            viewModel.initializeToDoTasks()
-            viewModel.initializeInProgressTasks()
-        })
+    if (uiState.isDeleteDialogVisible)
+        TaskDeletingBottomSheet(
+            viewModel = viewModel, onTaskDeleted = {
+                showDeleteSheet = false
+                showDeleteSnackBar = true
+                viewModel.initializeDoneTasks()
+                viewModel.initializeToDoTasks()
+                viewModel.initializeInProgressTasks()
+            },
+            onDismissRequest = viewModel::dismissDeleteDialog
+        )
+
     AnimatedVisibility(
         visible = showDeleteSnackBar,
         modifier = Modifier.padding(top = 50.dp),
@@ -224,15 +228,15 @@ private fun TasksContent(
             showDatePickerDetails = false
         }, onDismiss = { showDatePickerDetails = false })
     }
-
-    TaskModifyBottomSheet(
-        modifier = Modifier.zIndex(1f),
-        screenContent = { },
-        uiState = taskModifyUiState,
-        interactions = interactions,
-        onHideBottomSheet = { interactions.hideBottomSheet() },
-        onShowDatePicker = { interactions.showDatePicker() },
-        onHideDatePicker = { interactions.hideDatePicker() })
+    if (taskModifyUiState.showBottomSheet) {
+        TaskModifyBottomSheet(
+            uiState = taskModifyUiState,
+            interactions = interactions,
+            onShowDatePicker = interactions::showDatePicker,
+            onHideDatePicker = interactions::hideDatePicker,
+            onDismissRequest = { interactions.hideBottomSheet() }
+        )
+    }
 
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter
