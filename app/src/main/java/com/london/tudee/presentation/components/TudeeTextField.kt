@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -125,6 +126,7 @@ fun TudeeTextField(
                     .fillMaxWidth()
                     .focusRequester(focusRequester)
                     .padding(end = 12.dp),
+                cursorBrush = SolidColor(TudeeTheme.colors.primary)
             )
         }
         if (readOnly && onClick != null) {
