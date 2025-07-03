@@ -102,9 +102,7 @@ private fun CategoryDetailsEditContent(
     viewModel: CategoryDetailsViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
-    var categoryName by remember {
-        mutableStateOf(category.titleRes?.let { context.getString(it) } ?: category.title ?: "")
-    }
+    var categoryName by remember { mutableStateOf(category.title ?: "") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val uiState by viewModel.uiState.collectAsState()
 
@@ -169,6 +167,10 @@ private fun CategoryDetailsEditContent(
 
         Spacer(modifier = Modifier.height(36.dp))
 
+        val isSaveDisabled =
+            ((imageUri == null && categoryName.isCategoryNotChanged(category.title))
+                    || categoryName.isBlank())
+
         TudeePrimaryButton(
             onClick = {
                 val savedImageUri = saveImageToInternalStorage(
@@ -189,7 +191,7 @@ private fun CategoryDetailsEditContent(
             },
             text = stringResource(R.string.save),
             modifier = Modifier.fillMaxWidth(),
-            isDisabled = imageUri == null
+            isDisabled = isSaveDisabled
         )
 
 
@@ -203,6 +205,9 @@ private fun CategoryDetailsEditContent(
     }
 }
 
+private fun String.isCategoryNotChanged(categoryTitle: String?): Boolean {
+    return categoryTitle?.let { this == it } ?: this.isEmpty()
+}
 
 @Composable
 private fun ImagePickerEditCategory(
