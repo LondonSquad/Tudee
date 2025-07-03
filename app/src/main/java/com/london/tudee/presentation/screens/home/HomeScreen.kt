@@ -50,7 +50,6 @@ import com.london.tudee.presentation.components.StatusCard
 import com.london.tudee.presentation.components.buttons.TudeeFloatingActionButton
 import com.london.tudee.presentation.components.date.DateBadge
 import com.london.tudee.presentation.components.date.DateBadgeStyleValues
-import com.london.tudee.presentation.components.task.EmptyTasksScreen
 import com.london.tudee.presentation.components.task.TaskItem
 import com.london.tudee.presentation.design_system.theme.ThemePreviews
 import com.london.tudee.presentation.design_system.theme.TudeeTheme
@@ -143,57 +142,50 @@ private fun HomeScreenContent(
                         )
                     }"
                 )
-                if (state.allTasks.isEmpty()) {
-                    EmptyTasksScreen()
-                } else {
-                    InProgressSection(
-                        inProgressTasks = state.inProgressTasks,
-                        onInProgressTasksArrowClicked = onArrowClicked,
-                        categoryIcons = taskUiState.categoryIcons,
-                        onTaskClicked = interactions::showTaskDetailsBottomSheet,
-                        loadTask = interactions::loadTask
-                    )
-                    Spacer(Modifier.height(24.dp))
-                    ToDoSection(
-                        toDoTasks = state.toDoTasks,
-                        onTodoTasksArrowClicked = onArrowClicked,
-                        categoryIcons = taskUiState.categoryIcons,
-                        onTaskClicked = interactions::showTaskDetailsBottomSheet,
-                        loadTask = interactions::loadTask
-                    )
-                    Spacer(Modifier.height(24.dp))
-                    DoneSection(
-                        doneTasks = state.doneTasks,
-                        onDoneTasksArrowClicked = onArrowClicked,
-                        categoryIcons = taskUiState.categoryIcons,
-                        onTaskClicked = interactions::showTaskDetailsBottomSheet,
-                        loadTask = interactions::loadTask
-                    )
-                }
+
+                InProgressSection(
+                    inProgressTasks = state.inProgressTasks,
+                    onInProgressTasksArrowClicked = onArrowClicked,
+                    categoryIcons = taskUiState.categoryIcons,
+                    onTaskClicked = interactions::showTaskDetailsBottomSheet,
+                    loadTask = interactions::loadTask
+                )
+
+                ToDoSection(
+                    toDoTasks = state.toDoTasks,
+                    onTodoTasksArrowClicked = onArrowClicked,
+                    categoryIcons = taskUiState.categoryIcons,
+                    onTaskClicked = interactions::showTaskDetailsBottomSheet,
+                    loadTask = interactions::loadTask
+                )
+
+                DoneSection(
+                    doneTasks = state.doneTasks,
+                    onDoneTasksArrowClicked = onArrowClicked,
+                    categoryIcons = taskUiState.categoryIcons,
+                    onTaskClicked = interactions::showTaskDetailsBottomSheet,
+                    loadTask = interactions::loadTask
+                )
             }
         }
 
-        if (state.isTaskDetailsBottomSheetVisible)
-            TaskDetailsBottomSheet(
-                uiState = state.taskDetailBottomSheetUiState,
-                onDismissRequest = interactions::hideTaskDetailsBottomSheet,
-                onMoveClick = interactions::onClickMove,
-                onEditClick = {
-                    interactions.hideTaskDetailsBottomSheet()
-                    val taskId = state.taskDetailBottomSheetUiState.task.id
-                    interactions.onEditTask(taskId)
-                }
-            )
+        if (state.isTaskDetailsBottomSheetVisible) TaskDetailsBottomSheet(
+            uiState = state.taskDetailBottomSheetUiState,
+            onDismissRequest = interactions::hideTaskDetailsBottomSheet,
+            onMoveClick = interactions::onClickMove,
+            onEditClick = {
+                interactions.hideTaskDetailsBottomSheet()
+                val taskId = state.taskDetailBottomSheetUiState.task.id
+                interactions.onEditTask(taskId)
+            })
 
 
-        if (taskUiState.showBottomSheet)
-            TaskModifyBottomSheet(
-                uiState = taskUiState,
-                interactions = interactions,
-                onShowDatePicker = interactions::showDatePicker,
-                onHideDatePicker = interactions::hideDatePicker,
-                onDismissRequest = { interactions.toggleBottomSheet(false) }
-            )
+        if (taskUiState.showBottomSheet) TaskModifyBottomSheet(
+            uiState = taskUiState,
+            interactions = interactions,
+            onShowDatePicker = interactions::showDatePicker,
+            onHideDatePicker = interactions::hideDatePicker,
+            onDismissRequest = { interactions.toggleBottomSheet(false) })
 
         Box(
             modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter
@@ -356,10 +348,7 @@ private fun ToDoSection(
     onTaskClicked: () -> Unit,
     loadTask: (Task) -> Unit
 ) {
-
-    if (toDoTasks.isNotEmpty() && categoryIcons.isEmpty()) {
-        return
-    }
+    if (toDoTasks.isEmpty() || categoryIcons.isEmpty()) return
 
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -367,7 +356,7 @@ private fun ToDoSection(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .padding(bottom = 8.dp)
+            .padding(bottom = 8.dp, top = 24.dp)
     ) {
         Text(
             text = stringResource(R.string.To_Do),
@@ -446,10 +435,7 @@ private fun InProgressSection(
     onTaskClicked: () -> Unit,
     loadTask: (Task) -> Unit
 ) {
-
-    if (inProgressTasks.isNotEmpty() && categoryIcons.isEmpty()) {
-        return
-    }
+    if (inProgressTasks.isEmpty() || categoryIcons.isEmpty()) return
 
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -457,7 +443,7 @@ private fun InProgressSection(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .padding(bottom = 8.dp)
+            .padding(bottom = 8.dp, top = 24.dp)
     ) {
         Text(
             text = stringResource(R.string.In_Progress),
@@ -535,9 +521,7 @@ private fun DoneSection(
     loadTask: (Task) -> Unit
 ) {
 
-    if (doneTasks.isNotEmpty() && categoryIcons.isEmpty()) {
-        return
-    }
+    if (doneTasks.isEmpty() || categoryIcons.isEmpty()) return
 
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -545,7 +529,7 @@ private fun DoneSection(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .padding(bottom = 8.dp)
+            .padding(bottom = 8.dp, top = 24.dp)
     ) {
         Text(
             text = stringResource(R.string.Done),

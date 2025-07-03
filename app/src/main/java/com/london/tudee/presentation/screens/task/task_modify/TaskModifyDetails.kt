@@ -68,6 +68,8 @@ fun TaskModifyDetails(
                 .weight(1f, fill = false)
                 .verticalScroll(rememberScrollState())
         ) {
+            if(uiState.selectedDate == null)
+                interactions.updateDate( System.currentTimeMillis())
             TaskDetailsContent(
                 title = title,
                 uiState = uiState,
